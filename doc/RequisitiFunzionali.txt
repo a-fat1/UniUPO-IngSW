@@ -1,0 +1,44 @@
+RF00: login (CODETTA)
+
+RF01: visualizza notifiche (?, ?)
+
+RF02: crea utente (?, ?)
+
+RF03: aggiorna password (?, ?)
+
+RF04: genera notifica (?, ?)
+
+RF05: visualizza carrello (?, ?)
+
+RF06: effettua ordine (?, ?)
+
+RF07: rimuovi prodotti dal carrello (?, ?)
+
+RF08: ricerca prodotto (?, ?)
+
+RF09: aggiungi al carrello (?, ?)
+
+RF10: rimuovi / ripristina nel catalogo (?, ?)
+
+RF11: lista ordini (?, ?)
+
+RF12: lista pagamenti (?, ?)
+
+RF13: lista forniture (?, ?)
+
+RF14: aggiorna prezzo (?, ?)
+
+RF15: nuova fornitura (?, ?)
+
+RF16: nuovo prodotto (?, ?)
+
+RF17: incrementa / decrementa prezzi (?, ?)
+
+RF18: prodotti in esaurimento (?, ?)
+
+RF19: ricerca utente (?, ?)
+
+RF20: blocca / sblocca utente (?, ?)
+
+RF21: ricerca notifiche (?, ?)
+
