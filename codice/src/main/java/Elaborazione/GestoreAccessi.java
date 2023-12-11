@@ -2,6 +2,7 @@ package Elaborazione;
 
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.regex.*;
 
 import java.rmi.registry.Registry; 
 import java.rmi.registry.LocateRegistry; 
@@ -96,5 +97,39 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 			utente = utenti.get(0);
 		
 		return utente;			
+	}
+
+	public int verificaCredenziali(String password, String passwordAttuale){
+		if(password.equals(passwordAttuale)){
+			return 0;  //le password sono uguali
+		}
+		else {
+			return 4;  //le password non coincidono
+		}
+	}
+
+	public int controlloNuovaPassword (String nuovaPassword){
+		int len;
+		boolean alpha;
+		boolean num;
+
+
+		len=nuovaPassword.length();
+		if(len<6){
+			return 1;	//lunghezza password<6
+		}
+		else {
+			alpha=nuovaPassword.matches(".*[a-zA-Z].*");
+			if(!alpha){
+				return 2;	//la password non contiene una lettera
+			}
+			else {
+				num=nuovaPassword.matches(".*[0-9].*");
+				if(!num){
+					return 3;	//la password non contiene un numero
+				}
+				else return 0;	//la password rispetta tutti i criteri
+			}
+		}
 	}
 }
