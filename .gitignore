@@ -1,0 +1,9 @@
+codice/.gradle/
+codice/build/
+codice/gradle/
+codice/gradlew
+codice/gradlew.bat
+.git/
+.DS_Store
+codice/.DS_Store
+
