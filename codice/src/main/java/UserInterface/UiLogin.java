@@ -11,6 +11,7 @@ import java.rmi.NotBoundException;
 
 import javax.swing.*;
 
+import DataBase.DbUtenti;
 import UserInterface.*;
 import Elaborazione.*;
 
@@ -44,6 +45,7 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 	private String passwordAttuale;
 	private String nuovaPassword;
 	private int esitoControlloPassword;
+	private int richiesta;
 	
 	// elementi grafici
 	// RF00: login (Codetta)
@@ -142,9 +144,15 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 		menuPanel.add(menuLabel2, BorderLayout.CENTER);
 		menuPanel.add(menuList, BorderLayout.SOUTH);
 
+		passwordAttualeLabel= new JLabel("password");
+		passwordAttualeField= new JPasswordField("", 10);
+
 		aggiornaPasswordPanel = new JPanel(new FlowLayout());
 		aggiornaPasswordPanel.add(passwordAttualeLabel);
 		aggiornaPasswordPanel.add(passwordAttualeField);
+
+		nuovaPasswordLabel= new JLabel("password");
+		nuovaPasswordField= new JPasswordField("", 10);
 
 		nuovaPasswordPanel = new JPanel(new FlowLayout());
 		nuovaPasswordPanel.add(nuovaPasswordLabel);
@@ -183,7 +191,7 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 							if (sceltaMenu==0)
 								this.avvioAggiornaUsername();
 							if (sceltaMenu==1)
-								this.avvioAggiornaPassword();
+								this.avvioAggiornaPassword(true,username,password);
 							if (sceltaMenu==2 && !((String)utente.get("tipo")).equals("amministratore"))
 								uiRicerca.avvioRicercaProdotto();
 							if (sceltaMenu==2 && ((String)utente.get("tipo")).equals("amministratore"))			
@@ -320,21 +328,40 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 			do{
 				this.mostraFormPasswordAttuale();
 
-				gestoreAccessi.verificaCredenziali(passwordAttuale, password);
+				if(richiesta==OK_OPTION) {
+					esitoControlloPassword = gestoreAccessi.verificaCredenziali(passwordAttuale, password);
 
-				if(esitoControlloPassword==4) {
-					this.mostraErrore(4);
+					if (esitoControlloPassword == 4) {
+						this.mostraErrore(4);
+					}
 				}
 			} while(esitoControlloPassword!=0);
 		}
 
 		do {
+			this.mostraFormNuovaPassword();
 
-		}while (esitoControlloPassword!=0 && richiesta == 1);
+			esitoControlloPassword=gestoreAccessi.controlloNuovaPassword(nuovaPassword);
+
+			if(esitoControlloPassword==1){
+				this.mostraErrore(1);
+			}
+			if(esitoControlloPassword==2){
+				this.mostraErrore(2);
+			}
+			if(esitoControlloPassword==3){
+				this.mostraErrore(3);
+			}
+			if(esitoControlloPassword==0){
+				//query utente
+				this.mostraMessaggioDiSuccesso();
+            }
+
+		}while (esitoControlloPassword!=0 && richiesta == OK_OPTION);
 	}
 
 	private void mostraFormPasswordAttuale(){
-		this.showMessageDialog(null, aggiornaPasswordPanel, "Aggiorna password", QUESTION_MESSAGE, null);
+		richiesta = this.showConfirmDialog(null, aggiornaPasswordPanel, "Aggiorna password", this.OK_CANCEL_OPTION);
 
 		passwordAttuale=new String(passwordAttualeField.getPassword());
 
@@ -366,7 +393,7 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 	}
 
 	private void mostraFormNuovaPassword(){
-		this.showMessageDialog(null, nuovaPasswordPanel, "Aggiorna password", this.QUESTION_MESSAGE, null);
+		richiesta = this.showConfirmDialog(null, nuovaPasswordPanel, "Aggiorna password", this.OK_CANCEL_OPTION);
 
 		nuovaPassword=new String(nuovaPasswordField.getPassword());
 
