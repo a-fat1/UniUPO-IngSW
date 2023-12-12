@@ -1,5 +1,6 @@
 package UserInterface;
 
+import java.awt.*;
 import java.util.HashMap;
 import java.util.ArrayList;
 
@@ -9,9 +10,6 @@ import java.rmi.RemoteException;
 import java.rmi.NotBoundException;
 
 import javax.swing.*;
-import java.awt.GridLayout;
-import java.awt.BorderLayout;
-import java.awt.Color;
 
 import UserInterface.*;
 import Elaborazione.*;
@@ -39,7 +37,13 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 	private String password;
 	private HashMap<String, Object> utente;
 	private	String esitoControllo;	
-	private	String esitoRicerca; 
+	private	String esitoRicerca;
+
+	// attributi
+	//RF03: Aggiorna password
+	private String passwordAttuale;
+	private String nuovaPassword;
+	private int esitoControlloPassword;
 	
 	// elementi grafici
 	// RF00: login (Codetta)
@@ -56,6 +60,15 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 	private JLabel menuLabel2;
 	private JList<String> menuList;
 	private JPanel menuPanel;
+
+	// elementi grafici
+	//RF03: Aggiorna password
+	private JLabel passwordAttualeLabel;
+	private JLabel nuovaPasswordLabel;
+	private JPasswordField passwordAttualeField;
+	private JPasswordField nuovaPasswordField;
+	private JPanel aggiornaPasswordPanel;
+	private JPanel nuovaPasswordPanel;
 
 	public UiLogin(String hostGestore) throws RemoteException, NotBoundException
 	{
@@ -128,6 +141,15 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 		menuPanel.add(menuLabel1, BorderLayout.NORTH);
 		menuPanel.add(menuLabel2, BorderLayout.CENTER);
 		menuPanel.add(menuList, BorderLayout.SOUTH);
+
+		aggiornaPasswordPanel = new JPanel(new FlowLayout());
+		aggiornaPasswordPanel.add(passwordAttualeLabel);
+		aggiornaPasswordPanel.add(passwordAttualeField);
+
+		nuovaPasswordPanel = new JPanel(new FlowLayout());
+		nuovaPasswordPanel.add(nuovaPasswordLabel);
+		nuovaPasswordPanel.add(nuovaPasswordField);
+		nuovaPasswordPanel.add(new JLabel("La password deve essere almeno 6 caratteri e contenere almeno una lettera e un numero"));
 	}
 	
 	public void avvioLogin() throws RemoteException
@@ -292,7 +314,67 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 	{ 	// RF23
 	}
 
-	public void avvioAggiornaPassword() throws RemoteException
+	public void avvioAggiornaPassword(Boolean loggato, String username, String password) throws RemoteException
 	{ 	// RF03
+		if(loggato){
+			do{
+				this.mostraFormPasswordAttuale();
+
+				gestoreAccessi.verificaCredenziali(passwordAttuale, password);
+
+				if(esitoControlloPassword==4) {
+					this.mostraErrore(4);
+				}
+			} while(esitoControlloPassword!=0);
+		}
+
+		do {
+
+		}while (esitoControlloPassword!=0 && richiesta == 1);
+	}
+
+	private void mostraFormPasswordAttuale(){
+		this.showMessageDialog(null, aggiornaPasswordPanel, "Aggiorna password", QUESTION_MESSAGE, null);
+
+		passwordAttuale=new String(passwordAttualeField.getPassword());
+
+		passwordAttualeField.setBackground(Color.white);
+	}
+
+	private void mostraErrore(int nErrore){
+
+		String messaggio="";
+
+		if(nErrore==4){
+			passwordAttualeField.setBackground(Color.red);
+			messaggio="ERRORE"+"\nLa password inserita non coincide con quella attuale"+"\nSi prega di riprova";
+		}
+		if(nErrore==1){
+			nuovaPasswordField.setBackground(Color.yellow);
+			messaggio="ERRORE"+"\nLa password inserita deve contenere almeno 6 caratteri"+"\nSi prega di riprova";
+		}
+		if(nErrore==2){
+			nuovaPasswordField.setBackground(Color.yellow);
+			messaggio="ERRORE"+"\nLa password inserita deve contenere almeno una lettera"+"\nSi prega di riprova";
+		}
+		if(nErrore==3){
+			nuovaPasswordField.setBackground(Color.yellow);
+			messaggio="ERRORE"+"\nLa password inserita deve contenere almeno un numero"+"\nSi prega di riprova";
+		}
+
+		this.showMessageDialog(null, messaggio, "Errore", this.ERROR_MESSAGE);
+	}
+
+	private void mostraFormNuovaPassword(){
+		this.showMessageDialog(null, nuovaPasswordPanel, "Aggiorna password", this.QUESTION_MESSAGE, null);
+
+		nuovaPassword=new String(nuovaPasswordField.getPassword());
+
+		nuovaPasswordField.setBackground(Color.white);
+	}
+
+	private void mostraMessaggioDiSuccesso(){
+		String messaggio= "La password è stata cambiata con successo!"+"\nora potrai accedere con la tua nuova password";
+		this.showMessageDialog(null, messaggio, "Aggiorna Password", this.INFORMATION_MESSAGE);
 	}
 }

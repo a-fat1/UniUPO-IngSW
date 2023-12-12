@@ -99,7 +99,7 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 		return utente;			
 	}
 
-	public int verificaCredenziali(String password, String passwordAttuale){
+	public int verificaCredenziali(String passwordAttuale, String password){
 		if(password.equals(passwordAttuale)){
 			return 0;  //le password sono uguali
 		}
