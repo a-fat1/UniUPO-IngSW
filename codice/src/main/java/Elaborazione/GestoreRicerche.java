@@ -28,4 +28,17 @@ public class GestoreRicerche implements GestoreRicercheInterfaccia
 		dbUtenti = d1;
 		dbProdotti = d2;
 	}
+
+	public int controlloParametri(String username){
+
+		// RF19
+		// Riccardo Nazzari, Andrea Benedetto
+
+		int len1 = username.length();
+
+		if(len1 < 3)
+			return 1;
+		else
+			return 4;
+	}
 }
