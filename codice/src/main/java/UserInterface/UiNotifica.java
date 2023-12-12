@@ -23,7 +23,9 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 	private GestoreNotificheInterfaccia gestoreNotifiche;
 
 	// attributi
-	
+	private HashMap<String, Object> utente;
+	private HashMap<String, Object> prodotto;
+	private HashMap<String, Object> ordine;
 	// elementi grafici
 	
 	public UiNotifica(String hostGestore) throws RemoteException, NotBoundException
@@ -38,11 +40,36 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 	{ 	// RF01
 	}
 
+	/**
+	 * RF04: Avvia la generazione di una notifica
+	 *
+	 * @author  Linda Monfermoso, Gabriele Magenta Biasina
+	 */
 	public void avvioGeneraNotifica() throws RemoteException
-	{ 	// RF04
+	{
+
+	}
+
+	/**
+	 * RF04: Mostra il form delle notifiche.
+	 *
+	 * @author  Linda Monfermoso, Gabriele Magenta Biasina
+	 */
+	private void mostraFormNotifica() {
+
 	}
 
 	public void avvioRicercaNotifiche() throws RemoteException
 	{ 	// RF21	
 	}
+
+	/**
+	 * RF04: Mostra un errore.
+	 *
+	 * @author  Linda Monfermoso, Gabriele Magenta Biasina
+	 */
+	private void mostraErrore(String tipoErrore) {
+
+	}
+
 }
