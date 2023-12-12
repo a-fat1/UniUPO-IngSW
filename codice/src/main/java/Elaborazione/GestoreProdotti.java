@@ -2,27 +2,70 @@ package Elaborazione;
 
 import java.util.HashMap;
 import java.util.ArrayList;
-
-import java.rmi.registry.Registry; 
-import java.rmi.registry.LocateRegistry; 
+import java.util.Collections;
+import java.rmi.registry.Registry;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.rmi.registry.LocateRegistry;
 import java.rmi.RemoteException;
 import java.rmi.NotBoundException;
 
 import DataBase.*;
 
-public class GestoreProdotti implements GestoreProdottiInterfaccia
-{
+public class GestoreProdotti implements GestoreProdottiInterfaccia {
 	private Registry registry;
 	private DbProdottiInterfaccia dbProdotti;
 
-	public GestoreProdotti(String host) throws RemoteException, NotBoundException
-	{
-		registry = LocateRegistry.getRegistry(host, 1098); 
-       	 	dbProdotti = (DbProdottiInterfaccia) registry.lookup("dbProdotti");
+	public GestoreProdotti(String host) throws RemoteException, NotBoundException {
+		registry = LocateRegistry.getRegistry(host, 1098);
+		dbProdotti = (DbProdottiInterfaccia) registry.lookup("dbProdotti");
 	}
 
 	public GestoreProdotti(DbProdotti d1) // per testing
 	{
 		dbProdotti = d1;
 	}
+
+	@Override
+	public ArrayList<HashMap<String, Object>> ricercaListaForniture(int codice) {
+		try {
+			return dbProdotti.query("SELECT * FROM Fornitura WHERE codiceProdotto=" + codice);
+		} catch (RemoteException e) {
+			return new ArrayList<>();
+		}
+	}
+
+	@Override
+	public ArrayList<HashMap<String, Object>> ricercaListaForniture(String dataInizio, String dataFine) {
+
+		if (controlloParametri(dataInizio, dataFine) == 0)
+			try {
+				return dbProdotti.query(
+						"SELECT f.*, p.autore ,p.autore, p.editore FROM Fornitura AS f JOIN Prodotto AS p on f.codiceProdotto=p.codice WHERE f.dataFornitura BETWEEN '"
+								+ dataInizio + "' AND '" + dataFine + "'");
+			} catch (RemoteException e) {
+				return new ArrayList<>();
+			}
+		return new ArrayList<>();
+	}
+
+	@Override
+	public int controlloParametri(String dataInizio, String dataFine) {
+		int esitoControllo = 0;
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		var dataIn = LocalDate.parse(dataInizio, formatter);
+		var dataFin = LocalDate.parse(dataFine, formatter);
+
+		if (dataIn != null && dataFin != null) {
+			if (dataIn.isBefore(dataFin))
+				esitoControllo = 0;
+			else {
+				esitoControllo = 1;
+			}
+		} else {
+			esitoControllo = 2;
+		}
+		return esitoControllo;
+	}
+
 }
