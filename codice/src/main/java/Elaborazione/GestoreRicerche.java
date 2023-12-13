@@ -29,6 +29,8 @@ public class GestoreRicerche implements GestoreRicercheInterfaccia
 		dbProdotti = d2;
 	}
 
+
+	// controllo dei parametri per username
 	public int controlloParametri(String username){
 
 		// RF19
@@ -42,26 +44,83 @@ public class GestoreRicerche implements GestoreRicercheInterfaccia
 			return 4;
 	}
 
+	// controllo dei parametri per nome e cognome
 	public int controlloParametri(String nome, String cognome) {
 
 		// RF19
 		// Riccardo Nazzari, Andrea Benedetto
 
 		int len1 = nome.length();
-		boolean bool1 = false;
+		boolean bool1 = !nome.matches("[a-zA-Z]+");
 		int len2 = cognome.length();
-		boolean bool2 = false;
+		boolean bool2 = !cognome.matches("[a-zA-Z]+");
 
-		for (int i=0; i<len1; i++) {
-			if (!Character.isAlphabetic(nome.charAt(i))) bool1 = true;
+		if ((len1 < 3) || (bool1)){
+			return 2;
+		}else{
+			if((len2 < 3) || (bool2)){
+				return 3;
+			}else{
+				return 4;
+			}
 		}
+	}
 
-		for (int j=0; j<len2; j++) {
-			if (!Character.isAlphabetic(cognome.charAt(j))) bool2 = true;
-		}
+	public ArrayList<HashMap<String, Object>> cercaUtenteBloccatoNonBloccato(String username) throws RemoteException {
 
-		if (len1<3 || bool1) return 2;
-		else if (len2<3 || bool2) return 3;
-		return 4;
+		String comandoSql, esitoRicerca;
+		ArrayList<HashMap<String, Object>> utenti = null;
+
+
+		comandoSql = "SELECT Utente.nome, Utente.cognome, Utente.username, Utente.tipo, Credenziali.attivo\n" +
+					"FROM Utente JOIN Credenziali ON Utente.username = Credenziali.username\n" +
+					"WHERE Utente.username LIKE \""+ username + "%\";";
+		utenti = dbUtenti.query(comandoSql);
+
+		return utenti;
+	}
+
+
+	public ArrayList<HashMap<String, Object>> cercaUtenteBloccatoNonBloccato(String nome, String cognome) throws RemoteException {
+
+		String comandoSql, esitoRicerca;
+		ArrayList<HashMap<String, Object>> utenti = null;
+
+
+		comandoSql = "SELECT Utente.nome, Utente.cognome, Utente.username, Utente.tipo, Credenziali.attivo\n" +
+				"FROM Utente JOIN Credenziali ON Utente.username = Credenziali.username\n" +
+				"WHERE Utente.nome LIKE \""+ nome + "%\" AND Utente.cognome LIKE \""+ cognome + "%\";";
+		utenti = dbUtenti.query(comandoSql);
+
+		return utenti;
+	}
+
+	public ArrayList<HashMap<String, Object>> cercaUtenteNonBloccato(String username) throws RemoteException {
+
+		String comandoSql, esitoRicerca;
+		ArrayList<HashMap<String, Object>> utenti = null;
+
+
+		comandoSql = "SELECT Utente.nome, Utente.cognome, Utente.username, Utente.tipo, Credenziali.attivo\n" +
+				"FROM Utente JOIN Credenziali ON Utente.username = Credenziali.username\n" +
+				"WHERE Utente.username LIKE \""+ username + "%\" AND Credenziali.attivo == 1;";
+		utenti = dbUtenti.query(comandoSql);
+
+		return utenti;
+	}
+
+
+	public ArrayList<HashMap<String, Object>> cercaUtenteNonBloccato(String nome, String cognome) throws RemoteException {
+
+		String comandoSql, esitoRicerca;
+		ArrayList<HashMap<String, Object>> utenti = null;
+
+
+		comandoSql = "SELECT Utente.nome, Utente.cognome, Utente.username, Utente.tipo, Credenziali.attivo\n" +
+				"FROM Utente JOIN Credenziali ON Utente.username = Credenziali.username\n" +
+				"WHERE Utente.nome LIKE \""+ nome + "%\" AND Utente.cognome LIKE \""+ cognome + "%\" AND CREDENZIALI.attivo == 1;";
+		utenti = dbUtenti.query(comandoSql);
+
+		return utenti;
 	}
 }
