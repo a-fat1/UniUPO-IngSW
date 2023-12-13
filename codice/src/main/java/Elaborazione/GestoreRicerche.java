@@ -68,13 +68,16 @@ public class GestoreRicerche implements GestoreRicercheInterfaccia
 
 	public ArrayList<HashMap<String, Object>> cercaUtenteBloccatoNonBloccato(String username) throws RemoteException {
 
-		String comandoSql, esitoRicerca;
-		ArrayList<HashMap<String, Object>> utenti = null;
+		// RF19
+		// Riccardo Nazzari, Andrea Benedetto
 
+		String comandoSql;
+		ArrayList<HashMap<String, Object>> utenti;
 
 		comandoSql = "SELECT Utente.nome, Utente.cognome, Utente.username, Utente.tipo, Credenziali.attivo\n" +
-					"FROM Utente JOIN Credenziali ON Utente.username = Credenziali.username\n" +
-					"WHERE Utente.username LIKE \""+ username + "%\";";
+					 "FROM Utente JOIN Credenziali ON Utente.username = Credenziali.username\n" +
+					 "WHERE Utente.username LIKE \""+ username + "%\";";
+
 		utenti = dbUtenti.query(comandoSql);
 
 		return utenti;
@@ -83,12 +86,14 @@ public class GestoreRicerche implements GestoreRicercheInterfaccia
 
 	public ArrayList<HashMap<String, Object>> cercaUtenteBloccatoNonBloccato(String nome, String cognome) throws RemoteException {
 
-		String comandoSql, esitoRicerca;
-		ArrayList<HashMap<String, Object>> utenti = null;
+		// RF19
+		// Riccardo Nazzari, Andrea Benedetto
 
+		String comandoSql;
+		ArrayList<HashMap<String, Object>> utenti;
 
 		comandoSql = "SELECT Utente.nome, Utente.cognome, Utente.username, Utente.tipo, Credenziali.attivo\n" +
-				"FROM Utente JOIN Credenziali ON Utente.username = Credenziali.username\n" +
+				     "FROM Utente JOIN Credenziali ON Utente.username = Credenziali.username\n" +
 				"WHERE Utente.nome LIKE \""+ nome + "%\" AND Utente.cognome LIKE \""+ cognome + "%\";";
 		utenti = dbUtenti.query(comandoSql);
 
@@ -97,13 +102,15 @@ public class GestoreRicerche implements GestoreRicercheInterfaccia
 
 	public ArrayList<HashMap<String, Object>> cercaUtenteNonBloccato(String username) throws RemoteException {
 
-		String comandoSql, esitoRicerca;
-		ArrayList<HashMap<String, Object>> utenti = null;
+		// RF19
+		// Riccardo Nazzari, Andrea Benedetto
 
+		String comandoSql;
+		ArrayList<HashMap<String, Object>> utenti;
 
 		comandoSql = "SELECT Utente.nome, Utente.cognome, Utente.username, Utente.tipo, Credenziali.attivo\n" +
-				"FROM Utente JOIN Credenziali ON Utente.username = Credenziali.username\n" +
-				"WHERE Utente.username LIKE \""+ username + "%\" AND Credenziali.attivo == 1;";
+				     "FROM Utente JOIN Credenziali ON Utente.username = Credenziali.username\n" +
+				     "WHERE Utente.username LIKE \""+ username + "%\" AND Credenziali.attivo == 1;";
 		utenti = dbUtenti.query(comandoSql);
 
 		return utenti;
@@ -112,13 +119,15 @@ public class GestoreRicerche implements GestoreRicercheInterfaccia
 
 	public ArrayList<HashMap<String, Object>> cercaUtenteNonBloccato(String nome, String cognome) throws RemoteException {
 
-		String comandoSql, esitoRicerca;
-		ArrayList<HashMap<String, Object>> utenti = null;
+		// RF19
+		// Riccardo Nazzari, Andrea Benedetto
 
+		String comandoSql;
+		ArrayList<HashMap<String, Object>> utenti;
 
 		comandoSql = "SELECT Utente.nome, Utente.cognome, Utente.username, Utente.tipo, Credenziali.attivo\n" +
-				"FROM Utente JOIN Credenziali ON Utente.username = Credenziali.username\n" +
-				"WHERE Utente.nome LIKE \""+ nome + "%\" AND Utente.cognome LIKE \""+ cognome + "%\" AND CREDENZIALI.attivo == 1;";
+				     "FROM Utente JOIN Credenziali ON Utente.username = Credenziali.username\n" +
+				     "WHERE Utente.nome LIKE \""+ nome + "%\" AND Utente.cognome LIKE \""+ cognome + "%\" AND CREDENZIALI.attivo == 1;";
 		utenti = dbUtenti.query(comandoSql);
 
 		return utenti;

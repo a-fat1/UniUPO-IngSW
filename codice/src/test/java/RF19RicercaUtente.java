@@ -1,6 +1,8 @@
 import static org.junit.Assert.*;
 import org.junit.Test;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import DataBase.DbUtenti;
 import DataBase.DbProdotti;
@@ -77,25 +79,37 @@ public class RF19RicercaUtente {
         assertEquals(3, gestorericerche.controlloParametri("abc", "abc123456789!?=)("));
     }
 
-    /*
+
     @Test
     public void testDatabase0() throws RemoteException {
-        System.out.println(gestorericerche.cercaUtenteBloccatoNonBloccato("ald"));
+        ArrayList<HashMap<String, Object>> utenti = gestorericerche.cercaUtenteBloccatoNonBloccato("ald");
+        assertEquals("Aldo", utenti.get(0).get("nome"));
+        assertEquals("Bianchi", utenti.get(0).get("cognome"));
+        assertEquals("aldo", utenti.get(0).get("username"));
     }
 
     @Test
     public void testDatabase1() throws RemoteException {
-        System.out.println(gestorericerche.cercaUtenteBloccatoNonBloccato("Ald", "Bia"));
+        ArrayList<HashMap<String, Object>> utenti = gestorericerche.cercaUtenteBloccatoNonBloccato("Ald", "Bia");
+        assertEquals("Aldo", utenti.get(0).get("nome"));
+        assertEquals("Bianchi", utenti.get(0).get("cognome"));
+        assertEquals("aldo", utenti.get(0).get("username"));
     }
 
     @Test
     public void testDatabase2() throws RemoteException {
-        System.out.println(gestorericerche.cercaUtenteNonBloccato("ald"));
+        ArrayList<HashMap<String, Object>> utenti = gestorericerche.cercaUtenteNonBloccato("ald");
+        assertEquals("Aldo", utenti.get(0).get("nome"));
+        assertEquals("Bianchi", utenti.get(0).get("cognome"));
+        assertEquals("aldo", utenti.get(0).get("username"));
     }
 
     @Test
     public void testDatabase3() throws RemoteException {
-        System.out.println(gestorericerche.cercaUtenteNonBloccato("Ald", "Bia"));
+        ArrayList<HashMap<String, Object>> utenti = gestorericerche.cercaUtenteNonBloccato("Ald", "Bia");
+        assertEquals("Aldo", utenti.get(0).get("nome"));
+        assertEquals("Bianchi", utenti.get(0).get("cognome"));
+        assertEquals("aldo", utenti.get(0).get("username"));
     }
-     */
+
 }
