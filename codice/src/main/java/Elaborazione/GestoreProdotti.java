@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.rmi.registry.Registry;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.RemoteException;
@@ -40,9 +42,14 @@ public class GestoreProdotti implements GestoreProdottiInterfaccia {
 
 		if (controlloParametri(dataInizio, dataFine) == 0)
 			try {
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+				DateTimeFormatter stringFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+				LocalDateTime dataIn = LocalDateTime.of(LocalDate.parse(dataInizio, formatter), LocalTime.MIDNIGHT);
+				LocalDateTime dataFin = LocalDateTime.of(LocalDate.parse(dataFine, formatter), LocalTime.MAX);
+
 				return dbProdotti.query(
 						"SELECT f.*, p.autore ,p.autore, p.editore FROM Fornitura AS f JOIN Prodotto AS p on f.codiceProdotto=p.codice WHERE f.dataFornitura BETWEEN '"
-								+ dataInizio + "' AND '" + dataFine + "'");
+								+ dataIn.format(stringFormatter) + "' AND '" + dataFin.format(stringFormatter) + "'");
 			} catch (RemoteException e) {
 				return new ArrayList<>();
 			}

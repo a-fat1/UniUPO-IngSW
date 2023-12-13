@@ -20,7 +20,8 @@ public class RF13ListaForniture {
     @Test
     public void testRicercaListaForniturePerData() {
         assertNotNull(gestoreProdotti.ricercaListaForniture("01/12/2023", "04/12/2023"));
-        assertNull(gestoreProdotti.ricercaListaForniture("07/12/2023", "01/12/2023"));
+        assertEquals(12,gestoreProdotti.ricercaListaForniture("01/12/2023", "04/12/2023").size());
+        assertEquals(0,gestoreProdotti.ricercaListaForniture("07/12/2023", "01/12/2023").size());
     }
 
     @Test
