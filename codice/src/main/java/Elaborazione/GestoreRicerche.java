@@ -41,4 +41,27 @@ public class GestoreRicerche implements GestoreRicercheInterfaccia
 		else
 			return 4;
 	}
+
+	public int controlloParametri(String nome, String cognome) {
+
+		// RF19
+		// Riccardo Nazzari, Andrea Benedetto
+
+		int len1 = nome.length();
+		boolean bool1 = false;
+		int len2 = cognome.length();
+		boolean bool2 = false;
+
+		for (int i=0; i<len1; i++) {
+			if (!Character.isAlphabetic(nome.charAt(i))) bool1 = true;
+		}
+
+		for (int j=0; j<len2; j++) {
+			if (!Character.isAlphabetic(cognome.charAt(j))) bool2 = true;
+		}
+
+		if (len1<3 || bool1) return 2;
+		else if (len2<3 || bool2) return 3;
+		return 4;
+	}
 }
