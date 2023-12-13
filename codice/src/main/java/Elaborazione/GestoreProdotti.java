@@ -25,4 +25,22 @@ public class GestoreProdotti implements GestoreProdottiInterfaccia
 	{
 		dbProdotti = d1;
 	}
+
+	public String Rf14_ControlloFormatoModificaPrezzo(float prezzoNuovo, float prezzoVecchio)
+	{	
+		String controllo = null;
+
+		if(prezzoNuovo <= 0)
+			controllo = "erroreNegativo";
+		else if(prezzoNuovo == prezzoVecchio)
+		{
+			controllo = "erroreNonModificato";
+		}
+		else 
+		{
+			controllo = "OK";
+		}
+		
+		return controllo;
+	}
 }
