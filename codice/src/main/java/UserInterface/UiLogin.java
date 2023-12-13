@@ -164,7 +164,8 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 		nuovaPasswordPanel.setLayout(boxLayoutNP);
 		nuovaPasswordPanel.add(nuovaPasswordLabel);
 		nuovaPasswordPanel.add(nuovaPasswordField);
-		nuovaPasswordPanel.add(new JLabel("La password deve essere almeno 6 caratteri e contenere almeno una lettera e un numero"));
+		nuovaPasswordPanel.add(new JLabel("La password deve essere almeno 6 caratteri"));
+		nuovaPasswordPanel.add(new JLabel("e contenere almeno una lettera e un numero"));
 	}
 	
 	public void avvioLogin() throws RemoteException
@@ -342,7 +343,7 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 						this.mostraErrore(4);
 					}
 				}
-				if(richiesta==CANCEL_OPTION){
+				if(richiesta==CANCEL_OPTION || richiesta==DEFAULT_OPTION){
 					return;
 				}
 			} while(esitoControlloPassword!=0);
@@ -353,7 +354,7 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 
 			esitoControlloPassword=gestoreAccessi.controlloNuovaPassword(nuovaPassword);
 
-			if(richiesta==CANCEL_OPTION){
+			if(richiesta==CANCEL_OPTION || richiesta==DEFAULT_OPTION){
 				return;
 			}
 			if(esitoControlloPassword==1){
