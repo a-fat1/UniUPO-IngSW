@@ -21,14 +21,14 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 	// componenti
 	private GestoreRicercheInterfaccia gestoreRicerche;
 
-	// attributi
+	// attributi RF13
 	private int codice = 0;
 	private String listaForniture;
 	private String dataInizio;
 	private String dataFine;
 	private int esitoControllo = 0;
 
-	// elementi grafici
+	// elementi grafici RF13
 	private JLabel labelDataInizio;
 	private JLabel labelDataFine;
 	private JTextField fieldDataInizio;
