@@ -71,6 +71,8 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 	private JPasswordField nuovaPasswordField;
 	private JPanel aggiornaPasswordPanel;
 	private JPanel nuovaPasswordPanel;
+	BoxLayout boxLayoutNP;
+	BoxLayout boxLayoutAP;
 
 	public UiLogin(String hostGestore) throws RemoteException, NotBoundException
 	{
@@ -144,17 +146,22 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 		menuPanel.add(menuLabel2, BorderLayout.CENTER);
 		menuPanel.add(menuList, BorderLayout.SOUTH);
 
-		passwordAttualeLabel= new JLabel("password");
+		passwordAttualeLabel= new JLabel("Password attuale");
 		passwordAttualeField= new JPasswordField("", 10);
 
-		aggiornaPasswordPanel = new JPanel(new FlowLayout());
+		aggiornaPasswordPanel = new JPanel();
+		boxLayoutAP = new BoxLayout(aggiornaPasswordPanel, BoxLayout.PAGE_AXIS);
+		aggiornaPasswordPanel.setLayout(boxLayoutAP);
 		aggiornaPasswordPanel.add(passwordAttualeLabel);
 		aggiornaPasswordPanel.add(passwordAttualeField);
+		aggiornaPasswordPanel.add(new JLabel("Inserire la password attualmente usata"));
 
-		nuovaPasswordLabel= new JLabel("password");
+		nuovaPasswordLabel= new JLabel("Nuova password");
 		nuovaPasswordField= new JPasswordField("", 10);
 
-		nuovaPasswordPanel = new JPanel(new FlowLayout());
+		nuovaPasswordPanel = new JPanel();
+		boxLayoutNP = new BoxLayout(nuovaPasswordPanel, BoxLayout.PAGE_AXIS);
+		nuovaPasswordPanel.setLayout(boxLayoutNP);
 		nuovaPasswordPanel.add(nuovaPasswordLabel);
 		nuovaPasswordPanel.add(nuovaPasswordField);
 		nuovaPasswordPanel.add(new JLabel("La password deve essere almeno 6 caratteri e contenere almeno una lettera e un numero"));
@@ -335,6 +342,9 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 						this.mostraErrore(4);
 					}
 				}
+				if(richiesta==CANCEL_OPTION){
+					return;
+				}
 			} while(esitoControlloPassword!=0);
 		}
 
@@ -343,6 +353,9 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 
 			esitoControlloPassword=gestoreAccessi.controlloNuovaPassword(nuovaPassword);
 
+			if(richiesta==CANCEL_OPTION){
+				return;
+			}
 			if(esitoControlloPassword==1){
 				this.mostraErrore(1);
 			}
@@ -373,20 +386,21 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 		String messaggio="";
 
 		if(nErrore==4){
-			passwordAttualeField.setBackground(Color.red);
-			messaggio="ERRORE"+"\nLa password inserita non coincide con quella attuale"+"\nSi prega di riprova";
+			passwordAttualeField.setBackground(Color.yellow);
+			messaggio="ERRORE"+"\nLa password inserita non coincide con quella attuale"+"\nSi prega di riprovare";
+
 		}
 		if(nErrore==1){
 			nuovaPasswordField.setBackground(Color.yellow);
-			messaggio="ERRORE"+"\nLa password inserita deve contenere almeno 6 caratteri"+"\nSi prega di riprova";
+			messaggio="ERRORE"+"\nLa password inserita deve contenere almeno 6 caratteri"+"\nSi prega di riprovare";
 		}
 		if(nErrore==2){
 			nuovaPasswordField.setBackground(Color.yellow);
-			messaggio="ERRORE"+"\nLa password inserita deve contenere almeno una lettera"+"\nSi prega di riprova";
+			messaggio="ERRORE"+"\nLa password inserita deve contenere almeno una lettera"+"\nSi prega di riprovare";
 		}
 		if(nErrore==3){
 			nuovaPasswordField.setBackground(Color.yellow);
-			messaggio="ERRORE"+"\nLa password inserita deve contenere almeno un numero"+"\nSi prega di riprova";
+			messaggio="ERRORE"+"\nLa password inserita deve contenere almeno un numero"+"\nSi prega di riprovare";
 		}
 
 		this.showMessageDialog(null, messaggio, "Errore", this.ERROR_MESSAGE);
@@ -401,7 +415,7 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 	}
 
 	private void mostraMessaggioDiSuccesso(){
-		String messaggio= "La password è stata cambiata con successo!"+"\nora potrai accedere con la tua nuova password";
+		String messaggio= "La password e' stata cambiata con successo!"+"\nOra potrai accedere con la tua nuova password";
 		this.showMessageDialog(null, messaggio, "Aggiorna Password", this.INFORMATION_MESSAGE);
 	}
 }
