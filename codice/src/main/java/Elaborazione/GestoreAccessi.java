@@ -143,7 +143,7 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
         dbUtenti.query(query);
     }
 
-    public void mostraErrore(int val){
+    public void mostraErrore(int val) throws RemoteException{
 		//RF23 - Aggiorna Username
 		//autore: Brivio Marco, Serio Giulia
         switch(val){
@@ -164,7 +164,7 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
         }
     }
 
-	public void messaggio(String messaggio){
+	public void messaggio(String messaggio) throws RemoteException{
 		//RF23 - Aggiorna Username
 		//autore: Brivio Marco, Serio Giulia
         System.out.println(messaggio);
