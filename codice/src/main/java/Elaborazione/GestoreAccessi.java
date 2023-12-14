@@ -83,7 +83,7 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 		//RF00: login
     		//autore: Codetta
 
-		String comandoSql, esitoRicerca;
+		String comandoSql;
 		ArrayList<HashMap<String, Object>> utenti = null;
 		HashMap<String, Object> utente=null;
 
@@ -97,4 +97,76 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 		
 		return utente;			
 	}
+
+	public boolean verificaDuplicato(String nuovoUsername) throws RemoteException{
+		//RF23 - Aggiorna Username
+		//autore: Brivio Marco, Serio Giulia
+        boolean esito;
+        String query = "SELECT username FROM credenziali WHERE username = \"" + nuovoUsername + "\" ;";
+        ArrayList <HashMap<String, Object>> credenziali = null;
+
+        credenziali = dbUtenti.query(query);
+
+        if(credenziali.size()==0){
+            esito = true; 
+        }
+        else
+            esito = false;
+        return esito;
+    }
+
+    public int verifica(String vecchioUsername, String nuovoUsername) {
+		//RF23 - Aggiorna Username
+		//autore: Brivio Marco, Serio Giulia
+        int esito = -1;
+        int lunghezza = nuovoUsername.length();
+        if (lunghezza < 3) {
+            if (vecchioUsername.equals(nuovoUsername)) {
+                esito = 3;
+            } else {
+                esito = 1;
+            }
+        } else {
+            if (vecchioUsername.equals(nuovoUsername)) {
+                esito = 2;
+            } else {
+                esito = 0;
+            }
+        }
+        return esito;
+    }
+
+    public void cambio(String vecchioUsername, String nuovoUsername) throws RemoteException{
+		//RF23 - Aggiorna Username
+		//autore: Brivio Marco, Serio Giulia
+        String query = "UPDATE credenziali SET username = \"" + nuovoUsername + "\" WHERE username = \"" + vecchioUsername + "\";";
+        dbUtenti.query(query);
+    }
+
+    public void mostraErrore(int val){
+		//RF23 - Aggiorna Username
+		//autore: Brivio Marco, Serio Giulia
+        switch(val){
+            case 0:
+                System.out.println("Lo username è corretto");
+                break;
+            case 1:
+                System.out.println("Lo username deve avere almeno 3 caratteri");
+                break;
+            case 2:
+                System.out.println("Lo username deve avere almeno 3 caratteri ed essere diverso da quello vecchio");
+                break;
+            case 3:
+                System.out.println("Lo username deve essere diverso da quello vecchio");
+                break;
+            default:
+                System.out.println("Numero non valido");
+        }
+    }
+
+	public void messaggio(String messaggio){
+		//RF23 - Aggiorna Username
+		//autore: Brivio Marco, Serio Giulia
+        System.out.println(messaggio);
+    }
 }
