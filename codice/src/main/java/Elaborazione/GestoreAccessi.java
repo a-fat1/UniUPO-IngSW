@@ -121,16 +121,40 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 			return 1;
 	}
 	
+	/**
+	 * Funzione che aggiorna il database creando una nuova entry per l'utente designato da nome e cognome,
+	 * con nickname "nome.cognome".
+	 * @param nome nome dell'utente.
+	 * @param cognome cognome dell'utente.
+	 * 
+	 * @throws RemoteException
+	*/
 	public void promptSalvaAccount(String nome, String cognome) throws RemoteException
 	{
 		dbUtenti.update("INSERT INTO 'main'.'Utente' ('username', 'nome', 'cognome') VALUES ("+nome+'.'+cognome+", "+nome+"', "+cognome+");");
 	}
 	
+	/**
+	 * Funzione necessaria per attivare l'account, settando il tipo utente dell'utente designato da nome
+	 * e cognome, con nickname "nome.cognome".
+	 * @param nome nome dell'utente.
+	 * @param cognome cognome dell'utente.
+	 * @param tipoUtente il tipo con cui l'utente verrà attivato.
+	 * 
+	 * @throws RemoteException
+	*/
 	public void richiestaAttivazioneAccount(String nome, String cognome, String tipoUtente) throws RemoteException
 	{
 		dbUtenti.update("UPDATE Utente SET tipo="+tipoUtente+" WHERE username="+nome+'.'+cognome);
 	}
 	
+	/**
+	 * Funzione necessaria per aggiungere delle credenziali da aggiornare per l'utente identificato da 
+	 * username.
+	 * @param username username dell'utente.
+	 * 
+	 * @throws RemoteException
+	*/
 	public void aggiuntaCredenziali(String username) throws RemoteException
 	{
 		dbUtenti.update("UPDATE Utente SET password='' WHERE username="+username);
