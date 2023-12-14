@@ -64,42 +64,56 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 	}
 
 	@Override
-	public void avvioListaForniture(int codice) throws RemoteException { // RF 13 Benetti-Chiappa
+	public void avvioListaForniture(int codice)  { // RF 13 Benetti-Chiappa
 		DbProdotti dbProdotti = new DbProdotti();
 		GestoreProdotti gestoreProdotti = new GestoreProdotti(dbProdotti);
 		var listaForniture = gestoreProdotti.ricercaListaForniture(codice);
 		if (listaForniture.size() == 0)
 			mostraErrore(3);
 		mostraListaItem(listaForniture);
-		
+
 	}
 
 	@Override
-	public void avvioListaForniture( ) throws RemoteException { // RF 13 Benetti-Chiappa
+	public void avvioListaForniture()  { // RF 13 Benetti-Chiappa
 		DbProdotti dbProdotti = new DbProdotti();
 		GestoreProdotti gestoreProdotti = new GestoreProdotti(dbProdotti);
-		
-		do{
+
+		do {
 			mostraFormRicercaPerData();
-			esitoControllo=gestoreProdotti.controlloParametri(dataInizio, dataFine);
-			if (esitoControllo==1 || esitoControllo==2){
+			esitoControllo = gestoreProdotti.controlloParametri(dataInizio, dataFine);
+			if (esitoControllo == 1 || esitoControllo == 2) {
 				mostraErrore(esitoControllo);
-			}
-			else{
-				var listaForniture=gestoreProdotti.ricercaListaForniture(dataInizio, dataFine);
-				if (listaForniture.size()==0)
+			} else {
+				var listaForniture = gestoreProdotti.ricercaListaForniture(dataInizio, dataFine);
+				if (listaForniture.size() == 0)
 					mostraErrore(3);
 				mostraListaData(listaForniture);
 			}
-		}while(esitoControllo==1 || esitoControllo==2);
-		
+		} while (esitoControllo == 1 || esitoControllo == 2);
 
 	}
 
 	@Override
 	public void mostraErrore(int esitoControllo) {// RF 13 Benetti-Chiappa
 
+		//da finire
+		String messaggio = "";
 
+		if (esitoControllo == 1) {
+			messaggio="Data non esistente/invalida"; 
+		}
+		if (esitoControllo == 2) {
+			messaggio="La seconda data deve essere successiva alla prima";
+		}
+		if (esitoControllo == 3) {
+			messaggio="Forniture in tale range di date non trovate";
+		}
+		if (esitoControllo == 4) {
+			messaggio="Forniture non trovate per questo prodotto";
+		}
+		messaggio = messaggio + "\n(clicca su OK o X per continuare)";
+		this.showMessageDialog(null, messaggio, "Errore", this.ERROR_MESSAGE);
 	}
 
 	@Override

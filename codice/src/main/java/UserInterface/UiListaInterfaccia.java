@@ -11,8 +11,8 @@ public interface UiListaInterfaccia extends Remote
 	void avvioListaPagamenti() throws RemoteException;
 
 	// RF 13 Benetti-Chiappa
-	void avvioListaForniture( int  codice) throws RemoteException;
-	void avvioListaForniture() throws RemoteException;
+	void avvioListaForniture( int  codice) ;
+	void avvioListaForniture() ;
 	void mostraErrore(int esitoControllo);
 	void mostraFormRicercaPerData();
 	void mostraListaItem(ArrayList<HashMap<String, Object>> listaForniture);
