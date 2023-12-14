@@ -14,8 +14,8 @@ public interface GestoreAccessiInterfaccia extends Remote
    boolean verificaDuplicato(String nuovoUsername) throws RemoteException;
    int verifica(String vecchioUsername, String nuovoUsername) throws RemoteException;
    void cambio(String vecchioUsername, String nuovoUsername) throws RemoteException;
-   void mostraErrore(int val);
-   void messaggio(String messaggio);
+   void mostraErrore(int val) throws RemoteException;
+   void messaggio(String messaggio) throws RemoteException;
 } 
 
 
