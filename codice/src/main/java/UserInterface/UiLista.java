@@ -64,7 +64,7 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 	}
 
 	@Override
-	public void avvioListaForniture(int codice)  { // RF 13 Benetti-Chiappa
+	public void avvioListaForniture(int codice) throws RemoteException  { // RF 13 Benetti-Chiappa
 		DbProdotti dbProdotti = new DbProdotti();
 		GestoreProdotti gestoreProdotti = new GestoreProdotti(dbProdotti);
 		var listaForniture = gestoreProdotti.ricercaListaForniture(codice);
@@ -75,7 +75,7 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 	}
 
 	@Override
-	public void avvioListaForniture()  { // RF 13 Benetti-Chiappa
+	public void avvioListaForniture() throws RemoteException { // RF 13 Benetti-Chiappa
 		DbProdotti dbProdotti = new DbProdotti();
 		GestoreProdotti gestoreProdotti = new GestoreProdotti(dbProdotti);
 
@@ -95,9 +95,8 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 	}
 
 	@Override
-	public void mostraErrore(int esitoControllo) {// RF 13 Benetti-Chiappa
+	public void mostraErrore(int esitoControllo) throws RemoteException  {// RF 13 Benetti-Chiappa
 
-		//da finire
 		String messaggio = "";
 
 		if (esitoControllo == 1) {
@@ -113,11 +112,11 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 			messaggio="Forniture non trovate per questo prodotto";
 		}
 		messaggio = messaggio + "\n(clicca su OK o X per continuare)";
-		this.showMessageDialog(null, messaggio, "Errore", this.ERROR_MESSAGE);
+		this.showMessageDialog(null, messaggio, "Errore", this.ERROR_MESSAGE, null);
 	}
 
 	@Override
-	public void mostraFormRicercaPerData() {// RF 13 Benetti-Chiappa
+	public void mostraFormRicercaPerData() throws RemoteException {// RF 13 Benetti-Chiappa
 		var ricerca = showConfirmDialog(null, panelData, "Ricerca per data", this.OK_OPTION);
 
 		if (ricerca == this.OK_OPTION) {
@@ -127,13 +126,13 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 	}
 
 	@Override
-	public void mostraListaItem(ArrayList<HashMap<String, Object>> listaForniture) {// RF 13 Benetti-Chiappa
+	public void mostraListaItem(ArrayList<HashMap<String, Object>> listaForniture) throws RemoteException{// RF 13 Benetti-Chiappa
 
 	}
 
 	@Override
-	public void mostraListaData(ArrayList<HashMap<String, Object>> listaForniture) {// RF 13 Benetti-Chiappa
-
+	public void mostraListaData(ArrayList<HashMap<String, Object>> listaForniture) throws RemoteException {// RF 13 Benetti-Chiappa
+		
 	}
 
 }

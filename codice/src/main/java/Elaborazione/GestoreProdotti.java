@@ -29,7 +29,7 @@ public class GestoreProdotti implements GestoreProdottiInterfaccia {
 	}
 
 	@Override
-	public ArrayList<HashMap<String, Object>> ricercaListaForniture(int codice) {// RF 13 Benetti-Chiappa
+	public ArrayList<HashMap<String, Object>> ricercaListaForniture(int codice) throws RemoteException {// RF 13 Benetti-Chiappa
 		try {
 			return dbProdotti.query("SELECT * FROM Fornitura WHERE codiceProdotto=" + codice);
 		} catch (RemoteException e) {
@@ -38,7 +38,7 @@ public class GestoreProdotti implements GestoreProdottiInterfaccia {
 	}
 
 	@Override
-	public ArrayList<HashMap<String, Object>> ricercaListaForniture(String dataInizio, String dataFine) {// RF 13 Benetti-Chiappa
+	public ArrayList<HashMap<String, Object>> ricercaListaForniture(String dataInizio, String dataFine) throws RemoteException {// RF 13 Benetti-Chiappa
 
 		if (controlloParametri(dataInizio, dataFine) == 0)
 			try {
