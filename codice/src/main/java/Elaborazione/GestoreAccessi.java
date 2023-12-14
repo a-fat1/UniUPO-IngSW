@@ -115,7 +115,7 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
         return esito;
     }
 
-    public int verifica(String vecchioUsername, String nuovoUsername) {
+    public int verifica(String vecchioUsername, String nuovoUsername) throws RemoteException{
 		//RF23 - Aggiorna Username
 		//autore: Brivio Marco, Serio Giulia
         int esito = -1;
