@@ -9,6 +9,8 @@ public interface UiListaInterfaccia extends Remote
 {
 	void avvioListaOrdini() throws RemoteException;
 	void avvioListaPagamenti() throws RemoteException;
+
+	// RF 13 Benetti-Chiappa
 	void avvioListaForniture( int  codice) throws RemoteException;
 	void avvioListaForniture() throws RemoteException;
 	void mostraErrore(int esitoControllo);

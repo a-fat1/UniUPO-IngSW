@@ -64,7 +64,7 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 	}
 
 	@Override
-	public void avvioListaForniture(int codice) throws RemoteException { // RF13
+	public void avvioListaForniture(int codice) throws RemoteException { // RF 13 Benetti-Chiappa
 		DbProdotti dbProdotti = new DbProdotti();
 		GestoreProdotti gestoreProdotti = new GestoreProdotti(dbProdotti);
 		var listaForniture = gestoreProdotti.ricercaListaForniture(codice);
@@ -75,7 +75,7 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 	}
 
 	@Override
-	public void avvioListaForniture( ) throws RemoteException { // RF13
+	public void avvioListaForniture( ) throws RemoteException { // RF 13 Benetti-Chiappa
 		DbProdotti dbProdotti = new DbProdotti();
 		GestoreProdotti gestoreProdotti = new GestoreProdotti(dbProdotti);
 		
@@ -97,12 +97,13 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 	}
 
 	@Override
-	public void mostraErrore(int esitoControllo) {
+	public void mostraErrore(int esitoControllo) {// RF 13 Benetti-Chiappa
+		
 
 	}
 
 	@Override
-	public void mostraFormRicercaPerData() {
+	public void mostraFormRicercaPerData() {// RF 13 Benetti-Chiappa
 		var ricerca = showConfirmDialog(null, panelData, "Ricerca per data", this.OK_OPTION);
 
 		if (ricerca == this.OK_OPTION) {
@@ -112,12 +113,12 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 	}
 
 	@Override
-	public void mostraListaItem(ArrayList<HashMap<String, Object>> listaForniture) {
+	public void mostraListaItem(ArrayList<HashMap<String, Object>> listaForniture) {// RF 13 Benetti-Chiappa
 
 	}
 
 	@Override
-	public void mostraListaData(ArrayList<HashMap<String, Object>> listaForniture) {
+	public void mostraListaData(ArrayList<HashMap<String, Object>> listaForniture) {// RF 13 Benetti-Chiappa
 
 	}
 
