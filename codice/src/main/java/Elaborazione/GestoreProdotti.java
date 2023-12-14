@@ -60,8 +60,8 @@ public class GestoreProdotti implements GestoreProdottiInterfaccia {
 	public int controlloParametri(String dataInizio, String dataFine) throws RemoteException{// RF 13 Benetti-Chiappa
 		int esitoControllo = 0;
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-		var dataIn = LocalDate.parse(dataInizio, formatter);
-		var dataFin = LocalDate.parse(dataFine, formatter);
+		LocalDate dataIn = LocalDate.parse(dataInizio, formatter);
+		LocalDate dataFin = LocalDate.parse(dataFine, formatter);
 
 		if (dataIn != null && dataFin != null) {
 			if (dataIn.isBefore(dataFin))

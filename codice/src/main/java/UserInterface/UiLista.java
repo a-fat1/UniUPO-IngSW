@@ -7,6 +7,11 @@ import java.util.ArrayList;
 import java.rmi.registry.Registry;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.RemoteException;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Dialog.ModalityType;
+import java.awt.Window.Type;
+import java.awt.event.ActionListener;
 import java.rmi.NotBoundException;
 
 import javax.swing.*;
@@ -18,6 +23,7 @@ import org.checkerframework.checker.units.qual.t;
 
 import DataBase.DbProdotti;
 import UserInterface.*;
+import javafx.event.ActionEvent;
 import Elaborazione.*;
 
 public class UiLista extends JOptionPane implements UiListaInterfaccia {
@@ -45,6 +51,7 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 
 	private JScrollPane scrollPanelListaForniture;
 	private JTable tableListaForniture;
+	private JDialog tableListaFornitureFrame;
 
 	public UiLista(String hostGestore) throws RemoteException, NotBoundException {
 		registryUI = LocateRegistry.getRegistry("127.0.0.1", 1100); // default: 1099
@@ -64,7 +71,13 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 		panelData.add(fieldDataFine);
 		tableListaForniture = new JTable();
 		scrollPanelListaForniture = new JScrollPane(tableListaForniture);
-
+		tableListaFornitureFrame = new JDialog(null, ModalityType.APPLICATION_MODAL);
+		tableListaFornitureFrame.setSize(new Dimension(700, 450));
+		tableListaFornitureFrame.setMinimumSize(new Dimension(650, 350));
+		scrollPanelListaForniture.add(tableListaForniture);
+		scrollPanelListaForniture.setViewportView(tableListaForniture);
+		tableListaFornitureFrame.getContentPane().add(scrollPanelListaForniture);
+		tableListaFornitureFrame.setType(Type.NORMAL);
 	}
 
 	public void avvioListaOrdini() throws RemoteException { // RF11
@@ -77,7 +90,7 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 	public void avvioListaForniture(int codice) throws RemoteException { // RF 13 Benetti-Chiappa
 		DbProdotti dbProdotti = new DbProdotti();
 		GestoreProdotti gestoreProdotti = new GestoreProdotti(dbProdotti);
-		var listaForniture = gestoreProdotti.ricercaListaForniture(codice);
+		ArrayList<HashMap<String,Object>> listaForniture = gestoreProdotti.ricercaListaForniture(codice);
 		if (listaForniture.size() == 0)
 			mostraErrore(3);
 		mostraListaItem(listaForniture);
@@ -88,6 +101,7 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 	public void avvioListaForniture() throws RemoteException { // RF 13 Benetti-Chiappa
 		DbProdotti dbProdotti = new DbProdotti();
 		GestoreProdotti gestoreProdotti = new GestoreProdotti(dbProdotti);
+		ArrayList<HashMap<String, Object>> listaForniture = new ArrayList<>();
 
 		do {
 			mostraFormRicercaPerData();
@@ -95,15 +109,17 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 			if (esitoControllo == 1 || esitoControllo == 2) {
 				mostraErrore(esitoControllo);
 			} else {
-				var listaForniture = gestoreProdotti.ricercaListaForniture(dataInizio, dataFine);
+				listaForniture = gestoreProdotti.ricercaListaForniture(dataInizio, dataFine);
 				if (listaForniture.size() == 0) {
 					mostraErrore(3);
 					break;
 				}
 				mostraListaData(listaForniture);
+				tableListaFornitureFrame.setTitle("Ricerca per data " + dataInizio + " a " + dataFine);
+				tableListaFornitureFrame.setVisible(true);
+				
 			}
 		} while (esitoControllo == 1 || esitoControllo == 2);
-
 	}
 
 	@Override
@@ -129,7 +145,7 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 
 	@Override
 	public void mostraFormRicercaPerData() throws RemoteException {// RF 13 Benetti-Chiappa
-		var ricerca = showConfirmDialog(null, panelData, "Ricerca per data", this.OK_OPTION);
+		int ricerca = showConfirmDialog(null, panelData, "Ricerca per data", this.OK_OPTION);
 
 		if (ricerca == this.OK_OPTION) {
 			dataInizio = fieldDataInizio.getText();
@@ -181,11 +197,25 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 				}
 				data.add(rowData);
 			}
-
+			
+			
 		}
 		DefaultTableModel model = new DefaultTableModel(data, columnNames);
+    	tableListaForniture.setModel(model);
+
+		JButton okButton = new JButton("OK");
+		okButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(java.awt.event.ActionEvent e) {
+				tableListaFornitureFrame.dispose();
+			}
+		});
+        
+		JPanel buttonPanel = new JPanel();
+    	buttonPanel.add(okButton);
+		
+		tableListaFornitureFrame.getContentPane().add(BorderLayout.SOUTH, buttonPanel);
 		tableListaForniture.setModel(model);
+		
 	}
 }
-UiLista.java
-6 KB
