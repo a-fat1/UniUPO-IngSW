@@ -71,7 +71,7 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 		if (listaForniture.size() == 0)
 			mostraErrore(3);
 		mostraListaItem(listaForniture);
-		}
+		
 	}
 
 	@Override
@@ -98,7 +98,7 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 
 	@Override
 	public void mostraErrore(int esitoControllo) {// RF 13 Benetti-Chiappa
-		
+
 
 	}
 
