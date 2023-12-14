@@ -9,6 +9,7 @@ public interface UiListaInterfaccia extends Remote
 {
 	void avvioListaOrdini() throws RemoteException;
 	void avvioListaPagamenti() throws RemoteException;
+	void avvioListaForniture( int  codice) throws RemoteException;
 	void avvioListaForniture() throws RemoteException;
 	void mostraErrore(int esitoControllo);
 	void mostraFormRicercaPerData();
