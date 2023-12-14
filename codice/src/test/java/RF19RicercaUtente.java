@@ -16,66 +16,52 @@ public class RF19RicercaUtente {
     // -------------------------------------------------------------
 
     @Test
-    public void testControlloParametriUsername0(){
+    public void testControlloParametriUsername(){
+        // controllo username lunghezza inferiore a 3
         assertEquals(1, gestorericerche.controlloParametri(""));
-    }
-
-    @Test
-    public void testControlloParametriUsername1(){
         assertEquals(1, gestorericerche.controlloParametri("a"));
-    }
-
-    @Test
-    public void testControlloParametriUsername2(){
         assertEquals(1, gestorericerche.controlloParametri("ab"));
     }
 
     @Test
-    public void testControlloParametriUsername3(){
+    public void testControlloParametriUsername1(){
+        // controllo username lunghezza corretta
         assertEquals(4, gestorericerche.controlloParametri("abc"));
+        assertEquals(4, gestorericerche.controlloParametri("orchidea1"));
     }
 
     @Test
     public void testControlloParametriNomeCognome0(){
+        // controllo nome lunghezza inferiore a 3
         assertEquals(2, gestorericerche.controlloParametri("", "abc"));
-    }
-    @Test
-    public void testControlloParametriNomeCognome1(){
         assertEquals(2, gestorericerche.controlloParametri("a", "abc"));
-    }
-    @Test
-    public void testControlloParametriNomeCognome2(){
         assertEquals(2, gestorericerche.controlloParametri("ab", "abc"));
-    }
-    @Test
-    public void testControlloParametriNomeCognome3(){
-        assertEquals(4, gestorericerche.controlloParametri("abc", "abc"));
     }
 
     @Test
-    public void testControlloParametriNomeCognome4(){
-        assertEquals(3, gestorericerche.controlloParametri("abc", ""));
-    }
-    @Test
-    public void testControlloParametriNomeCognome5(){
-        assertEquals(3, gestorericerche.controlloParametri("abc", "a"));
-    }
-    @Test
-    public void testControlloParametriNomeCognome6(){
-        assertEquals(3, gestorericerche.controlloParametri("abc", "ab"));
-    }
-    @Test
-    public void testControlloParametriNomeCognome7(){
+    public void testControlloParametriNomeCognome1(){
+        // controllo nome e cognome con lunghezza corretta
         assertEquals(4, gestorericerche.controlloParametri("abc", "abc"));
+        assertEquals(4, gestorericerche.controlloParametri("Mario", "Rossi"));
+    }
+
+    @Test
+    public void testControlloParametriNomeCognome2() {
+        // controllo cognome lunghezza inferiore a 3
+        assertEquals(3, gestorericerche.controlloParametri("abc", ""));
+        assertEquals(3, gestorericerche.controlloParametri("abc", "a"));
+        assertEquals(3, gestorericerche.controlloParametri("abc", "ab"));
     }
 
     @Test
     public void testControlloParametriNomeCognome8(){
+        // controllo nome caratteri non conseniti
         assertEquals(2, gestorericerche.controlloParametri("abc123456789!?=)(", "abc"));
     }
 
     @Test
     public void testControlloParametriNomeCognome9(){
+        // controllo cognome caratteri non consentiti
         assertEquals(3, gestorericerche.controlloParametri("abc", "abc123456789!?=)("));
     }
 
@@ -112,4 +98,48 @@ public class RF19RicercaUtente {
         assertEquals("aldo", utenti.get(0).get("username"));
     }
 
+    @Test
+    public void testDatabase() throws RemoteException {
+        // Ricerca con utenti multipli
+        ArrayList<HashMap<String, Object>> utenti = gestorericerche.cercaUtenteNonBloccato("s");
+        assertEquals(3, utenti.size());
+        assertEquals("Sirio", utenti.get(0).get("nome"));
+        assertEquals("Smith", utenti.get(0).get("cognome"));
+        assertEquals("sirio", utenti.get(0).get("username"));
+        assertEquals("Silvio", utenti.get(1).get("nome"));
+        assertEquals("Taylor", utenti.get(1).get("cognome"));
+        assertEquals("sisto", utenti.get(1).get("username"));
+        assertEquals("Sara", utenti.get(2).get("nome"));
+        assertEquals("Keynes", utenti.get(2).get("cognome"));
+        assertEquals("soave", utenti.get(2).get("username"));
+    }
+
+    @Test
+    public void testDatabase4() throws RemoteException {
+        // controllo numero corretto di elementi per utenti non bloccati (da username vuoto)
+        ArrayList<HashMap<String, Object>> utenti = gestorericerche.cercaUtenteNonBloccato("");
+        assertEquals(8, utenti.size());
+    }
+
+    @Test
+    public void testDatabase5() throws RemoteException {
+        // controllo nessun elemento nell'arrayList
+        ArrayList<HashMap<String, Object>> utenti = gestorericerche.cercaUtenteNonBloccato("alfio");
+        assertEquals(0, utenti.size());
+    }
+
+    @Test
+    public void testDatabase6() throws RemoteException {
+        // controlo numero corrett di elementi da username vuoto per utenti bloccati e non bloccati
+        ArrayList<HashMap<String, Object>> utenti = gestorericerche.cercaUtenteBloccatoNonBloccato("");
+        assertEquals(9, utenti.size());
+    }
+
+    @Test
+    public void testDatabase7() throws RemoteException {
+        // controllo un solo elemento nell'arrayList
+        ArrayList<HashMap<String, Object>> utenti = gestorericerche.cercaUtenteBloccatoNonBloccato("alfio");
+        assertEquals(1, utenti.size());
+        assertEquals(0, utenti.get(0).get("attivo"));
+    }
 }
