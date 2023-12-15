@@ -90,7 +90,7 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 	public void avvioListaForniture(int codice) throws RemoteException { // RF 13 Benetti-Chiappa
 		DbProdotti dbProdotti = new DbProdotti();
 		GestoreProdotti gestoreProdotti = new GestoreProdotti(dbProdotti);
-		ArrayList<HashMap<String,Object>> listaForniture = gestoreProdotti.ricercaListaForniture(codice);
+		ArrayList<HashMap<String, Object>> listaForniture = gestoreProdotti.ricercaListaForniture(codice);
 		if (listaForniture.size() == 0)
 			mostraErrore(3);
 		mostraListaItem(listaForniture);
@@ -111,13 +111,13 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 			} else {
 				listaForniture = gestoreProdotti.ricercaListaForniture(dataInizio, dataFine);
 				if (listaForniture.size() == 0) {
-					mostraErrore(3);
+					mostraErrore(4);
 					break;
 				}
 				mostraListaData(listaForniture);
 				tableListaFornitureFrame.setTitle("Ricerca per data " + dataInizio + " a " + dataFine);
 				tableListaFornitureFrame.setVisible(true);
-				
+
 			}
 		} while (esitoControllo == 1 || esitoControllo == 2);
 	}
@@ -128,7 +128,7 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 		String messaggio = "";
 
 		if (esitoControllo == 1) {
-			messaggio = "Data non esistente/invalida";
+			messaggio = "Data non esistente/invalida, usare formato dd/MM/yyyy";
 		}
 		if (esitoControllo == 2) {
 			messaggio = "La seconda data deve essere successiva alla prima";
@@ -140,17 +140,30 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 			messaggio = "Forniture non trovate per questo prodotto";
 		}
 		messaggio = messaggio + "\n(clicca su OK o X per continuare)";
-		this.showMessageDialog(null, messaggio, "Errore", this.ERROR_MESSAGE, null);
+		int risultato = JOptionPane.showOptionDialog(
+				null,
+				messaggio,
+				"Errore",
+				JOptionPane.DEFAULT_OPTION,
+				JOptionPane.ERROR_MESSAGE,
+				null,
+				new Object[] { "OK" },
+				null);
+		if (risultato == JOptionPane.CLOSED_OPTION) {
+			System.exit(0);
+		}
 	}
 
 	@Override
 	public void mostraFormRicercaPerData() throws RemoteException {// RF 13 Benetti-Chiappa
-		int ricerca = showConfirmDialog(null, panelData, "Ricerca per data", this.OK_OPTION);
+		int ricerca = showOptionDialog(null, panelData, "Ricerca per data", JOptionPane.DEFAULT_OPTION,
+				JOptionPane.PLAIN_MESSAGE, null, new Object[] { "OK" }, null);
 
 		if (ricerca == this.OK_OPTION) {
 			dataInizio = fieldDataInizio.getText();
 			dataFine = fieldDataFine.getText();
 		}
+
 	}
 
 	@Override
@@ -176,6 +189,19 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 		}
 		DefaultTableModel model = new DefaultTableModel(data, columnNames);
 		tableListaForniture.setModel(model);
+		JButton okButton = new JButton("OK");
+		okButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(java.awt.event.ActionEvent e) {
+				tableListaFornitureFrame.dispose();
+			}
+		});
+
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.add(okButton);
+
+		tableListaFornitureFrame.getContentPane().add(BorderLayout.SOUTH, buttonPanel);
+		tableListaForniture.setModel(model);
 	}
 
 	@Override
@@ -197,11 +223,10 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 				}
 				data.add(rowData);
 			}
-			
-			
+
 		}
 		DefaultTableModel model = new DefaultTableModel(data, columnNames);
-    	tableListaForniture.setModel(model);
+		tableListaForniture.setModel(model);
 
 		JButton okButton = new JButton("OK");
 		okButton.addActionListener(new ActionListener() {
@@ -210,12 +235,12 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 				tableListaFornitureFrame.dispose();
 			}
 		});
-        
+
 		JPanel buttonPanel = new JPanel();
-    	buttonPanel.add(okButton);
-		
+		buttonPanel.add(okButton);
+
 		tableListaFornitureFrame.getContentPane().add(BorderLayout.SOUTH, buttonPanel);
 		tableListaForniture.setModel(model);
-		
+
 	}
 }

@@ -29,7 +29,8 @@ public class GestoreProdotti implements GestoreProdottiInterfaccia {
 	}
 
 	@Override
-	public ArrayList<HashMap<String, Object>> ricercaListaForniture(int codice) throws RemoteException {// RF 13 Benetti-Chiappa
+	public ArrayList<HashMap<String, Object>> ricercaListaForniture(int codice) throws RemoteException {// RF 13
+																										// Benetti-Chiappa
 		try {
 			return dbProdotti.query("SELECT * FROM Fornitura WHERE codiceProdotto=" + codice);
 		} catch (RemoteException e) {
@@ -38,7 +39,8 @@ public class GestoreProdotti implements GestoreProdottiInterfaccia {
 	}
 
 	@Override
-	public ArrayList<HashMap<String, Object>> ricercaListaForniture(String dataInizio, String dataFine) throws RemoteException {// RF 13 Benetti-Chiappa
+	public ArrayList<HashMap<String, Object>> ricercaListaForniture(String dataInizio, String dataFine)
+			throws RemoteException {// RF 13 Benetti-Chiappa
 
 		if (controlloParametri(dataInizio, dataFine) == 0)
 			try {
@@ -57,20 +59,24 @@ public class GestoreProdotti implements GestoreProdottiInterfaccia {
 	}
 
 	@Override
-	public int controlloParametri(String dataInizio, String dataFine) throws RemoteException{// RF 13 Benetti-Chiappa
+	public int controlloParametri(String dataInizio, String dataFine) throws RemoteException {// RF 13 Benetti-Chiappa
 		int esitoControllo = 0;
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-		LocalDate dataIn = LocalDate.parse(dataInizio, formatter);
-		LocalDate dataFin = LocalDate.parse(dataFine, formatter);
+		LocalDate dataIn = null;
+		LocalDate dataFin = null;
+		try {
+			dataIn = LocalDate.parse(dataInizio, formatter);
+			dataFin = LocalDate.parse(dataFine, formatter);
+		} catch (Exception e) {
+			esitoControllo = 1;
+		}
 
 		if (dataIn != null && dataFin != null) {
 			if (dataIn.isBefore(dataFin))
 				esitoControllo = 0;
 			else {
-				esitoControllo = 1;
+				esitoControllo = 2;
 			}
-		} else {
-			esitoControllo = 2;
 		}
 		return esitoControllo;
 	}
