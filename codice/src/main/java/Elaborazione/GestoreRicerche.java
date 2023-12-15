@@ -28,4 +28,27 @@ public class GestoreRicerche implements GestoreRicercheInterfaccia
 		dbUtenti = d1;
 		dbProdotti = d2;
 	}
+
+	@Override
+	public int controlloGiacenza(String giacenza) throws RemoteException
+	{
+		if (giacenza == null)
+			return 1; 
+		if (!giacenza.matches("\\d+")) 
+            return 2;
+		if(Integer.parseInt(giacenza) == 0)
+			return 3;
+		return 0; 
+        
+	}
+
+	@Override
+	public ArrayList<HashMap<String, Object>> ricercaProdotti(String giacenza)throws RemoteException {
+		try {
+			return dbProdotti.query("SELECT * FROM Prodotto WHERE Quantità ≤ " +giacenza);
+		} catch (RemoteException e) {
+			return new ArrayList<>();
+		} 
+	}
 }
+
