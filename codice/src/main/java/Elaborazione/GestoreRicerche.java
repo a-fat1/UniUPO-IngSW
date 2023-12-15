@@ -45,7 +45,7 @@ public class GestoreRicerche implements GestoreRicercheInterfaccia
 	@Override
 	public ArrayList<HashMap<String, Object>> ricercaProdotti(String giacenza)throws RemoteException {
 		try {
-			return dbProdotti.query("SELECT * FROM Prodotto WHERE Quantità ≤ " +giacenza);
+			return dbProdotti.query("SELECT * FROM Prodotto WHERE Quantita ≤ " +giacenza);
 		} catch (RemoteException e) {
 			return new ArrayList<>();
 		} 
