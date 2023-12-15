@@ -69,7 +69,7 @@ public class GestoreNotifiche implements GestoreNotificheInterfaccia {
             return esitoVerifica + "formato data";
         }
         // controllo formato ora
-        if (!ora.matches("^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$")) {
+        if (!ora.matches("^([0-1]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$")) {
             return esitoVerifica + "formato ora";
         }
         // controllo correttezza data
@@ -85,7 +85,7 @@ public class GestoreNotifiche implements GestoreNotificheInterfaccia {
     }
 
     public void inserimentoNotifica(HashMap<String, Object> dataPubblicazione, HashMap<String, Object> dataScadenza, String testoNotifica, String tipoUtente) throws RemoteException {
-        String comandoSql = "INSERT INTO Notifica (\"" + dataPubblicazione.get("data") + dataPubblicazione.get("ora") + "\", \"" + dataScadenza.get("data") + dataScadenza.get("ora") + "\", \"" + testoNotifica + "\", \"" + tipoUtente + "\");";
+        String comandoSql = "INSERT INTO Notifica (dataPubblicazione, dataScadenza, testo, tipoUtente) values (\"" + dataPubblicazione.get("data") + " " + dataPubblicazione.get("ora") + "\", \"" + dataScadenza.get("data") + dataScadenza.get("ora") + "\", \"" + testoNotifica + "\", \"" + tipoUtente + "\");";
 
         dbNotifiche.update(comandoSql);
     }

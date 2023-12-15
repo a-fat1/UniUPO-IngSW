@@ -1,5 +1,6 @@
 package UserInterface;
 
+import java.awt.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.HashMap;
@@ -37,7 +38,9 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 	//RF04: genera notifica (Monfermoso, Magenta Biasina)
 	private JLabel dataLabel;
 	private JLabel testoLabel;
+	private JLabel oraLabel;
 	private JTextField dataField;
+	private JTextField oraField;
 	private JTextField testoField;
 	private JPanel modificaNotificaPanel;
 	
@@ -46,7 +49,24 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 		registryUI = LocateRegistry.getRegistry("127.0.0.1", 1100); // default: 1099
 		registryGestore = LocateRegistry.getRegistry(hostGestore, 1099); 
 
-		gestoreNotifiche = (GestoreNotificheInterfaccia) registryGestore.lookup("gestoreNotifiche"); 
+		gestoreNotifiche = (GestoreNotificheInterfaccia) registryGestore.lookup("gestoreNotifiche");
+
+		dataLabel = new JLabel("Data:");
+		oraLabel = new JLabel("Ora:");
+		testoLabel = new JLabel("Testo Notifica:");
+		dataField = new JTextField("", 10);
+		dataField.setToolTipText("inserire data");
+		oraField = new JTextField("", 10);
+		oraField.setToolTipText("inserire ora");
+		testoField = new JPasswordField("", 10);
+
+		modificaNotificaPanel = new JPanel(new GridLayout(2,2));
+		modificaNotificaPanel.add(dataLabel);
+		modificaNotificaPanel.add(dataField);
+		modificaNotificaPanel.add(testoLabel);
+		modificaNotificaPanel.add(testoField);
+
+
 	}
 	
 	public void avvioVisualizzaNotifiche() throws RemoteException
@@ -65,7 +85,8 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 		switch (tipoNotifica) {
 			case "nuovo prodotto":
 				testoNotifica = gestoreNotifiche.generaTestoNotificaProdotto(prodotto);
-				mostraFormNotifica(testoNotifica);
+				this.mostraFormNotifica(testoNotifica);
+				//if(gestoreNotifiche.verificaCorrettezzaDati())
 				break;
 			case "nuovo ordine":
 				testoNotifica = gestoreNotifiche.generaTestoNotificaOrdine(ordine);
@@ -77,7 +98,7 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 				break;
 			case "avviso":
 				testoNotifica = gestoreNotifiche.generaTestoNotificaAvviso();
-				mostraFormNotifica(testoNotifica);
+				this.mostraFormNotifica(testoNotifica);
 				break;
 		}
 	}
@@ -88,7 +109,15 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 	 * @author  Linda Monfermoso, Gabriele Magenta Biasina
 	 */
 	private void mostraFormNotifica(String testoNotifica) {
+		int pulsante;
 
+		dataField.setText("");
+		oraField.setText("");
+		testoField.setText(testoNotifica);
+
+		dataField.setBackground(Color.white);
+		oraField.setBackground(Color.white);
+		testoField.setBackground(Color.white);
 	}
 
 	public void avvioRicercaNotifiche() throws RemoteException
