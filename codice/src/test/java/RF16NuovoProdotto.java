@@ -4,6 +4,7 @@ import org.junit.Test;
 import DataBase.DbProdotti;
 import Elaborazione.GestoreProdotti;
 import java.rmi.RemoteException;
+import java.util.HashMap;
 
 
 public class RF16NuovoProdotto {
@@ -48,8 +49,29 @@ public class RF16NuovoProdotto {
 
 
     @Test
-    public void testAggiungiProdotto(){
+    public void testAggiungiProdotto() throws RemoteException {
+        HashMap<String, Object> returnValue = gestoreProdotti.aggiungiProdotto(new String[]{"Franco"}, "Gallette", "Zanichelli", 2023, "Libro");
 
+        assertEquals("Franco", returnValue.get("autore"));
+        assertEquals("Gallette", returnValue.get("titolo"));
+        assertEquals("Zanichelli", returnValue.get("editore"));
+        assertEquals(2023, returnValue.get("anno"));
+        assertEquals("Libro", returnValue.get("tipo"));
+        assertNull(returnValue.get("prezzo"));
+        assertEquals(0, returnValue.get("quantita"));
+        assertEquals(1, returnValue.get("disponibile"));
+
+
+        returnValue = gestoreProdotti.aggiungiProdotto(new String[]{"Leonardo, Nicholas"}, "Gallette 2", "Zanichelli", 2024, "Libro");
+
+        assertEquals("Leonardo, Nicholas", returnValue.get("autore"));
+        assertEquals("Gallette 2", returnValue.get("titolo"));
+        assertEquals("Zanichelli", returnValue.get("editore"));
+        assertEquals(2024, returnValue.get("anno"));
+        assertEquals("Libro", returnValue.get("tipo"));
+        assertNull(returnValue.get("prezzo"));
+        assertEquals(0, returnValue.get("quantita"));
+        assertEquals(1, returnValue.get("disponibile"));
     }
 
 }

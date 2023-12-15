@@ -46,9 +46,23 @@ public class GestoreProdotti implements GestoreProdottiInterfaccia
 	public boolean controlloUnicita(String[] autori, String titolo, String editore, int anno, String tipo) throws RemoteException {
 		ArrayList<HashMap<String, Object>> prodotti = dbProdotti.query(
 				"SELECT * FROM Prodotto " +
-						"WHERE autore = \""+ String.join(", ", autori)+"\" AND titolo = \""+titolo+"\" AND editore = \""+editore+"\" AND anno = \"" + String.valueOf(anno) + "\" AND tipo = \"" + tipo + "\""
+						"WHERE autore = \""+ String.join(", ", autori)+"\" AND titolo = \""+titolo+"\" AND editore = \""+editore+"\" AND anno = \"" + anno + "\" AND tipo = \"" + tipo + "\""
 		);
 
 		return prodotti.isEmpty();
+	}
+
+	public HashMap<String, Object> aggiungiProdotto(String[] autori, String titolo, String editore, int anno, String tipo) throws RemoteException {
+		dbProdotti.update(
+				"INSERT INTO Prodotto(autore, titolo, editore, anno, tipo, prezzo, quantita, disponibile) " +
+						"VALUES (\""+ String.join(", ", autori) +"\", \""+ titolo +"\", \""+ editore +"\", \""+ anno +"\", \""+ tipo +"\", null, 0, True)"
+				);
+
+		ArrayList<HashMap<String, Object>> prodotti = dbProdotti.query(
+				"SELECT * " +
+						"FROM Prodotto " +
+						"WHERE Codice = (SELECT MAX(Codice) FROM Prodotto)"
+		);
+		return prodotti.get(0);
 	}
 }
