@@ -30,8 +30,8 @@ public class GestoreProdotti implements GestoreProdottiInterfaccia
 		dbProdotti = d1;
 	}
 
-	public HashMap<String, Boolean> controlloDatiFornitura (String data, Float costo, Integer quantita) {
-		HashMap<String, Boolean> esitoControllo = new HashMap<String, Boolean>();
+	public HashMap<String, Boolean> controlloDatiFornitura(String data, Float costo, Integer quantita) {
+		HashMap<String, Boolean> esitoControllo = new HashMap<>();
 		for(String s : new String[] {"esitoData", "esitoCosto", "esitoQuantita"})
 			esitoControllo.put(s, null);
 
@@ -51,9 +51,8 @@ public class GestoreProdotti implements GestoreProdottiInterfaccia
 		return esitoControllo;
 	}
 
-	public void aggiungiFornitura(Integer codProdotto, String data, Float costo, Integer quantita){
-		DbProdotti db = new DbProdotti();
-		db.update("INSERT INTO Fornitura (codiceProdotto, dataFornitura, costo, quantita) VALUES ("+codProdotto+", '"+data+"', "+costo+", "+quantita+")");
-		db.update("UPDATE Prodotto SET quantita = quantita + "+quantita+" WHERE codice = "+codProdotto);
+	public void aggiungiFornitura(Integer codProdotto, String data, Float costo, Integer quantita) throws RemoteException {
+		dbProdotti.update("INSERT INTO Fornitura (codiceProdotto, dataFornitura, costo, quantita) VALUES ("+codProdotto+", '"+data+"', "+costo+", "+quantita+")");
+		dbProdotti.update("UPDATE Prodotto SET quantita = quantita + "+quantita+" WHERE codice = "+codProdotto);
 	}
 }

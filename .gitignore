@@ -6,4 +6,5 @@ codice/gradlew.bat
 .git/
 .DS_Store
 codice/.DS_Store
+codice/.idea
 

@@ -1,27 +1,20 @@
 import static org.junit.Assert.*;
 
-import DataBase.DbUtenti;
-import Elaborazione.GestoreAccessi;
 import org.junit.Test;
-import java.rmi.RemoteException;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
-
 import DataBase.DbProdotti;
 import Elaborazione.GestoreProdotti;
-import UserInterface.UiProdotto;
+
 
 public class RF15NuovaFornitura {
-    private DbProdotti dbProdotti = new DbProdotti();
-    private GestoreProdotti gestoreProdotti = new GestoreProdotti(dbProdotti);
+    final private DbProdotti dbProdotti = new DbProdotti();
+    final private GestoreProdotti gestoreProdotti = new GestoreProdotti(dbProdotti);
 
     // ===========================================================
 
     @Test
      public void testcontrolloDatiFornituraCorretti() {
-        HashMap<String, Boolean> expected = new HashMap<String, Boolean>();
+        HashMap<String, Boolean> expected = new HashMap<>();
         for(String s : new String[] {"esitoData", "esitoCosto", "esitoQuantita"}) expected.put(s, true);
         // data corretta, costo corretto, quantità corretta
         assertEquals(expected, gestoreProdotti.controlloDatiFornitura("2020-12-01", 25.0f, 5));
