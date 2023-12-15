@@ -23,7 +23,7 @@ import org.checkerframework.checker.units.qual.t;
 
 import DataBase.DbProdotti;
 import UserInterface.*;
-import javafx.event.ActionEvent;
+
 import Elaborazione.*;
 
 public class UiLista extends JOptionPane implements UiListaInterfaccia {
