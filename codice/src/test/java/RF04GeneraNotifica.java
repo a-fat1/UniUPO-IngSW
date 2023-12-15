@@ -20,10 +20,10 @@ public class RF04GeneraNotifica {
     @Test
     public void testVerificaCorrettezzaDati1() throws RemoteException {
         // data in formato errato
-        assertEquals("errore formato data", gestoreNotifiche.verificaCorrettezzaDati("12-12-12", "11:00", "Nuovo utente: Carla Rossi."));
+        assertEquals("errore formato data", gestoreNotifiche.verificaCorrettezzaDati("12-12-12", "11:00:00", "Nuovo utente: Carla Rossi."));
         assertEquals("errore formato data", gestoreNotifiche.verificaCorrettezzaDati("2024-20-01", "1111:00", "Nuovo utente: Carla Rossi."));
-        assertEquals("errore formato data", gestoreNotifiche.verificaCorrettezzaDati("2023-20-01", "11:00", ""));
-
+        assertEquals("errore formato data", gestoreNotifiche.verificaCorrettezzaDati("2023-20-01", "11:00:00", ""));
+        assertEquals("errore formato data", gestoreNotifiche.verificaCorrettezzaDati("", "11:00", ""));
     }
 
     @Test
@@ -32,6 +32,7 @@ public class RF04GeneraNotifica {
         assertEquals("errore formato ora", gestoreNotifiche.verificaCorrettezzaDati("2024-12-12", "99:00", "Nuovo utente: Carla Rossi."));
         assertEquals("errore formato ora", gestoreNotifiche.verificaCorrettezzaDati("2024-12-12", "23:89", "Nuovo utente: Carla Rossi."));
         assertEquals("errore formato ora", gestoreNotifiche.verificaCorrettezzaDati("2024-12-12", "100:00", ""));
+        assertEquals("errore formato ora", gestoreNotifiche.verificaCorrettezzaDati("2024-12-12", "", ""));
     }
 
     @Test
@@ -44,12 +45,12 @@ public class RF04GeneraNotifica {
     @Test
     public void testVerificaCorrettezzaDati4() throws RemoteException {
         // testo notifica vuoto
-        assertEquals("errore testo notifica", gestoreNotifiche.verificaCorrettezzaDati("2024-11-12", "11:00", ""));
+        assertEquals("errore testo notifica", gestoreNotifiche.verificaCorrettezzaDati("2024-11-12", "11:00:00", ""));
     }
 
     @Test
     public void testVerificaCorrettezzaDati5() throws RemoteException {
-        assertEquals("ok", gestoreNotifiche.verificaCorrettezzaDati("2024-11-12", "11:00", "Nuovo utente: Carla Rossi."));
+        assertEquals("ok", gestoreNotifiche.verificaCorrettezzaDati("2024-11-12", "11:00:00", "Nuovo utente: Carla Rossi."));
     }
 
     /*
@@ -92,6 +93,19 @@ public class RF04GeneraNotifica {
         utente.put("cognome", "Bruni");
 
         assertEquals("Nuovo Cliente: Aldo Bruni.", gestoreNotifiche.generaTestoNotificaUtente(utente));
+    }
+
+    @Test
+    public void testInserisci() throws RemoteException {
+        HashMap<String, Object> dataScadenza = new HashMap<>();
+        HashMap<String, Object> dataPubblicazione = new HashMap<>();
+
+        dataScadenza.put("data", "2024-11-12");
+        dataPubblicazione.put("data", "2024-12-12");
+        dataScadenza.put("ora", "11:00");
+        dataPubblicazione.put("ora", "11:00");
+
+        gestoreNotifiche.inserimentoNotifica(dataPubblicazione, dataScadenza, "Avviso: test", "staff");
     }
 
 }
