@@ -38,8 +38,8 @@ public class RF04GeneraNotifica {
     @Test
     public void testVerificaCorrettezzaDati3() throws RemoteException {
         // data non coerente
-        assertEquals("errore data", gestoreNotifiche.verificaCorrettezzaDati("2020-11-12", "11:00", "Nuovo utente: Carla Rossi."));
-        assertEquals("errore data", gestoreNotifiche.verificaCorrettezzaDati("2020-11-12", "11:00", ""));
+        assertEquals("errore data", gestoreNotifiche.verificaCorrettezzaDati("2020-11-12", "11:00:00", "Nuovo utente: Carla Rossi."));
+        assertEquals("errore data", gestoreNotifiche.verificaCorrettezzaDati("2020-11-12", "11:00:00", ""));
     }
 
     @Test
