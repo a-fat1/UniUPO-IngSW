@@ -7,5 +7,7 @@ import java.util.HashMap;
 import java.util.ArrayList;
 
 public interface GestoreRicercheInterfaccia extends Remote 
-{  
+{
+    public int controlloParametri(String dataInizio, String dataFine);
+    public ArrayList<HashMap<String, Object>> ricercaListaPagamentiData(String dataInizio, String dataFine) throws RemoteException;
 } 
