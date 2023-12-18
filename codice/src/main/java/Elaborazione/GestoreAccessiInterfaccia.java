@@ -12,4 +12,5 @@ public interface GestoreAccessiInterfaccia extends Remote
    HashMap<String, Object> ricercaUtente(String username) throws RemoteException;
    int verificaCredenziali(String password, String passwordAttuale) throws RemoteException;
    int controlloNuovaPassword(String nuovaPassword) throws RemoteException;
+   void AggiornaPassword(String username, String nuovaPassword) throws RemoteException;
 } 

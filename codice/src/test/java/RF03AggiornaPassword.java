@@ -2,6 +2,8 @@ import DataBase.DbUtenti;
 import Elaborazione.GestoreAccessi;
 import org.junit.Test;
 
+import java.rmi.RemoteException;
+
 import static org.junit.Assert.assertEquals;
 
 import java.rmi.RemoteException;
@@ -12,7 +14,11 @@ public class RF03AggiornaPassword {
     GestoreAccessi gestoreAccessi = new GestoreAccessi(dbUtenti);
 
     @Test
+<<<<<<< HEAD
     public void testVerificaPassword() throws RemoteException{
+=======
+    public void testVerificaPassword() throws RemoteException {
+>>>>>>> 44cdba9 (aggiunta metodo: AggiornaPassword in gestore)
         //Test con password uguali = return expected 0
         assertEquals(0, gestoreAccessi.verificaCredenziali("abc123", "abc123"));
 
