@@ -165,8 +165,8 @@ public class GestoreRicerche implements GestoreRicercheInterfaccia
 	}
 
 	@Override
-	public int controlloGiacenza(String giacenza) throws RemoteException
-	{
+	public int controlloGiacenza(String giacenza) throws RemoteException {
+
 		// RF18 Prodotti in esaurimento
 		// Alessandro Fatone, Dario Guidotti
 
@@ -182,6 +182,7 @@ public class GestoreRicerche implements GestoreRicercheInterfaccia
 	
 	@Override
 	public ArrayList<HashMap<String, Object>> ricercaProdotti(String giacenza) throws RemoteException {
+		
 		// RF18 Prodotti in esaurimento
 		// Alessandro Fatone, Dario Guidotti
 
