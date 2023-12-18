@@ -170,6 +170,7 @@ public class Prototipo extends JFrame
 			stubUiLogin = (UiLoginInterfaccia) UnicastRemoteObject.exportObject(uiLogin, 2007);	
  	      	        registryUI.bind("uiLogin", stubUiLogin);
 
+
 			uiLogin.avvioLogin();
 			System.exit(0);
 		}
