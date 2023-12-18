@@ -164,6 +164,34 @@ public class GestoreRicerche implements GestoreRicercheInterfaccia
 		return listaPagamenti;
 	}
 
+	@Override
+	public int controlloGiacenza(String giacenza) throws RemoteException
+	{
+		// RF18 Prodotti in esaurimento
+		// Alessandro Fatone, Dario Guidotti
+
+		if (giacenza == null) 
+			return 1;
+		if (!giacenza.matches("\\d+"))
+			return 2;
+		if (Integer.parseInt(giacenza) == 0)
+			return 3;
+
+		return 0;
+	}
+	
+	@Override
+	public ArrayList<HashMap<String, Object>> ricercaProdotti(String giacenza) throws RemoteException {
+		// RF18 Prodotti in esaurimento
+		// Alessandro Fatone, Dario Guidotti
+
+		try {
+			return dbProdotti.query("SELECT * FROM Prodotto WHERE Quantita <= " + giacenza);
+		} catch (RemoteException e) {
+			return new ArrayList<>();
+		}
+    }
+
 	/**
 	 * Controlla se l'utente ha inserito una stringa username valida.
 	 * @param username che viene inserito dall'utente.
