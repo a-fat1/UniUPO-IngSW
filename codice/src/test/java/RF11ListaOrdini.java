@@ -16,6 +16,7 @@ public class RF11ListaOrdini {
 
     @Test
     public void testRicercaPerUtente() throws RemoteException {
+        //ricerca ordini dato username
         ArrayList<HashMap<String,Object>> ordini = gestoreRicerche.ricercaPerUtente("claudia");
         assertNotNull(ordini);
         assertEquals(ordini.size(),4);
@@ -37,6 +38,7 @@ public class RF11ListaOrdini {
 
     @Test
     public void testRicercaPerProdotto() throws RemoteException {
+        //ricerca ordini dato codiceProdotto
         ArrayList<HashMap<String,Object>> ordini = gestoreRicerche.ricercaPerProdotto(100004);
         assertNotNull(ordini);
         assertEquals(ordini.size(),1);
@@ -51,6 +53,22 @@ public class RF11ListaOrdini {
         assertEquals(ordini.get(0).get("tipo"), "Libro");
         assertEquals(ordini.get(0).get("anno"), 2022);
         assertEquals(ordini.get(0).get("prezzo"), 39.9);
+    }
+
+    @Test
+    public void testRicercaPerProdottoNoRisultato() throws RemoteException {
+        //ricerca ordini dato codiceProdotto senza risultato
+        ArrayList<HashMap<String,Object>> ordini = gestoreRicerche.ricercaPerProdotto(87688);
+        assertNotNull(ordini);
+        assertEquals(ordini.size(),0);
+    }
+
+    @Test
+    public void testRicercaPerUtenteNoRisultato() throws RemoteException {
+        //ricerca ordini dato username senza risultato
+        ArrayList<HashMap<String,Object>> ordini = gestoreRicerche.ricercaPerUtente("Fabio");
+        assertNotNull(ordini);
+        assertEquals(ordini.size(),0);
     }
 }
 
