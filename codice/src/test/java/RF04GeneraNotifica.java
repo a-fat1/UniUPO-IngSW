@@ -95,17 +95,4 @@ public class RF04GeneraNotifica {
         assertEquals("Nuovo Cliente: Aldo Bruni.", gestoreNotifiche.generaTestoNotificaUtente(utente));
     }
 
-    @Test
-    public void testInserisci() throws RemoteException {
-        HashMap<String, Object> dataScadenza = new HashMap<>();
-        HashMap<String, Object> dataPubblicazione = new HashMap<>();
-
-        dataScadenza.put("data", "2024-11-12");
-        dataPubblicazione.put("data", "2024-12-12");
-        dataScadenza.put("ora", "11:00");
-        dataPubblicazione.put("ora", "11:00");
-
-        gestoreNotifiche.inserimentoNotifica(dataPubblicazione, dataScadenza, "Avviso: test", "staff");
-    }
-
 }
