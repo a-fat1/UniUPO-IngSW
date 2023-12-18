@@ -120,7 +120,7 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 		else
 			return 1;
 	}
-	
+
 	/**
 	 * Funzione che aggiorna il database creando una nuova entry per l'utente designato da nome e cognome,
 	 * con nickname "nome.cognome".
@@ -145,7 +145,7 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 	*/
 	public void richiestaAttivazioneAccount(String nome, String cognome, String tipoUtente) throws RemoteException
 	{
-		dbUtenti.update("UPDATE Utente SET tipo="+tipoUtente+" WHERE username="+nome+'.'+cognome);
+		dbUtenti.update("UPDATE Utente SET tipo='"+tipoUtente+"' WHERE username='"+nome+'.'+cognome+"'");
 	}
 	
 	/**
@@ -157,6 +157,6 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 	*/
 	public void aggiuntaCredenziali(String username) throws RemoteException
 	{
-		dbUtenti.update("UPDATE Utente SET password='' WHERE username="+username);
+		dbUtenti.update("INSERT INTO Credenziali ('password', 'username', 'attivo') VALUES ('', '"+username+"', 1);");
 	}
 }
