@@ -12,6 +12,8 @@ import Elaborazione.GestoreRicerche;
 
 public class RF12ListaPagamenti
 {
+    //RF12: Lista Pagamenti
+    //autori: Broglio, Cartieri
     DbUtenti dbUtenti = new DbUtenti();
     DbProdotti dbProdotti = new DbProdotti();
     GestoreRicerche gestoreRicerche = new GestoreRicerche(dbUtenti, dbProdotti);
@@ -47,6 +49,7 @@ public class RF12ListaPagamenti
     @Test
     public void testricercaListaPagamentiData1() throws RemoteException
     {
+        //due pagamenti nell'intervallo specificato
         assertFalse(gestoreRicerche.ricercaListaPagamentiData("01/12/2023","31/12/2023").isEmpty());
         assertEquals(gestoreRicerche.ricercaListaPagamentiData("01/12/2023","31/12/2023").size(),2);
     }
@@ -54,6 +57,7 @@ public class RF12ListaPagamenti
     @Test
     public void testricercaListaPagamentiData2() throws RemoteException
     {
+        //un pagamento nell'intervallo specificato
         assertFalse(gestoreRicerche.ricercaListaPagamentiData("01/12/2023","05/12/2023").isEmpty());
         assertEquals(gestoreRicerche.ricercaListaPagamentiData("01/12/2023","05/12/2023").size(),1);
     }
@@ -61,7 +65,31 @@ public class RF12ListaPagamenti
     @Test
     public void testricercaListaPagamentiData3() throws RemoteException
     {
+        //nessun pagamento nell'intervallo specificato
         assertTrue(gestoreRicerche.ricercaListaPagamentiData("01/12/2023","04/12/2023").isEmpty());
         assertEquals(gestoreRicerche.ricercaListaPagamentiData("01/12/2023","04/12/2023").size(),0);
+    }
+
+    @Test
+    public void testRicercaListaPagamentiUtente1() throws RemoteException
+    {
+        //utente esistente con dei pagamenti
+        assertFalse(gestoreRicerche.ricercaListaPagamentiUtente("claudia").isEmpty());
+        assertEquals(gestoreRicerche.ricercaListaPagamentiUtente("claudia").size(), 2);
+    }
+
+    @Test
+    public void testRicercaListaPagamentiUtente2() throws RemoteException
+    {
+        //utente esistente senza pagamenti
+        assertTrue(gestoreRicerche.ricercaListaPagamentiUtente("ciro").isEmpty());
+        assertEquals(gestoreRicerche.ricercaListaPagamentiUtente("ciro").size(), 0);
+    }
+
+    @Test
+    public void testRicercaListaPagamentiUtente3() throws RemoteException
+    {
+        //utente non esistente
+        assertNull(gestoreRicerche.ricercaListaPagamentiUtente("utente_non_esistente"));
     }
 }
