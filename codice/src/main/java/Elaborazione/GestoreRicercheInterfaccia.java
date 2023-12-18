@@ -8,7 +8,6 @@ import java.util.ArrayList;
 
 public interface GestoreRicercheInterfaccia extends Remote 
 {
-<<<<<<< HEAD
 
     //RF11: lista ordini
     //autore: Marino & Vecchio
@@ -17,11 +16,6 @@ public interface GestoreRicercheInterfaccia extends Remote
     public int controlloParametri(String dataInizio, String dataFine) throws RemoteException;
     public ArrayList<HashMap<String, Object>> ricercaListaPagamentiData(String dataInizio, String dataFine) throws RemoteException;
 
-
-}
-
-
-=======
     // RF19 RicercaUtente
     // Nazzari Riccardo, Andrea Benedetto
 
@@ -36,4 +30,4 @@ public interface GestoreRicercheInterfaccia extends Remote
 
     ArrayList<HashMap<String, Object>> cercaUtenteNonBloccato(String nome, String cognome) throws RemoteException;
 } 
->>>>>>> RF19
+
