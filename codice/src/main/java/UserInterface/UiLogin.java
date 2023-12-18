@@ -367,7 +367,7 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 				this.mostraErrore(3);
 			}
 			if(esitoControlloPassword==0){
-				//query utente
+				//gestoreAccessi.AggiornaPassword(username, nuovaPassword);
 				this.mostraMessaggioDiSuccesso();
             }
 

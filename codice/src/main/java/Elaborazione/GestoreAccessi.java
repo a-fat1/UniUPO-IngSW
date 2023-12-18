@@ -99,7 +99,11 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 		return utente;			
 	}
 
-	public int verificaCredenziali(String passwordAttuale, String password){
+	public int verificaCredenziali(String passwordAttuale, String password)throws RemoteException{
+
+		//RF03: Aggiorna password
+		//autori: Pietro Balossino, Andrija Jovic
+
 		if(password.equals(passwordAttuale)){
 			return 0;  //le password sono uguali
 		}
@@ -108,7 +112,11 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 		}
 	}
 
-	public int controlloNuovaPassword (String nuovaPassword){
+	public int controlloNuovaPassword (String nuovaPassword)throws RemoteException{
+
+		//RF03: Aggiorna password
+		//autori: Pietro Balossino, Andrija Jovic
+
 		int len;
 		boolean alpha;
 		boolean num;
@@ -131,5 +139,18 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 				else return 0;	//la password rispetta tutti i criteri
 			}
 		}
+	}
+
+	public void AggiornaPassword(String username, String nuovaPassword) throws RemoteException {
+
+		//RF03: Aggiorna password
+		//autori: Pietro Balossino, Andrija Jovic
+
+		String comandoSql;
+
+		System.out.println("GestoreAccessi.AggiornaPassword(\""+ username + "\")");
+
+		comandoSql = "UPDATE credenziali SET password=\"" + nuovaPassword + "\" WHERE username=\"" + username + "\" ;";
+		dbUtenti.update(comandoSql);
 	}
 }
