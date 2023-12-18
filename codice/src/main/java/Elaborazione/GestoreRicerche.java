@@ -62,6 +62,8 @@ public class GestoreRicerche implements GestoreRicercheInterfaccia
 	}
 	public int controlloParametri(String dataInizio, String dataFine) throws RemoteException
 	{
+		//RF12: Lista Pagamenti
+		//autori: Broglio, Cartieri
 		int esitoControllo=0;
 		DateTimeFormatter formatoData = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		String matchStr = "^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[012])/[0-9]{4}$";
@@ -86,19 +88,14 @@ public class GestoreRicerche implements GestoreRicercheInterfaccia
 		return esitoControllo;
 	}
 
-	/*public ArrayList<HashMap<String, Object>> ricercaListaPagamentiUtente(String username)
-	{
-
-	}*/
-
 	public ArrayList<HashMap<String, Object>> ricercaListaPagamentiData(String dataInizio, String dataFine) throws RemoteException
 	{
+		//RF12: Lista Pagamenti
+		//autori: Broglio, Cartieri
 		String comandoSql1,comandoSql2;
-		ArrayList<HashMap<String, Object>> pagamentiTot, utentiTot, pagamenti;
+		ArrayList<HashMap<String, Object>> pagamentiTot, utentiTot, listaPagamenti=null;
 
 		System.out.println("GestoreRicerche.ricercaListaPagamentiData(" + dataInizio +", " + dataFine+ ")\n");
-
-		//comandoSql = "SELECT * FROM Pagamento JOIN Utente ON Pagamento.username=Utente.username WHERE \"" + dataInizio + "\"<= dataOrdine AND dataOrdine<=\"" + dataFine + "\" ;";
 
 		comandoSql1 = "SELECT * FROM Pagamento;";
 		pagamentiTot = dbProdotti.query(comandoSql1);
@@ -106,37 +103,67 @@ public class GestoreRicerche implements GestoreRicercheInterfaccia
 		comandoSql2 = "SELECT * FROM Utente;";
 		utentiTot = dbUtenti.query(comandoSql2);
 
-		pagamenti=joinPagamentoUtente(pagamentiTot,utentiTot,dataInizio,dataFine);
+		if(!pagamentiTot.isEmpty() && !utentiTot.isEmpty())
+			listaPagamenti=joinPagamentoUtente(pagamentiTot,utentiTot,dataInizio,dataFine);
 
-		return pagamenti;
+		return listaPagamenti;
+	}
+
+	public ArrayList<HashMap<String, Object>> ricercaListaPagamentiUtente(String username) throws RemoteException
+	{
+		//RF12: Lista Pagamenti
+		//autori: Broglio, Cartieri
+		String comandoSql1, comandoSql2;
+		ArrayList<HashMap<String, Object>> pagamentiTot, utentiTot, listaPagamenti=null;
+
+		System.out.println("GestoreRicerche.ricercaListaPagamentiUtente(" + username + ")\n");
+		comandoSql1 = "SELECT * FROM Pagamento;";
+		pagamentiTot = dbProdotti.query(comandoSql1);
+
+		comandoSql2 = "SELECT * FROM Utente WHERE username = \"" + username + "\";";
+		utentiTot = dbUtenti.query(comandoSql2);
+
+		if(!pagamentiTot.isEmpty() && !utentiTot.isEmpty())
+			listaPagamenti = joinPagamentoUtente(pagamentiTot, utentiTot, null, null);
+		return listaPagamenti;
 	}
 
 	private ArrayList<HashMap<String, Object>> joinPagamentoUtente(ArrayList<HashMap<String, Object>> pagamentiTot,
-																   ArrayList<HashMap<String, Object>> utentiTot, String dataInizio, String dataFine) throws RemoteException {
-		ArrayList<HashMap<String, Object>> pagamenti = new ArrayList<>();
+																   ArrayList<HashMap<String, Object>> utentiTot, String dataInizio, String dataFine) throws RemoteException
+	{
+		//RF12: Lista Pagamenti
+		//autori: Broglio, Cartieri
+		ArrayList<HashMap<String, Object>> listaPagamenti=new ArrayList<>();
 
-		DateTimeFormatter formato1 = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-		DateTimeFormatter formato2 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-		LocalDate data1 = LocalDate.parse(dataInizio, formato1);
-		LocalDate data2 = LocalDate.parse(dataFine, formato1);
+		for(HashMap<String, Object> pagamento: pagamentiTot)
+		{
+			for(HashMap<String, Object> utente: utentiTot)
+			{
+				boolean cond = true;
+				if(dataInizio!=null && dataFine!=null)
+				{
+					DateTimeFormatter formato1 = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+					DateTimeFormatter formato2 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+					LocalDate data1 = LocalDate.parse(dataInizio, formato1);
+					LocalDate data2 = LocalDate.parse(dataFine, formato1);
+					String stringDataOrdine = pagamento.get("dataOrdine").toString().substring(0, 10);
+					LocalDate dataOrdine = LocalDate.parse(stringDataOrdine, formato2);
+					cond = data1.isBefore(dataOrdine) && dataOrdine.isBefore(data2) || data1.isEqual(dataOrdine) && dataOrdine.isBefore(data2) ||
+							data1.isEqual(dataOrdine) && dataOrdine.isEqual(data2) || data1.isBefore(dataOrdine) && dataOrdine.isEqual(data2);
+				}
 
-		for (HashMap<String, Object> pagamento : pagamentiTot) {
-			for (HashMap<String, Object> utente : utentiTot) {
-				String stringDataOrdine = pagamento.get("dataOrdine").toString().substring(0, 10);
-				LocalDate dataOrdine = LocalDate.parse(stringDataOrdine, formato2);
-				boolean cond = data1.isBefore(dataOrdine) && dataOrdine.isBefore(data2) || data1.isEqual(dataOrdine) && dataOrdine.isBefore(data2) ||
-						data1.isEqual(dataOrdine) && dataOrdine.isEqual(data2) || data1.isBefore(dataOrdine) && dataOrdine.isEqual(data2);
-				if (pagamento.get("username").equals(utente.get("username")) && cond) {
+				if(pagamento.get("username").equals(utente.get("username")) && cond)
+				{
 					HashMap<String, Object> temp = new HashMap<>();
 					temp.putAll(pagamento);
 					temp.putAll(utente);
-					pagamenti.add(temp);
+					listaPagamenti.add(temp);
 				}
 			}
 		}
-		System.out.println(pagamenti.toString() + "\n");
-		return pagamenti;
+		return listaPagamenti;
 	}
+
 	/**
 	 * Controlla se l'utente ha inserito una stringa username valida.
 	 * @param username che viene inserito dall'utente.
