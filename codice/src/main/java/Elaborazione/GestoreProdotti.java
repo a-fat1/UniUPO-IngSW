@@ -55,4 +55,15 @@ public class GestoreProdotti implements GestoreProdottiInterfaccia
 		dbProdotti.update("INSERT INTO Fornitura (codiceProdotto, dataFornitura, costo, quantita) VALUES ("+codProdotto+", '"+data+"', "+costo+", "+quantita+")");
 		dbProdotti.update("UPDATE Prodotto SET quantita = quantita + "+quantita+" WHERE codice = "+codProdotto);
 	}
+
+	public void rimuoviProdotto(Integer codProdotto) throws RemoteException{
+		//RF10 :Rimuovi Ripristina
+		//Autori: Filidoro Mahfoud
+		dpProdotti.update("UPDATE Prodotto SET Disponibile=False WHERE codice =" +codProdotto);
+	}
+	public void ripristinaProdotto(Integer codProdotto) throws RemoteException{
+		//RF10 :Rimuovi Ripristina
+		//Autori: Filidoro Mahfoud
+		dpProdotti.update("UPDATE Prodotto SET Disponibile=True WHERE codice =" +codProdotto);
+	}
 }
