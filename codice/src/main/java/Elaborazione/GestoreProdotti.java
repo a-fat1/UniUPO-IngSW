@@ -1,13 +1,11 @@
 package Elaborazione;
 
-<<<<<<< HEAD
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
-=======
 import java.time.Year;
->>>>>>> RF16
 import java.util.HashMap;
 import java.util.ArrayList;
 
@@ -34,7 +32,7 @@ public class GestoreProdotti implements GestoreProdottiInterfaccia
 		dbProdotti = d1;
 	}
 
-<<<<<<< HEAD
+
 	public HashMap<String, Boolean> controlloDatiFornitura(String data, Float costo, Integer quantita) {
 		HashMap<String, Boolean> esitoControllo = new HashMap<>();
 		for(String s : new String[] {"esitoData", "esitoCosto", "esitoQuantita"})
@@ -57,9 +55,10 @@ public class GestoreProdotti implements GestoreProdottiInterfaccia
 	}
 
 	public void aggiungiFornitura(Integer codProdotto, String data, Float costo, Integer quantita) throws RemoteException {
-		dbProdotti.update("INSERT INTO Fornitura (codiceProdotto, dataFornitura, costo, quantita) VALUES ("+codProdotto+", '"+data+"', "+costo+", "+quantita+")");
-		dbProdotti.update("UPDATE Prodotto SET quantita = quantita + "+quantita+" WHERE codice = "+codProdotto);
-=======
+		dbProdotti.update("INSERT INTO Fornitura (codiceProdotto, dataFornitura, costo, quantita) VALUES (" + codProdotto + ", '" + data + "', " + costo + ", " + quantita + ")");
+		dbProdotti.update("UPDATE Prodotto SET quantita = quantita + " + quantita + " WHERE codice = " + codProdotto);
+	}
+
 	public int verificaCampi(String[] autori, String titolo, String editore, int anno){
 		int lenTitolo = titolo.length();
 		if(lenTitolo == 0) return 1; //titolo mancante
@@ -97,6 +96,6 @@ public class GestoreProdotti implements GestoreProdottiInterfaccia
 						"WHERE Codice = (SELECT MAX(Codice) FROM Prodotto)"
 		);
 		return prodotti.get(0);
->>>>>>> RF16
+
 	}
 }
