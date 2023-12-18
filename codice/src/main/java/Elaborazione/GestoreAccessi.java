@@ -133,8 +133,6 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 			}
 		}
 	}
-}
-	
 	/**
 	 * Controlla se l'utente ha inserito delle stringhe di nome e cognome valide.
 	 * @param nome Il nome dell'utente che si sta registrando sul sistema informatico.
