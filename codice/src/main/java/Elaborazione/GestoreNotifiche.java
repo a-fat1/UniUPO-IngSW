@@ -22,6 +22,7 @@ import DataBase.*;
 public class GestoreNotifiche implements GestoreNotificheInterfaccia {
     private Registry registry;
     private DbNotificheInterfaccia dbNotifiche;
+    private DateTimeFormatter FORMATO_DATA = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
     public GestoreNotifiche(String host) throws RemoteException, NotBoundException {
         registry = LocateRegistry.getRegistry(host, 1098);
@@ -90,4 +91,40 @@ public class GestoreNotifiche implements GestoreNotificheInterfaccia {
         dbNotifiche.update(comandoSql);
     }
 
+
+    	public String controlloParametri(String dataPubblicazione, String dataScadenza) {
+		if (dataPubblicazione == null || dataScadenza == null || dataPubblicazione.isEmpty() || dataScadenza.isEmpty())
+			throw new IllegalArgumentException("Manca una data!");
+		else {
+			try {
+				LocalDate pubblicazione = LocalDate.parse(dataPubblicazione, FORMATO_DATA);
+				LocalDate scadenza = LocalDate.parse(dataScadenza, FORMATO_DATA);
+				if (pubblicazione.isAfter(scadenza))
+					throw new IllegalArgumentException("Date non valide!");
+				else return "Date corrette!";
+			} catch (DateTimeParseException e) {
+				throw new IllegalArgumentException("Formato data non valido!");
+			}
+		}
+	}
+
+	public ArrayList<HashMap<String, Object>> cercaNotifiche(String dataPubblicazione, String dataScadenza, String tipoUtente)
+	{
+		String comandoSql;
+		ArrayList<HashMap<String, Object>> notifica = null;
+
+		comandoSql = "SELECT * FROM Notifica WHERE dataPubblicazione = \"" + dataPubblicazione + "\" AND dataScadenza = \"" + dataScadenza + "\" AND tipoUtente = \"" + tipoUtente + "\" ;";
+
+		try {
+			notifica = dbNotifiche.query(comandoSql);
+		} catch (RemoteException e) {
+			System.err.println("Errore remoto: ");
+			e.printStackTrace();
+		}
+
+		return notifica;
+	}
 }
+
+
+
