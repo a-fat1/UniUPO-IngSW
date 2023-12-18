@@ -194,4 +194,118 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 	{
 		dbUtenti.update("INSERT INTO Credenziali ('password', 'username', 'attivo') VALUES ('', '"+username+"', 1);");
 	}
+
+		/**
+	 * Verifica se la stringa contiene solo caratteri dell'alfabeto, inclusi eventuali spazi e apostrofi.
+	 *
+	 * @param input La stringa da verificare.
+	 * @return true se la stringa contiene solo caratteri dell'alfabeto, false altrimenti.
+	 *
+	 * RF24: AggiornamentoDomicilio
+	 * Autore: Mondelli e Reci
+	 */
+	private static boolean controllaValiditaStringaAlfabetica(String input) {
+		Pattern pattern = Pattern.compile("^[a-zA-Z'\\s]+$");
+		Matcher matcher = pattern.matcher(input);
+		return matcher.matches();
+	}
+
+	/**
+	 * Verifica se la stringa rappresenta un numero intero positivo
+	 *
+	 * @param input La stringa da verificare.
+	 * @return true se la stringa rappresenta un numero intero positivo, false altrimenti.
+	 *
+	 * RF24: AggiornamentoDomicilio
+	 * Autore: Mondelli e Reci
+	 */
+	private static boolean isNumeroInteroPositivo(String input) {
+		return input.matches("\\d+") && Integer.parseInt(input) > 0;
+	}
+
+	/**
+	 * Verifica che la stringa contenga cifre (la prima cifra non può essere '0'), eventualmente seguite da lettere, senza altri numeri dopo le lettere
+	 *
+	 * @param input La stringa da verificare.
+	 * @return true se la stringa rappresenta un civico valido, else altrimenti
+	 *
+	 * RF24: AggiornamentoDomicilio
+	 * Autore: Mondelli e Reci
+	 */
+	private static boolean isValidoNumeroCivico(String input) {
+		return input.equalsIgnoreCase("snc") || input.matches("[1-9][0-9]*[A-Za-z]?[A-Za-z]*");
+	}
+
+	/**
+	 * Controlla il formato dei dati relativi a un domicilio.
+	 *
+	 * @param via       La via del domicilio.
+	 * @param numero    Il numero civico del domicilio.
+	 * @param cap       Il codice di postale del domicilio.
+	 * @param localita  La località del domicilio.
+	 * @return Un intero che rappresenta l'esito del controllo:
+	 *         - 0 se tutti i campi sono corretti,
+	 *         - 1 se il formato della via è errato,
+	 *         - 2 se il formato del CAP è errato,
+	 *         - 3 se il formato della località è errato,
+	 *         - 4 se il formato del numero civico è errato,
+	 *         - 5 se ci sono più campi errati.
+	 *
+	 * RF24: AggiornamentoDomicilio
+	 * Autore: Mondelli e Reci
+	 */
+	public int controllaFormatoDomicilio(String via, String numero, String cap, String localita) {
+		int esitoControllo;
+
+		int lenVia = via.length();
+		int lenCap = cap.length();
+		int lenLocalita = localita.length();
+
+		// controllo se tutti i campi sono corretti
+		if (lenVia > 0 && controllaValiditaStringaAlfabetica(via) && isValidoNumeroCivico(numero) && lenCap == 5 && isNumeroInteroPositivo(cap) && lenLocalita > 0 && controllaValiditaStringaAlfabetica(localita))
+			esitoControllo = 0;
+
+		// controllo formato 'via'
+		else if ((lenVia == 0 || !controllaValiditaStringaAlfabetica(via)) && isValidoNumeroCivico(numero) && lenCap == 5 && isNumeroInteroPositivo(cap) && lenLocalita > 0 && controllaValiditaStringaAlfabetica(localita))
+			esitoControllo = 1;
+
+		// controllo formato 'cap'
+		else if (lenVia > 0 && controllaValiditaStringaAlfabetica(via) && isValidoNumeroCivico(numero) && (lenCap != 5 || !isNumeroInteroPositivo(cap)) && lenLocalita > 0 && controllaValiditaStringaAlfabetica(localita))
+			esitoControllo = 2;
+
+		//controllo formato 'localita'
+		else if (lenVia > 0 && controllaValiditaStringaAlfabetica(via) && isValidoNumeroCivico(numero) && lenCap == 5 && (lenLocalita == 0 || !controllaValiditaStringaAlfabetica(localita)))
+			esitoControllo = 3;
+
+		//controllo formato 'numero'
+		else if (lenVia > 0 && controllaValiditaStringaAlfabetica(via) && !isValidoNumeroCivico(numero) && lenCap == 5 && isNumeroInteroPositivo(cap) && lenLocalita > 0 && controllaValiditaStringaAlfabetica(localita))
+			esitoControllo = 4;
+
+		//ci sono più campi errati
+		else esitoControllo = 5;
+
+		return esitoControllo;
+	}
+
+	@Override
+	public void promptSalvaDomicilio(String username, String via, String civico, String cap, String localita) throws RemoteException {
+
+		// Controlla se esiste già un indirizzo per l'username
+		String checkExistingQuery = "SELECT COUNT(*) FROM Domicilio WHERE Username = '" + username + "'";
+		DbUtenti dbUtenti = new DbUtenti();
+
+		// Esegui la query per verificare se esiste già un indirizzo per l'username
+		ArrayList<HashMap<String, Object>> result = dbUtenti.query(checkExistingQuery);
+
+		// Se esiste già un indirizzo per l'username, esegui l'update
+		if (result != null && !result.isEmpty() && (Long) result.get(0).get("COUNT(*)") > 0) {
+			// Comando SQL di Update
+			String updateQuery = "UPDATE Domicilio SET via = '" + via + "', civico = '" + civico + "', cap = '" + cap + "', localita = '" + localita + "' WHERE Username = '" + username + "'";
+			dbUtenti.update(updateQuery);
+		} else {
+			// Altrimenti, esegui l'insert
+			String insertQuery = "INSERT INTO Domicilio (Username, via, civico, cap, localita) VALUES ('" + username + "', '" + via + "', '" + civico + "', '" + cap + "', '" + localita + "')";
+			dbUtenti.update(insertQuery);
+		}
+	}
 }
