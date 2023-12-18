@@ -1,7 +1,6 @@
 import static org.junit.Assert.*;
 import org.junit.Test;
 
-import java.lang.reflect.Array;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -70,7 +69,7 @@ public class RF19RicercaUtente {
 
     @Test
     public void testDatabase0() throws RemoteException {
-        // ricerca di un utente tramite username nel database
+        // ricerca di un utente non bloccato tramite username nel database
         ArrayList<HashMap<String, Object>> utenti = gestorericerche.cercaUtenteBloccatoNonBloccato("aldo");
         assertEquals("Aldo", utenti.get(0).get("nome"));
         assertEquals("Bianchi", utenti.get(0).get("cognome"));
@@ -79,7 +78,7 @@ public class RF19RicercaUtente {
 
     @Test
     public void testDatabase1() throws RemoteException {
-        // ricerca di un utente tramite nome e cognome nel database
+        // ricerca di un utente non bloccato tramite nome e cognome nel database
         ArrayList<HashMap<String, Object>> utenti = gestorericerche.cercaUtenteBloccatoNonBloccato("Aldo", "Bianchi");
         assertEquals("Aldo", utenti.get(0).get("nome"));
         assertEquals("Bianchi", utenti.get(0).get("cognome"));
@@ -88,16 +87,35 @@ public class RF19RicercaUtente {
 
     @Test
     public void testDatabase2() throws RemoteException {
-        // ricerca di un utente tramite username nel database
-        ArrayList<HashMap<String, Object>> utenti = gestorericerche.cercaUtenteNonBloccato("aldo");
+        // ricerca di un utente tramite nome e cognome nel database
+        ArrayList<HashMap<String, Object>> utenti = gestorericerche.cercaUtenteBloccatoNonBloccato("Aldo", "Bianchi");
         assertEquals("Aldo", utenti.get(0).get("nome"));
         assertEquals("Bianchi", utenti.get(0).get("cognome"));
         assertEquals("aldo", utenti.get(0).get("username"));
-        assertEquals(1, utenti.get(0).get("attivo"));
     }
 
     @Test
     public void testDatabase3() throws RemoteException {
+        // ricerca di un utente bloccato tramite nome e cognome nel database
+        ArrayList<HashMap<String, Object>> utenti = gestorericerche.cercaUtenteBloccatoNonBloccato("Alfio", "Verdi");
+        assertEquals("Alfio", utenti.get(0).get("nome"));
+        assertEquals("Verdi", utenti.get(0).get("cognome"));
+        assertEquals("alfio", utenti.get(0).get("username"));
+        assertEquals(0, utenti.get(0).get("attivo"));
+    }
+
+    @Test
+    public void testDatabase4() throws RemoteException {
+        // ricerca di un utente bloccato tramite username nel database
+        ArrayList<HashMap<String, Object>> utenti = gestorericerche.cercaUtenteBloccatoNonBloccato("alfio");
+        assertEquals("Alfio", utenti.get(0).get("nome"));
+        assertEquals("Verdi", utenti.get(0).get("cognome"));
+        assertEquals("alfio", utenti.get(0).get("username"));
+        assertEquals(0, utenti.get(0).get("attivo"));
+    }
+
+    @Test
+    public void testDatabase5() throws RemoteException {
         // ricerca di un utente tramite nome e cognome nel database
         ArrayList<HashMap<String, Object>> utenti = gestorericerche.cercaUtenteNonBloccato("Aldo", "Bianchi");
         assertEquals("Aldo", utenti.get(0).get("nome"));
@@ -107,7 +125,7 @@ public class RF19RicercaUtente {
     }
 
     @Test
-    public void testDatabase4() throws RemoteException {
+    public void testDatabase6() throws RemoteException {
         // ricerca di un utente bloccato tramite username nel database
         // controllo che non sia presente nulla (gli utenti bloccati vengono scartati dalla funzione)
         ArrayList<HashMap<String, Object>> utenti = gestorericerche.cercaUtenteNonBloccato("alfio");
@@ -117,11 +135,11 @@ public class RF19RicercaUtente {
 
 
     @Test
-    public void testDatabase5() throws RemoteException {
+    public void testDatabase7() throws RemoteException {
         // ricerca di un utente bloccato tramite nome e cognome nel database
         // controllo che non sia presente nulla (gli utenti bloccati vengono scartati dalla funzione)
         ArrayList<HashMap<String, Object>> utenti = gestorericerche.cercaUtenteNonBloccato("alfio");
-        assertEquals(utenti.size(), 0);
+        assertEquals(0, utenti.size());
     }
 
 }
