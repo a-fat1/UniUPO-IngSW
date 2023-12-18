@@ -159,12 +159,12 @@ public class GestoreProdotti implements GestoreProdottiInterfaccia {
 	public void rimuoviProdotto(Integer codProdotto) throws RemoteException{
 		//RF10 :Rimuovi Ripristina
 		//Autori: Filidoro Mahfoud
-		dpProdotti.update("UPDATE Prodotto SET Disponibile=False WHERE codice =" +codProdotto);
+		dbProdotti.update("UPDATE Prodotto SET Disponibile=False WHERE codice =" +codProdotto);
 	}
 	public void ripristinaProdotto(Integer codProdotto) throws RemoteException{
 		//RF10 :Rimuovi Ripristina
 		//Autori: Filidoro Mahfoud
-		dpProdotti.update("UPDATE Prodotto SET Disponibile=True WHERE codice =" +codProdotto);
+		dbProdotti.update("UPDATE Prodotto SET Disponibile=True WHERE codice =" +codProdotto);
 	}
 
 }
