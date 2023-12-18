@@ -61,7 +61,7 @@ public class GestoreRicerche implements GestoreRicercheInterfaccia
 
 		return ordini;
 	}
-	public int controlloParametri(String dataInizio, String dataFine)
+	public int controlloParametri(String dataInizio, String dataFine) throws RemoteException
 	{
 		int esitoControllo=0;
 		DateTimeFormatter formatoData = DateTimeFormatter.ofPattern("dd/MM/yyyy");
