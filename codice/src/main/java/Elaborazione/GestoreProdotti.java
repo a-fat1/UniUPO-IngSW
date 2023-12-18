@@ -51,7 +51,7 @@ public class GestoreProdotti implements GestoreProdottiInterfaccia {
 
 		if (controlloParametri(dataInizio, dataFine) == 0)
 			try {
-				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 				DateTimeFormatter stringFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 				LocalDateTime dataIn = LocalDateTime.of(LocalDate.parse(dataInizio, formatter), LocalTime.MIDNIGHT);
 				LocalDateTime dataFin = LocalDateTime.of(LocalDate.parse(dataFine, formatter), LocalTime.MAX);
@@ -68,7 +68,7 @@ public class GestoreProdotti implements GestoreProdottiInterfaccia {
 	@Override
 	public int controlloParametri(String dataInizio, String dataFine) throws RemoteException {// RF 13 Benetti-Chiappa
 		int esitoControllo = 0;
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		LocalDate dataIn = null;
 		LocalDate dataFin = null;
 		try {
@@ -159,12 +159,12 @@ public class GestoreProdotti implements GestoreProdottiInterfaccia {
 	public void rimuoviProdotto(Integer codProdotto) throws RemoteException{
 		//RF10 :Rimuovi Ripristina
 		//Autori: Filidoro Mahfoud
-		dpProdotti.update("UPDATE Prodotto SET Disponibile=False WHERE codice =" +codProdotto);
+		dbProdotti.update("UPDATE Prodotto SET Disponibile=False WHERE codice =" +codProdotto);
 	}
 	public void ripristinaProdotto(Integer codProdotto) throws RemoteException{
 		//RF10 :Rimuovi Ripristina
 		//Autori: Filidoro Mahfoud
-		dpProdotti.update("UPDATE Prodotto SET Disponibile=True WHERE codice =" +codProdotto);
+		dbProdotti.update("UPDATE Prodotto SET Disponibile=True WHERE codice =" +codProdotto);
 	}
 
 }

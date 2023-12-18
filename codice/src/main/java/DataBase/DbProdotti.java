@@ -29,7 +29,7 @@ public class DbProdotti implements DbProdottiInterfaccia
 
 		try 
 		{
-           		conn = DriverManager.getConnection("jdbc:sqlite:dati/DbProdotti.db");		
+           		conn = DriverManager.getConnection("jdbc:sqlite:ProductManager/codice/dati/DbProdotti.db");		
 	    		stmt = conn.createStatement();
     			rs = stmt.executeQuery(comandoSql);
 			md = rs.getMetaData();

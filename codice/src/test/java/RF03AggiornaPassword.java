@@ -4,13 +4,15 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
+import java.rmi.RemoteException;
+
 public class RF03AggiornaPassword {
 
     DbUtenti dbUtenti = new DbUtenti();
     GestoreAccessi gestoreAccessi = new GestoreAccessi(dbUtenti);
 
     @Test
-    public void testVerificaPassword(){
+    public void testVerificaPassword() throws RemoteException{
         //Test con password uguali = return expected 0
         assertEquals(0, gestoreAccessi.verificaCredenziali("abc123", "abc123"));
 
@@ -19,7 +21,7 @@ public class RF03AggiornaPassword {
     }
 
     @Test
-    public void testNuovaPassword(){
+    public void testNuovaPassword() throws RemoteException {
          //Test lunghezza password <6 = return expected 1
         assertEquals(1, gestoreAccessi.controlloNuovaPassword("abc12"));
 
