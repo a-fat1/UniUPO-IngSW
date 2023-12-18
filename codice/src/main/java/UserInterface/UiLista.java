@@ -147,7 +147,7 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 				new Object[] { "OK" },
 				null);
 		if (risultato == JOptionPane.CLOSED_OPTION) {
-			System.exit(0);
+			return;
 		}
 	}
 

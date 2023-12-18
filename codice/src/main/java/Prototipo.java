@@ -171,8 +171,8 @@ public class Prototipo extends JFrame
  	      	        registryUI.bind("uiLogin", stubUiLogin);
 
 
-			uiLogin.avvioLogin();
-			
+			//uiLogin.avvioLogin();
+			uiLista.avvioListaForniture();
 			System.exit(0);
 		}
   	}
