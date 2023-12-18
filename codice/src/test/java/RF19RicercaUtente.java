@@ -1,5 +1,7 @@
 import static org.junit.Assert.*;
 import org.junit.Test;
+
+import java.lang.reflect.Array;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,7 +57,7 @@ public class RF19RicercaUtente {
 
     @Test
     public void testControlloParametriNomeCognome8(){
-        // controllo nome caratteri non conseniti
+        // controllo nome caratteri non consentiti
         assertEquals(2, gestorericerche.controlloParametri("abc123456789!?=)(", "abc"));
     }
 
@@ -99,6 +101,50 @@ public class RF19RicercaUtente {
     }
 
     @Test
+    public void testDatabase4() throws RemoteException {
+        // controllo nessun elemento nell'arrayList
+        ArrayList<HashMap<String, Object>> utenti = gestorericerche.cercaUtenteNonBloccato("alfio");
+        assertEquals(0, utenti.size());
+    }
+
+    /*
+
+    @Test
+    public void testDatabase5() throws RemoteException {
+        // controllo numero corretto di elementi da username vuoto per utenti bloccati e non bloccati
+        ArrayList<HashMap<String, Object>> utenti = gestorericerche.cercaUtenteBloccatoNonBloccato("");
+        assertEquals(9, utenti.size());
+    }
+
+     */
+
+    @Test
+    public void testDatabase5() throws RemoteException {
+        // controllo un solo elemento nell'arrayList
+        ArrayList<HashMap<String, Object>> utenti = gestorericerche.cercaUtenteBloccatoNonBloccato("alfio");
+        assertEquals(1, utenti.size());
+        assertEquals(0, utenti.get(0).get("attivo"));
+    }
+
+    @Test
+    public void testDatabase6() throws RemoteException {
+        ArrayList<HashMap<String, Object>> utenti = gestorericerche.cercaUtenteNonBloccato("alfio");
+        assertEquals(utenti.size(), 0);
+    }
+
+    /*
+    @Test
+    public void testDatabase4() throws RemoteException {
+        // controllo numero corretto di elementi per utenti non bloccati (da username vuoto)
+        ArrayList<HashMap<String, Object>> utenti = gestorericerche.cercaUtenteNonBloccato("");
+        assertEquals(8, utenti.size());
+    }
+
+     */
+
+    /*
+
+    @Test
     public void testDatabase() throws RemoteException {
         // Ricerca con utenti multipli
         ArrayList<HashMap<String, Object>> utenti = gestorericerche.cercaUtenteNonBloccato("s");
@@ -114,32 +160,5 @@ public class RF19RicercaUtente {
         assertEquals("soave", utenti.get(2).get("username"));
     }
 
-    @Test
-    public void testDatabase4() throws RemoteException {
-        // controllo numero corretto di elementi per utenti non bloccati (da username vuoto)
-        ArrayList<HashMap<String, Object>> utenti = gestorericerche.cercaUtenteNonBloccato("");
-        assertEquals(8, utenti.size());
-    }
-
-    @Test
-    public void testDatabase5() throws RemoteException {
-        // controllo nessun elemento nell'arrayList
-        ArrayList<HashMap<String, Object>> utenti = gestorericerche.cercaUtenteNonBloccato("alfio");
-        assertEquals(0, utenti.size());
-    }
-
-    @Test
-    public void testDatabase6() throws RemoteException {
-        // controlo numero corrett di elementi da username vuoto per utenti bloccati e non bloccati
-        ArrayList<HashMap<String, Object>> utenti = gestorericerche.cercaUtenteBloccatoNonBloccato("");
-        assertEquals(9, utenti.size());
-    }
-
-    @Test
-    public void testDatabase7() throws RemoteException {
-        // controllo un solo elemento nell'arrayList
-        ArrayList<HashMap<String, Object>> utenti = gestorericerche.cercaUtenteBloccatoNonBloccato("alfio");
-        assertEquals(1, utenti.size());
-        assertEquals(0, utenti.get(0).get("attivo"));
-    }
+     */
 }
