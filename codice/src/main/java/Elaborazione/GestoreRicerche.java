@@ -32,7 +32,6 @@ public class GestoreRicerche implements GestoreRicercheInterfaccia
 		dbProdotti = d2;
 	}
 
-<<<<<<< HEAD
 	public ArrayList<HashMap<String, Object>> ricercaPerUtente(String username) throws RemoteException
 	{
 		//RF11: lista ordini
@@ -113,25 +112,21 @@ public class GestoreRicerche implements GestoreRicercheInterfaccia
 	}
 
 	private ArrayList<HashMap<String, Object>> joinPagamentoUtente(ArrayList<HashMap<String, Object>> pagamentiTot,
-																   ArrayList<HashMap<String, Object>> utentiTot, String dataInizio, String dataFine) throws RemoteException
-	{
-		ArrayList<HashMap<String, Object>> pagamenti=new ArrayList<>();
+																   ArrayList<HashMap<String, Object>> utentiTot, String dataInizio, String dataFine) throws RemoteException {
+		ArrayList<HashMap<String, Object>> pagamenti = new ArrayList<>();
 
 		DateTimeFormatter formato1 = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		DateTimeFormatter formato2 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		LocalDate data1 = LocalDate.parse(dataInizio, formato1);
-		LocalDate data2 =  LocalDate.parse(dataFine, formato1);
+		LocalDate data2 = LocalDate.parse(dataFine, formato1);
 
-		for(HashMap<String, Object> pagamento: pagamentiTot)
-		{
-			for(HashMap<String, Object> utente: utentiTot)
-			{
-				String stringDataOrdine= pagamento.get("dataOrdine").toString().substring(0,10);
+		for (HashMap<String, Object> pagamento : pagamentiTot) {
+			for (HashMap<String, Object> utente : utentiTot) {
+				String stringDataOrdine = pagamento.get("dataOrdine").toString().substring(0, 10);
 				LocalDate dataOrdine = LocalDate.parse(stringDataOrdine, formato2);
 				boolean cond = data1.isBefore(dataOrdine) && dataOrdine.isBefore(data2) || data1.isEqual(dataOrdine) && dataOrdine.isBefore(data2) ||
 						data1.isEqual(dataOrdine) && dataOrdine.isEqual(data2) || data1.isBefore(dataOrdine) && dataOrdine.isEqual(data2);
-				if(pagamento.get("username").equals(utente.get("username")) && cond)
-				{
+				if (pagamento.get("username").equals(utente.get("username")) && cond) {
 					HashMap<String, Object> temp = new HashMap<>();
 					temp.putAll(pagamento);
 					temp.putAll(utente);
@@ -139,10 +134,9 @@ public class GestoreRicerche implements GestoreRicercheInterfaccia
 				}
 			}
 		}
-		System.out.println(pagamenti.toString()+"\n");
+		System.out.println(pagamenti.toString() + "\n");
 		return pagamenti;
-=======
-
+	}
 	/**
 	 * Controlla se l'utente ha inserito una stringa username valida.
 	 * @param username che viene inserito dall'utente.
@@ -291,6 +285,5 @@ public class GestoreRicerche implements GestoreRicercheInterfaccia
 		utenti = dbUtenti.query(comandoSql);
 
 		return utenti;
->>>>>>> RF19
 	}
 }
