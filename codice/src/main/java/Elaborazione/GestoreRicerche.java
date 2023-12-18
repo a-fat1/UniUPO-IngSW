@@ -33,7 +33,8 @@ public class GestoreRicerche implements GestoreRicercheInterfaccia
 	/**
 	 * Controlla se l'utente ha inserito una stringa username valida.
 	 * @param username che viene inserito dall'utente.
-	 * @return ritorna 1 in caso in cui la lunghezza della stringa sia < 3, altrimenti ritorna 4
+	 * @return ritorna 1 in caso in cui la lunghezza della stringa sia < 3, altrimenti ritorna 4.
+	 * @throws RemoteException
 	 */
 
 	public int controlloParametri(String username) throws RemoteException {
@@ -57,6 +58,7 @@ public class GestoreRicerche implements GestoreRicercheInterfaccia
 	 * @return ritorna 2 se il nome non è lungo almeno 3 caratteri o se contiene dei caratteri non
 	 * alfabetici, ritorna 3 se il cognome non è lungo almeno 3 caratteri o se contiene dei caratteri
 	 * non alfabetici, ritorna 4 se invece nome e cognome sono validi.
+	 * @throws RemoteException
 	 */
 	public int controlloParametri(String nome, String cognome) throws RemoteException {
 
@@ -88,7 +90,7 @@ public class GestoreRicerche implements GestoreRicercheInterfaccia
 	 * che l'utente sia bloccato o meno.
 	 * @param username lo username che bisogna ricercare nel database.
 	 * @return ritorna un'ArrayList degli utenti trovati, sotto forma di HashMap.
-	 * @throws RemoteException .
+	 * @throws RemoteException
 	 */
 	public ArrayList<HashMap<String, Object>> cercaUtenteBloccatoNonBloccato(String username) throws RemoteException {
 
@@ -113,7 +115,7 @@ public class GestoreRicerche implements GestoreRicercheInterfaccia
 	 * @param nome il nome che bisogna ricercare nel database.
 	 * @param cognome il cognome che bisogna ricercare nel database.
 	 * @return ritorna un'ArrayList degli utenti trovati, sotto forma di HashMap.
-	 * @throws RemoteException .
+	 * @throws RemoteException
 	 */
 	public ArrayList<HashMap<String, Object>> cercaUtenteBloccatoNonBloccato(String nome, String cognome) throws RemoteException {
 
@@ -136,7 +138,7 @@ public class GestoreRicerche implements GestoreRicercheInterfaccia
 	 * l'utente non sia bloccato (identificato dal valore "1" che significa utente non bloccato).
 	 * @param username lo username che bisogna ricercare nel database.
 	 * @return ritorna un'ArrayList degli utenti trovati, sotto forma di HashMap.
-	 * @throws RemoteException .
+	 * @throws RemoteException
 	 */
 	public ArrayList<HashMap<String, Object>> cercaUtenteNonBloccato(String username) throws RemoteException {
 
@@ -160,7 +162,7 @@ public class GestoreRicerche implements GestoreRicercheInterfaccia
 	 * @param nome il nome inserito dall'utente per la ricerca.
 	 * @param cognome il cognome inserito dall'utente per la ricerca.
 	 * @return ritorna un'ArrayList degli utenti trovati, sotto forma di HashMap.
-	 * @throws RemoteException .
+	 * @throws RemoteException
 	 */
 	public ArrayList<HashMap<String, Object>> cercaUtenteNonBloccato(String nome, String cognome) throws RemoteException {
 
