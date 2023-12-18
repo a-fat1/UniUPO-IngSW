@@ -61,8 +61,9 @@ public class RF16NuovoProdotto {
         assertEquals(0, returnValue.get("quantita"));
         assertEquals(1, returnValue.get("disponibile"));
 
-
+        dbProdotti.update("DELETE FROM Prodotto WHERE codice="+ returnValue.get("codice") +";");
         returnValue = gestoreProdotti.aggiungiProdotto(new String[]{"Leonardo, Nicholas"}, "Gallette 2", "Zanichelli", 2024, "Libro");
+
 
         assertEquals("Leonardo, Nicholas", returnValue.get("autore"));
         assertEquals("Gallette 2", returnValue.get("titolo"));
@@ -71,7 +72,9 @@ public class RF16NuovoProdotto {
         assertEquals("Libro", returnValue.get("tipo"));
         assertNull(returnValue.get("prezzo"));
         assertEquals(0, returnValue.get("quantita"));
+
         assertEquals(1, returnValue.get("disponibile"));
+        dbProdotti.update("DELETE FROM Prodotto WHERE codice="+ returnValue.get("codice") +";");
     }
 
 }
