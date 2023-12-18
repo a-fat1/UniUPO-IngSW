@@ -11,8 +11,8 @@ public interface GestoreRicercheInterfaccia extends Remote
     // RF19 RicercaUtente
     // Nazzari Riccardo, Andrea Benedetto
 
-    int controlloParametri(String username);
-    int controlloParametri(String nome, String cognome);
+    int controlloParametri(String username) throws RemoteException;
+    int controlloParametri(String nome, String cognome) throws RemoteException;
 
     ArrayList<HashMap<String, Object>> cercaUtenteBloccatoNonBloccato(String username) throws RemoteException;
 

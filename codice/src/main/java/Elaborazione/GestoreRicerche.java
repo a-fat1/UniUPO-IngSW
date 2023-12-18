@@ -36,7 +36,7 @@ public class GestoreRicerche implements GestoreRicercheInterfaccia
 	 * @return ritorna 1 in caso in cui la lunghezza della stringa sia < 3, altrimenti ritorna 4
 	 */
 
-	public int controlloParametri(String username){
+	public int controlloParametri(String username) throws RemoteException {
 
 		// RF19
 		// Riccardo Nazzari, Andrea Benedetto
@@ -58,7 +58,7 @@ public class GestoreRicerche implements GestoreRicercheInterfaccia
 	 * alfabetici, ritorna 3 se il cognome non è lungo almeno 3 caratteri o se contiene dei caratteri
 	 * non alfabetici, ritorna 4 se invece nome e cognome sono validi.
 	 */
-	public int controlloParametri(String nome, String cognome) {
+	public int controlloParametri(String nome, String cognome) throws RemoteException {
 
 		// RF19
 		// Riccardo Nazzari, Andrea Benedetto

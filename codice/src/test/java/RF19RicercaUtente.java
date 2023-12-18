@@ -18,7 +18,7 @@ public class RF19RicercaUtente {
     // ------------------------------------------------------------------------------------ //
 
     @Test
-    public void testControlloParametriUsername(){
+    public void testControlloParametriUsername() throws RemoteException {
         // controllo di username con lunghezza inferiore a 3
         assertEquals(1, gestorericerche.controlloParametri(""));
         assertEquals(1, gestorericerche.controlloParametri("a"));
@@ -26,14 +26,14 @@ public class RF19RicercaUtente {
     }
 
     @Test
-    public void testControlloParametriUsername1(){
+    public void testControlloParametriUsername1() throws RemoteException {
         // controllo di username con lunghezza corretta
         assertEquals(4, gestorericerche.controlloParametri("abc"));
         assertEquals(4, gestorericerche.controlloParametri("orchidea1"));
     }
 
     @Test
-    public void testControlloParametriNomeCognome0(){
+    public void testControlloParametriNomeCognome0() throws RemoteException {
         // controllo di nome con una lunghezza inferiore a 3
         assertEquals(2, gestorericerche.controlloParametri("", "abc"));
         assertEquals(2, gestorericerche.controlloParametri("a", "abc"));
@@ -41,14 +41,14 @@ public class RF19RicercaUtente {
     }
 
     @Test
-    public void testControlloParametriNomeCognome1(){
+    public void testControlloParametriNomeCognome1() throws RemoteException {
         // controllo di nome e cognome con lunghezza corretta
         assertEquals(4, gestorericerche.controlloParametri("abc", "abc"));
         assertEquals(4, gestorericerche.controlloParametri("Mario", "Rossi"));
     }
 
     @Test
-    public void testControlloParametriNomeCognome2() {
+    public void testControlloParametriNomeCognome2() throws RemoteException {
         // controllo di cognome con una lunghezza inferiore a 3
         assertEquals(3, gestorericerche.controlloParametri("abc", ""));
         assertEquals(3, gestorericerche.controlloParametri("abc", "a"));
@@ -56,13 +56,13 @@ public class RF19RicercaUtente {
     }
 
     @Test
-    public void testControlloParametriNomeCognome8(){
+    public void testControlloParametriNomeCognome8() throws RemoteException {
         // controllo di nome con caratteri non consentiti
         assertEquals(2, gestorericerche.controlloParametri("abc123456789!?=)(", "abc"));
     }
 
     @Test
-    public void testControlloParametriNomeCognome9(){
+    public void testControlloParametriNomeCognome9() throws RemoteException {
         // controllo di cognome con caratteri non consentiti
         assertEquals(3, gestorericerche.controlloParametri("abc", "abc123456789!?=)("));
     }
