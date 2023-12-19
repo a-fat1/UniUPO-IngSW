@@ -60,7 +60,10 @@ public class GestoreProdotti implements GestoreProdottiInterfaccia
 		dbProdotti.update("UPDATE Prodotto SET quantita = quantita + "+quantita+" WHERE codice = "+codProdotto);
 	}
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> bc23d5d (Aggiunto codice Interfaccia (da testare))
 
 	public int verificaCampi(String[] autori, String titolo, String editore, int anno){
 		int lenTitolo = titolo.length();
@@ -134,5 +137,10 @@ public class GestoreProdotti implements GestoreProdottiInterfaccia
 			//RF17 Incrementea/Decrementa
 			dbProdotti.update("UPDATE Prodotto SET prezzo = prezzo *(1-"+Percentuale"/100)");
 	}
+<<<<<<< HEAD
 >>>>>>> b0db70f (RF17)
+=======
+=======
+>>>>>>> 2f0dd5e (Aggiunto codice Interfaccia (da testare))
+>>>>>>> bc23d5d (Aggiunto codice Interfaccia (da testare))
 }
