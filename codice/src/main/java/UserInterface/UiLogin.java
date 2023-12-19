@@ -154,7 +154,7 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 					else
 					{
 						utente=gestoreAccessi.ricercaUtente(username);
-						uiNotifica.avvioVisualizzaNotifiche();
+						uiNotifica.avvioVisualizzaNotifiche((String)utente.get("tipo"));
 						do
 						{
 							this.mostraMenu((String)utente.get("nome"), ((String)utente.get("tipo")));
