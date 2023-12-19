@@ -53,13 +53,14 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 		if(dim==0)
 			System.out.println("\nNessuna notifica!\n");
 		else{
-			for(int i=0;i<dim;i++){
-				id=(int)lista.get(i).get("numero");
-				testo=(String)lista.get(i).get("testo");
-				dataPubblicazione=(String) lista.get(i).get("dataPubblicazione");
-				dataScadenza=(String) lista.get(i).get("dataScadenza");
-				tipodiUtente=(String)lista.get(i).get("tipoUtente");
+			for (int i = 0; i < dim; i++) {
+				id = (int) lista.get(i).get("numero");
+				testo = (String) lista.get(i).get("testo");
+				dataPubblicazione = (String) lista.get(i).get("dataPubblicazione");
+				dataScadenza = (String) lista.get(i).get("dataScadenza");
+				tipodiUtente = (String) lista.get(i).get("tipoUtente");
 			}
+			System.out.println(dim);
 		}
 
 	}
