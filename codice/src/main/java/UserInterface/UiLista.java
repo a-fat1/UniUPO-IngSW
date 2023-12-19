@@ -51,7 +51,7 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 
 	private JScrollPane scrollPanelListaForniture;
 	private JTable tableListaForniture;
-	private JDialog tableListaFornitureFrame;
+	
 
 	public UiLista(String hostGestore) throws RemoteException, NotBoundException {
 		registryUI = LocateRegistry.getRegistry("127.0.0.1", 1100); // default: 1099
@@ -71,13 +71,7 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 		panelData.add(fieldDataFine);
 		tableListaForniture = new JTable();
 		scrollPanelListaForniture = new JScrollPane(tableListaForniture);
-		tableListaFornitureFrame = new JDialog(null, ModalityType.APPLICATION_MODAL);
-		tableListaFornitureFrame.setSize(new Dimension(700, 450));
-		tableListaFornitureFrame.setMinimumSize(new Dimension(650, 350));
-		scrollPanelListaForniture.add(tableListaForniture);
-		scrollPanelListaForniture.setViewportView(tableListaForniture);
-		tableListaFornitureFrame.getContentPane().add(scrollPanelListaForniture);
-		tableListaFornitureFrame.setType(Type.NORMAL);
+		
 	}
 
 	public void avvioListaOrdini() throws RemoteException { // RF11
@@ -91,9 +85,12 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 		DbProdotti dbProdotti = new DbProdotti();
 		GestoreProdotti gestoreProdotti = new GestoreProdotti(dbProdotti);
 		ArrayList<HashMap<String, Object>> listaForniture = gestoreProdotti.ricercaListaForniture(codice);
-		if (listaForniture.size() == 0)
+		if (listaForniture.size() == 0){
 			mostraErrore(3);
-		mostraListaItem(listaForniture);
+			return;
+		}
+		mostraLista(listaForniture);
+		showMessageDialog(null, scrollPanelListaForniture, "Lista forniture di " + codice , JOptionPane.PLAIN_MESSAGE);
 
 	}
 
@@ -105,6 +102,8 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 
 		do {
 			mostraFormRicercaPerData();
+			if (dataInizio == null || dataFine == null)
+				return;
 			esitoControllo = gestoreProdotti.controlloParametri(dataInizio, dataFine);
 			if (esitoControllo == 1 || esitoControllo == 2) {
 				mostraErrore(esitoControllo);
@@ -114,10 +113,8 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 					mostraErrore(4);
 					break;
 				}
-				mostraListaData(listaForniture);
-				tableListaFornitureFrame.setTitle("Ricerca per data " + dataInizio + " a " + dataFine);
-				tableListaFornitureFrame.setVisible(true);
-
+				mostraLista(listaForniture);
+				showMessageDialog(null, scrollPanelListaForniture, "Lista forniture da "+ dataInizio + " a " + dataFine , JOptionPane.PLAIN_MESSAGE);
 			}
 		} while (esitoControllo == 1 || esitoControllo == 2);
 	}
@@ -128,16 +125,16 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 		String messaggio = "";
 
 		if (esitoControllo == 1) {
-			messaggio = "Data non esistente/invalida, usare formato dd/MM/yyyy";
+			messaggio = "Data non esistente/invalida, usare formato yyyy-MM-dd";
 		}
 		if (esitoControllo == 2) {
 			messaggio = "La seconda data deve essere successiva alla prima";
 		}
 		if (esitoControllo == 3) {
-			messaggio = "Forniture in tale range di date non trovate";
+			messaggio = "Forniture non trovate per questo prodotto";
 		}
 		if (esitoControllo == 4) {
-			messaggio = "Forniture non trovate per questo prodotto";
+			messaggio = "Forniture in tale range di date non trovate";
 		}
 		messaggio = messaggio + "\n(clicca su OK o X per continuare)";
 		int risultato = JOptionPane.showOptionDialog(
@@ -150,24 +147,27 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 				new Object[] { "OK" },
 				null);
 		if (risultato == JOptionPane.CLOSED_OPTION) {
-			System.exit(0);
+			return;
 		}
 	}
 
 	@Override
 	public void mostraFormRicercaPerData() throws RemoteException {// RF 13 Benetti-Chiappa
 		int ricerca = showOptionDialog(null, panelData, "Ricerca per data", JOptionPane.DEFAULT_OPTION,
-				JOptionPane.PLAIN_MESSAGE, null, new Object[] { "OK" }, null);
+				JOptionPane.PLAIN_MESSAGE, null, new Object[] { "OK" }, -1);
 
 		if (ricerca == this.OK_OPTION) {
 			dataInizio = fieldDataInizio.getText();
 			dataFine = fieldDataFine.getText();
+		} else if (ricerca == JOptionPane.CLOSED_OPTION) {
+			dataInizio = null;
+			dataFine = null;
 		}
 
 	}
 
 	@Override
-	public void mostraListaItem(ArrayList<HashMap<String, Object>> listaForniture) throws RemoteException {// RF 13
+	public void mostraLista(ArrayList<HashMap<String, Object>> listaForniture) throws RemoteException {// RF 13
 																											// Benetti-Chiappa
 		Vector<String> columnNames = new Vector<>();
 		Vector<Vector<Object>> data = new Vector<>();
@@ -189,58 +189,6 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 		}
 		DefaultTableModel model = new DefaultTableModel(data, columnNames);
 		tableListaForniture.setModel(model);
-		JButton okButton = new JButton("OK");
-		okButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(java.awt.event.ActionEvent e) {
-				tableListaFornitureFrame.dispose();
-			}
-		});
-
-		JPanel buttonPanel = new JPanel();
-		buttonPanel.add(okButton);
-
-		tableListaFornitureFrame.getContentPane().add(BorderLayout.SOUTH, buttonPanel);
-		tableListaForniture.setModel(model);
 	}
 
-	@Override
-	public void mostraListaData(ArrayList<HashMap<String, Object>> listaForniture) throws RemoteException {// RF 13
-																											// Benetti-Chiappa
-		Vector<String> columnNames = new Vector<>();
-		Vector<Vector<Object>> data = new Vector<>();
-
-		if (!listaForniture.isEmpty()) {
-
-			for (String columnName : listaForniture.get(0).keySet()) {
-				columnNames.add(columnName);
-			}
-
-			for (HashMap<String, Object> riga : listaForniture) {
-				Vector<Object> rowData = new Vector<>();
-				for (String columnName : columnNames) {
-					rowData.add(riga.get(columnName));
-				}
-				data.add(rowData);
-			}
-
-		}
-		DefaultTableModel model = new DefaultTableModel(data, columnNames);
-		tableListaForniture.setModel(model);
-
-		JButton okButton = new JButton("OK");
-		okButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(java.awt.event.ActionEvent e) {
-				tableListaFornitureFrame.dispose();
-			}
-		});
-
-		JPanel buttonPanel = new JPanel();
-		buttonPanel.add(okButton);
-
-		tableListaFornitureFrame.getContentPane().add(BorderLayout.SOUTH, buttonPanel);
-		tableListaForniture.setModel(model);
-
-	}
 }

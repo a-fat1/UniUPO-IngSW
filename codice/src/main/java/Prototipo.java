@@ -172,6 +172,7 @@ public class Prototipo extends JFrame
 
 
 			uiLogin.avvioLogin();
+			
 			System.exit(0);
 		}
   	}
