@@ -51,24 +51,52 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 
 		gestoreNotifiche = (GestoreNotificheInterfaccia) registryGestore.lookup("gestoreNotifiche");
 
-		dataLabel = new JLabel("Data:");
-		oraLabel = new JLabel("Ora:");
-		testoLabel = new JLabel("Testo Notifica:");
-		dataField = new JTextField("", 10);
-		dataField.setToolTipText("inserire data");
-		oraField = new JTextField("", 10);
-		oraField.setToolTipText("inserire ora");
-		testoField = new JPasswordField("", 10);
 
-		modificaNotificaPanel = new JPanel(new GridLayout(2,2));
-		modificaNotificaPanel.add(dataLabel);
-		modificaNotificaPanel.add(dataField);
-		modificaNotificaPanel.add(testoLabel);
-		modificaNotificaPanel.add(testoField);
+		dataField = new JTextField("", 20);
+		dataLabel = new JLabel("Inserisci data di scadenza: ");
+		dataField.setToolTipText("Data");
+
+		oraField = new JTextField("", 20);
+		oraLabel = new JLabel("Inserisci l'ora di scadenza: ");
+		oraField.setToolTipText("Ora");
+
+		testoField = new JTextField("", 50);
+		testoLabel = new JLabel("Inserire testo notifica:");
+		testoField.setToolTipText("Testo");
 
 
+		modificaNotificaPanel = new JPanel(new GridBagLayout());
+		GridBagConstraints constrains = new GridBagConstraints();
+
+		constrains.gridy=0;
+		constrains.gridx=0;
+		modificaNotificaPanel.add(dataLabel,constrains);
+
+		constrains.gridy=0;
+		constrains.gridx=2;
+		constrains.gridwidth=1;
+		modificaNotificaPanel.add(dataField,constrains);
+
+		constrains.gridy=1;
+		constrains.gridx=0;
+		modificaNotificaPanel.add(oraLabel,constrains);
+
+		constrains.gridy=1;
+		constrains.gridx=2;
+		constrains.gridwidth=1;
+		modificaNotificaPanel.add(oraField,constrains);
+
+		constrains.gridy=3;
+		constrains.gridx=0;
+		modificaNotificaPanel.add(testoLabel,constrains);
+
+		constrains.gridy=3;
+		constrains.gridx=2;
+		constrains.gridwidth=5;
+		constrains.ipady = 100;
+		modificaNotificaPanel.add(testoField,constrains);
 	}
-	
+
 	public void avvioVisualizzaNotifiche() throws RemoteException
 	{ 	// RF01
 	}
@@ -109,15 +137,14 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 	 * @author  Linda Monfermoso, Gabriele Magenta Biasina
 	 */
 	private void mostraFormNotifica(String testoNotifica) {
-		int pulsante;
 
+		this.showMessageDialog(null, modificaNotificaPanel,"Modifica notifica",this.OK_CANCEL_OPTION);
 		dataField.setText("");
 		oraField.setText("");
-		testoField.setText(testoNotifica);
-
-		dataField.setBackground(Color.white);
-		oraField.setBackground(Color.white);
-		testoField.setBackground(Color.white);
+		testoField.setText("");
+		dataField.setBackground(Color.WHITE);
+		oraField.setBackground(Color.WHITE);
+		testoField.setBackground(Color.WHITE);
 	}
 
 	public void avvioRicercaNotifiche() throws RemoteException
@@ -134,16 +161,32 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 
 		switch(tipoErrore) {
 			case "errore formato data":
+				dataField.setBackground(Color.RED);
+				oraField.setBackground(Color.WHITE);
+				testoField.setBackground(Color.WHITE);
 				messaggio = "La data fornita non è in formato YYYY-MM-DD.";
+				this.showMessageDialog(null,messaggio, "errore",this.ERROR_MESSAGE);
 				break;
 			case "errore formato ora":
+				dataField.setBackground(Color.WHITE);
+				oraField.setBackground(Color.RED);
+				testoField.setBackground(Color.WHITE);
 				messaggio = "La ora fornita non è in formato HH:mm.";
+				this.showMessageDialog(null,messaggio, "errore",this.ERROR_MESSAGE);
 				break;
 			case "errore data":
+				dataField.setBackground(Color.RED);
+				oraField.setBackground(Color.WHITE);
+				testoField.setBackground(Color.WHITE);
 				messaggio = "La data fornita non è compatibile con la data di pubblicazione.";
+				this.showMessageDialog(null,messaggio, "errore",this.ERROR_MESSAGE);
 				break;
 			case "errore testo notifica":
+				dataField.setBackground(Color.WHITE);
+				oraField.setBackground(Color.WHITE);
+				testoField.setBackground(Color.RED);
 				messaggio = "Il testo della notifica non può essere vuoto.";
+				this.showMessageDialog(null,messaggio, "errore",this.ERROR_MESSAGE);
 				break;
 		}
 	}
