@@ -166,5 +166,26 @@ public class GestoreProdotti implements GestoreProdottiInterfaccia {
 		//Autori: Filidoro Mahfoud
 		dbProdotti.update("UPDATE Prodotto SET Disponibile=True WHERE codice =" +codProdotto);
 	}
+	
+	public boolean controllaParametri( int Percentuale){
+		//RF17 Incrementea/Decrementa
+		boolean esitoControllo;
+		if(Percentuale > 0 && Percentuale <= 100){
+			esitoControllo=true;
+		}else
+		{
+			esitoControllo=false;
+		}
+		return esitoControllo;
+	}
 
+	public void incrementaPrezzi(int Percentuale) throws RemoteException{
+		//RF17 Incrementea/Decrementa
+		dbProdotti.update("UPDATE Prodotto SET prezzo = prezzo *(1+"+Percentuale"/100)");
+		}
+
+	public void decrementaPrezzi(int Percentuale) throws RemoteException{
+			//RF17 Incrementea/Decrementa
+			dbProdotti.update("UPDATE Prodotto SET prezzo = prezzo *(1-"+Percentuale"/100)");
+	}
 }
