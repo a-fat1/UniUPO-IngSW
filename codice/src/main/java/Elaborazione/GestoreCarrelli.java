@@ -79,4 +79,43 @@ public class GestoreCarrelli implements GestoreCarrelliInterfaccia
 				+ elemento.get("quantita") + ((int) elemento.get("quantitaProdotto") - nuovaQuantita)
 				+ "WHERE Prodotto.codice = " + elemento.get("codice") + ";");
 	}
+
+	public boolean controlloNumeroCarta (String numero_carta){
+		//RF_06 effettua ordine
+		// Luini, Mengaptche
+		if (numero_carta<'0000000000000000' || numero_carta>'9999999999999999')
+			esito_controllo= "false";
+		else{
+			if('0000000000000000'<=numero_carta<='9999999999999999')
+				esito_controllo= "true";
+		}
+		return esito_controllo;
+	}
+
+	public float CalcolaPrezzoTotale(ArrayList<HashMap<String, Object>> Carello ,List<String> Prodotti){
+		//RF_06 effettua ordine
+		// Luini, Mengaptche
+		
+		float somma=0;
+		for (HashMap<String, Object> prodotto : Carello){
+			if(Prodotti!=null){
+				for(String codiceProduct : Prodotti){ 
+					if (prodotto.containsKey(codiceProduct){
+						float prezzo = (float) prodotto.get(codiceProduct);
+						int quantitaprodotto = (int) prodotto.get("quantità");
+						if(prezzo > 0){
+							somma=somma+ (prezzo*quantitaProdotto);
+						}
+					}
+		        }
+			}
+
+		else{
+			System.out.println("Non ci sono prodotti");
+			return 0;
+		}	
+	  	}
+		return somma;
+	}
+
 }
