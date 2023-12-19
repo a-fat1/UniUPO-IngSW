@@ -200,7 +200,7 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 	public void aggiuntaCredenziali(String username) throws RemoteException
 	{
 		dbUtenti.update("INSERT INTO Credenziali ('password', 'username', 'attivo') VALUES ('', '"+username+"', 1);");
-
+	}
 
 	public void AggiornaPassword(String username, String nuovaPassword) throws RemoteException {
 
