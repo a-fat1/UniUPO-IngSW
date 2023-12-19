@@ -69,4 +69,8 @@ public interface GestoreNotificheInterfaccia extends Remote
      * @throws RemoteException
      */
     void inserimentoNotifica(HashMap<String, Object> dataPubblicazione, HashMap<String, Object> dataScadenza, String testoNotifica, String tipoUtente) throws RemoteException;
+
+    String controlloParametri(String dataPubblicazione, String dataScadenza) throws RemoteException;
+    ArrayList<HashMap<String, Object>> cercaNotifiche(String dataPubblicazione, String dataScadenza, String tipoUtente) throws RemoteException;
+
 } 
