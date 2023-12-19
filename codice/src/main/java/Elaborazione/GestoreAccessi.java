@@ -98,16 +98,11 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 		return utente;			
 	}
 
-<<<<<<< HEAD
-	public int verificaCredenziali(String passwordAttuale, String password) throws RemoteException{
-		//RF03: Aggiorna Password
-=======
 	public int verificaCredenziali(String passwordAttuale, String password)throws RemoteException{
 
 		//RF03: Aggiorna password
 		//autori: Pietro Balossino, Andrija Jovic
 
->>>>>>> RF03
 		if(password.equals(passwordAttuale)){
 			return 0;  //le password sono uguali
 		}
@@ -116,16 +111,11 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 		}
 	}
 
-<<<<<<< HEAD
-	public int controlloNuovaPassword (String nuovaPassword) throws RemoteException{
-		//RF03: Aggiorna Password
-=======
 	public int controlloNuovaPassword (String nuovaPassword)throws RemoteException{
 
 		//RF03: Aggiorna password
 		//autori: Pietro Balossino, Andrija Jovic
 
->>>>>>> RF03
 		int len;
 		boolean alpha;
 		boolean num;
@@ -149,7 +139,7 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 			}
 		}
 	}
-<<<<<<< HEAD
+
 	/**
 	 * Controlla se l'utente ha inserito delle stringhe di nome e cognome valide.
 	 * @param nome Il nome dell'utente che si sta registrando sul sistema informatico.
@@ -210,7 +200,7 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 	public void aggiuntaCredenziali(String username) throws RemoteException
 	{
 		dbUtenti.update("INSERT INTO Credenziali ('password', 'username', 'attivo') VALUES ('', '"+username+"', 1);");
-=======
+
 
 	public void AggiornaPassword(String username, String nuovaPassword) throws RemoteException {
 
@@ -223,6 +213,5 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 
 		comandoSql = "UPDATE credenziali SET password=\"" + nuovaPassword + "\" WHERE username=\"" + username + "\" ;";
 		dbUtenti.update(comandoSql);
->>>>>>> RF03
 	}
 }
