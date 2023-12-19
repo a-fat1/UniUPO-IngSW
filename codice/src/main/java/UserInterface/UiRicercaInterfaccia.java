@@ -7,7 +7,7 @@ public interface UiRicercaInterfaccia extends Remote
 {
 	void avvioRicercaProdotto() throws RemoteException;
 	void avvioProdottiInEsaurimento() throws RemoteException;
-	void avvioRicercaUtente() throws RemoteException;
+	void avvioRicercaUtente(String genereUtente) throws RemoteException;
 	void avvioProdottiPiuVenduti() throws RemoteException;
 }
 
