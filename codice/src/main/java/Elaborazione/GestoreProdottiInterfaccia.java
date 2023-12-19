@@ -22,8 +22,13 @@ public interface GestoreProdottiInterfaccia extends Remote
     HashMap<String, Boolean> controlloDatiFornitura(String data, Float costo, Integer quantita) throws RemoteException;
     void aggiungiFornitura(Integer codProdotto, String data, Float costo, Integer quantita) throws RemoteException;
 
+    //RF10
     void rimuoviProdotto(Integer codProdotto) throws RemoteException;
-
     void ripristinaProdotto(Integer codProdotto) throws RemoteException;
+
+    //RF17
+    boolean controllaParametri(int Percentuale) throws RemoteException;
+    void incrementaPrezzi(int Percentuale) throws RemoteException;
+    void decrementaPrezzi(int Percentuale) throws RemoteException;
 
 } 
