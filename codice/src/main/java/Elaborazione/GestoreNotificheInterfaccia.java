@@ -70,6 +70,25 @@ public interface GestoreNotificheInterfaccia extends Remote
      */
     void inserimentoNotifica(HashMap<String, Object> dataPubblicazione, HashMap<String, Object> dataScadenza, String testoNotifica, String tipoUtente) throws RemoteException;
     
+    /**
+     * RF21: Ricerca Notifiche
+     * 
+     * @author Giacomo Colombo, Riccardo Caviggia
+     * @param dataPubblicazione la data in cui viene pubblicata la notifica
+     * @param dataScadenza la data di scdenza della notifica
+     * @return una stringa con l'esito sul controllo dei dati per la ricerca
+     * @throws RemoteException
+     */
     String controlloParametri(String dataPubblicazione, String dataScadenza) throws RemoteException;
+
+    /**
+     * RF21: Ricerca Notifiche
+     *
+     * @author Giacomo Colombo, Riccardo Caviggia
+     * @param dataPubblicazione la data in cui viene pubblicata la notifica
+     * @param dataScadenza la data di scdenza della notifica
+     * @param tipoUtente il tipo di utente interessato
+     * @throws RemoteException
+     */
     ArrayList<HashMap<String, Object>> cercaNotifiche(String dataPubblicazione, String dataScadenza, String tipoUtente) throws RemoteException;
 } 
