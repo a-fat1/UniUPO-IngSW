@@ -26,21 +26,27 @@ public class GestoreProdotti implements GestoreProdottiInterfaccia
 		dbProdotti = d1;
 	}
 
-	public String Rf14_ControlloFormatoModificaPrezzo(float prezzoNuovo, float prezzoVecchio)
+	public int Rf14_ControlloFormatoModificaPrezzo(float prezzoNuovo, float prezzoVecchio)
 	{	
-		String controllo = null;
+		int controllo;
 
 		if(prezzoNuovo <= 0)
-			controllo = "erroreNegativo";
+			controllo = 1;
 		else if(prezzoNuovo == prezzoVecchio)
 		{
-			controllo = "erroreNonModificato";
+			controllo = 2;
 		}
 		else 
 		{
-			controllo = "OK";
+			controllo = 0;
 		}
 		
 		return controllo;
+	}
+
+	public void ModificaPrezzo(float prezzo, int codice) throws RemoteException
+	{
+		String query = "UPDATE Prodotto SET prezzo ="+prezzo+" WHERE codice ="+codice;
+		dbProdotti.update(query);
 	}
 }
