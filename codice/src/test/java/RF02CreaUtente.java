@@ -1,11 +1,11 @@
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import DataBase.DbUtenti;
 import Elaborazione.GestoreAccessi;
 
-class RF02CreaUtente {
+public class RF02CreaUtente {
 
 	DbUtenti dbUtenti = new DbUtenti();
     GestoreAccessi gestoreAccessi = new GestoreAccessi(dbUtenti);
@@ -13,7 +13,7 @@ class RF02CreaUtente {
     /***********************************************************/
     
 	@Test
-	void testFormatoNomeCognome() {
+	public void testFormatoNomeCognome() {
 		
 		//nome corto
 		assertEquals(1, gestoreAccessi.controlloFormatoNomeCognome("am", "Rossi"));

@@ -61,7 +61,7 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 		oraField.setToolTipText("Ora");
 
 		testoField = new JTextField("", 50);
-		testoLabel = new JLabel("Inserire testo notifica:");
+		testoLabel = new JLabel("Inseririsci testo notifica:");
 		testoField.setToolTipText("Testo");
 
 
