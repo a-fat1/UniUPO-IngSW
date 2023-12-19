@@ -18,7 +18,7 @@ public interface GestoreProdottiInterfaccia extends Remote
 
 
 
-    //RF??
+    //RF15 (Nicolò Bianchetto, Kristian Rigo)
     HashMap<String, Boolean> controlloDatiFornitura(String data, Float costo, Integer quantita) throws RemoteException;
     void aggiungiFornitura(Integer codProdotto, String data, Float costo, Integer quantita) throws RemoteException;
 

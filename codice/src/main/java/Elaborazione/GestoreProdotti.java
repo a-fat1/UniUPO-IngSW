@@ -2,6 +2,7 @@ package Elaborazione;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.Year;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
@@ -29,6 +30,21 @@ public class GestoreProdotti implements GestoreProdottiInterfaccia
 	public GestoreProdotti(DbProdotti d1) // per testing
 	{
 		dbProdotti = d1;
+	}
+
+	@Override
+	public ArrayList<HashMap<String, Object>> ricercaListaForniture(int codice) throws RemoteException {
+		return null;
+	}
+
+	@Override
+	public ArrayList<HashMap<String, Object>> ricercaListaForniture(String dataInizio, String dataFine) throws RemoteException {
+		return null;
+	}
+
+	@Override
+	public int controlloParametri(String dataInizio, String dataFine) throws RemoteException {
+		return 0;
 	}
 
 	//RF15 (Nicolò Bianchetto, Kristian Rigo)
@@ -59,11 +75,6 @@ public class GestoreProdotti implements GestoreProdottiInterfaccia
 		dbProdotti.update("INSERT INTO Fornitura (codiceProdotto, dataFornitura, costo, quantita) VALUES ("+codProdotto+", '"+dataOra+"', "+costo+", "+quantita+")");
 		dbProdotti.update("UPDATE Prodotto SET quantita = quantita + "+quantita+" WHERE codice = "+codProdotto);
 	}
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> bc23d5d (Aggiunto codice Interfaccia (da testare))
 
 	public int verificaCampi(String[] autori, String titolo, String editore, int anno){
 		int lenTitolo = titolo.length();
@@ -116,7 +127,7 @@ public class GestoreProdotti implements GestoreProdottiInterfaccia
 		dbProdotti.update("UPDATE Prodotto SET Disponibile=True WHERE codice =" +codProdotto);
 	}
 	
-	public boolean controllaParametri( int Percentuale){
+	public boolean controllaParametri( int Percentuale)  {
 		//RF17 Incrementea/Decrementa
 		boolean esitoControllo;
 		if(Percentuale > 0 && Percentuale <= 100){
@@ -130,17 +141,11 @@ public class GestoreProdotti implements GestoreProdottiInterfaccia
 
 	public void incrementaPrezzi(int Percentuale) throws RemoteException{
 		//RF17 Incrementea/Decrementa
-		dbProdotti.update("UPDATE Prodotto SET prezzo = prezzo *(1+"+Percentuale"/100)");
+		dbProdotti.update("UPDATE Prodotto SET prezzo = prezzo *(1+"+Percentuale+"/100)");
 		}
 
 	public void decrementaPrezzi(int Percentuale) throws RemoteException{
 			//RF17 Incrementea/Decrementa
-			dbProdotti.update("UPDATE Prodotto SET prezzo = prezzo *(1-"+Percentuale"/100)");
+			dbProdotti.update("UPDATE Prodotto SET prezzo = prezzo *(1-"+Percentuale+"/100)");
 	}
-<<<<<<< HEAD
->>>>>>> b0db70f (RF17)
-=======
-=======
->>>>>>> 2f0dd5e (Aggiunto codice Interfaccia (da testare))
->>>>>>> bc23d5d (Aggiunto codice Interfaccia (da testare))
 }
