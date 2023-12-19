@@ -23,16 +23,18 @@ public class RF13ListaForniture {
     @Test
     public void testRicercaListaForniturePerData() throws RemoteException {
         assertNotNull(gestoreProdotti.ricercaListaForniture("2023-01-12", "2023-04-12"));
-        assertEquals(12,gestoreProdotti.ricercaListaForniture("2023-01-12", "2023-04-123").size());
-        assertEquals(0,gestoreProdotti.ricercaListaForniture("2023-07-12", "2023-01-12").size());
+        assertEquals(12,gestoreProdotti.ricercaListaForniture("2023-12-01", "2023-12-04").size());
+        assertEquals(0,gestoreProdotti.ricercaListaForniture("2023-12-07", "2023-12-01").size());
     }
 
     @Test
     public void testControlloParametri() throws RemoteException {
-        assertEquals(0, gestoreProdotti.controlloParametri("2023-01-12", "2023-04-12"));
-        assertEquals(1, gestoreProdotti.controlloParametri("2023-04-12", "2023-01-12"));
-        assertThrows(NullPointerException.class, () -> gestoreProdotti.controlloParametri(null, "2023-04-12"));
-        assertThrows(NullPointerException.class, () -> gestoreProdotti.controlloParametri("2023-04-12", null));
+        assertEquals(0, gestoreProdotti.controlloParametri("2023-12-01", "2023-12-04"));
+        assertEquals(2, gestoreProdotti.controlloParametri("2023-12-04", "2023-12-01"));
+        assertEquals(1, gestoreProdotti.controlloParametri(null, "2023-04-12"));
+        assertEquals(1, gestoreProdotti.controlloParametri("2023-04-12", null));
+    }
+
     }
 
 }
