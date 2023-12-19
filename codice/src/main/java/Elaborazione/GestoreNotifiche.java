@@ -110,7 +110,7 @@ public class GestoreNotifiche implements GestoreNotificheInterfaccia {
 			throw new IllegalArgumentException("Formato data non valido!");
 		}
 	     }
-     }
+    }
 
     public ArrayList<HashMap<String, Object>> cercaNotifiche(String dataPubblicazione, String dataScadenza, String tipoUtente) {
 	//RF21 - RicercaNotifiche
@@ -127,12 +127,15 @@ public class GestoreNotifiche implements GestoreNotificheInterfaccia {
 		System.err.println("Errore remoto: ");
 		e.printStackTrace();
 	}
+    }
 
+	
 	public GestoreNotifiche(DbNotifiche d1) // per testing
 	{
 		dbNotifiche = d1;
 
 	}
+     
 
 	public ArrayList<HashMap<String, Object>> ricercaNotifiche(String tipoUtente, String myDateObj) throws RemoteException{
 		String comandoSql;
