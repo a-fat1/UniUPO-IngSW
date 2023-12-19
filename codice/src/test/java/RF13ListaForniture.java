@@ -35,6 +35,6 @@ public class RF13ListaForniture {
         assertEquals(1, gestoreProdotti.controlloParametri("2023-04-12", null));
     }
 
-    }
+    
 
 }
