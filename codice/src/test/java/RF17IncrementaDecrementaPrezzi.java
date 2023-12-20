@@ -1,19 +1,15 @@
 import static org.junit.Assert.*;
 
-import Elaborazione.GestoreAccessi;
 import org.junit.Test;
-import java.rmi.RemoteException;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 import DataBase.DbUtenti;
 import DataBase.DbProdotti;
 import Elaborazione.GestoreProdotti;
 
-public class Test {
-    DbUtenti dbUtenti=new DBUtenti();
-    dbProdotti dbProdotti= new DbProdotti();
-    GestoreProdotti gestoreProdotti=new GestoreProdotti(dbUtenti,dbProdotti);
+public class RF17IncrementaDecrementaPrezzi {
+    DbUtenti dbUtenti=new DbUtenti();
+    DbProdotti dbProdotti= new DbProdotti();
+    GestoreProdotti gestoreProdotti=new GestoreProdotti(dbProdotti);
     // ===========================================================
 
     @Test

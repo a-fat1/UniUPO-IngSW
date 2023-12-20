@@ -147,7 +147,6 @@ public class GestoreNotifiche implements GestoreNotificheInterfaccia {
         return notifica;
     }
 
-
 }
 
 
