@@ -184,11 +184,11 @@ public class GestoreProdotti implements GestoreProdottiInterfaccia {
 
 	public void incrementaPrezzi(int Percentuale) throws RemoteException{
 		//RF17 Incrementea/Decrementa
-		dbProdotti.update("UPDATE Prodotto SET prezzo = prezzo *(1+"+Percentuale"/100)");
+		dbProdotti.update("UPDATE Prodotto SET prezzo = prezzo * (1 + " + Percentuale + " / 100)");
 		}
 
 	public void decrementaPrezzi(int Percentuale) throws RemoteException{
 			//RF17 Incrementea/Decrementa
-			dbProdotti.update("UPDATE Prodotto SET prezzo = prezzo *(1-"+Percentuale"/100)");
+			dbProdotti.update("UPDATE Prodotto SET prezzo = prezzo * (1 - " + Percentuale + " / 100)");
 	}
 }
