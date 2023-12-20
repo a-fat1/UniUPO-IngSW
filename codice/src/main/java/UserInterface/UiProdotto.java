@@ -29,21 +29,20 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 	private GestoreProdottiInterfaccia gestoreProdotti;
 
 	// attributi
-	private Integer codProdotto;
+	private Integer codProdotto; //RF15
 	
 	// elementi grafici
 
-	private JLabel dataFornituraLabel;
-	private JLabel costoFornituraLabel;
-	private JLabel quantitaFornituraLabel;
-	private JTextField dataFornituraField;
-	private JTextField costoFornituraField;
-	private JTextField quantitaFornituraField;
-	private JPanel nuovaFornituraPanel;
-
-	private JLabel successoFornituraLabel;
-	private JPanel successoFornituraPanel;
-	private JPanel erroreFornituraPanel;
+	private JLabel dataFornituraLabel; //RF15
+	private JLabel costoFornituraLabel; //RF15
+	private JLabel quantitaFornituraLabel; //RF15
+	private JTextField dataFornituraField; //RF15
+	private JTextField costoFornituraField; //RF15
+	private JTextField quantitaFornituraField; //RF15
+	private JPanel nuovaFornituraPanel; //RF15
+	private JLabel successoFornituraLabel; //RF15
+	private JPanel successoFornituraPanel; //RF15
+	private JPanel erroreFornituraPanel; //RF15
 
 	
 	public UiProdotto(String hostGestore) throws RemoteException, NotBoundException
@@ -69,12 +68,10 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 		nuovaFornituraPanel.add(costoFornituraField);
 		nuovaFornituraPanel.add(quantitaFornituraLabel);
 		nuovaFornituraPanel.add(quantitaFornituraField);
-
 		successoFornituraLabel = new JLabel();
 		successoFornituraPanel = new JPanel();
 		erroreFornituraPanel = new JPanel();
-		BoxLayout boxLayout = new BoxLayout(erroreFornituraPanel, BoxLayout.PAGE_AXIS);
-		erroreFornituraPanel.setLayout(boxLayout);
+		erroreFornituraPanel.setLayout(new BoxLayout(erroreFornituraPanel, BoxLayout.PAGE_AXIS));
 	}
 	
 	public void avvioRimuoviRipristinaNelCatalogo() throws RemoteException
@@ -85,7 +82,7 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 	{	// RF14	
 	}
 
-	public void avvioNuovaFornitura(Integer codProdotto, Boolean nuovoProdotto) throws RemoteException {
+	public void avvioNuovaFornitura(Integer codProdotto, boolean nuovoProdotto) throws RemoteException {
 		// RF15 (Nicolò Bianchetto, Kristian Rigo)
 		this.codProdotto = codProdotto;
 		mostraFormNuovaFornitura(nuovoProdotto);
@@ -98,8 +95,7 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 	public void avvioIncrementaDecrementaPrezzi() throws RemoteException
 	{	// RF17	
 	}
-
-	private void mostraFormNuovaFornitura(Boolean nuovoProdotto) throws RemoteException {
+	private void mostraFormNuovaFornitura(boolean nuovoProdotto) throws RemoteException {
 		// RF15 (Nicolò Bianchetto, Kristian Rigo)
 		int scelta = JOptionPane.OK_OPTION;
 		while(scelta == JOptionPane.OK_OPTION) {
@@ -203,12 +199,10 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 		nuovaFornituraPanel.add(costoFornituraField);
 		nuovaFornituraPanel.add(quantitaFornituraLabel);
 		nuovaFornituraPanel.add(quantitaFornituraField);
-
 		successoFornituraLabel = new JLabel();
 		successoFornituraPanel = new JPanel();
 		erroreFornituraPanel = new JPanel();
-		BoxLayout boxLayout = new BoxLayout(erroreFornituraPanel, BoxLayout.PAGE_AXIS);
-		erroreFornituraPanel.setLayout(boxLayout);
+		erroreFornituraPanel.setLayout(new BoxLayout(erroreFornituraPanel, BoxLayout.PAGE_AXIS));
 	}
 	//main per testing UI Fornitura (da eliminare)
 	public static void main(String[] args) throws RemoteException {

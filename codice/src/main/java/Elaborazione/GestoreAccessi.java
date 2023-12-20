@@ -103,10 +103,6 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 		//RF03: Aggiorna password
 		//autori: Pietro Balossino, Andrija Jovic
 
-<<<<<<< HEAD
->>>>>>> 44cdba9 (aggiunta metodo: AggiornaPassword in gestore)
-=======
->>>>>>> 11ba14d (Replace GestoreAccessi.java)
 		if(password.equals(passwordAttuale)){
 			return 0;  //le password sono uguali
 		}
@@ -120,10 +116,6 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 		//RF03: Aggiorna password
 		//autori: Pietro Balossino, Andrija Jovic
 
-<<<<<<< HEAD
->>>>>>> 44cdba9 (aggiunta metodo: AggiornaPassword in gestore)
-=======
->>>>>>> 11ba14d (Replace GestoreAccessi.java)
 		int len;
 		boolean alpha;
 		boolean num;
@@ -221,9 +213,5 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 
 		comandoSql = "UPDATE credenziali SET password=\"" + nuovaPassword + "\" WHERE username=\"" + username + "\" ;";
 		dbUtenti.update(comandoSql);
-<<<<<<< HEAD
->>>>>>> 44cdba9 (aggiunta metodo: AggiornaPassword in gestore)
-=======
->>>>>>> 11ba14d (Replace GestoreAccessi.java)
 	}
 }
