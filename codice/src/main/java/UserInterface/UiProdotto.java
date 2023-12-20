@@ -165,7 +165,7 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 			}
 			if(Boolean.FALSE.equals(esitoControllo.get("esitoQuantità"))) {
 				quantitaFornituraField.setBackground(Color.RED);
-				erroreFornituraPanel.add(new JLabel("- La quantità deve essere un numero maggiore di 0."));
+				erroreFornituraPanel.add(new JLabel("- La quantità deve essere un numero intero maggiore di 0."));
 			}
 		}
 
