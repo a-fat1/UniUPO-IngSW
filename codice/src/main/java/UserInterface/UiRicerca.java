@@ -11,6 +11,7 @@ import java.rmi.NotBoundException;
 import java.util.Objects;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
 import UserInterface.*;
 import Elaborazione.*;
@@ -82,18 +83,9 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 		scelteMenuRicercaUtente[1] = "Ricerca per username";
 		comboMenu = new JComboBox(scelteMenuRicercaUtente);
 
-		colonneAmministratore = new String[4];
-		colonneAmministratore[0] = "Nome";
-		colonneAmministratore[1] = "Cognome";
-		colonneAmministratore[2] = "Username";
-		colonneAmministratore[3] = "Tipo utente";
+		colonneAmministratore = new String[]{"Nome", "Cognome", "Username", "Tipo utente"};
 
-		colonneStaff = new String[5];
-		colonneStaff[0] = "Nome";
-		colonneStaff[1] = "Cognome";
-		colonneStaff[2] = "Username";
-		colonneStaff[3] = "Tipo utente";
-		colonneStaff[4] = "Attivo";
+		colonneStaff = new String[]{"Nome", "Cognome", "Username", "Tipo utente", "Attivo"};
 
 		searchPanel = new JPanel(new GridLayout(7, 1));
 		searchPanel.add(comboMenu);
@@ -243,6 +235,27 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 		// codice provvisorio per verificarne il funzionamento
 		System.out.println("genereUtente: " + genereUtente);
 		System.out.println("Utenti trovati: " + elencoUtenti.toString());
+		Object[][] utentiTabella;
+
+		// da cambiare, per ora come test faccio solo amministratore
+		utentiTabella = new Object[elencoUtenti.size()][colonneAmministratore.length];
+
+		for(int i=0; i < elencoUtenti.size(); i++)
+		{
+			utentiTabella[i][0] = elencoUtenti.get(i).get("nome");
+			utentiTabella[i][1] = elencoUtenti.get(i).get("cognome");
+			utentiTabella[i][2] = elencoUtenti.get(i).get("attivo");
+			utentiTabella[i][3] = elencoUtenti.get(i).get("username");
+		}
+
+		System.out.println(colonneAmministratore[0]);
+		JTable table = new JTable(utentiTabella, colonneAmministratore);
+		JScrollPane tabella = new JScrollPane(table);
+		tabella.setPreferredSize((new Dimension(300, 300)));
+
+		// bisogna usare showOptionDialog
+		showConfirmDialog(null, tabella, "elenco utenti", OK_CANCEL_OPTION);
+
 		// TO DO:
 		/*
 			> creare le tabelle
@@ -250,6 +263,7 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 			> sono già state inserite le colonne con i relativi campi sotto forma di String[]
 			> bisogna estrarre i dati da ArrayList e inserirli nelle righe
 		 */
+
 	}
 
 
