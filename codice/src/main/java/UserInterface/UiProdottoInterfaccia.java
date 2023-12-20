@@ -8,7 +8,7 @@ public interface UiProdottoInterfaccia extends Remote
 	void avvioRimuoviRipristinaNelCatalogo() throws RemoteException;
 	void avvioAggiornaPrezzo() throws RemoteException;
 	/**
-	 * nuovoProdotto = true se chiama da RF16, false se chiama da RF08
+	 * nuovoProdotto = true se chiamato da RF16, false se chiamato da RF08
 	 */
 	void avvioNuovaFornitura(Integer codProdotto, boolean nuovoProdotto) throws RemoteException; // RF15 (Nicolò Bianchetto, Kristian Rigo)
 	void avvioNuovoProdotto() throws RemoteException;

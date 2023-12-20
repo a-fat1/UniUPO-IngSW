@@ -145,6 +145,9 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 		erroreFornituraPanel.removeAll(); //per rimuovere i messaggi di errore precedenti
 		erroreFornituraPanel.add(new JLabel("Attenzione! Errore nell'aggiunta della nuova fornitura."));
 		erroreFornituraPanel.add(Box.createVerticalStrut(10)); //per aggiungere spazio
+		dataFornituraField.setBackground(Color.WHITE);
+		costoFornituraField.setBackground(Color.WHITE);
+		quantitaFornituraField.setBackground(Color.WHITE);
 
 		String valoriErrati = Arrays.stream(new String[] {"Data", "Costo", "Quantità"}).filter(
 				s -> Boolean.FALSE.equals(esitoControllo.get("esito" + s))
@@ -179,34 +182,5 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 		}
 
 		showMessageDialog(null, erroreFornituraPanel, "Errore", JOptionPane.ERROR_MESSAGE);
-	}
-
-	//costruttore per testing UI Fornitura (da eliminare)
-	public UiProdotto() {
-		// RF15 (Nicolò Bianchetto, Kristian Rigo)
-		gestoreProdotti = new GestoreProdotti(new DbProdotti());
-
-		dataFornituraLabel = new JLabel("Data fornitura (AAAA-MM-GG): ");
-		costoFornituraLabel = new JLabel("Costo fornitura: ");
-		quantitaFornituraLabel = new JLabel("Quantità fornitura: ");
-		dataFornituraField = new JTextField();
-		costoFornituraField = new JTextField();
-		quantitaFornituraField = new JTextField();
-		nuovaFornituraPanel = new JPanel(new GridLayout(3, 2));
-		nuovaFornituraPanel.add(dataFornituraLabel);
-		nuovaFornituraPanel.add(dataFornituraField);
-		nuovaFornituraPanel.add(costoFornituraLabel);
-		nuovaFornituraPanel.add(costoFornituraField);
-		nuovaFornituraPanel.add(quantitaFornituraLabel);
-		nuovaFornituraPanel.add(quantitaFornituraField);
-		successoFornituraLabel = new JLabel();
-		successoFornituraPanel = new JPanel();
-		erroreFornituraPanel = new JPanel();
-		erroreFornituraPanel.setLayout(new BoxLayout(erroreFornituraPanel, BoxLayout.PAGE_AXIS));
-	}
-	//main per testing UI Fornitura (da eliminare)
-	public static void main(String[] args) throws RemoteException {
-		UiProdotto uiProdotto = new UiProdotto();
-		uiProdotto.avvioNuovaFornitura(100008, false);
 	}
 }
