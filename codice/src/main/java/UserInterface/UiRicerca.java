@@ -121,29 +121,39 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 	public void avvioRicercaUtente(String genereUtente) throws RemoteException
 	{	// RF19
 
+		// set di esitoControllo con valore iniziale
+
 		int esitoControllo = 0;
 
+		// loop fino a quando il controllo non è positivo (o l'utente esce dalla finestra)
 		while((esitoControllo != 4) && (result != -1)){
 
+			// mostra il form della ricerca
 			mostraFormRicerca();
 
+			// se viene selezionato nome-cognome, viene controllato tramite la funzione apposita per il nome
+			// e cognome
 			if(scelta.equals("Ricerca per nome-cognome"))
 			{
 				esitoControllo = gestoreRicerche.controlloParametriRicercaUtente(nome, cognome);
+				// result != -1, altrimenti viene mostrato questo errore quando viene chiusa la finestra per uscire
 				if((esitoControllo == 2 || esitoControllo == 3) && (result != -1))
 				{
 					mostraErroreRicercaUtente(esitoControllo);
 				}
 			}
-			else
+			// se viene selezionato username, viene controllato tramite la funzione apposita per lo username
+			else if(scelta.equals("Ricerca per username"))
 			{
 				esitoControllo = gestoreRicerche.controlloParametriRicercaUtente(username);
+				// result != -1, altrimenti viene mostrato questo errore quando viene chiusa la finestra per uscire
 				if((esitoControllo == 1) && (result != -1))
 				{
 					mostraErroreRicercaUtente(1);
 				}
 			}
 
+			// se il controllo è andato a buon fine e l'utente è dello staff, si ricercano gli utenti NON bloccati
 			if((esitoControllo == 4) && genereUtente.equals("staff"))
 			{
 				if(scelta.equals("Ricerca per nome-cognome"))
@@ -155,6 +165,8 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 					elencoUtenti = gestoreRicerche.cercaUtenteNonBloccato(username);
 				}
 			}
+			// se il controllo è andato a buon fine e l'utente è amministratore, si ricercano gli utenti bloccati e
+			// non bloccati
 			else if((esitoControllo == 4) && genereUtente.equals("amministratore"))
 			{
 				if(scelta.equals("Ricerca per nome-cognome"))
@@ -167,13 +179,16 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 				}
 			}
 
+			// se non sono stati trovati utenti viene mostrato il messaggio di errore
 			if((elencoUtenti.isEmpty()) && (result != -1) && (esitoControllo == 4))
 			{
 				mostraErroreRicercaUtente(5);
 			}
 
+			// se sono stati trovati utenti viene mostrata la tabella con le relative opzioni
 			if((!elencoUtenti.isEmpty()) && (result != -1) && (esitoControllo == 4))
 			{
+				// TO DO
 				mostraElencoRicercaUtente(elencoUtenti, genereUtente);
 			}
 		}
@@ -225,8 +240,16 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 
 	private void mostraElencoRicercaUtente(ArrayList<HashMap<String, Object>> elencoUtenti, String genereUtente) throws RemoteException
 	{
+		// codice provvisorio per verificarne il funzionamento
 		System.out.println("genereUtente: " + genereUtente);
 		System.out.println("Utenti trovati: " + elencoUtenti.toString());
+		// TO DO:
+		/*
+			> creare le tabelle
+			> inserire i relativi pulsanti se si parla di amministratore o staff
+			> sono già state inserite le colonne con i relativi campi sotto forma di String[]
+			> bisogna estrarre i dati da ArrayList e inserirli nelle righe
+		 */
 	}
 
 
