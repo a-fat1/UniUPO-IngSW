@@ -1,8 +1,6 @@
 package UserInterface;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.ArrayList;
 
@@ -10,6 +8,7 @@ import java.rmi.registry.Registry;
 import java.rmi.registry.LocateRegistry; 
 import java.rmi.RemoteException;
 import java.rmi.NotBoundException;
+import java.util.Objects;
 
 import javax.swing.*;
 
@@ -34,6 +33,8 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 	// elementi grafici
 	// RF19
 	private JPanel searchPanel;
+
+	private JPanel elencoUtentiRicerca;
 	private JLabel labelUsername;
 	private JLabel labelNome;
 	private JLabel labelCognome;
@@ -43,16 +44,21 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 	private JTextField fieldNome;
 	private JTextField fieldCognome;
 
-	private String scelteMenuRicercaUtente[];
 	private int result;
 
 	private String nome;
 	private String cognome;
 	private String username;
 
+	private ArrayList<HashMap<String, Object>> elencoUtenti;
 	private String scelta;
 
-	private String pulsanteRicerca[];
+	private final String[] pulsanteRicerca;
+
+	private final String[] colonneStaff;
+
+	private final String[] colonneAmministratore;
+
 	public UiRicerca(String hostGestore) throws RemoteException, NotBoundException
 	{
 		registryUI = LocateRegistry.getRegistry("127.0.0.1", 1100); // default: 1099
@@ -71,10 +77,23 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 		fieldNome = new JTextField("", 10);
 		fieldCognome = new JTextField("", 10);
 
-		scelteMenuRicercaUtente = new String[2];
+		String[] scelteMenuRicercaUtente = new String[2];
 		scelteMenuRicercaUtente[0] = "Ricerca per nome-cognome";
 		scelteMenuRicercaUtente[1] = "Ricerca per username";
 		comboMenu = new JComboBox(scelteMenuRicercaUtente);
+
+		colonneAmministratore = new String[4];
+		colonneAmministratore[0] = "Nome";
+		colonneAmministratore[1] = "Cognome";
+		colonneAmministratore[2] = "Username";
+		colonneAmministratore[3] = "Tipo utente";
+
+		colonneStaff = new String[5];
+		colonneStaff[0] = "Nome";
+		colonneStaff[1] = "Cognome";
+		colonneStaff[2] = "Username";
+		colonneStaff[3] = "Tipo utente";
+		colonneStaff[4] = "Attivo";
 
 		searchPanel = new JPanel(new GridLayout(7, 1));
 		searchPanel.add(comboMenu);
@@ -87,6 +106,7 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 		pulsanteRicerca = new String[1];
 		pulsanteRicerca[0] = "Invia";
 
+		elencoUtenti = new ArrayList<>();
 
 	}
 	
@@ -103,19 +123,58 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 
 		int esitoControllo = 0;
 
-		while(esitoControllo != 4){
+		while((esitoControllo != 4) && (result != -1)){
 
 			mostraFormRicerca();
 
 			if(scelta.equals("Ricerca per nome-cognome"))
 			{
 				esitoControllo = gestoreRicerche.controlloParametriRicercaUtente(nome, cognome);
-				System.out.println("Esito: " + esitoControllo);
+				if((esitoControllo == 2 || esitoControllo == 3) && (result != -1))
+				{
+					mostraErroreRicercaUtente(esitoControllo);
+				}
 			}
 			else
 			{
 				esitoControllo = gestoreRicerche.controlloParametriRicercaUtente(username);
-				System.out.println("Esito: " + esitoControllo);
+				if((esitoControllo == 1) && (result != -1))
+				{
+					mostraErroreRicercaUtente(1);
+				}
+			}
+
+			if((esitoControllo == 4) && genereUtente.equals("staff"))
+			{
+				if(scelta.equals("Ricerca per nome-cognome"))
+				{
+					elencoUtenti = gestoreRicerche.cercaUtenteNonBloccato(nome, cognome);
+				}
+				else if(scelta.equals("Ricerca per username"))
+				{
+					elencoUtenti = gestoreRicerche.cercaUtenteNonBloccato(username);
+				}
+			}
+			else if((esitoControllo == 4) && genereUtente.equals("amministratore"))
+			{
+				if(scelta.equals("Ricerca per nome-cognome"))
+				{
+					elencoUtenti = gestoreRicerche.cercaUtenteBloccatoNonBloccato(nome, cognome);
+				}
+				else if(scelta.equals("Ricerca per username"))
+				{
+					elencoUtenti = gestoreRicerche.cercaUtenteBloccatoNonBloccato(username);
+				}
+			}
+
+			if((elencoUtenti.isEmpty()) && (result != -1) && (esitoControllo == 4))
+			{
+				mostraErroreRicercaUtente(5);
+			}
+
+			if((!elencoUtenti.isEmpty()) && (result != -1) && (esitoControllo == 4))
+			{
+				mostraElencoRicercaUtente(elencoUtenti, genereUtente);
 			}
 		}
 	}
@@ -124,7 +183,7 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 	{
 
 		result = JOptionPane.showOptionDialog(null, searchPanel, "Ricerca utente (clicca X per uscire)", DEFAULT_OPTION, QUESTION_MESSAGE, null, pulsanteRicerca, "Ricerca");
-		scelta = comboMenu.getSelectedItem().toString();
+		scelta = Objects.requireNonNull(comboMenu.getSelectedItem()).toString();
 		nome = fieldNome.getText();
 		cognome = fieldCognome.getText();
 		username = fieldUsername.getText();
@@ -132,14 +191,42 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 	}
 
 
-	private void mostraErroreRicercaUtente() throws RemoteException
+	private void mostraErroreRicercaUtente(int tipo) throws RemoteException
 	{
+		String messaggio;
 
+		if(tipo == 1)
+		{
+			messaggio = "format username errato: assicurati di inserire almeno tre caratteri nel campo \"username\".";
+			showMessageDialog(null, messaggio, "errore username (clicca X per chiudere)", ERROR_MESSAGE);
+
+		}
+
+		if(tipo == 2)
+		{
+			messaggio = "format nome errato: assicurati di inserire almeno tre caratteri nel campo \"nome\" e di " +
+						"inserire solo caratteri letterali";
+			showMessageDialog(null, messaggio, "errore nome (clicca X per chiudere)", ERROR_MESSAGE);
+		}
+
+		if(tipo == 3)
+		{
+			messaggio = "format cognome errato: assicurati di inserire almeno tre caratteri nel campo \"cognome\" e di " +
+						"inserire solo caratteri letterali";
+			showMessageDialog(null, messaggio, "errore cognome (clicca X per chiudere)", ERROR_MESSAGE);
+		}
+
+		if(tipo == 5)
+		{
+			messaggio = "Non sono stati trovati risultati per la tua ricerca";
+			showMessageDialog(null, messaggio, "nessun risultato (clicca X per chiudere)", ERROR_MESSAGE);
+		}
 	}
 
-	private void mostraElencoRicercaUtente() throws RemoteException
+	private void mostraElencoRicercaUtente(ArrayList<HashMap<String, Object>> elencoUtenti, String genereUtente) throws RemoteException
 	{
-
+		System.out.println("genereUtente: " + genereUtente);
+		System.out.println("Utenti trovati: " + elencoUtenti.toString());
 	}
 
 
