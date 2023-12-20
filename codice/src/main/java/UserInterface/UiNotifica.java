@@ -10,6 +10,7 @@ import java.rmi.registry.Registry;
 import java.rmi.registry.LocateRegistry; 
 import java.rmi.RemoteException;
 import java.rmi.NotBoundException;
+import java.util.Objects;
 
 import javax.swing.*;
 
@@ -113,8 +114,14 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 		switch (tipoNotifica) {
 			case "nuovo prodotto":
 				testoNotifica = gestoreNotifiche.generaTestoNotificaProdotto(prodotto);
-				this.mostraFormNotifica(testoNotifica);
-				//if(gestoreNotifiche.verificaCorrettezzaDati())
+				String esitoNotifica= gestoreNotifiche.verificaCorrettezzaDati(dataField.getText(), oraField.getText(), testoField.getText());
+				while(!Objects.equals(esitoNotifica, "ok")){
+					esitoNotifica= gestoreNotifiche.verificaCorrettezzaDati(dataField.getText(), oraField.getText(), testoField.getText());
+					this.mostraFormNotifica(testoNotifica);
+					if(esitoNotifica.contains("errore")) {
+						mostraErrore(esitoVerifica);
+					}
+				}
 				break;
 			case "nuovo ordine":
 				testoNotifica = gestoreNotifiche.generaTestoNotificaOrdine(ordine);
