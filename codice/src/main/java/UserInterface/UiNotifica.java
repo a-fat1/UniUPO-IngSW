@@ -32,10 +32,29 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 	// componenti
 	private GestoreNotificheInterfaccia gestoreNotifiche;
 
-	// attributi
-	
+	// RF04: genera notifica (Monfermoso, Magenta Biasina)
+	private HashMap<String, Object> utente;
+	private HashMap<String, Object> prodotto;
+	private HashMap<String, Object> ordine;
+	private HashMap<String, Object> dataScadenza;
+	private HashMap<String, Object> dataPubblicazione;
+	private String esitoVerifica;
+
+
 	// elementi grafici
-	
+	//RF04: genera notifica (Monfermoso, Magenta Biasina)
+	private JLabel dataLabel;
+	private JLabel testoLabel;
+	private JLabel oraLabel;
+	private JTextField dataField;
+	private JTextField oraField;
+	private JTextField testoField;
+	private JPanel modificaNotificaPanel;
+	// RF01 Galletti-Calcaterra
+	JPanel pannello = new JPanel(); // Nuova finestra
+	JScrollPane pannello_tabella;
+
+
 	public UiNotifica(String hostGestore) throws RemoteException, NotBoundException
 	{
 
@@ -98,18 +117,17 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 	 *
 	 * @author  Linda Monfermoso, Gabriele Magenta Biasina
 	 */
-	public void avvioGeneraNotifica(String tipoNotifica, HashMap<String, Object> prodotto, HashMap<String, Object> ordine, HashMap<String, Object> utente) throws RemoteException
-	{
+	public void avvioGeneraNotifica(String tipoNotifica, HashMap<String, Object> prodotto, HashMap<String, Object> ordine, HashMap<String, Object> utente) throws RemoteException {
 		String testoNotifica = "";
 
 		switch (tipoNotifica) {
 			case "nuovo prodotto":
 				testoNotifica = gestoreNotifiche.generaTestoNotificaProdotto(prodotto);
-				String esitoNotifica= gestoreNotifiche.verificaCorrettezzaDati(dataField.getText(), oraField.getText(), testoField.getText());
-				while(!Objects.equals(esitoNotifica, "ok")){
-					esitoNotifica= gestoreNotifiche.verificaCorrettezzaDati(dataField.getText(), oraField.getText(), testoField.getText());
+				String esitoNotifica = gestoreNotifiche.verificaCorrettezzaDati(dataField.getText(), oraField.getText(), testoField.getText());
+				while (!Objects.equals(esitoNotifica, "ok")) {
+					esitoNotifica = gestoreNotifiche.verificaCorrettezzaDati(dataField.getText(), oraField.getText(), testoField.getText());
 					this.mostraFormNotifica(testoNotifica);
-					if(esitoNotifica.contains("errore")) {
+					if (esitoNotifica.contains("errore")) {
 						mostraErrore(esitoVerifica);
 					}
 				}
@@ -126,12 +144,9 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 				testoNotifica = gestoreNotifiche.generaTestoNotificaAvviso();
 				this.mostraFormNotifica(testoNotifica);
 				break;
-=======
+
+		}
 	}
-	
-	// RF01 Galletti-Calcaterra
-	JPanel pannello = new JPanel(); // Nuova finestra
-	JScrollPane pannello_tabella;
 
 	public void avvioVisualizzaNotifiche(String tipoUtente) throws RemoteException
 	{ // RF01 Galletti-Calcaterra
@@ -154,7 +169,6 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 			pannello_tabella = new JScrollPane(tabella);
 			pannello_tabella.setPreferredSize(new Dimension(800, 250));
 			this.showMessageDialog(null, pannello_tabella);
->>>>>>> origin/main
 		}
 	}
 	private JTable creaTabella(int dim) { // RF01 Galletti-Calcaterra
@@ -170,6 +184,7 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 		tabella.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		return tabella;
 	}
+
 	// RF01 Galletti-Calcaterra
 	private JTable inserisciDatiTabella(JTable tabella, ArrayList<HashMap<String, Object>> lista, int dim){
 		for (int i = 0; i < dim; i++) {
@@ -205,7 +220,6 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 	public void avvioRicercaNotifiche() throws RemoteException
 	{ 	// RF21	
 	}
-<<<<<<< HEAD
 
 	/**
 	 * RF04: Mostra un errore.
@@ -255,6 +269,3 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 	}
 
 }
-=======
-}
->>>>>>> origin/main

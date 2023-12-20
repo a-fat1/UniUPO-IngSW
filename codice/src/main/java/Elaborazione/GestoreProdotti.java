@@ -168,8 +168,6 @@ public class GestoreProdotti implements GestoreProdottiInterfaccia {
 		//RF10 :Rimuovi Ripristina
 		//Autori: Filidoro Mahfoud
 		dbProdotti.update("UPDATE Prodotto SET Disponibile=True WHERE codice =" +codProdotto);
-<<<<<<< HEAD
-=======
 	}
 	
 	public boolean controllaParametri( int Percentuale){
@@ -182,7 +180,6 @@ public class GestoreProdotti implements GestoreProdottiInterfaccia {
 			esitoControllo=false;
 		}
 		return esitoControllo;
->>>>>>> origin/main
 	}
 
 	public void incrementaPrezzi(int Percentuale) throws RemoteException{

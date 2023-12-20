@@ -19,13 +19,13 @@ public class Test {
     @Test
     public void testControlloParametri1(){
         //percentuale idonea
-        assertEquals(true,gestoreProdotti.controlloParametri(50));
+        assertEquals(true,gestoreProdotti.controllaParametri(50));
 
     }
 
     @Test
     public void testControlloParametri2(){
         //percentuale non idonea
-        assertEquals(false,gestoreProdotti.controlloParametri(110));
+        assertEquals(false,gestoreProdotti.controllaParametri(110));
     }
 }

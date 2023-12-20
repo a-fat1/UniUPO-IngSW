@@ -105,19 +105,19 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 				scelta = showConfirmDialog(null, nuovaFornituraPanel, "Nuova fornitura per prodotto " + codProdotto, JOptionPane.OK_CANCEL_OPTION);
 
 			if(scelta == JOptionPane.OK_OPTION) {
-				String data = dataFornituraField.getText().strip();
+				String data = dataFornituraField.getText().trim();
 				Float costo = null;
 				Integer quantita = null;
-				if(!costoFornituraField.getText().isBlank()) {
+				if(!costoFornituraField.getText().isEmpty()) {
 					try {
-						costo = Float.parseFloat(costoFornituraField.getText().strip().replace(",", "."));
+						costo = Float.parseFloat(costoFornituraField.getText().trim().replace(",", "."));
 					} catch(NumberFormatException e) {
 						costo = -1.0f;
 					}
 				}
-				if(!quantitaFornituraField.getText().isBlank()) {
+				if(!quantitaFornituraField.getText().isEmpty()) {
 					try {
-						quantita = Integer.parseInt(quantitaFornituraField.getText().strip());
+						quantita = Integer.parseInt(quantitaFornituraField.getText().trim());
 					} catch(NumberFormatException e) {
 						quantita = -1;
 					}
