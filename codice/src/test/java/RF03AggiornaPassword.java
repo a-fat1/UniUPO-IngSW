@@ -14,15 +14,8 @@ public class RF03AggiornaPassword {
     GestoreAccessi gestoreAccessi = new GestoreAccessi(dbUtenti);
 
     @Test
-<<<<<<< HEAD
-<<<<<<< HEAD
-    public void testVerificaPassword() throws RemoteException{
-=======
     public void testVerificaPassword() throws RemoteException {
->>>>>>> 44cdba9 (aggiunta metodo: AggiornaPassword in gestore)
-=======
-    public void testVerificaPassword() throws RemoteException {
->>>>>>> b1e3dda (Replace RF03AggiornaPassword.java)
+
         //Test con password uguali = return expected 0
         assertEquals(0, gestoreAccessi.verificaCredenziali("abc123", "abc123"));
 
