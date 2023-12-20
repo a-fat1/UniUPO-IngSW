@@ -102,7 +102,7 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 		return tabella;
 	}
 
-	public void avvioGeneraNotifica() throws RemoteException
+	public void avvioGeneraNotifica(String tipoNotifica, HashMap<String, Object> prodotto, HashMap<String, Object> ordine, HashMap<String, Object> utente) throws RemoteException
 	{ 	// RF04
 	}
 

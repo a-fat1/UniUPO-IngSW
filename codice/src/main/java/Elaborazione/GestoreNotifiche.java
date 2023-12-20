@@ -127,14 +127,8 @@ public class GestoreNotifiche implements GestoreNotificheInterfaccia {
 		System.err.println("Errore remoto: ");
 		e.printStackTrace();
 	}
+    return notifica;
     }
-
-	
-	public GestoreNotifiche(DbNotifiche d1) // per testing
-	{
-		dbNotifiche = d1;
-
-	}
      
 
 	public ArrayList<HashMap<String, Object>> ricercaNotifiche(String tipoUtente, String myDateObj) throws RemoteException{
@@ -149,7 +143,6 @@ public class GestoreNotifiche implements GestoreNotificheInterfaccia {
 			e.printStackTrace();
 		}
 		return notifica;
-	return notifica;
 	}
 }
 
