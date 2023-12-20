@@ -15,7 +15,6 @@ public interface UiListaInterfaccia extends Remote
 	void avvioListaForniture() throws RemoteException ;
 	void mostraErrore(int esitoControllo) throws RemoteException ;
 	void mostraFormRicercaPerData() throws RemoteException;
-	void mostraListaItem(ArrayList<HashMap<String, Object>> listaForniture) throws RemoteException;
-	void mostraListaData(ArrayList<HashMap<String, Object>> listaForniture) throws RemoteException;
+	void mostraLista(ArrayList<HashMap<String, Object>> listaForniture) throws RemoteException;
 }
 

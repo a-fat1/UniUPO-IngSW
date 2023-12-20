@@ -51,7 +51,7 @@ public class GestoreProdotti implements GestoreProdottiInterfaccia {
 
 		if (controlloParametri(dataInizio, dataFine) == 0)
 			try {
-				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 				DateTimeFormatter stringFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 				LocalDateTime dataIn = LocalDateTime.of(LocalDate.parse(dataInizio, formatter), LocalTime.MIDNIGHT);
 				LocalDateTime dataFin = LocalDateTime.of(LocalDate.parse(dataFine, formatter), LocalTime.MAX);
@@ -68,7 +68,7 @@ public class GestoreProdotti implements GestoreProdottiInterfaccia {
 	@Override
 	public int controlloParametri(String dataInizio, String dataFine) throws RemoteException {// RF 13 Benetti-Chiappa
 		int esitoControllo = 0;
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		LocalDate dataIn = null;
 		LocalDate dataFin = null;
 		try {
@@ -90,14 +90,15 @@ public class GestoreProdotti implements GestoreProdottiInterfaccia {
 
 
 
+	//RF15 (Nicolò Bianchetto, Kristian Rigo)
 	public HashMap<String, Boolean> controlloDatiFornitura(String data, Float costo, Integer quantita) {
 		HashMap<String, Boolean> esitoControllo = new HashMap<>();
-		for(String s : new String[] {"esitoData", "esitoCosto", "esitoQuantita"})
+		for(String s : new String[] {"esitoData", "esitoCosto", "esitoQuantità"})
 			esitoControllo.put(s, null);
 
 		if(data != null && !data.isEmpty()) {
 			try {
-				String dataOra = data + " " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+				String dataOra = data + " " + LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
 				LocalDateTime dataFornitura = LocalDateTime.parse(dataOra, DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm:ss").withResolverStyle(ResolverStyle.STRICT));
 				esitoControllo.put("esitoData", !dataFornitura.isAfter(LocalDateTime.now()));
 			}
@@ -106,14 +107,16 @@ public class GestoreProdotti implements GestoreProdottiInterfaccia {
 			}
 		}
 		if(costo != null) esitoControllo.put("esitoCosto", Float.compare(costo, 0.0f) > 0);
-		if(quantita != null) esitoControllo.put("esitoQuantita", quantita > 0);
+		if(quantita != null) esitoControllo.put("esitoQuantità", quantita > 0);
 
 		return esitoControllo;
 	}
 
+	//RF15 (Nicolò Bianchetto, Kristian Rigo)
 	public void aggiungiFornitura(Integer codProdotto, String data, Float costo, Integer quantita) throws RemoteException {
-		dbProdotti.update("INSERT INTO Fornitura (codiceProdotto, dataFornitura, costo, quantita) VALUES (" + codProdotto + ", '" + data + "', " + costo + ", " + quantita + ")");
-		dbProdotti.update("UPDATE Prodotto SET quantita = quantita + " + quantita + " WHERE codice = " + codProdotto);
+		String dataOra = data + " " + LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+		dbProdotti.update("INSERT INTO Fornitura (codiceProdotto, dataFornitura, costo, quantita) VALUES ("+codProdotto+", '"+dataOra+"', "+costo+", "+quantita+")");
+		dbProdotti.update("UPDATE Prodotto SET quantita = quantita + "+quantita+" WHERE codice = "+codProdotto);
 	}
 
 	public int verificaCampi(String[] autori, String titolo, String editore, int anno){
@@ -165,6 +168,30 @@ public class GestoreProdotti implements GestoreProdottiInterfaccia {
 		//RF10 :Rimuovi Ripristina
 		//Autori: Filidoro Mahfoud
 		dbProdotti.update("UPDATE Prodotto SET Disponibile=True WHERE codice =" +codProdotto);
+<<<<<<< HEAD
+=======
+	}
+	
+	public boolean controllaParametri( int Percentuale){
+		//RF17 Incrementea/Decrementa
+		boolean esitoControllo;
+		if(Percentuale > 0 && Percentuale <= 100){
+			esitoControllo=true;
+		}else
+		{
+			esitoControllo=false;
+		}
+		return esitoControllo;
+>>>>>>> origin/main
 	}
 
+	public void incrementaPrezzi(int Percentuale) throws RemoteException{
+		//RF17 Incrementea/Decrementa
+		dbProdotti.update("UPDATE Prodotto SET prezzo = prezzo * (1 + " + Percentuale + " / 100)");
+		}
+
+	public void decrementaPrezzi(int Percentuale) throws RemoteException{
+			//RF17 Incrementea/Decrementa
+			dbProdotti.update("UPDATE Prodotto SET prezzo = prezzo * (1 - " + Percentuale + " / 100)");
+	}
 }

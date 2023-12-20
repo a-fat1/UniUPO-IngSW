@@ -6,6 +6,8 @@ import java.rmi.RemoteException;
 
 import static org.junit.Assert.assertEquals;
 
+import java.rmi.RemoteException;
+
 public class RF03AggiornaPassword {
 
     DbUtenti dbUtenti = new DbUtenti();

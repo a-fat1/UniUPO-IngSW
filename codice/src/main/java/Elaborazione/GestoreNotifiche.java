@@ -1,5 +1,5 @@
 package Elaborazione;
-
+import java.time.LocalDateTime;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -93,6 +93,7 @@ public class GestoreNotifiche implements GestoreNotificheInterfaccia {
     }
 
 
+<<<<<<< HEAD
     	public String controlloParametri(String dataPubblicazione, String dataScadenza) {
 		if (dataPubblicazione == null || dataScadenza == null || dataPubblicazione.isEmpty() || dataScadenza.isEmpty())
 			throw new IllegalArgumentException("Manca una data!");
@@ -116,14 +117,66 @@ public class GestoreNotifiche implements GestoreNotificheInterfaccia {
 
 		comandoSql = "SELECT * FROM Notifica WHERE dataPubblicazione = \"" + dataPubblicazione + "\" AND dataScadenza = \"" + dataScadenza + "\" AND tipoUtente = \"" + tipoUtente + "\" ;";
 
+=======
+    public String controlloParametri(String dataPubblicazione, String dataScadenza) {
+	//RF21 - RicercaNotifiche
+	//Colombo Giacomo, Riccardo Caviggia
+		
+	if (dataPubblicazione == null || dataScadenza == null || dataPubblicazione.isEmpty() || dataScadenza.isEmpty())
+		throw new IllegalArgumentException("Manca una data!");
+	else {
+>>>>>>> origin/main
 		try {
-			notifica = dbNotifiche.query(comandoSql);
-		} catch (RemoteException e) {
-			System.err.println("Errore remoto: ");
+			LocalDate pubblicazione = LocalDate.parse(dataPubblicazione, FORMATO_DATA);
+			LocalDate scadenza = LocalDate.parse(dataScadenza, FORMATO_DATA);
+			
+			if (pubblicazione.isAfter(scadenza))
+				throw new IllegalArgumentException("Date non valide!");
+			else return "Date corrette!";
+		} catch (DateTimeParseException e) {
+			throw new IllegalArgumentException("Formato data non valido!");
+		}
+	     }
+    }
+
+    public ArrayList<HashMap<String, Object>> cercaNotifiche(String dataPubblicazione, String dataScadenza, String tipoUtente) {
+	//RF21 - RicercaNotifiche
+	//Colombo Giacomo, Riccardo Caviggia
+		
+	String comandoSql;
+	ArrayList<HashMap<String, Object>> notifica = null;
+
+	comandoSql = "SELECT * FROM Notifica WHERE dataPubblicazione = \"" + dataPubblicazione + "\" AND dataScadenza = \"" + dataScadenza + "\" AND tipoUtente = \"" + tipoUtente + "\" ;";
+
+	try {
+		notifica = dbNotifiche.query(comandoSql);
+	} catch (RemoteException e) {
+		System.err.println("Errore remoto: ");
+		e.printStackTrace();
+	}
+    }
+
+	
+	public GestoreNotifiche(DbNotifiche d1) // per testing
+	{
+		dbNotifiche = d1;
+
+	}
+     
+
+	public ArrayList<HashMap<String, Object>> ricercaNotifiche(String tipoUtente, String myDateObj) throws RemoteException{
+		String comandoSql;
+		ArrayList<HashMap<String,Object>> notifica=null;
+		comandoSql="SELECT * FROM Notifica WHERE(tipoUtente='"+tipoUtente+"' OR tipoUtente='tutti')"+" AND dataScadenza>='"+myDateObj+"'";
+		try{
+			notifica=dbNotifiche.query(comandoSql);
+		}
+		catch (Exception e){
+			System.err.println(e.toString());
 			e.printStackTrace();
 		}
-
 		return notifica;
+	return notifica;
 	}
 }
 

@@ -192,7 +192,7 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 					else
 					{
 						utente=gestoreAccessi.ricercaUtente(username);
-						uiNotifica.avvioVisualizzaNotifiche();
+						uiNotifica.avvioVisualizzaNotifiche((String)utente.get("tipo"));
 						do
 						{
 							this.mostraMenu((String)utente.get("nome"), ((String)utente.get("tipo")));
@@ -367,7 +367,7 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 				this.mostraErrore(3);
 			}
 			if(esitoControlloPassword==0){
-				//query utente
+				//gestoreAccessi.AggiornaPassword(username, nuovaPassword);
 				this.mostraMessaggioDiSuccesso();
             }
 
