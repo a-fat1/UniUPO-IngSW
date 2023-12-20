@@ -11,7 +11,6 @@ import java.rmi.NotBoundException;
 import java.util.Objects;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 
 import UserInterface.*;
 import Elaborazione.*;
@@ -35,31 +34,24 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 	// RF19
 	private JPanel searchPanel;
 
-	private JPanel elencoUtentiRicerca;
 	private JLabel labelUsername;
 	private JLabel labelNome;
 	private JLabel labelCognome;
 	private JComboBox comboMenu;
-	private BoxLayout boxLayout;
 	private JTextField fieldUsername;
 	private JTextField fieldNome;
 	private JTextField fieldCognome;
-
 	private int result;
-
 	private String nome;
 	private String cognome;
 	private String username;
-
 	private ArrayList<HashMap<String, Object>> elencoUtenti;
 	private String scelta;
-
 	private final String[] pulsanteRicerca;
-
+	private final String[] pulsanteElencoUtentiStaff;
+	private final String[] pulsanteElencoUtentiAdmin;
 	private final String[] colonneStaff;
-
 	private final String[] colonneAmministratore;
-
 	public UiRicerca(String hostGestore) throws RemoteException, NotBoundException
 	{
 		registryUI = LocateRegistry.getRegistry("127.0.0.1", 1100); // default: 1099
@@ -97,6 +89,11 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 		searchPanel.add(fieldCognome);
 		pulsanteRicerca = new String[1];
 		pulsanteRicerca[0] = "Invia";
+		pulsanteElencoUtentiStaff = new String[2];
+		pulsanteElencoUtentiStaff[0] = "Lista pagamenti";
+		pulsanteElencoUtentiStaff[1] = "Lista ordini";
+		pulsanteElencoUtentiAdmin = new String[1];
+		pulsanteElencoUtentiAdmin[0] = "Blocca\\Sblocca utente";
 
 		elencoUtenti = new ArrayList<>();
 
@@ -116,6 +113,7 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 		// set di esitoControllo con valore iniziale
 
 		int esitoControllo = 0;
+		result = 0;
 
 		// loop fino a quando il controllo non è positivo (o l'utente esce dalla finestra)
 		while((esitoControllo != 4) && (result != -1)){
@@ -189,7 +187,8 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 	private void mostraFormRicerca() throws RemoteException
 	{
 
-		result = JOptionPane.showOptionDialog(null, searchPanel, "Ricerca utente (clicca X per uscire)", DEFAULT_OPTION, QUESTION_MESSAGE, null, pulsanteRicerca, "Ricerca");
+		result = JOptionPane.showOptionDialog(null, searchPanel, "Ricerca utente (clicca X per uscire)",
+				DEFAULT_OPTION, QUESTION_MESSAGE, null, pulsanteRicerca, "Ricerca");
 		scelta = Objects.requireNonNull(comboMenu.getSelectedItem()).toString();
 		nome = fieldNome.getText();
 		cognome = fieldCognome.getText();
@@ -204,21 +203,21 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 
 		if(tipo == 1)
 		{
-			messaggio = "format username errato: assicurati di inserire almeno tre caratteri nel campo \"username\".";
+			messaggio = "format username errato: assicurati di inserire\nalmeno tre caratteri nel campo \"username\".";
 			showMessageDialog(null, messaggio, "errore username (clicca X per chiudere)", ERROR_MESSAGE);
 
 		}
 
 		if(tipo == 2)
 		{
-			messaggio = "format nome errato: assicurati di inserire almeno tre caratteri nel campo \"nome\" e di " +
+			messaggio = "format nome errato: assicurati di inserire\nalmeno tre caratteri nel campo \"nome\" e di\n" +
 						"inserire solo caratteri letterali";
 			showMessageDialog(null, messaggio, "errore nome (clicca X per chiudere)", ERROR_MESSAGE);
 		}
 
 		if(tipo == 3)
 		{
-			messaggio = "format cognome errato: assicurati di inserire almeno tre caratteri nel campo \"cognome\" e di " +
+			messaggio = "format cognome errato: assicurati di inserire\nalmeno tre caratteri nel campo \"cognome\" e di\n" +
 						"inserire solo caratteri letterali";
 			showMessageDialog(null, messaggio, "errore cognome (clicca X per chiudere)", ERROR_MESSAGE);
 		}
@@ -232,38 +231,64 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 
 	private void mostraElencoRicercaUtente(ArrayList<HashMap<String, Object>> elencoUtenti, String genereUtente) throws RemoteException
 	{
-		// codice provvisorio per verificarne il funzionamento
-		System.out.println("genereUtente: " + genereUtente);
-		System.out.println("Utenti trovati: " + elencoUtenti.toString());
+
 		Object[][] utentiTabella;
+		JTable table = null;
+		int azione = -3;
 
-		// da cambiare, per ora come test faccio solo amministratore
-		utentiTabella = new Object[elencoUtenti.size()][colonneAmministratore.length];
-
-		for(int i=0; i < elencoUtenti.size(); i++)
+		if(genereUtente.equals("staff"))
 		{
-			utentiTabella[i][0] = elencoUtenti.get(i).get("nome");
-			utentiTabella[i][1] = elencoUtenti.get(i).get("cognome");
-			utentiTabella[i][2] = elencoUtenti.get(i).get("attivo");
-			utentiTabella[i][3] = elencoUtenti.get(i).get("username");
+			utentiTabella = new Object[elencoUtenti.size()][colonneStaff.length];
+
+			for(int i=0; i < elencoUtenti.size(); i++)
+			{
+				utentiTabella[i][0] = elencoUtenti.get(i).get("nome");
+				utentiTabella[i][1] = elencoUtenti.get(i).get("cognome");
+				utentiTabella[i][2] = elencoUtenti.get(i).get("username");
+				utentiTabella[i][3] = elencoUtenti.get(i).get("tipo");
+				utentiTabella[i][4] = elencoUtenti.get(i).get("attivo");
+			}
+			table = new JTable(utentiTabella, colonneStaff);
 		}
+		else if(genereUtente.equals("amministratore"))
+		{
+			utentiTabella = new Object[elencoUtenti.size()][colonneAmministratore.length];
 
-		System.out.println(colonneAmministratore[0]);
-		JTable table = new JTable(utentiTabella, colonneAmministratore);
+			for(int i=0; i < elencoUtenti.size(); i++)
+			{
+				utentiTabella[i][0] = elencoUtenti.get(i).get("nome");
+				utentiTabella[i][1] = elencoUtenti.get(i).get("cognome");
+				utentiTabella[i][2] = elencoUtenti.get(i).get("username");
+				utentiTabella[i][3] = elencoUtenti.get(i).get("attivo");
+			}
+			table = new JTable(utentiTabella, colonneAmministratore);
+		}
+		
 		JScrollPane tabella = new JScrollPane(table);
-		tabella.setPreferredSize((new Dimension(300, 300)));
+		tabella.setPreferredSize((new Dimension(500, 200)));
 
-		// bisogna usare showOptionDialog
-		showConfirmDialog(null, tabella, "elenco utenti", OK_CANCEL_OPTION);
+		if(genereUtente.equals("staff"))
+			azione = showOptionDialog(null, tabella, "elenco utenti",
+					DEFAULT_OPTION, QUESTION_MESSAGE, null,
+					pulsanteElencoUtentiStaff, null);
 
-		// TO DO:
-		/*
-			> creare le tabelle
-			> inserire i relativi pulsanti se si parla di amministratore o staff
-			> sono già state inserite le colonne con i relativi campi sotto forma di String[]
-			> bisogna estrarre i dati da ArrayList e inserirli nelle righe
-		 */
+		else if(genereUtente.equals("amministratore"))
+			azione = showOptionDialog(null, tabella, "elenco utenti",
+					DEFAULT_OPTION, QUESTION_MESSAGE, null,
+					pulsanteElencoUtentiAdmin, null);
 
+		if(azione == 0 && genereUtente.equals("staff"))
+		{
+			// richiamo lista pagamenti
+		}
+		else if(azione == 1 && genereUtente.equals("staff"))
+		{
+			// richiamo lista ordini
+		}
+		else if(azione == 0 && genereUtente.equals("amministratore"))
+		{
+			// richiamo blocca\sblocca utente
+		}
 	}
 
 
