@@ -95,6 +95,7 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 	public void avvioIncrementaDecrementaPrezzi() throws RemoteException
 	{	// RF17	
 	}
+
 	private void mostraFormNuovaFornitura(boolean nuovoProdotto) throws RemoteException {
 		// RF15 (Nicolò Bianchetto, Kristian Rigo)
 		int scelta = JOptionPane.OK_OPTION;
