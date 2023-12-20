@@ -1,7 +1,5 @@
 package UserInterface;
 
-import java.awt.*;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.ArrayList;
 
@@ -9,11 +7,9 @@ import java.rmi.registry.Registry;
 import java.rmi.registry.LocateRegistry; 
 import java.rmi.RemoteException;
 import java.rmi.NotBoundException;
-import java.util.stream.Collectors;
 
 import javax.swing.*;
 
-import DataBase.DbProdotti;
 import UserInterface.*;
 import Elaborazione.*;
 
@@ -32,7 +28,7 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 	private Integer codProdotto; //RF15
 	
 	// elementi grafici
-
+	
 	private JLabel dataFornituraLabel; //RF15
 	private JLabel costoFornituraLabel; //RF15
 	private JLabel quantitaFornituraLabel; //RF15
@@ -43,7 +39,7 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 	private JLabel successoFornituraLabel; //RF15
 	private JPanel successoFornituraPanel; //RF15
 	private JPanel erroreFornituraPanel; //RF15
-
+	
 	
 	public UiProdotto(String hostGestore) throws RemoteException, NotBoundException
 	{
@@ -52,8 +48,8 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 
 		uiNotifica = (UiNotificaInterfaccia) registryUI.lookup("uiNotifica");
 		uiLista = (UiListaInterfaccia) registryUI.lookup("uiLista");
-		gestoreProdotti = (GestoreProdottiInterfaccia) registryGestore.lookup("gestoreProdotti");
-
+		gestoreProdotti = (GestoreProdottiInterfaccia) registryGestore.lookup("gestoreProdotti"); 
+		
 		// RF15 (Nicolò Bianchetto, Kristian Rigo)
 		dataFornituraLabel = new JLabel("Data fornitura (AAAA-MM-GG): ");
 		costoFornituraLabel = new JLabel("Costo fornitura: ");
@@ -80,20 +76,6 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 
 	public void avvioAggiornaPrezzo() throws RemoteException
 	{	// RF14	
-	}
-
-	public void avvioNuovaFornitura(Integer codProdotto, boolean nuovoProdotto) throws RemoteException {
-		// RF15 (Nicolò Bianchetto, Kristian Rigo)
-		this.codProdotto = codProdotto;
-		mostraFormNuovaFornitura(nuovoProdotto);
-	}
-
-	public void avvioNuovoProdotto() throws RemoteException
-	{	// RF16	
-	}
-
-	public void avvioIncrementaDecrementaPrezzi() throws RemoteException
-	{	// RF17	
 	}
 
 	private void mostraFormNuovaFornitura(boolean nuovoProdotto) throws RemoteException {

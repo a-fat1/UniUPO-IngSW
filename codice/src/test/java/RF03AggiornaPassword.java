@@ -15,7 +15,6 @@ public class RF03AggiornaPassword {
 
     @Test
     public void testVerificaPassword() throws RemoteException {
-
         //Test con password uguali = return expected 0
         assertEquals(0, gestoreAccessi.verificaCredenziali("abc123", "abc123"));
 
