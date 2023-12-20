@@ -1,5 +1,7 @@
 package UserInterface;
 
+import java.awt.*;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.ArrayList;
 
@@ -7,6 +9,7 @@ import java.rmi.registry.Registry;
 import java.rmi.registry.LocateRegistry; 
 import java.rmi.RemoteException;
 import java.rmi.NotBoundException;
+import java.util.stream.Collectors;
 
 import javax.swing.*;
 
@@ -69,13 +72,27 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 		erroreFornituraPanel = new JPanel();
 		erroreFornituraPanel.setLayout(new BoxLayout(erroreFornituraPanel, BoxLayout.PAGE_AXIS));
 	}
-	
+
 	public void avvioRimuoviRipristinaNelCatalogo() throws RemoteException
 	{	// RF10
 	}
 
 	public void avvioAggiornaPrezzo() throws RemoteException
 	{	// RF14	
+	}
+
+	public void avvioNuovaFornitura(Integer codProdotto, boolean nuovoProdotto) throws RemoteException {
+		// RF15 (Nicolò Bianchetto, Kristian Rigo)
+		this.codProdotto = codProdotto;
+		mostraFormNuovaFornitura(nuovoProdotto);
+	}
+
+	public void avvioNuovoProdotto() throws RemoteException
+	{	// RF16
+	}
+
+	public void avvioIncrementaDecrementaPrezzi() throws RemoteException
+	{	// RF17
 	}
 
 	private void mostraFormNuovaFornitura(boolean nuovoProdotto) throws RemoteException {
