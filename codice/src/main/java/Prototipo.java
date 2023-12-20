@@ -169,25 +169,7 @@ public class Prototipo extends JFrame
 			uiLogin = new UiLogin(host);
 			stubUiLogin = (UiLoginInterfaccia) UnicastRemoteObject.exportObject(uiLogin, 2007);	
 			registryUI.bind("uiLogin", stubUiLogin);
-			//uiLogin.avvioLogin();
-
-			HashMap<String, Object> ordine;
-			HashMap<String, Object> prodotto;
-			HashMap<String, Object> utente;
-
-			ordine = new HashMap<>();
-			prodotto = new HashMap<>();
-			utente = new HashMap<>();
-
-
-			ordine.put("username", "clea99");
-			prodotto.put("tipo", "Libro");
-			prodotto.put("autore", "Nikolaj S. Piskunov");
-			prodotto.put("titolo", "Calcolo Integrale e Differenziale 2");
-			utente.put("nome", "Aldo");
-			utente.put("cognome", "Bruni");
-
-			uiNotifica.avvioGeneraNotifica("avviso", prodotto, ordine, utente);
+			uiLogin.avvioLogin();
 
 			System.exit(0);
 		}
