@@ -1,5 +1,5 @@
 package Elaborazione;
-
+import java.time.LocalDateTime;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -110,7 +110,7 @@ public class GestoreNotifiche implements GestoreNotificheInterfaccia {
 			throw new IllegalArgumentException("Formato data non valido!");
 		}
 	     }
-     }
+    }
 
     public ArrayList<HashMap<String, Object>> cercaNotifiche(String dataPubblicazione, String dataScadenza, String tipoUtente) {
 	//RF21 - RicercaNotifiche
@@ -127,8 +127,22 @@ public class GestoreNotifiche implements GestoreNotificheInterfaccia {
 		System.err.println("Errore remoto: ");
 		e.printStackTrace();
 	}
+    return notifica;
+    }
+     
 
-	return notifica;
+	public ArrayList<HashMap<String, Object>> ricercaNotifiche(String tipoUtente, String myDateObj) throws RemoteException{
+		String comandoSql;
+		ArrayList<HashMap<String,Object>> notifica=null;
+		comandoSql="SELECT * FROM Notifica WHERE(tipoUtente='"+tipoUtente+"' OR tipoUtente='tutti')"+" AND dataScadenza>='"+myDateObj+"'";
+		try{
+			notifica=dbNotifiche.query(comandoSql);
+		}
+		catch (Exception e){
+			System.err.println(e.toString());
+			e.printStackTrace();
+		}
+		return notifica;
 	}
 }
 
