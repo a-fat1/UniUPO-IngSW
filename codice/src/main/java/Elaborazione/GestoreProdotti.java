@@ -170,7 +170,7 @@ public class GestoreProdotti implements GestoreProdottiInterfaccia {
 		dbProdotti.update("UPDATE Prodotto SET Disponibile=True WHERE codice =" +codProdotto);
 	}
 	
-	public boolean controllaParametri( int Percentuale){
+	public boolean controlloPercentuale( int Percentuale){
 		//RF17 Incrementea/Decrementa
 		boolean esitoControllo;
 		if(Percentuale > 0 && Percentuale <= 100){
