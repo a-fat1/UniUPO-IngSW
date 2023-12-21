@@ -37,7 +37,7 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 	private JLabel labelUsername;
 	private JLabel labelNome;
 	private JLabel labelCognome;
-	private JComboBox comboMenu;
+	private JComboBox<String> comboMenu;
 	private JTextField fieldUsername;
 	private JTextField fieldNome;
 	private JTextField fieldCognome;
@@ -73,7 +73,7 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 		String[] scelteMenuRicercaUtente = new String[2];
 		scelteMenuRicercaUtente[0] = "Ricerca per nome-cognome";
 		scelteMenuRicercaUtente[1] = "Ricerca per username";
-		comboMenu = new JComboBox(scelteMenuRicercaUtente);
+		comboMenu = new JComboBox<>(scelteMenuRicercaUtente);
 
 		colonneAmministratore = new String[]{"Nome", "Cognome", "Username", "Tipo utente"};
 
