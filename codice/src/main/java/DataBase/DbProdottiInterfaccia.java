@@ -10,4 +10,8 @@ public interface DbProdottiInterfaccia extends Remote
 {  
    ArrayList<HashMap<String, Object>> query(String comandoSql) throws RemoteException;
    void update(String comandoSql) throws RemoteException;
+   
+   
+   public ArrayList<HashMap<String, Object>> ricercaProdotto(String titolo, String autore, String editore,
+           String anno, String tipo);
 } 
