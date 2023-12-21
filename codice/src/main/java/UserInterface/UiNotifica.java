@@ -204,7 +204,7 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 	 */
 	private void mostraFormNotifica(String testoNotifica) {
 
-		this.showMessageDialog(null, modificaNotificaPanel,"Modifica notifica",this.OK_CANCEL_OPTION);
+		this.showMessageDialog(null, modificaNotificaPanel, "Modifica notifica", this.OK_CANCEL_OPTION);
 		dataField.setText("");
 		oraField.setText("");
 		testoField.setText("");
