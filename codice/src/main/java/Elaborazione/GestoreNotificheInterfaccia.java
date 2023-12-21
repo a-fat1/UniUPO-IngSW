@@ -10,6 +10,9 @@ import java.util.ArrayList;
 
 public interface GestoreNotificheInterfaccia extends Remote 
 {
+    ArrayList<HashMap<String, Object>> ricercaNotifiche(String tipoUtente, String myDateObj) throws RemoteException;
+
+
     /**
      * RF04: Genera il testo della notifica per un nuovo prodotto.
      *
@@ -91,6 +94,4 @@ public interface GestoreNotificheInterfaccia extends Remote
      * @throws RemoteException
      */
     ArrayList<HashMap<String, Object>> cercaNotifiche(String dataPubblicazione, String dataScadenza, String tipoUtente) throws RemoteException;
-
-    ArrayList<HashMap<String, Object>> ricercaNotifiche(String tipoUtente, String myDateObj) throws RemoteException;
 } 

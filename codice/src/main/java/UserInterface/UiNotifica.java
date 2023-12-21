@@ -108,46 +108,6 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 		modificaNotificaPanel.add(testoField,constrains);
 	}
 
-	public void avvioVisualizzaNotifiche() throws RemoteException
-	{ 	// RF01
-	}
-
-	/**
-	 * RF04: Avvia la generazione di una notifica
-	 *
-	 * @author  Linda Monfermoso, Gabriele Magenta Biasina
-	 */
-	public void avvioGeneraNotifica(String tipoNotifica, HashMap<String, Object> prodotto, HashMap<String, Object> ordine, HashMap<String, Object> utente) throws RemoteException {
-		String testoNotifica = "";
-
-		switch (tipoNotifica) {
-			case "nuovo prodotto":
-				testoNotifica = gestoreNotifiche.generaTestoNotificaProdotto(prodotto);
-				String esitoNotifica = gestoreNotifiche.verificaCorrettezzaDati(dataField.getText(), oraField.getText(), testoField.getText());
-				while (!Objects.equals(esitoNotifica, "ok")) {
-					esitoNotifica = gestoreNotifiche.verificaCorrettezzaDati(dataField.getText(), oraField.getText(), testoField.getText());
-					this.mostraFormNotifica(testoNotifica);
-					if (esitoNotifica.contains("errore")) {
-						mostraErrore(esitoVerifica);
-					}
-				}
-				break;
-			case "nuovo ordine":
-				testoNotifica = gestoreNotifiche.generaTestoNotificaOrdine(ordine);
-				gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), dataScadenza, testoNotifica, utente.get("tipoUtente").toString());
-				break;
-			case "nuovo utente":
-				testoNotifica = gestoreNotifiche.generaTestoNotificaUtente(utente);
-				gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), dataScadenza, testoNotifica, utente.get("tipoUtente").toString());
-				break;
-			case "avviso":
-				testoNotifica = gestoreNotifiche.generaTestoNotificaAvviso();
-				this.mostraFormNotifica(testoNotifica);
-				break;
-
-		}
-	}
-
 	public void avvioVisualizzaNotifiche(String tipoUtente) throws RemoteException
 	{ // RF01 Galletti-Calcaterra
 		int id;
@@ -202,13 +162,49 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 	}
 
 	/**
+	 * RF04: Avvia la generazione di una notifica
+	 *
+	 * @author  Linda Monfermoso, Gabriele Magenta Biasina
+	 */
+	public void avvioGeneraNotifica(String tipoNotifica, HashMap<String, Object> prodotto, HashMap<String, Object> ordine, HashMap<String, Object> utente) throws RemoteException {
+		String testoNotifica = "";
+
+		switch (tipoNotifica) {
+			case "nuovo prodotto":
+				testoNotifica = gestoreNotifiche.generaTestoNotificaProdotto(prodotto);
+				String esitoNotifica = gestoreNotifiche.verificaCorrettezzaDati(dataField.getText(), oraField.getText(), testoField.getText());
+				while (!Objects.equals(esitoNotifica, "ok")) {
+					esitoNotifica = gestoreNotifiche.verificaCorrettezzaDati(dataField.getText(), oraField.getText(), testoField.getText());
+					this.mostraFormNotifica(testoNotifica);
+					if (esitoNotifica.contains("errore")) {
+						mostraErrore(esitoVerifica);
+					}
+				}
+				break;
+			case "nuovo ordine":
+				testoNotifica = gestoreNotifiche.generaTestoNotificaOrdine(ordine);
+				gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), dataScadenza, testoNotifica, utente.get("tipoUtente").toString());
+				break;
+			case "nuovo utente":
+				testoNotifica = gestoreNotifiche.generaTestoNotificaUtente(utente);
+				gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), dataScadenza, testoNotifica, utente.get("tipoUtente").toString());
+				break;
+			case "avviso":
+				testoNotifica = gestoreNotifiche.generaTestoNotificaAvviso();
+				this.mostraFormNotifica(testoNotifica);
+				break;
+
+		}
+	}
+
+	/**
 	 * RF04: Mostra il form delle notifiche.
 	 *
 	 * @author  Linda Monfermoso, Gabriele Magenta Biasina
 	 */
 	private void mostraFormNotifica(String testoNotifica) {
 
-		this.showMessageDialog(null, modificaNotificaPanel,"Modifica notifica",this.OK_CANCEL_OPTION);
+		this.showMessageDialog(null, modificaNotificaPanel, "Modifica notifica", this.OK_CANCEL_OPTION);
 		dataField.setText("");
 		oraField.setText("");
 		testoField.setText("");
