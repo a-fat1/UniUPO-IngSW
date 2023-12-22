@@ -27,7 +27,7 @@ public interface GestoreProdottiInterfaccia extends Remote
     void ripristinaProdotto(Integer codProdotto) throws RemoteException;
 
     //RF17
-    boolean controllaParametri(int Percentuale) throws RemoteException;
+    boolean controlloPercentuale(int Percentuale) throws RemoteException;
     void incrementaPrezzi(int Percentuale) throws RemoteException;
     void decrementaPrezzi(int Percentuale) throws RemoteException;
 

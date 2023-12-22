@@ -4,6 +4,7 @@ import java.awt.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.EventObject;
 import java.util.HashMap;
 import java.util.ArrayList;
 
@@ -132,7 +133,12 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 		}
 	}
 	private JTable creaTabella(int dim) { // RF01 Galletti-Calcaterra
-		JTable tabella = new JTable(dim, 4);
+		JTable tabella = new JTable(dim, 4){
+			@Override
+			public boolean editCellAt(int row, int column, java.util.EventObject e) {
+				return false;
+			}
+		};
 		tabella.getColumnModel().getColumn(0).setHeaderValue("Data");
 		tabella.getColumnModel().getColumn(0).setPreferredWidth(150);
 		tabella.getColumnModel().getColumn(1).setHeaderValue("Contenuto");

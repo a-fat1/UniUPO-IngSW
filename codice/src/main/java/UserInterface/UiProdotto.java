@@ -135,6 +135,7 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 
 	private void mostraSuccessoFornitura() {
 		// RF15 (Nicolò Bianchetto, Kristian Rigo)
+		successoFornituraPanel.removeAll(); //per rimuovere i messaggi di successo precedenti
 		successoFornituraLabel.setText("La nuova fornitura per il prodotto " + codProdotto + " è stata aggiunta con successo");
 		successoFornituraPanel.add(successoFornituraLabel);
 		showMessageDialog(null, successoFornituraPanel, "Successo", JOptionPane.INFORMATION_MESSAGE);
