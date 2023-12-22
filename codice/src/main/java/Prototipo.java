@@ -183,7 +183,7 @@ public class Prototipo extends JFrame
 			utente.put("nome", "Aldo");
 			utente.put("cognome", "Bruni");
 
-			uiNotifica.avvioGeneraNotifica("", prodotto, ordine, utente);
+			uiNotifica.avvioGeneraNotifica("avviso", prodotto, ordine, utente);
 
 			System.exit(0);
 		}
