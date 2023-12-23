@@ -5,6 +5,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.time.temporal.ChronoUnit;
+import java.util.EventObject;
+import java.util.HashMap;
+import java.util.ArrayList;
 
 import java.rmi.registry.Registry; 
 import java.rmi.registry.LocateRegistry; 
@@ -32,12 +36,10 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 
 	// attributi
 	// RF04: genera notifica (Monfermoso, Magenta Biasina)
-	private HashMap<String, Object> utente;
-	private HashMap<String, Object> prodotto;
-	private HashMap<String, Object> ordine;
-	private HashMap<String, Object> dataScadenza;
-	private HashMap<String, Object> dataPubblicazione;
+	private HashMap<String, String> dataScadenza;
+	private HashMap<String, String> dataPubblicazione;
 	private String esitoVerifica;
+	private String testoNotifica;
 
 
 	// elementi grafici
@@ -129,6 +131,9 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 	 * @author Linda Monfermoso, Gabriele Magenta Biasina
 	 */
 	public void inizializzaUIRF04() {
+		dataPubblicazione = new HashMap<>();
+		dataScadenza = new HashMap<>();
+
 		dataField = new JTextField("", 20);
 		dataLabel = new JLabel("Inserisci data di scadenza: ");
 		dataField.setToolTipText("Data");
@@ -138,40 +143,39 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 		oraField.setToolTipText("Ora");
 
 		testoField = new JTextField("", 50);
-		testoLabel = new JLabel("Inseririsci testo notifica:");
+		testoLabel = new JLabel("Inserisci testo notifica:");
 		testoField.setToolTipText("Testo");
 
-
 		modificaNotificaPanel = new JPanel(new GridBagLayout());
-		GridBagConstraints constrains = new GridBagConstraints();
+		GridBagConstraints constraints = new GridBagConstraints();
 
-		constrains.gridy=0;
-		constrains.gridx=0;
-		modificaNotificaPanel.add(dataLabel,constrains);
+		constraints.gridy=0;
+		constraints.gridx=0;
+		modificaNotificaPanel.add(dataLabel,constraints);
 
-		constrains.gridy=0;
-		constrains.gridx=2;
-		constrains.gridwidth=1;
-		modificaNotificaPanel.add(dataField,constrains);
+		constraints.gridy=0;
+		constraints.gridx=2;
+		constraints.gridwidth=1;
+		modificaNotificaPanel.add(dataField,constraints);
 
-		constrains.gridy=1;
-		constrains.gridx=0;
-		modificaNotificaPanel.add(oraLabel,constrains);
+		constraints.gridy=1;
+		constraints.gridx=0;
+		modificaNotificaPanel.add(oraLabel,constraints);
 
-		constrains.gridy=1;
-		constrains.gridx=2;
-		constrains.gridwidth=1;
-		modificaNotificaPanel.add(oraField,constrains);
+		constraints.gridy=1;
+		constraints.gridx=2;
+		constraints.gridwidth=1;
+		modificaNotificaPanel.add(oraField,constraints);
 
-		constrains.gridy=3;
-		constrains.gridx=0;
-		modificaNotificaPanel.add(testoLabel,constrains);
+		constraints.gridy=3;
+		constraints.gridx=0;
+		modificaNotificaPanel.add(testoLabel,constraints);
 
-		constrains.gridy=3;
-		constrains.gridx=2;
-		constrains.gridwidth=5;
-		constrains.ipady = 100;
-		modificaNotificaPanel.add(testoField,constrains);
+		constraints.gridy=3;
+		constraints.gridx=2;
+		constraints.gridwidth=5;
+		constraints.ipady = 100;
+		modificaNotificaPanel.add(testoField,constraints);
 	}
 
 	/**
@@ -180,42 +184,35 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 	 * @author  Linda Monfermoso, Gabriele Magenta Biasina
 	 */
 	public void avvioGeneraNotifica(String tipoNotifica, HashMap<String, Object> prodotto, HashMap<String, Object> ordine, HashMap<String, Object> utente) throws RemoteException {
-		String testoNotifica;
-		String esitoNotifica;
-		dataPubblicazione = new HashMap<>();
-
 		switch (tipoNotifica) {
 			case "nuovo prodotto":
 				testoNotifica = gestoreNotifiche.generaTestoNotificaProdotto(prodotto);
 				do {
 					this.mostraFormNotifica(testoNotifica);
-					esitoNotifica = gestoreNotifiche.verificaCorrettezzaDati(dataPubblicazione.get("data").toString(), dataPubblicazione.get("ora").toString(), testoNotifica);
-					if (esitoNotifica.contains("errore")) {
+					esitoVerifica = gestoreNotifiche.verificaCorrettezzaDati(dataScadenza.get("data"), dataScadenza.get("ora"), testoNotifica);
+					if (esitoVerifica.contains("errore")) {
 						mostraErrore(esitoVerifica);
 					}
-				} while(!Objects.equals(esitoNotifica, "ok"));
+				} while(!Objects.equals(esitoVerifica, "ok"));
 				gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), dataScadenza, testoNotifica, utente.get("tipoUtente").toString());
 				break;
 			case "nuovo ordine":
 				testoNotifica = gestoreNotifiche.generaTestoNotificaOrdine(ordine);
-				Date dataScadenza= new Date();
 				gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), dataScadenza, testoNotifica, utente.get("tipoUtente").toString());
 				break;
 			case "nuovo utente":
 				testoNotifica = gestoreNotifiche.generaTestoNotificaUtente(utente);
-				// TODO: qui dataScadenza non è impostata
-				Date dataScadenza= new Date();
-				gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), dataScadenza, testoNotifica, utente.get("tipoUtente").toString());
+				gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), setDataScadenzaDefault(), testoNotifica, utente.get("tipoUtente").toString());
 				break;
 			case "avviso":
 				testoNotifica = gestoreNotifiche.generaTestoNotificaAvviso();
 				do {
 					this.mostraFormNotifica(testoNotifica);
-					esitoNotifica = gestoreNotifiche.verificaCorrettezzaDati(dataField.getText(), oraField.getText(), testoField.getText());
-					if (esitoNotifica.contains("errore")) {
+					esitoVerifica = gestoreNotifiche.verificaCorrettezzaDati(dataScadenza.get("data"), dataScadenza.get("ora"), testoNotifica);
+					if (esitoVerifica.contains("errore")) {
 						mostraErrore(esitoVerifica);
 					}
-				} while(!Objects.equals(esitoNotifica, "ok"));
+				} while(!Objects.equals(esitoVerifica, "ok"));
 				gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), dataScadenza, testoNotifica, utente.get("tipoUtente").toString());
 				break;
             default:
@@ -231,16 +228,13 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 	private void mostraFormNotifica(String testoNotifica) {
 		this.showMessageDialog(null, modificaNotificaPanel, "Modifica notifica", this.QUESTION_MESSAGE);
 
-		dataField.setText("");
-		oraField.setText("");
 		testoField.setText(testoNotifica);
 		dataField.setBackground(Color.WHITE);
 		oraField.setBackground(Color.WHITE);
 		testoField.setBackground(Color.WHITE);
 
-		dataPubblicazione.put("data", dataField.getText());
-		dataPubblicazione.put("ora", oraField.getText());
-		testoNotifica = testoField.getText();
+		dataScadenza.put("data", dataField.getText());
+		dataScadenza.put("ora", oraField.getText());
 	}
 
 	public void avvioRicercaNotifiche() throws RemoteException
@@ -264,8 +258,8 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 				dataField.setBackground(Color.YELLOW);
 				break;
 			case "errore formato ora":
-				messaggio = "La ora fornita non è in formato HH:mm.";
-				oraField.setBackground(Color.YELLOW);
+				messaggio = "L'ora fornita non è in formato HH:mm:ss.";
+				oraField.setBackground(Color.RED);
 				break;
 			case "errore data":
 				messaggio = "La data fornita non è compatibile con la data di pubblicazione.";
@@ -287,14 +281,21 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 				testoField.setBackground(Color.RED);
 				break;
 		}
-		this.showMessageDialog(null, messaggio, "Errore", this.ERROR_MESSAGE);
+		this.showMessageDialog(null, messaggio, "Errore", this.ERROR_MESSAGE, null);
 	}
 
-	private HashMap<String, Object> setDataPubblicazione() {
-		dataPubblicazione.put("data", LocalDate.now());
-		dataPubblicazione.put("ora", LocalTime.now());
+	private HashMap<String, String> setDataPubblicazione() {
+		dataPubblicazione.put("data", LocalDate.now().toString());
+		dataPubblicazione.put("ora", LocalTime.now().truncatedTo(ChronoUnit.SECONDS).toString());
 
 		return dataPubblicazione;
+	}
+
+	private HashMap<String, String> setDataScadenzaDefault() {
+		dataScadenza.put("data", LocalDate.now().plusDays(1).toString());
+		dataScadenza.put("ora", LocalTime.now().truncatedTo(ChronoUnit.SECONDS).toString());
+
+		return dataScadenza;
 	}
 
 }

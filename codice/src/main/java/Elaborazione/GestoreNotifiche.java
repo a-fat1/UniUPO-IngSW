@@ -87,8 +87,8 @@ public class GestoreNotifiche implements GestoreNotificheInterfaccia {
         }
     }
 
-    public void inserimentoNotifica(HashMap<String, Object> dataPubblicazione, HashMap<String, Object> dataScadenza, String testoNotifica, String tipoUtente) throws RemoteException {
-        String comandoSql = "INSERT INTO Notifica (dataPubblicazione, dataScadenza, testo, tipoUtente) values (\"" + dataPubblicazione.get("data") + " " + dataPubblicazione.get("ora") + "\", \"" + dataScadenza.get("data") + dataScadenza.get("ora") + "\", \"" + testoNotifica + "\", \"" + tipoUtente + "\");";
+    public void inserimentoNotifica(HashMap<String, String> dataPubblicazione, HashMap<String, String> dataScadenza, String testoNotifica, String tipoUtente) throws RemoteException {
+        String comandoSql = "INSERT INTO Notifica (dataPubblicazione, dataScadenza, testo, tipoUtente) values (\"" + dataPubblicazione.get("data") + " " + dataPubblicazione.get("ora") + "\", \"" + dataScadenza.get("data") + " " + dataScadenza.get("ora") + "\", \"" + testoNotifica + "\", \"" + tipoUtente + "\");";
 
         dbNotifiche.update(comandoSql);
     }

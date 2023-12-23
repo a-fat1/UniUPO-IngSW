@@ -71,7 +71,7 @@ public interface GestoreNotificheInterfaccia extends Remote
      * @param tipoUtente il tipo di utente interessato
      * @throws RemoteException
      */
-    void inserimentoNotifica(HashMap<String, Object> dataPubblicazione, HashMap<String, Object> dataScadenza, String testoNotifica, String tipoUtente) throws RemoteException;
+    void inserimentoNotifica(HashMap<String, String> dataPubblicazione, HashMap<String, String> dataScadenza, String testoNotifica, String tipoUtente) throws RemoteException;
     
     /**
      * RF21: Ricerca Notifiche
