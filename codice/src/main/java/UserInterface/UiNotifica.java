@@ -33,6 +33,7 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 	// componenti
 	private GestoreNotificheInterfaccia gestoreNotifiche;
 
+	// attributi
 	// RF04: genera notifica (Monfermoso, Magenta Biasina)
 	private HashMap<String, Object> utente;
 	private HashMap<String, Object> prodotto;
@@ -45,8 +46,8 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 	// elementi grafici
 	//RF04: genera notifica (Monfermoso, Magenta Biasina)
 	private JLabel dataLabel;
-	private JLabel testoLabel;
 	private JLabel oraLabel;
+	private JLabel testoLabel;
 	private JTextField dataField;
 	private JTextField oraField;
 	private JTextField testoField;
@@ -64,6 +65,73 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 
 		gestoreNotifiche = (GestoreNotificheInterfaccia) registryGestore.lookup("gestoreNotifiche");
 
+		inizializzaUIRF04();
+	}
+
+	public void avvioVisualizzaNotifiche(String tipoUtente) throws RemoteException
+	{ // RF01 Galletti-Calcaterra
+		int id;
+		String testo, tipodiUtente, dataPubblicazione, dataScadenza;
+		ArrayList<HashMap<String, Object>> lista = null;
+		LocalDateTime myDateObj = LocalDateTime.now();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		// Formattare la data utilizzando il formato personalizzato
+		String formattedDate = myDateObj.format(formatter);
+		lista = gestoreNotifiche.ricercaNotifiche(tipoUtente, formattedDate);
+		int dim = lista.size();
+		if (dim == 0) {
+			JLabel messaggio = new JLabel("Nessuna notifica");
+			pannello.add(messaggio);
+			this.showMessageDialog(pannello, messaggio);
+		} else {
+			JTable tabella = creaTabella(dim);
+			tabella=inserisciDatiTabella(tabella, lista, dim);
+			pannello_tabella = new JScrollPane(tabella);
+			pannello_tabella.setPreferredSize(new Dimension(800, 250));
+			this.showMessageDialog(null, pannello_tabella);
+		}
+	}
+	private JTable creaTabella(int dim) { // RF01 Galletti-Calcaterra
+		JTable tabella = new JTable(dim, 4){
+			@Override
+			public boolean editCellAt(int row, int column, EventObject e) {
+				return false;
+			}
+		};
+		tabella.getColumnModel().getColumn(0).setHeaderValue("Data");
+		tabella.getColumnModel().getColumn(0).setPreferredWidth(150);
+		tabella.getColumnModel().getColumn(1).setHeaderValue("Contenuto");
+		tabella.getColumnModel().getColumn(1).setPreferredWidth(400);
+		tabella.getColumnModel().getColumn(2).setHeaderValue("Destinatario");
+		tabella.getColumnModel().getColumn(2).setPreferredWidth(100);
+		tabella.getColumnModel().getColumn(3).setHeaderValue("Scadenza");
+		tabella.getColumnModel().getColumn(3).setPreferredWidth(150);
+		tabella.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		return tabella;
+	}
+
+	// RF01 Galletti-Calcaterra
+	private JTable inserisciDatiTabella(JTable tabella, ArrayList<HashMap<String, Object>> lista, int dim){
+		for (int i = 0; i < dim; i++) {
+			String testo = (String) lista.get(i).get("testo");
+			String dataPubblicazione = (String) lista.get(i).get("dataPubblicazione");
+			String dataScadenza = (String) lista.get(i).get("dataScadenza");
+			String tipodiUtente = (String) lista.get(i).get("tipoUtente");
+
+			tabella.setValueAt(dataPubblicazione, i, 0);
+			tabella.setValueAt(testo, i, 1);
+			tabella.setValueAt(tipodiUtente, i, 2);
+			tabella.setValueAt(dataScadenza, i, 3);
+		}
+		return tabella;
+	}
+
+	/**
+	 * RF04: Inizializza gli attributi per generare la finestra di dialogo di avvioGeneraNotifica()
+	 *
+	 * @author Linda Monfermoso, Gabriele Magenta Biasina
+	 */
+	public void inizializzaUIRF04() {
 		dataField = new JTextField("", 20);
 		dataLabel = new JLabel("Inserisci data di scadenza: ");
 		dataField.setToolTipText("Data");
@@ -109,90 +177,36 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 		modificaNotificaPanel.add(testoField,constrains);
 	}
 
-	public void avvioVisualizzaNotifiche(String tipoUtente) throws RemoteException
-	{ // RF01 Galletti-Calcaterra
-		int id;
-		String testo, tipodiUtente, dataPubblicazione, dataScadenza;
-		ArrayList<HashMap<String, Object>> lista = null;
-		LocalDateTime myDateObj = LocalDateTime.now();
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-		// Formattare la data utilizzando il formato personalizzato
-		String formattedDate = myDateObj.format(formatter);
-		lista = gestoreNotifiche.ricercaNotifiche(tipoUtente, formattedDate);
-		int dim = lista.size();
-		if (dim == 0) {
-			JLabel messaggio = new JLabel("Nessuna notifica");
-			pannello.add(messaggio);
-			this.showMessageDialog(pannello, messaggio);
-		} else {
-			JTable tabella = creaTabella(dim);
-			tabella=inserisciDatiTabella(tabella, lista, dim);
-			pannello_tabella = new JScrollPane(tabella);
-			pannello_tabella.setPreferredSize(new Dimension(800, 250));
-			this.showMessageDialog(null, pannello_tabella);
-		}
-	}
-	private JTable creaTabella(int dim) { // RF01 Galletti-Calcaterra
-		JTable tabella = new JTable(dim, 4){
-			@Override
-			public boolean editCellAt(int row, int column, java.util.EventObject e) {
-				return false;
-			}
-		};
-		tabella.getColumnModel().getColumn(0).setHeaderValue("Data");
-		tabella.getColumnModel().getColumn(0).setPreferredWidth(150);
-		tabella.getColumnModel().getColumn(1).setHeaderValue("Contenuto");
-		tabella.getColumnModel().getColumn(1).setPreferredWidth(400);
-		tabella.getColumnModel().getColumn(2).setHeaderValue("Destinatario");
-		tabella.getColumnModel().getColumn(2).setPreferredWidth(100);
-		tabella.getColumnModel().getColumn(3).setHeaderValue("Scadenza");
-		tabella.getColumnModel().getColumn(3).setPreferredWidth(150);
-		tabella.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		return tabella;
-	}
-
-	// RF01 Galletti-Calcaterra
-	private JTable inserisciDatiTabella(JTable tabella, ArrayList<HashMap<String, Object>> lista, int dim){
-		for (int i = 0; i < dim; i++) {
-			String testo = (String) lista.get(i).get("testo");
-			String dataPubblicazione = (String) lista.get(i).get("dataPubblicazione");
-			String dataScadenza = (String) lista.get(i).get("dataScadenza");
-			String tipodiUtente = (String) lista.get(i).get("tipoUtente");
-
-			tabella.setValueAt(dataPubblicazione, i, 0);
-			tabella.setValueAt(testo, i, 1);
-			tabella.setValueAt(tipodiUtente, i, 2);
-			tabella.setValueAt(dataScadenza, i, 3);
-		}
-		return tabella;
-	}
-
 	/**
 	 * RF04: Avvia la generazione di una notifica
 	 *
 	 * @author  Linda Monfermoso, Gabriele Magenta Biasina
 	 */
 	public void avvioGeneraNotifica(String tipoNotifica, HashMap<String, Object> prodotto, HashMap<String, Object> ordine, HashMap<String, Object> utente) throws RemoteException {
-		String testoNotifica = "";
-		String esitoNotifica = "";
+		String testoNotifica;
+		String esitoNotifica;
+		dataPubblicazione = new HashMap<>();
 
 		switch (tipoNotifica) {
 			case "nuovo prodotto":
 				testoNotifica = gestoreNotifiche.generaTestoNotificaProdotto(prodotto);
 				do {
 					this.mostraFormNotifica(testoNotifica);
-					esitoNotifica = gestoreNotifiche.verificaCorrettezzaDati(dataField.getText(), oraField.getText(), testoField.getText());
+					esitoNotifica = gestoreNotifiche.verificaCorrettezzaDati(dataPubblicazione.get("data").toString(), dataPubblicazione.get("ora").toString(), testoNotifica);
 					if (esitoNotifica.contains("errore")) {
 						mostraErrore(esitoVerifica);
 					}
 				} while(!Objects.equals(esitoNotifica, "ok"));
+				gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), dataScadenza, testoNotifica, utente.get("tipoUtente").toString());
 				break;
 			case "nuovo ordine":
 				testoNotifica = gestoreNotifiche.generaTestoNotificaOrdine(ordine);
+				// TODO: qui dataScadenza non è impostata
 				gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), dataScadenza, testoNotifica, utente.get("tipoUtente").toString());
 				break;
 			case "nuovo utente":
 				testoNotifica = gestoreNotifiche.generaTestoNotificaUtente(utente);
+				// TODO: qui dataScadenza non è impostata
 				gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), dataScadenza, testoNotifica, utente.get("tipoUtente").toString());
 				break;
 			case "avviso":
@@ -204,9 +218,11 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 						mostraErrore(esitoVerifica);
 					}
 				} while(!Objects.equals(esitoNotifica, "ok"));
+				gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), dataScadenza, testoNotifica, utente.get("tipoUtente").toString());
 				break;
-
-		}
+            default:
+                throw new IllegalStateException("Valore inatteso: " + tipoNotifica);
+        }
 	}
 
 	/**
@@ -215,13 +231,18 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 	 * @author  Linda Monfermoso, Gabriele Magenta Biasina
 	 */
 	private void mostraFormNotifica(String testoNotifica) {
-		this.showMessageDialog(null, modificaNotificaPanel, "Modifica notifica", this.OK_CANCEL_OPTION);
+		this.showMessageDialog(null, modificaNotificaPanel, "Modifica notifica", this.QUESTION_MESSAGE);
+
 		dataField.setText("");
 		oraField.setText("");
 		testoField.setText(testoNotifica);
 		dataField.setBackground(Color.WHITE);
 		oraField.setBackground(Color.WHITE);
 		testoField.setBackground(Color.WHITE);
+
+		dataPubblicazione.put("data", dataField.getText());
+		dataPubblicazione.put("ora", oraField.getText());
+		testoNotifica = testoField.getText();
 	}
 
 	public void avvioRicercaNotifiche() throws RemoteException
@@ -236,28 +257,26 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 	private void mostraErrore(String tipoErrore) {
 		String messaggio = "";
 
+		// TODO: aggiungere errori per data/ora mancanti (bisogna modificare gestoreNotifiche)
 		switch(tipoErrore) {
 			case "errore formato data":
 				messaggio = "La data fornita non è in formato YYYY-MM-DD.";
 				dataField.setBackground(Color.RED);
-				this.showMessageDialog(null,messaggio, "errore", ERROR_MESSAGE);
 				break;
 			case "errore formato ora":
 				messaggio = "La ora fornita non è in formato HH:mm.";
 				oraField.setBackground(Color.RED);
-				this.showMessageDialog(null,messaggio, "errore", ERROR_MESSAGE);
 				break;
 			case "errore data":
 				messaggio = "La data fornita non è compatibile con la data di pubblicazione.";
 				dataField.setBackground(Color.RED);
-				this.showMessageDialog(null,messaggio, "errore", ERROR_MESSAGE);
 				break;
 			case "errore testo notifica":
 				messaggio = "Il testo della notifica non può essere vuoto.";
-				testoField.setBackground(Color.RED);
-				this.showMessageDialog(null,messaggio, "errore", ERROR_MESSAGE);
+				testoField.setBackground(Color.YELLOW);
 				break;
 		}
+		this.showMessageDialog(null, messaggio, "Errore", this.ERROR_MESSAGE);
 	}
 
 	private HashMap<String, Object> setDataPubblicazione() {
