@@ -4,15 +4,12 @@ import java.awt.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.EventObject;
-import java.util.HashMap;
-import java.util.ArrayList;
+import java.util.*;
 
 import java.rmi.registry.Registry; 
 import java.rmi.registry.LocateRegistry; 
 import java.rmi.RemoteException;
 import java.rmi.NotBoundException;
-import java.util.Objects;
 
 import java.time.LocalTime;
 
@@ -201,12 +198,13 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 				break;
 			case "nuovo ordine":
 				testoNotifica = gestoreNotifiche.generaTestoNotificaOrdine(ordine);
-				// TODO: qui dataScadenza non è impostata
+				Date dataScadenza= new Date();
 				gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), dataScadenza, testoNotifica, utente.get("tipoUtente").toString());
 				break;
 			case "nuovo utente":
 				testoNotifica = gestoreNotifiche.generaTestoNotificaUtente(utente);
 				// TODO: qui dataScadenza non è impostata
+				Date dataScadenza= new Date();
 				gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), dataScadenza, testoNotifica, utente.get("tipoUtente").toString());
 				break;
 			case "avviso":
@@ -257,23 +255,36 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 	private void mostraErrore(String tipoErrore) {
 		String messaggio = "";
 
-		// TODO: aggiungere errori per data/ora mancanti (bisogna modificare gestoreNotifiche)
+		// TODO:  bisogna modificare gestoreNotifiche per le nuove notifiche aggiunte
+		//YELLOW per gli errori di inserimento/ sintassi
+		//RED per il mancato inserimento del dato
 		switch(tipoErrore) {
 			case "errore formato data":
 				messaggio = "La data fornita non è in formato YYYY-MM-DD.";
-				dataField.setBackground(Color.RED);
+				dataField.setBackground(Color.YELLOW);
 				break;
 			case "errore formato ora":
 				messaggio = "La ora fornita non è in formato HH:mm.";
-				oraField.setBackground(Color.RED);
+				oraField.setBackground(Color.YELLOW);
 				break;
 			case "errore data":
 				messaggio = "La data fornita non è compatibile con la data di pubblicazione.";
-				dataField.setBackground(Color.RED);
+				dataField.setBackground(Color.YELLOW);
 				break;
 			case "errore testo notifica":
 				messaggio = "Il testo della notifica non può essere vuoto.";
-				testoField.setBackground(Color.YELLOW);
+				testoField.setBackground(Color.RED);
+				break;
+			case "data/ora mancanti":
+				messaggio = "Data e Ora non possono essere mancanti.";
+				dataField.setBackground(Color.RED);
+				oraField.setBackground(Color.RED);
+				break;
+			case "mancante":
+				messaggio = "Data, Ora e Testo non possono essere mancanti.";
+				dataField.setBackground(Color.RED);
+				oraField.setBackground(Color.RED);
+				testoField.setBackground(Color.RED);
 				break;
 		}
 		this.showMessageDialog(null, messaggio, "Errore", this.ERROR_MESSAGE);

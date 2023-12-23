@@ -183,6 +183,10 @@ public class Prototipo extends JFrame
 			utente.put("nome", "Aldo");
 			utente.put("cognome", "Bruni");
 
+			if (prodotto == null) {
+				prodotto = new HashMap<>();
+			}
+
 			uiNotifica.avvioGeneraNotifica("avviso", prodotto, ordine, utente);
 
 			System.exit(0);
