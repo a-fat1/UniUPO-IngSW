@@ -63,7 +63,6 @@ public class GestoreNotifiche implements GestoreNotificheInterfaccia {
 
     public String verificaCorrettezzaDati(String data, String ora, String testoNotifica) throws RemoteException {
         String esitoVerifica = "errore ";
-        int lenTxt = testoNotifica.length();
 
         // controllo formato data
         try {
@@ -80,7 +79,7 @@ public class GestoreNotifiche implements GestoreNotificheInterfaccia {
             return esitoVerifica + "data";
         }
         // controllo lunghezza testo
-        else if (lenTxt == 0) {
+        else if (testoNotifica.isEmpty()) {
             return esitoVerifica + "testo notifica";
         } else {
             return "ok";

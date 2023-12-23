@@ -49,7 +49,7 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 	private JLabel testoLabel;
 	private JTextField dataField;
 	private JTextField oraField;
-	private JTextField testoField;
+	private JTextArea testoField;
 	private JPanel modificaNotificaPanel;
 	// RF01 Galletti-Calcaterra
 	JPanel pannello = new JPanel(); // Nuova finestra
@@ -142,7 +142,8 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 		oraLabel = new JLabel("Inserisci l'ora di scadenza: ");
 		oraField.setToolTipText("Ora");
 
-		testoField = new JTextField("", 50);
+		testoField = new JTextArea(10, 40);
+		testoField.setLineWrap(true);
 		testoLabel = new JLabel("Inserisci testo notifica:");
 		testoField.setToolTipText("Testo");
 
@@ -174,7 +175,6 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 		constraints.gridy=3;
 		constraints.gridx=2;
 		constraints.gridwidth=5;
-		constraints.ipady = 100;
 		modificaNotificaPanel.add(testoField,constraints);
 	}
 
@@ -183,37 +183,39 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 	 *
 	 * @author  Linda Monfermoso, Gabriele Magenta Biasina
 	 */
-	public void avvioGeneraNotifica(String tipoNotifica, HashMap<String, Object> prodotto, HashMap<String, Object> ordine, HashMap<String, Object> utente) throws RemoteException {
+	public void avvioGeneraNotifica(String tipoNotifica, HashMap<String, Object> prodotto, HashMap<String, Object> ordine, HashMap<String, Object> utente, String tipoUtente) throws RemoteException {
 		switch (tipoNotifica) {
 			case "nuovo prodotto":
 				testoNotifica = gestoreNotifiche.generaTestoNotificaProdotto(prodotto);
 				do {
 					this.mostraFormNotifica(testoNotifica);
+					testoNotifica = testoField.getText();
 					esitoVerifica = gestoreNotifiche.verificaCorrettezzaDati(dataScadenza.get("data"), dataScadenza.get("ora"), testoNotifica);
 					if (esitoVerifica.contains("errore")) {
 						mostraErrore(esitoVerifica);
 					}
 				} while(!Objects.equals(esitoVerifica, "ok"));
-				gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), dataScadenza, testoNotifica, utente.get("tipoUtente").toString());
+				gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), dataScadenza, testoField.getText(), tipoUtente);
 				break;
 			case "nuovo ordine":
 				testoNotifica = gestoreNotifiche.generaTestoNotificaOrdine(ordine);
-				gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), dataScadenza, testoNotifica, utente.get("tipoUtente").toString());
+				gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), dataScadenza, testoNotifica, tipoUtente);
 				break;
 			case "nuovo utente":
 				testoNotifica = gestoreNotifiche.generaTestoNotificaUtente(utente);
-				gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), setDataScadenzaDefault(), testoNotifica, utente.get("tipoUtente").toString());
+				gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), setDataScadenzaDefault(), testoNotifica, tipoUtente);
 				break;
 			case "avviso":
 				testoNotifica = gestoreNotifiche.generaTestoNotificaAvviso();
 				do {
 					this.mostraFormNotifica(testoNotifica);
+					testoNotifica = testoField.getText();
 					esitoVerifica = gestoreNotifiche.verificaCorrettezzaDati(dataScadenza.get("data"), dataScadenza.get("ora"), testoNotifica);
 					if (esitoVerifica.contains("errore")) {
 						mostraErrore(esitoVerifica);
 					}
 				} while(!Objects.equals(esitoVerifica, "ok"));
-				gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), dataScadenza, testoNotifica, utente.get("tipoUtente").toString());
+				gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), dataScadenza, testoNotifica, tipoUtente);
 				break;
             default:
                 throw new IllegalStateException("Valore inatteso: " + tipoNotifica);
@@ -226,9 +228,10 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 	 * @author  Linda Monfermoso, Gabriele Magenta Biasina
 	 */
 	private void mostraFormNotifica(String testoNotifica) {
+		testoField.setText(testoNotifica);
+
 		this.showMessageDialog(null, modificaNotificaPanel, "Modifica notifica", this.QUESTION_MESSAGE);
 
-		testoField.setText(testoNotifica);
 		dataField.setBackground(Color.WHITE);
 		oraField.setBackground(Color.WHITE);
 		testoField.setBackground(Color.WHITE);
@@ -249,13 +252,10 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 	private void mostraErrore(String tipoErrore) {
 		String messaggio = "";
 
-		// TODO:  bisogna modificare gestoreNotifiche per le nuove notifiche aggiunte
-		//YELLOW per gli errori di inserimento/ sintassi
-		//RED per il mancato inserimento del dato
 		switch(tipoErrore) {
 			case "errore formato data":
 				messaggio = "La data fornita non è in formato YYYY-MM-DD.";
-				dataField.setBackground(Color.YELLOW);
+				dataField.setBackground(Color.RED);
 				break;
 			case "errore formato ora":
 				messaggio = "L'ora fornita non è in formato HH:mm:ss.";
@@ -263,22 +263,11 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 				break;
 			case "errore data":
 				messaggio = "La data fornita non è compatibile con la data di pubblicazione.";
-				dataField.setBackground(Color.YELLOW);
+				dataField.setBackground(Color.RED);
 				break;
 			case "errore testo notifica":
 				messaggio = "Il testo della notifica non può essere vuoto.";
-				testoField.setBackground(Color.RED);
-				break;
-			case "data/ora mancanti":
-				messaggio = "Data e Ora non possono essere mancanti.";
-				dataField.setBackground(Color.RED);
-				oraField.setBackground(Color.RED);
-				break;
-			case "mancante":
-				messaggio = "Data, Ora e Testo non possono essere mancanti.";
-				dataField.setBackground(Color.RED);
-				oraField.setBackground(Color.RED);
-				testoField.setBackground(Color.RED);
+				testoField.setBackground(Color.YELLOW);
 				break;
 		}
 		this.showMessageDialog(null, messaggio, "Errore", this.ERROR_MESSAGE, null);

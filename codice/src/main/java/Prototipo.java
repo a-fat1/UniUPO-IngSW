@@ -182,9 +182,8 @@ public class Prototipo extends JFrame
 			prodotto.put("titolo", "Calcolo Integrale e Differenziale 2");
 			utente.put("nome", "Aldo");
 			utente.put("cognome", "Bruni");
-			utente.put("tipoUtente", "cliente");
 
-			uiNotifica.avvioGeneraNotifica("nuovo prodotto", prodotto, ordine, utente);
+			uiNotifica.avvioGeneraNotifica("nuovo prodotto", prodotto, ordine, utente, "cliente");
 
 			System.exit(0);
 		}
