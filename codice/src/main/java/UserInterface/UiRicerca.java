@@ -33,7 +33,6 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 	// elementi grafici
 	// RF19
 	private JPanel searchPanel;
-
 	private JLabel labelUsername;
 	private JLabel labelNome;
 	private JLabel labelCognome;
@@ -41,6 +40,8 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 	private JTextField fieldUsername;
 	private JTextField fieldNome;
 	private JTextField fieldCognome;
+
+	private JFrame frameRicercaUtente;
 	private int result;
 	private String nome;
 	private String cognome;
@@ -75,7 +76,7 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 		scelteMenuRicercaUtente[1] = "Ricerca per username";
 		comboMenu = new JComboBox<>(scelteMenuRicercaUtente);
 
-		colonneAmministratore = new String[]{"Nome", "Cognome", "Username", "Tipo utente"};
+		colonneAmministratore = new String[]{"Nome", "Cognome", "Username", "Attivo"};
 
 		colonneStaff = new String[]{"Nome", "Cognome", "Username", "Tipo utente", "Attivo"};
 
@@ -94,6 +95,8 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 		pulsanteElencoUtentiStaff[1] = "Lista ordini";
 		pulsanteElencoUtentiAdmin = new String[1];
 		pulsanteElencoUtentiAdmin[0] = "Blocca\\Sblocca utente";
+
+
 
 		elencoUtenti = new ArrayList<>();
 
@@ -188,7 +191,8 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 	{
 
 		result = JOptionPane.showOptionDialog(null, searchPanel, "Ricerca utente (clicca X per uscire)",
-				DEFAULT_OPTION, QUESTION_MESSAGE, null, pulsanteRicerca, "Ricerca");
+				DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, pulsanteRicerca, "Ricerca");
+
 		scelta = Objects.requireNonNull(comboMenu.getSelectedItem()).toString();
 		nome = fieldNome.getText();
 		cognome = fieldCognome.getText();
@@ -259,35 +263,52 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 				utentiTabella[i][0] = elencoUtenti.get(i).get("nome");
 				utentiTabella[i][1] = elencoUtenti.get(i).get("cognome");
 				utentiTabella[i][2] = elencoUtenti.get(i).get("username");
-				utentiTabella[i][3] = elencoUtenti.get(i).get("attivo");
+				if(elencoUtenti.get(i).get("attivo").toString().equals("1")) {
+					utentiTabella[i][3] = "True";
+				}
+				else {
+					utentiTabella[i][3] = "False";
+				}
 			}
 			table = new JTable(utentiTabella, colonneAmministratore);
 		}
-		
+
+        assert table != null;
+        ListSelectionModel selectionModel = table.getSelectionModel();
+		selectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
 		JScrollPane tabella = new JScrollPane(table);
 		tabella.setPreferredSize((new Dimension(500, 200)));
 
-		if(genereUtente.equals("staff"))
-			azione = showOptionDialog(null, tabella, "elenco utenti",
-					DEFAULT_OPTION, QUESTION_MESSAGE, null,
-					pulsanteElencoUtentiStaff, null);
+		while(table.getSelectedRow() == -1)
+		{
+			if(genereUtente.equals("staff"))
+				azione = showOptionDialog(null, tabella, "elenco utenti",
+						DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null,
+						pulsanteElencoUtentiStaff, null);
 
-		else if(genereUtente.equals("amministratore"))
-			azione = showOptionDialog(null, tabella, "elenco utenti",
-					DEFAULT_OPTION, QUESTION_MESSAGE, null,
-					pulsanteElencoUtentiAdmin, null);
+			else if(genereUtente.equals("amministratore"))
+				azione = showOptionDialog(null, tabella, "elenco utenti",
+						DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null,
+						pulsanteElencoUtentiAdmin, null);
+		}
 
 		if(azione == 0 && genereUtente.equals("staff"))
 		{
+			//uiLista.avvioListaPagamenti(table.getModel().getValueAt(table.getSelectedRow(), 2).toString());
 			// richiamo lista pagamenti
 		}
 		else if(azione == 1 && genereUtente.equals("staff"))
 		{
+			//uiLista.avvioListaOrdini(table.getModel().getValueAt(table.getSelectedRow(), 2).toString());
 			// richiamo lista ordini
 		}
 		else if(azione == 0 && genereUtente.equals("amministratore"))
 		{
+			System.out.println(value);
 			// richiamo blocca\sblocca utente
+			//uiUtente.avvioBloccaSbloccaUtente(table.getModel().getValueAt(table.getSelectedRow(), 2).toString());
+			// devo mandare anche il parametro per vedere se è attivo o meno
 		}
 	}
 
