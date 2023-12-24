@@ -280,7 +280,7 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 		JScrollPane tabella = new JScrollPane(table);
 		tabella.setPreferredSize((new Dimension(500, 200)));
 
-		while(table.getSelectedRow() == -1)
+		while(table.getSelectedRow() == -1 && azione != -1)
 		{
 			if(genereUtente.equals("staff"))
 				azione = showOptionDialog(null, tabella, "elenco utenti",
@@ -291,6 +291,7 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 				azione = showOptionDialog(null, tabella, "elenco utenti",
 						DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null,
 						pulsanteElencoUtentiAdmin, null);
+			
 		}
 
 		if(azione == 0 && genereUtente.equals("staff"))
