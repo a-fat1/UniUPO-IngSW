@@ -26,7 +26,10 @@ public interface GestoreNotificheInterfaccia extends Remote
     /**
      * RF04: Genera il testo della notifica per un nuovo ordine.
      *
-     * @author  Linda Monfermoso, Gabriele Magenta Biasina
+     * @author Linda Monfermoso, Gabriele Magenta Biasina
+     * @param ordine l'ordine in questione
+     * @return il testo della notifica
+     * @throws RemoteException
      */
     String generaTestoNotificaOrdine(HashMap<String, Object> ordine) throws RemoteException;
 

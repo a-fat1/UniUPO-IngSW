@@ -251,8 +251,8 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 	 */
 	private void mostraErrore(String tipoErrore) {
 		String messaggio = "";
-// YELLOW per quanto riguarda errori di inserimento/sintassi
-// RED per quanto riguarda il mancnato inserimento
+	// YELLOW per quanto riguarda errori di inserimento/sintassi
+	// RED per quanto riguarda il mancato inserimento
 		switch(tipoErrore) {
 			case "errore formato data":
 				messaggio = "La data fornita non e' in formato YYYY-MM-DD.";
