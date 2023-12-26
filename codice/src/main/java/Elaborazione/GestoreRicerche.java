@@ -29,26 +29,40 @@ public class GestoreRicerche implements GestoreRicercheInterfaccia
 		dbProdotti = d2;
 	}
 
-	@Override
-	public int controlloGiacenza(String giacenza) throws RemoteException
-	{
-		if (giacenza == null)
-			return 1; 
-		if (!giacenza.matches("\\d+")) 
-            return 2;
-		if(Integer.parseInt(giacenza) == 0)
+	public int controlloGiacenza(String giacenza) throws RemoteException {
+
+	    // RF18: Prodotti in esaurimento
+		// Alessandro Fatone, Dario Guidotti
+
+		if (giacenza == null || !giacenza.matches("\\d+"))	// Controllo per giacenza nulla e caratteri numerici
+			return 1;
+
+		String valoreMassimoIntero = String.valueOf(Integer.MAX_VALUE);		// Controllo lunghezza giacenza con Integer.MAX_VALUE
+		if (giacenza.length() > valoreMassimoIntero.length())
+			return 2;
+		else
+			if(giacenza.length() == valoreMassimoIntero.length())	// Quando hanno la stessa lunghezza
+				for (int i = 0; i < valoreMassimoIntero.length(); i++)	// Controllo giacenza con Integer.MAX_VALUE per ogni carattere
+					if(giacenza.charAt(i) > valoreMassimoIntero.charAt(i))
+						return 2;
+
+		if (Integer.parseInt(giacenza) == 0)	// Controllo giacenza diversa da zero
 			return 3;
-		return 0; 
-        
+
+		return 0;
 	}
 
-	@Override
-	public ArrayList<HashMap<String, Object>> ricercaProdotti(String giacenza)throws RemoteException {
+	public ArrayList<HashMap<String, Object>> ricercaProdotti(String giacenza) throws RemoteException {
+
+        // RF18: Prodotti in esaurimento
+		// Alessandro Fatone, Dario Guidotti
+		
+		// Se la query ha successo ritorna un ArrayList con il contenuto desiderato,
+		// altrimenti viene ritornato un ArrayList vuoto
 		try {
-			return dbProdotti.query("SELECT * FROM Prodotto WHERE Quantita ≤ " +giacenza);
+			return dbProdotti.query("SELECT * FROM Prodotto WHERE Quantita <= " + giacenza);
 		} catch (RemoteException e) {
 			return new ArrayList<>();
-		} 
-	}
+		}
+    }
 }
-
