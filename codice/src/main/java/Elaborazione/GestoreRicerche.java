@@ -57,12 +57,10 @@ public class GestoreRicerche implements GestoreRicercheInterfaccia
         // RF18: Prodotti in esaurimento
 		// Alessandro Fatone, Dario Guidotti
 		
-		// Se la query ha successo ritorna un ArrayList con il contenuto desiderato,
-		// altrimenti viene ritornato un ArrayList vuoto
-		try {
+		try {	// Se la query ha successo ritorna un ArrayList con il contenuto desiderato
 			return dbProdotti.query("SELECT * FROM Prodotto WHERE Quantita <= " + giacenza);
 		} catch (RemoteException e) {
-			return new ArrayList<>();
+			return new ArrayList<>();	// In caso contrario viene ritornato un ArrayList vuoto
 		}
     }
 }
