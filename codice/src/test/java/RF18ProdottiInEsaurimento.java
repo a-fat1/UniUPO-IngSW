@@ -26,7 +26,19 @@ public class RF18ProdottiInEsaurimento {
     @Test
     public void testControlloGiacenzaNonNumerico() throws RemoteException {
         // Test per verificare l'errore della giacenza invalida (caratteri non consentiti, compresi i numeri negativi)
-        assertEquals(2, gestoreRicerche.controlloGiacenza("abc"));
+        assertEquals(1, gestoreRicerche.controlloGiacenza("abc"));
+    }
+
+    @Test
+    public void testControlloGiacenzaOverflow1() throws RemoteException {
+        // Test per verificare l'errore di overflow (di caratteri in eccesso)
+        assertEquals(2, gestoreRicerche.controlloGiacenza("1000000000000"));
+    }
+
+    @Test
+    public void testControlloGiacenzaOverflow2() throws RemoteException {
+        // Test per verificare l'errore di overflow (con un valore troppo elevato)
+        assertEquals(2, gestoreRicerche.controlloGiacenza("2147483648"));
     }
 
     @Test
