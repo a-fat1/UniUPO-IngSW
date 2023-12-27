@@ -5,7 +5,7 @@ import java.rmi.RemoteException;
 
 public interface UiUtenteInterfaccia extends Remote
 {
-	void avvioCreaUtente() throws RemoteException;
+	void avvioCreaUtente(boolean cliente) throws RemoteException;
 	void avvioBloccaSbloccaUtente() throws RemoteException;
 	void avvioAggiornaDomicilio() throws RemoteException;
 }
