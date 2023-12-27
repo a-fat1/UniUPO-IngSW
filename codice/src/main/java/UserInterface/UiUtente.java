@@ -24,6 +24,7 @@ public class UiUtente extends JOptionPane implements UiUtenteInterfaccia
 	private Registry registryGestore;
 
 	// componenti
+	private UiLoginInterfaccia uiLogin;
 	private UiNotificaInterfaccia uiNotifica;
 	private GestoreAccessiInterfaccia gestoreAccessi;
 
@@ -41,12 +42,17 @@ public class UiUtente extends JOptionPane implements UiUtenteInterfaccia
 		registryUI = LocateRegistry.getRegistry("127.0.0.1", 1100); // default: 1099
 		registryGestore = LocateRegistry.getRegistry(hostGestore, 1099); 
 
+		uiLogin = null;
 		uiNotifica = (UiNotificaInterfaccia) registryUI.lookup("uiNotifica");
 		gestoreAccessi = (GestoreAccessiInterfaccia) registryGestore.lookup("gestoreAccessi");
 	}
 	
-	public void avvioCreaUtente() throws RemoteException
+	public void avvioCreaUtente(boolean cliente) throws RemoteException, NotBoundException
 	{ 	// RF02
+
+		if (uiLogin == null)
+			uiLogin = (UiLoginInterfaccia) registryUI.lookup("uiLogin");
+
 		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel(new GridLayout(0, 2, 50, 5));
