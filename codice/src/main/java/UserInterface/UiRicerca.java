@@ -28,16 +28,16 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 	private GestoreRicercheInterfaccia gestoreRicerche;
 
 	// attributi
-	private int scelta, esitoGiacenza = -1;
-	private String giacenza;
-	ArrayList<HashMap<String, Object>> listaProdotti;
+	private int scelta, esitoGiacenza = -1;		// RF18
+	private String giacenza;	// RF18
+	ArrayList<HashMap<String, Object>> listaProdotti;		//RF18
 	
 	// elementi grafici
-	private JPanel pannelloGiacenza;
-	private JTextField campoGiacenza;
-	private JTable tabellaProdotti;
-	private JScrollPane pannelloGiacenzaScorrevole;
-	private String giacenzaPulsanti[] = new String[2];
+	private JPanel pannelloGiacenza;	// RF18
+	private JTextField campoGiacenza;	// RF18
+	private JTable tabellaProdotti;		// RF18
+	private JScrollPane pannelloGiacenzaScorrevole;		// RF18
+	private String giacenzaPulsanti[] = new String[2];	// RF18
 	
 	public UiRicerca(String hostGestore) throws RemoteException, NotBoundException
 	{
@@ -133,7 +133,7 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 		if (tipoErrore == 1)
 			UiRicerca.showMessageDialog(null, "La giacenza deve contenere solo caratteri numerici positivi.", "Errore giacenza invalida", UiRicerca.PLAIN_MESSAGE, null);
 		if (tipoErrore == 2)
-			UiRicerca.showMessageDialog(null, "La giacenza deve contenere un numero intero inferiore a " + Integer.MAX_VALUE + ".", "Errore giacenza eccessiva", UiRicerca.PLAIN_MESSAGE, null);
+			UiRicerca.showMessageDialog(null, "La giacenza non deve essere troppo lunga o troppo elevata.", "Errore giacenza eccessiva", UiRicerca.PLAIN_MESSAGE, null);
 		if (tipoErrore == 3)
 			UiRicerca.showMessageDialog(null, "La giacenza deve essere maggiore di zero.", "Errore giacenza nulla", UiRicerca.PLAIN_MESSAGE, null);
 		if (tipoErrore == 4) {
