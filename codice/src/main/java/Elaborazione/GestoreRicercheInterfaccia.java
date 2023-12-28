@@ -7,9 +7,6 @@ import java.util.HashMap;
 import java.util.ArrayList;
 
 public interface GestoreRicercheInterfaccia extends Remote {
-    // compilare qui le firme - metodo normale vuoto
-    public int controlloGiacenza(String giacenza) throws RemoteException;
-
-    public ArrayList<HashMap<String, Object>> ricercaProdotti(String giacenza) throws RemoteException;
-
+    int controlloGiacenza(String giacenza) throws RemoteException;
+	ArrayList<HashMap<String, Object>> ricercaProdotti(String giacenza) throws RemoteException;
 }
