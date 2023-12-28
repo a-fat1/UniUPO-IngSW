@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 public interface UiCarrelloInterfaccia extends Remote
 {
-	void avvioVisualizzaCarrello() throws RemoteException;
+	void avvioVisualizzaCarrello(String username) throws RemoteException;
 	void avvioEffettuaOrdine() throws RemoteException;
 	
 	
