@@ -133,7 +133,7 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 		if (tipoErrore == 1)
 			UiRicerca.showMessageDialog(null, "La giacenza deve contenere solo caratteri numerici positivi.", "Errore giacenza invalida", UiRicerca.PLAIN_MESSAGE, null);
 		if (tipoErrore == 2)
-			UiRicerca.showMessageDialog(null, "La giacenza deve contenere un numero intero inferiore a " + Integer.MAX_VALUE + ".", "Errore giacenza eccessiva", UiRicerca.PLAIN_MESSAGE, null);
+			UiRicerca.showMessageDialog(null, "La giacenza non deve essere troppo lunga o troppo elevata.", "Errore giacenza eccessiva", UiRicerca.PLAIN_MESSAGE, null);
 		if (tipoErrore == 3)
 			UiRicerca.showMessageDialog(null, "La giacenza deve essere maggiore di zero.", "Errore giacenza nulla", UiRicerca.PLAIN_MESSAGE, null);
 		if (tipoErrore == 4) {
