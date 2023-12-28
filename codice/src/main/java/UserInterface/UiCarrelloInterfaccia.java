@@ -7,7 +7,10 @@ import java.util.HashMap;
 
 public interface UiCarrelloInterfaccia extends Remote
 {
+	// RF05: Visualizza Carrello
+	// autori: Bossola Francesco, Oppezzo Raul
 	void avvioVisualizzaCarrello(String username) throws RemoteException;
+
 	void avvioEffettuaOrdine() throws RemoteException;
 	
 	
