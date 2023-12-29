@@ -40,9 +40,7 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 	private JTextField fieldUsername;
 	private JTextField fieldNome;
 	private JTextField fieldCognome;
-
-	private JFrame frameRicercaUtente;
-	private int result;
+	private int result; // variabile per determinare l'uscita o meno dall'interfaccia di Ricerca utente
 	private String nome;
 	private String cognome;
 	private String username;
@@ -76,9 +74,9 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 		scelteMenuRicercaUtente[1] = "Ricerca per username";
 		comboMenu = new JComboBox<>(scelteMenuRicercaUtente);
 
-		colonneAmministratore = new String[]{"Nome", "Cognome", "Username", "Attivo"};
+		colonneStaff = new String[]{"Nome", "Cognome", "Username", "Tipo utente"};
 
-		colonneStaff = new String[]{"Nome", "Cognome", "Username", "Tipo utente", "Attivo"};
+		colonneAmministratore = new String[]{"Nome", "Cognome", "Username", "Tipo utente", "Attivo"};
 
 		searchPanel = new JPanel(new GridLayout(7, 1));
 		searchPanel.add(comboMenu);
@@ -117,6 +115,7 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 
 		// set di esitoControllo con valore iniziale
 		int esitoControllo = 0;
+		// set di result = 0 per iniziare il ciclo
 		result = 0;
 
 		// loop fino a quando il controllo non è positivo (o l'utente esce dalla finestra)
@@ -206,7 +205,7 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 		cognome = fieldCognome.getText();
 		username = fieldUsername.getText();
 
-		// reset dei campi di input per operazioni future
+		// reset dei campi di ingresso per operazioni future
 		fieldNome.setText("");
 		fieldCognome.setText("");
 		fieldUsername.setText("");
@@ -260,53 +259,70 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 		JTable table = null;
 		int azione = -3;
 
+		// se l'utente che ha richiesto è di genere "staff", allora inizializzo la tabella con 4 colonne in quanto
+		// deve essere mostrato solo nome-cognome-username-tipo
 		if(genereUtente.equals("staff"))
 		{
 			utentiTabella = new Object[elencoUtenti.size()][colonneStaff.length];
 
+			// estraggo i campi
 			for(int i=0; i < elencoUtenti.size(); i++)
 			{
 				utentiTabella[i][0] = elencoUtenti.get(i).get("nome");
 				utentiTabella[i][1] = elencoUtenti.get(i).get("cognome");
 				utentiTabella[i][2] = elencoUtenti.get(i).get("username");
 				utentiTabella[i][3] = elencoUtenti.get(i).get("tipo");
-				utentiTabella[i][4] = elencoUtenti.get(i).get("attivo");
 			}
+			// creo la tabella
 			table = new JTable(utentiTabella, colonneStaff);
 		}
+
+		// se l'utente che ha richiesto è di genere "amministratore", allora inizializzo la tabella con 5 colonne in quanto
+		// deve essere mostrato nome-cognome-username-tipo-attivo
 		else if(genereUtente.equals("amministratore"))
 		{
 			utentiTabella = new Object[elencoUtenti.size()][colonneAmministratore.length];
 
+			// estraggo i campi
 			for(int i=0; i < elencoUtenti.size(); i++)
 			{
 				utentiTabella[i][0] = elencoUtenti.get(i).get("nome");
 				utentiTabella[i][1] = elencoUtenti.get(i).get("cognome");
 				utentiTabella[i][2] = elencoUtenti.get(i).get("username");
+				utentiTabella[i][3] = elencoUtenti.get(i).get("tipo");
 				if(elencoUtenti.get(i).get("attivo").toString().equals("1")) {
-					utentiTabella[i][3] = "True";
+					utentiTabella[i][4] = "True";
 				}
 				else {
-					utentiTabella[i][3] = "False";
+					utentiTabella[i][4] = "False";
 				}
 			}
+			// creo la tabella
 			table = new JTable(utentiTabella, colonneAmministratore);
 		}
 
+		// mi assicuro che la tabella sia stata creata correttamente
         assert table != null;
+
+		// setto la tabella in modo che si possa selezionare solo un campo
         ListSelectionModel selectionModel = table.getSelectionModel();
 		selectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
+		// creo la tabella scroll e ne gestisco le dimensioni
 		JScrollPane tabella = new JScrollPane(table);
 		tabella.setPreferredSize((new Dimension(500, 200)));
 
+		// ciclo while che dura fino a quando non viene selezionato un campo utente e un'azione relativa, oppure
+		// fino a quando l'utente non chiude la finestra per uscire
 		while(table.getSelectedRow() == -1 && azione != -1)
 		{
+			// se il genereUtente è di tipo "staff" mostro solo i pulsanti per lo staff
 			if(genereUtente.equals("staff"))
 				azione = showOptionDialog(null, tabella, "elenco utenti",
 						DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null,
 						pulsanteElencoUtentiStaff, null);
 
+			// se il genereUtente è di tipo "amministratore" mostro solo i pulsanti per l'amministratore
 			else if(genereUtente.equals("amministratore"))
 				azione = showOptionDialog(null, tabella, "elenco utenti",
 						DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null,
@@ -326,7 +342,7 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 		}
 		else if(azione == 0 && genereUtente.equals("amministratore"))
 		{
-			System.out.println(value);
+			//System.out.println(value);
 			// richiamo blocca\sblocca utente
 			//uiUtente.avvioBloccaSbloccaUtente(table.getModel().getValueAt(table.getSelectedRow(), 2).toString());
 			// devo mandare anche il parametro per vedere se è attivo o meno
