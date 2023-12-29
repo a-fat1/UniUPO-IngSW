@@ -111,10 +111,11 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 	}
 
 	public void avvioRicercaUtente(String genereUtente) throws RemoteException
-	{	// RF19
+	{
+		// RF19 - Ricerca Utente
+		// Riccardo Nazzari, Andrea Benedetto
 
 		// set di esitoControllo con valore iniziale
-
 		int esitoControllo = 0;
 		result = 0;
 
@@ -149,10 +150,12 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 			// se il controllo è andato a buon fine e l'utente è dello staff, si ricercano gli utenti NON bloccati
 			if((esitoControllo == 4) && genereUtente.equals("staff"))
 			{
+				// ricerca per nome-cognome di utenti non bloccati
 				if(scelta.equals("Ricerca per nome-cognome"))
 				{
 					elencoUtenti = gestoreRicerche.cercaUtenteNonBloccato(nome, cognome);
 				}
+				// ricerca per username di utenti non bloccati
 				else if(scelta.equals("Ricerca per username"))
 				{
 					elencoUtenti = gestoreRicerche.cercaUtenteNonBloccato(username);
@@ -162,10 +165,12 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 			// non bloccati
 			else if((esitoControllo == 4) && genereUtente.equals("amministratore"))
 			{
+				// ricerca per nome-cognome di utenti bloccati e non bloccati
 				if(scelta.equals("Ricerca per nome-cognome"))
 				{
 					elencoUtenti = gestoreRicerche.cercaUtenteBloccatoNonBloccato(nome, cognome);
 				}
+				// ricerca per username di utenti bloccati e non bloccati
 				else if(scelta.equals("Ricerca per username"))
 				{
 					elencoUtenti = gestoreRicerche.cercaUtenteBloccatoNonBloccato(username);
@@ -181,7 +186,6 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 			// se sono stati trovati utenti viene mostrata la tabella con le relative opzioni
 			if((!elencoUtenti.isEmpty()) && (result != -1) && (esitoControllo == 4))
 			{
-				// TO DO
 				mostraElencoRicercaUtente(elencoUtenti, genereUtente);
 			}
 		}
@@ -189,20 +193,32 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 
 	private void mostraFormRicerca() throws RemoteException
 	{
+		// RF19 - Ricerca Utente
+		// Riccardo Nazzari, Andrea Benedetto
 
+		// mostro a schermo la finestra di inserimento dati per la ricerca
 		result = JOptionPane.showOptionDialog(null, searchPanel, "Ricerca utente (clicca X per uscire)",
 				DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, pulsanteRicerca, "Ricerca");
 
+		// estraggo i dati
 		scelta = Objects.requireNonNull(comboMenu.getSelectedItem()).toString();
 		nome = fieldNome.getText();
 		cognome = fieldCognome.getText();
 		username = fieldUsername.getText();
 
+		// reset dei campi di input per operazioni future
+		fieldNome.setText("");
+		fieldCognome.setText("");
+		fieldUsername.setText("");
 	}
 
 
 	private void mostraErroreRicercaUtente(int tipo) throws RemoteException
 	{
+		// RF19 - Ricerca Utente
+		// Riccardo Nazzari, Andrea Benedetto
+
+		// creo variabile per il messaggio di errore da mostrare
 		String messaggio;
 
 		if(tipo == 1)
@@ -236,6 +252,10 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 	private void mostraElencoRicercaUtente(ArrayList<HashMap<String, Object>> elencoUtenti, String genereUtente) throws RemoteException
 	{
 
+		// RF19 - Ricerca Utente
+		// Riccardo Nazzari, Andrea Benedetto
+
+		// inizializzazione variabili
 		Object[][] utentiTabella;
 		JTable table = null;
 		int azione = -3;
@@ -291,7 +311,7 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 				azione = showOptionDialog(null, tabella, "elenco utenti",
 						DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null,
 						pulsanteElencoUtentiAdmin, null);
-			
+
 		}
 
 		if(azione == 0 && genereUtente.equals("staff"))
