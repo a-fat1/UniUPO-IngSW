@@ -62,8 +62,8 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 
 		labelDataInizio = new JLabel("Data iniziale");
 		labelDataFine = new JLabel("Data finale");
-		fieldDataInizio = new JTextField("", 15);
-		fieldDataFine = new JTextField("", 15);
+		fieldDataInizio = new JTextField("", 10);
+		fieldDataFine = new JTextField("", 10);
 		panelData = new JPanel(new GridLayout(2,2));
 		panelData.add(labelDataInizio);
 		panelData.add(fieldDataInizio);
