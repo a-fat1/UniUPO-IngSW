@@ -9,6 +9,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.RemoteException;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.Dialog.ModalityType;
 import java.awt.Window.Type;
 import java.awt.event.ActionListener;
@@ -61,10 +62,9 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 
 		labelDataInizio = new JLabel("Data iniziale");
 		labelDataFine = new JLabel("Data finale");
-		fieldDataInizio = new JTextField("", 40);
-		fieldDataFine = new JTextField("", 40);
-		panelData = new JPanel();
-		panelData.setLayout(new BoxLayout(panelData, BoxLayout.PAGE_AXIS));
+		fieldDataInizio = new JTextField("", 15);
+		fieldDataFine = new JTextField("", 15);
+		panelData = new JPanel(new GridLayout(2,2));
 		panelData.add(labelDataInizio);
 		panelData.add(fieldDataInizio);
 		panelData.add(labelDataFine);
