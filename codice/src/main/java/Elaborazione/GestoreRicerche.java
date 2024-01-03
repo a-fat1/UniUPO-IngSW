@@ -38,7 +38,7 @@ public class GestoreRicerche implements GestoreRicercheInterfaccia
 		//autore: Marino & Vecchio
 
 		String comandoSql;
-		ArrayList<HashMap<String, Object>> ordini;
+		ArrayList<HashMap<String, Object>> ordini = null;
 
 		System.out.println("GestoreRicerche.ricercaPerUtente(" + username + ")\n");
 		comandoSql = "SELECT Ordine.username,Ordine.dataOrdine,Ordine.codiceProdotto,Ordine.quantitaProdotto,Prodotto.autore,Prodotto.titolo,Prodotto.editore,Prodotto.tipo,Prodotto.anno,Prodotto.prezzo FROM Ordine JOIN Prodotto ON Ordine.codiceProdotto = Prodotto.codice WHERE username = \"" + username + "\";";
@@ -52,7 +52,7 @@ public class GestoreRicerche implements GestoreRicercheInterfaccia
 		//autore: Marino & Vecchio
 
 		String comandoSql;
-		ArrayList<HashMap<String, Object>> ordini;
+		ArrayList<HashMap<String, Object>> ordini = null;
 
 		System.out.println("GestoreRicerche.ricercaPerProdotto(" + codiceProdotto + ")\n");
 		comandoSql = "SELECT Ordine.username,Ordine.dataOrdine,Ordine.codiceProdotto,Ordine.quantitaProdotto,Prodotto.autore,Prodotto.titolo,Prodotto.editore,Prodotto.tipo,Prodotto.anno,Prodotto.prezzo FROM Ordine JOIN Prodotto ON Ordine.codiceProdotto = Prodotto.codice WHERE codice = \"" + codiceProdotto + "\";";
