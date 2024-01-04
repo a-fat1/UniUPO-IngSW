@@ -348,4 +348,60 @@ public class GestoreRicerche implements GestoreRicercheInterfaccia
 
 		return utenti;
 	}
+
+	//RF08 Raffaele Camera
+	public boolean controllaParametri(String titolo, String autore, String editore, String anno, ArrayList<String> tipoList) {
+        boolean isTitoloEmptyOrNull = titolo==null || titolo.isEmpty();
+		boolean isAutoreEmptyOrNull =autore==null || autore.isEmpty();
+		boolean isEditoreEmptyOrNull =editore==null || editore.isEmpty();
+		boolean isAnnoEmptyOrNull = anno == null || anno.isEmpty();
+		boolean isTipoEmptyOrNull = tipoList==null || tipoList.size()==0;
+
+		boolean isCompiledAtLeastOne = !isTitoloEmptyOrNull || !isAutoreEmptyOrNull || !isEditoreEmptyOrNull || !isAnnoEmptyOrNull || !isTipoEmptyOrNull; 
+        
+        // se tutte le lunghezze di tutti i paramentri è 0 torna false , altrimenti true
+        return isCompiledAtLeastOne;
+    }
+	//RF08 Raffaele Camera
+    // Metodo che effettua la chiamata a dbProdotti solo se passa il check sui campi
+	public ArrayList<HashMap<String, Object>> ricercaProdotto(String titolo, String autore, String editore, String anno,
+			ArrayList<String> tipoList, boolean isCliente) throws RemoteException {
+        
+		ArrayList<HashMap<String, Object>> risultati = null;
+
+        
+		String comandoSql = "SELECT * FROM Prodotto WHERE 1=1 ";
+
+		if (titolo != null && !titolo.isEmpty())
+			comandoSql += "AND Titolo LIKE '%"+titolo+"%' ";
+		if (autore != null && !autore.isEmpty())
+			comandoSql += "AND Autore LIKE '%"+autore+"%' ";
+		if (editore != null && !editore.isEmpty())
+			comandoSql += "AND Editore LIKE '%"+editore+"%' ";
+		if (anno != null && !anno.isEmpty())
+			comandoSql += "AND Anno = "+anno+" ";
+		
+		
+		if (tipoList != null && tipoList.size()>0){
+			comandoSql += "AND Tipo IN ( ";
+			for(int i=0; i<tipoList.size(); i++){
+				comandoSql += " '"+tipoList.get(i)+"' ";
+				// Aggiungi la virgola se non è l'ultimo elemento
+				if (i < tipoList.size() - 1) {
+					comandoSql += ",";
+				}
+			}
+			comandoSql+=")";
+		}
+
+		if(isCliente){
+			comandoSql += " AND (disponibile = 1 OR quantita > 0) ";
+		}
+			
+		risultati = dbProdotti.query(comandoSql);
+		if(risultati!=null){
+			System.out.println( risultati.size());
+		   }
+		return risultati;
+	}
 }
