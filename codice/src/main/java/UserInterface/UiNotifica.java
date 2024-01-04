@@ -147,35 +147,14 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 		testoLabel = new JLabel("Inserisci testo notifica:");
 		testoField.setToolTipText("Testo");
 
-		modificaNotificaPanel = new JPanel(new GridBagLayout());
-		GridBagConstraints constraints = new GridBagConstraints();
+		modificaNotificaPanel = new JPanel(new GridLayout(2,2));
 
-		constraints.gridy=0;
-		constraints.gridx=0;
-		modificaNotificaPanel.add(dataLabel,constraints);
-
-		constraints.gridy=0;
-		constraints.gridx=2;
-		constraints.gridwidth=1;
-		modificaNotificaPanel.add(dataField,constraints);
-
-		constraints.gridy=1;
-		constraints.gridx=0;
-		modificaNotificaPanel.add(oraLabel,constraints);
-
-		constraints.gridy=1;
-		constraints.gridx=2;
-		constraints.gridwidth=1;
-		modificaNotificaPanel.add(oraField,constraints);
-
-		constraints.gridy=3;
-		constraints.gridx=0;
-		modificaNotificaPanel.add(testoLabel,constraints);
-
-		constraints.gridy=3;
-		constraints.gridx=2;
-		constraints.gridwidth=5;
-		modificaNotificaPanel.add(testoField,constraints);
+		modificaNotificaPanel.add(dataLabel);
+		modificaNotificaPanel.add(dataField);
+		modificaNotificaPanel.add(oraLabel);
+		modificaNotificaPanel.add(oraField);
+		modificaNotificaPanel.add(testoLabel);
+		modificaNotificaPanel.add(testoField);
 	}
 
 	/**
@@ -191,9 +170,9 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 	 */
 	public void avvioGeneraNotifica(String tipoNotifica, HashMap<String, Object> prodotto, HashMap<String, Object> ordine, HashMap<String, Object> utente, String tipoUtente) throws RemoteException {
 		switch (tipoNotifica) {
-			case "nuovo prodotto" :
+			case "nuovo prodotto":
 			case "avviso":
-				if(tipoNotifica.equals("nuovo prodotto"))
+				if (tipoNotifica.equals("nuovo prodotto"))
 					testoNotifica = gestoreNotifiche.generaTestoNotificaProdotto(prodotto);
 				else
 					testoNotifica = gestoreNotifiche.generaTestoNotificaAvviso();
@@ -204,18 +183,20 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 					if (esitoVerifica.contains("errore")) {
 						mostraErrore(esitoVerifica);
 					}
-				} while(!Objects.equals(esitoVerifica, "ok"));
+				} while (!Objects.equals(esitoVerifica, "ok"));
+				gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), dataScadenza, testoField.getText(), tipoUtente);
 				break;
 			case "nuovo ordine":
 				testoNotifica = gestoreNotifiche.generaTestoNotificaOrdine(ordine);
+				gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), setDataScadenzaDefault(), testoField.getText(), tipoUtente);
 				break;
 			case "nuovo utente":
 				testoNotifica = gestoreNotifiche.generaTestoNotificaUtente(utente);
+				gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), setDataScadenzaDefault(), testoField.getText(), tipoUtente);
 				break;
-            default:
-                throw new IllegalStateException("Valore inatteso: " + tipoNotifica);
-        }
-		gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), dataScadenza, testoField.getText(), tipoUtente);
+			default:
+				throw new IllegalStateException("Valore inatteso: " + tipoNotifica);
+		}
 	}
 
 	/**
@@ -283,7 +264,7 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 	}
 
 	/**
-	 * RF04: Imposta la data di scadenza di una notifica.
+	 * RF04: Imposta la data di scadenza di una notifica, richiesto dai metodi generaTestoNotificaAvviso e generaTestoNotificaUtente.
 	 *
 	 * @return la data entro la quale la notifica scadrà (una settimana dalla data di pubblicazione)
 	 */
