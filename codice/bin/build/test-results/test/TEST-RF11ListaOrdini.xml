@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="RF11ListaOrdini" tests="4" skipped="0" failures="0" errors="0" timestamp="2024-01-02T17:31:28" hostname="DESKTOP-PFP63N9" time="0.017">
+  <properties/>
+  <testcase name="testRicercaPerProdottoNoRisultato" classname="RF11ListaOrdini" time="0.006"/>
+  <testcase name="testRicercaPerUtenteNoRisultato" classname="RF11ListaOrdini" time="0.004"/>
+  <testcase name="testRicercaPerUtente" classname="RF11ListaOrdini" time="0.004"/>
+  <testcase name="testRicercaPerProdotto" classname="RF11ListaOrdini" time="0.002"/>
+  <system-out><![CDATA[GestoreRicerche.ricercaPerProdotto(87688)
+
+DbProdotti: SELECT Ordine.username,Ordine.dataOrdine,Ordine.codiceProdotto,Ordine.quantitaProdotto,Prodotto.autore,Prodotto.titolo,Prodotto.editore,Prodotto.tipo,Prodotto.anno,Prodotto.prezzo FROM Ordine JOIN Prodotto ON Ordine.codiceProdotto = Prodotto.codice WHERE codice = "87688";
+
+GestoreRicerche.ricercaPerUtente(Fabio)
+
+DbProdotti: SELECT Ordine.username,Ordine.dataOrdine,Ordine.codiceProdotto,Ordine.quantitaProdotto,Prodotto.autore,Prodotto.titolo,Prodotto.editore,Prodotto.tipo,Prodotto.anno,Prodotto.prezzo FROM Ordine JOIN Prodotto ON Ordine.codiceProdotto = Prodotto.codice WHERE username = "Fabio";
+
+GestoreRicerche.ricercaPerUtente(claudia)
+
+DbProdotti: SELECT Ordine.username,Ordine.dataOrdine,Ordine.codiceProdotto,Ordine.quantitaProdotto,Prodotto.autore,Prodotto.titolo,Prodotto.editore,Prodotto.tipo,Prodotto.anno,Prodotto.prezzo FROM Ordine JOIN Prodotto ON Ordine.codiceProdotto = Prodotto.codice WHERE username = "claudia";
+
+GestoreRicerche.ricercaPerProdotto(100004)
+
+DbProdotti: SELECT Ordine.username,Ordine.dataOrdine,Ordine.codiceProdotto,Ordine.quantitaProdotto,Prodotto.autore,Prodotto.titolo,Prodotto.editore,Prodotto.tipo,Prodotto.anno,Prodotto.prezzo FROM Ordine JOIN Prodotto ON Ordine.codiceProdotto = Prodotto.codice WHERE codice = "100004";
+
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

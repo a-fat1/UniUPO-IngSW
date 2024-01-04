@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="RF00Login" tests="11" skipped="0" failures="0" errors="0" timestamp="2024-01-02T17:31:28" hostname="DESKTOP-PFP63N9" time="0.203">
+  <properties/>
+  <testcase name="testRicercaUtente1" classname="RF00Login" time="0.171"/>
+  <testcase name="testRicercaUtente2" classname="RF00Login" time="0.006"/>
+  <testcase name="testControlloFormatoCredenziali1" classname="RF00Login" time="0.006"/>
+  <testcase name="testControlloFormatoCredenziali2" classname="RF00Login" time="0.001"/>
+  <testcase name="testControlloFormatoCredenziali3" classname="RF00Login" time="0.0"/>
+  <testcase name="testControlloFormatoCredenziali4" classname="RF00Login" time="0.001"/>
+  <testcase name="testRicercaCredenziali1" classname="RF00Login" time="0.003"/>
+  <testcase name="testRicercaCredenziali2" classname="RF00Login" time="0.002"/>
+  <testcase name="testRicercaCredenziali3" classname="RF00Login" time="0.003"/>
+  <testcase name="testRicercaCredenziali4" classname="RF00Login" time="0.004"/>
+  <testcase name="testRicercaCredenziali5" classname="RF00Login" time="0.003"/>
+  <system-out><![CDATA[GestoreAccessi.ricercaUtente(dcr)
+
+DbUtenti: SELECT * FROM Utente WHERE username = "dcr" ;
+
+GestoreAccessi.ricercaUtente(aldo)
+
+DbUtenti: SELECT * FROM Utente WHERE username = "aldo" ;
+
+GestoreAccessi.controllaFormatoCredenziali(dcr, )
+
+GestoreAccessi.controllaFormatoCredenziali(, 123)
+
+GestoreAccessi.controllaFormatoCredenziali(, )
+
+GestoreAccessi.controllaFormatoCredenziali(dcr, 123)
+
+GestoreAccessi.ricercaCredenziali(aldo, xyz)
+
+DbUtenti: SELECT * FROM Credenziali WHERE username = "aldo" AND password = "xyz" ;
+
+GestoreAccessi.ricercaCredenziali(dcr, abc123)
+
+DbUtenti: SELECT * FROM Credenziali WHERE username = "dcr" AND password = "abc123" ;
+
+GestoreAccessi.ricercaCredenziali(dcr, xyz)
+
+DbUtenti: SELECT * FROM Credenziali WHERE username = "dcr" AND password = "xyz" ;
+
+GestoreAccessi.ricercaCredenziali(alfio, abc123)
+
+DbUtenti: SELECT * FROM Credenziali WHERE username = "alfio" AND password = "abc123" ;
+
+GestoreAccessi.ricercaCredenziali(aldo, abc123)
+
+DbUtenti: SELECT * FROM Credenziali WHERE username = "aldo" AND password = "abc123" ;
+
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

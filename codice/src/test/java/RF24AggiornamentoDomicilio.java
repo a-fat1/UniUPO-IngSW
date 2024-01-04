@@ -1,4 +1,6 @@
 import static org.junit.Assert.*;
+
+import org.junit.After;
 import org.junit.Test;
 import java.rmi.RemoteException;
 import Elaborazione.GestoreAccessi;
@@ -108,63 +110,36 @@ public class RF24AggiornamentoDomicilio {
     }
 
     @Test
-    public void testUpdateExistingAddress() throws RemoteException {
-        // Dati di esempio
-        String username = "testUser";
-        String via = "Via Nuova";
-        String civico = "42";
-        String cap = "00123";
-        String localita = "Roma";
+    public void testPromptSalvaDomicilio() throws RemoteException {
+        // Inizializza il database con un record per l'utente di test
+        setUp();
+        String usernameTest = "testUser";
+        String viaTest = "Via Test";
+        String civicoTest = "42";
+        String capTest = "12345";
+        String localitaTest = "CittaTest";
 
-        // Inserisci un indirizzo di esempio nel database
-        String insertQuery = "INSERT INTO Domicilio (Username, via, civico, cap, localita) VALUES ('" + username + "', 'Vecchia Via', 1, '00000', 'Vecchia Localita')";
-        dbUtenti.update(insertQuery);
-
-        // Verifica il numero di record prima dell'esecuzione del metodo
-        String selectQueryBefore = "SELECT COUNT(*) FROM Domicilio WHERE Username = '" + username + "'";
-        long countBefore = (long) dbUtenti.query(selectQueryBefore).get(0).get("COUNT(*)");
-
-        // Esegui il metodo
-        gestoreAccessi.promptSalvaDomicilio(username, via, civico, cap, localita);
-
-        // Verifica il numero di record dopo l'esecuzione del metodo
-        String selectQueryAfter = "SELECT COUNT(*) FROM Domicilio WHERE Username = '" + username + "'";
-        long countAfter = (long) dbUtenti.query(selectQueryAfter).get(0).get("COUNT(*)");
+        // Esegue promptSalvaDomicilio per aggiornare l'indirizzo
+        gestoreAccessi.promptSalvaDomicilio(usernameTest, viaTest, civicoTest, capTest, localitaTest);
 
         // Verifica che l'indirizzo sia stato aggiornato correttamente
-        assertEquals(countBefore, countAfter); // Il numero di record deve rimanere lo stesso
-        String selectQuery = "SELECT * FROM Domicilio WHERE Username = '" + username + "'";
-        ArrayList<HashMap<String, Object>> result = dbUtenti.query(selectQuery);
+        String selectQueryAfter = "SELECT * FROM Domicilio WHERE Username = '" + usernameTest + "'";
+        ArrayList<HashMap<String, Object>> resultAfter = dbUtenti.query(selectQueryAfter);
 
-        assertNotNull(result);
+        // Assicurati che ci sia solo un record per l'utente di test
+        assertEquals(1, resultAfter.size());
+
+        // Verifica che i valori siano stati aggiornati correttamente
+        assertEquals(viaTest, resultAfter.get(0).get("via"));
+        assertEquals(civicoTest, resultAfter.get(0).get("civico"));
+        assertEquals(capTest, resultAfter.get(0).get("cap"));
+        assertEquals(localitaTest, resultAfter.get(0).get("localita"));
     }
 
-    @Test
-    public void testInsertNewAddress() throws RemoteException {
-        // Dati di esempio
-        String username = "testUser";
-        String via = "Via Nuova";
-        String civico = "42";
-        String cap = "00123";
-        String localita = "Roma";
-
-        // Verifica il numero di record prima dell'esecuzione del metodo
-        String selectQueryBefore = "SELECT COUNT(*) FROM Domicilio WHERE Username = '" + username + "'";
-        long countBefore = (long) dbUtenti.query(selectQueryBefore).get(0).get("COUNT(*)");
-
-        // Esegui il metodo
-        gestoreAccessi.promptSalvaDomicilio(username, via, civico, cap, localita);
-
-        // Verifica il numero di record dopo l'esecuzione del metodo
-        String selectQueryAfter = "SELECT COUNT(*) FROM Domicilio WHERE Username = '" + username + "'";
-        long countAfter = (long) dbUtenti.query(selectQueryAfter).get(0).get("COUNT(*)");
-
-        // Verifica che l'indirizzo sia stato inserito correttamente
-        assertEquals(countBefore + 1, countAfter); // Il numero di record deve aumentare di 1
-        String selectQuery = "SELECT * FROM Domicilio WHERE Username = '" + username + "'";
-        ArrayList<HashMap<String, Object>> result = dbUtenti.query(selectQuery);
-
-        assertNotNull(result);
-
+    @After
+    public void tearDown() {
+        // Ripulisce il database dopo ciascun test
+        String deleteQuery = "DELETE FROM Domicilio WHERE Username = 'testUser'";
+        dbUtenti.update(deleteQuery);
     }
 }

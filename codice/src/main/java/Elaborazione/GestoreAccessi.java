@@ -7,6 +7,8 @@ import java.rmi.registry.Registry;
 import java.rmi.registry.LocateRegistry; 
 import java.rmi.RemoteException;
 import java.rmi.NotBoundException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import DataBase.*;
 
@@ -290,15 +292,14 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 	@Override
 	public void promptSalvaDomicilio(String username, String via, String civico, String cap, String localita) throws RemoteException {
 
-		// Controlla se esiste già un indirizzo per l'username
-		String checkExistingQuery = "SELECT COUNT(*) FROM Domicilio WHERE Username = '" + username + "'";
 		DbUtenti dbUtenti = new DbUtenti();
 
-		// Esegui la query per verificare se esiste già un indirizzo per l'username
-		ArrayList<HashMap<String, Object>> result = dbUtenti.query(checkExistingQuery);
+		String selectQueryBefore = "SELECT COUNT(*) FROM Domicilio WHERE Username = '" + username + "'";
+		// numero di record prima dell'esecuzione del metodo
+		int esiste = (int) dbUtenti.query(selectQueryBefore).get(0).get("COUNT(*)");
 
 		// Se esiste già un indirizzo per l'username, esegui l'update
-		if (result != null && !result.isEmpty() && (Long) result.get(0).get("COUNT(*)") > 0) {
+		if(esiste != 0){
 			// Comando SQL di Update
 			String updateQuery = "UPDATE Domicilio SET via = '" + via + "', civico = '" + civico + "', cap = '" + cap + "', localita = '" + localita + "' WHERE Username = '" + username + "'";
 			dbUtenti.update(updateQuery);

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="RF13ListaForniture" tests="3" skipped="0" failures="0" errors="0" timestamp="2024-01-02T17:31:28" hostname="DESKTOP-PFP63N9" time="0.022">
+  <properties/>
+  <testcase name="testControlloParametri" classname="RF13ListaForniture" time="0.001"/>
+  <testcase name="testRicercaListaForniturePerData" classname="RF13ListaForniture" time="0.009"/>
+  <testcase name="testRicercaListaForniturePerItem" classname="RF13ListaForniture" time="0.011"/>
+  <system-out><![CDATA[DbProdotti: SELECT f.*, p.autore ,p.autore, p.editore FROM Fornitura AS f JOIN Prodotto AS p on f.codiceProdotto=p.codice WHERE f.dataFornitura BETWEEN '2023-01-12 00:00:00' AND '2023-04-12 23:59:59'
+
+DbProdotti: SELECT f.*, p.autore ,p.autore, p.editore FROM Fornitura AS f JOIN Prodotto AS p on f.codiceProdotto=p.codice WHERE f.dataFornitura BETWEEN '2023-12-01 00:00:00' AND '2023-12-04 23:59:59'
+
+DbProdotti: SELECT * FROM Fornitura WHERE codiceProdotto=100006
+
+DbProdotti: SELECT * FROM Fornitura WHERE codiceProdotto=2
+
+DbProdotti: SELECT * FROM Fornitura WHERE codiceProdotto=100006
+
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

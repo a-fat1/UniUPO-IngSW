@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="RF12ListaPagamenti" tests="10" skipped="0" failures="0" errors="0" timestamp="2024-01-02T17:31:28" hostname="DESKTOP-PFP63N9" time="0.089">
+  <properties/>
+  <testcase name="testricercaListaPagamentiData1" classname="RF12ListaPagamenti" time="0.015"/>
+  <testcase name="testricercaListaPagamentiData2" classname="RF12ListaPagamenti" time="0.015"/>
+  <testcase name="testricercaListaPagamentiData3" classname="RF12ListaPagamenti" time="0.026"/>
+  <testcase name="testRicercaListaPagamentiUtente1" classname="RF12ListaPagamenti" time="0.012"/>
+  <testcase name="testRicercaListaPagamentiUtente2" classname="RF12ListaPagamenti" time="0.009"/>
+  <testcase name="testRicercaListaPagamentiUtente3" classname="RF12ListaPagamenti" time="0.004"/>
+  <testcase name="testControlloParametri1" classname="RF12ListaPagamenti" time="0.001"/>
+  <testcase name="testControlloParametri2" classname="RF12ListaPagamenti" time="0.0"/>
+  <testcase name="testControlloParametri3" classname="RF12ListaPagamenti" time="0.002"/>
+  <testcase name="testControlloParametri4" classname="RF12ListaPagamenti" time="0.0"/>
+  <system-out><![CDATA[GestoreRicerche.ricercaListaPagamentiData(01/12/2023, 31/12/2023)
+
+DbProdotti: SELECT * FROM Pagamento;
+
+DbUtenti: SELECT * FROM Utente;
+
+GestoreRicerche.ricercaListaPagamentiData(01/12/2023, 31/12/2023)
+
+DbProdotti: SELECT * FROM Pagamento;
+
+DbUtenti: SELECT * FROM Utente;
+
+GestoreRicerche.ricercaListaPagamentiData(01/12/2023, 05/12/2023)
+
+DbProdotti: SELECT * FROM Pagamento;
+
+DbUtenti: SELECT * FROM Utente;
+
+GestoreRicerche.ricercaListaPagamentiData(01/12/2023, 05/12/2023)
+
+DbProdotti: SELECT * FROM Pagamento;
+
+DbUtenti: SELECT * FROM Utente;
+
+GestoreRicerche.ricercaListaPagamentiData(01/12/2023, 04/12/2023)
+
+DbProdotti: SELECT * FROM Pagamento;
+
+DbUtenti: SELECT * FROM Utente;
+
+GestoreRicerche.ricercaListaPagamentiData(01/12/2023, 04/12/2023)
+
+DbProdotti: SELECT * FROM Pagamento;
+
+DbUtenti: SELECT * FROM Utente;
+
+GestoreRicerche.ricercaListaPagamentiUtente(claudia)
+
+DbProdotti: SELECT * FROM Pagamento;
+
+DbUtenti: SELECT * FROM Utente WHERE username = "claudia";
+
+GestoreRicerche.ricercaListaPagamentiUtente(claudia)
+
+DbProdotti: SELECT * FROM Pagamento;
+
+DbUtenti: SELECT * FROM Utente WHERE username = "claudia";
+
+GestoreRicerche.ricercaListaPagamentiUtente(ciro)
+
+DbProdotti: SELECT * FROM Pagamento;
+
+DbUtenti: SELECT * FROM Utente WHERE username = "ciro";
+
+GestoreRicerche.ricercaListaPagamentiUtente(ciro)
+
+DbProdotti: SELECT * FROM Pagamento;
+
+DbUtenti: SELECT * FROM Utente WHERE username = "ciro";
+
+GestoreRicerche.ricercaListaPagamentiUtente(utente_non_esistente)
+
+DbProdotti: SELECT * FROM Pagamento;
+
+DbUtenti: SELECT * FROM Utente WHERE username = "utente_non_esistente";
+
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,4 @@
+INDEX VERSION 1.131+C:\Users\Enea\Documents\IngSoftware\Progetto\ProductManager\.metadata\.plugins\org.eclipse.jdt.core
+1817312413.index
+4180806292.index
+1865797976.index

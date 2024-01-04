@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="RF05VisualizzaCarrello" tests="5" skipped="0" failures="0" errors="0" timestamp="2024-01-02T17:31:28" hostname="DESKTOP-PFP63N9" time="0.033">
+  <properties/>
+  <testcase name="testVerificaQuantita1" classname="RF05VisualizzaCarrello" time="0.014"/>
+  <testcase name="testVerificaQuantita3" classname="RF05VisualizzaCarrello" time="0.004"/>
+  <testcase name="testCercaElementi1" classname="RF05VisualizzaCarrello" time="0.007"/>
+  <testcase name="testCercaElementi2" classname="RF05VisualizzaCarrello" time="0.003"/>
+  <testcase name="testVerificaQuantrita2" classname="RF05VisualizzaCarrello" time="0.004"/>
+  <system-out><![CDATA[GestoreCarrelli.cercaElementi(clio)
+
+DbProdotti: SELECT * FROM Carrello JOIN Prodotto ON Carrello.codiceProdotto = Prodotto.codice WHERE Carrello.username = "clio";
+
+GestoreCarrelli.verificaQuantita(7, {editore=EMI, tipo=CD, titolo=The Dark Side Of The Moon, anno=1973, codice=100000, prezzo=20.0, codiceProdotto=100000, quantita=8, disponibile=1, username=clio, quantitaProdotto=1, autore=Pink Floyd})
+
+GestoreCarrelli.cercaElementi(ciro)
+
+DbProdotti: SELECT * FROM Carrello JOIN Prodotto ON Carrello.codiceProdotto = Prodotto.codice WHERE Carrello.username = "ciro";
+
+GestoreCarrelli.verificaQuantita(2, {editore=EMI, tipo=CD, titolo=Fireball, anno=1971, codice=100002, prezzo=18.0, codiceProdotto=100002, quantita=0, disponibile=1, username=ciro, quantitaProdotto=1, autore=Deep Purple})
+
+GestoreCarrelli.cercaElementi(ciro)
+
+DbProdotti: SELECT * FROM Carrello JOIN Prodotto ON Carrello.codiceProdotto = Prodotto.codice WHERE Carrello.username = "ciro";
+
+GestoreCarrelli.cercaElementi(carlo)
+
+DbProdotti: SELECT * FROM Carrello JOIN Prodotto ON Carrello.codiceProdotto = Prodotto.codice WHERE Carrello.username = "carlo";
+
+GestoreCarrelli.cercaElementi(clio)
+
+DbProdotti: SELECT * FROM Carrello JOIN Prodotto ON Carrello.codiceProdotto = Prodotto.codice WHERE Carrello.username = "clio";
+
+GestoreCarrelli.verificaQuantita(0, {editore=EMI, tipo=CD, titolo=The Dark Side Of The Moon, anno=1973, codice=100000, prezzo=20.0, codiceProdotto=100000, quantita=8, disponibile=1, username=clio, quantitaProdotto=1, autore=Pink Floyd})
+
+GestoreCarrelli.verificaQuantita(1, {editore=EMI, tipo=CD, titolo=The Dark Side Of The Moon, anno=1973, codice=100000, prezzo=20.0, codiceProdotto=100000, quantita=8, disponibile=1, username=clio, quantitaProdotto=1, autore=Pink Floyd})
+
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

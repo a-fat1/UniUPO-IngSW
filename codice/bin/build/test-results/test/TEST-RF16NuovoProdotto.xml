@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="RF16NuovoProdotto" tests="3" skipped="0" failures="0" errors="0" timestamp="2024-01-02T17:31:28" hostname="DESKTOP-PFP63N9" time="0.069">
+  <properties/>
+  <testcase name="testVerificaCampi" classname="RF16NuovoProdotto" time="0.001"/>
+  <testcase name="testControlloUnicita" classname="RF16NuovoProdotto" time="0.015"/>
+  <testcase name="testAggiungiProdotto" classname="RF16NuovoProdotto" time="0.053"/>
+  <system-out><![CDATA[DbProdotti: SELECT * FROM Prodotto WHERE autore = "autore" AND titolo = "titolo" AND editore = "editore" AND anno = "2000" AND tipo = "CD"
+
+DbProdotti: SELECT * FROM Prodotto WHERE autore = "autore1, autore2" AND titolo = "titolo" AND editore = "editore" AND anno = "2000" AND tipo = "CD"
+
+DbProdotti: SELECT * FROM Prodotto WHERE autore = "Pink Floyd" AND titolo = "The Dark Side Of The Moon" AND editore = "EMI" AND anno = "1973" AND tipo = "CD"
+
+DbProdotti: SELECT * FROM Prodotto WHERE autore = "Paul Deitel, Harvey Deitel" AND titolo = "Il linguaggio C. Fondamenti e tecniche di programmazione" AND editore = "Pearson" AND anno = "2022" AND tipo = "Libro"
+
+DbProdotti: INSERT INTO Prodotto(autore, titolo, editore, anno, tipo, prezzo, quantita, disponibile) VALUES ("Franco", "Gallette", "Zanichelli", "2023", "Libro", null, 0, True)
+
+DbProdotti: SELECT * FROM Prodotto WHERE Codice = (SELECT MAX(Codice) FROM Prodotto)
+
+DbProdotti: DELETE FROM Prodotto WHERE codice=100018;
+
+DbProdotti: INSERT INTO Prodotto(autore, titolo, editore, anno, tipo, prezzo, quantita, disponibile) VALUES ("Leonardo, Nicholas", "Gallette 2", "Zanichelli", "2024", "Libro", null, 0, True)
+
+DbProdotti: SELECT * FROM Prodotto WHERE Codice = (SELECT MAX(Codice) FROM Prodotto)
+
+DbProdotti: DELETE FROM Prodotto WHERE codice=100019;
+
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

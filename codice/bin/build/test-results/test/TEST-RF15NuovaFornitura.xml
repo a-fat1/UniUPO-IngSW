@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="RF15NuovaFornitura" tests="4" skipped="0" failures="0" errors="0" timestamp="2024-01-02T17:31:28" hostname="DESKTOP-PFP63N9" time="0.009">
+  <properties/>
+  <testcase name="testControlloDatiFornituraCorretti" classname="RF15NuovaFornitura" time="0.005"/>
+  <testcase name="testControlloDatiFornituraScorretti" classname="RF15NuovaFornitura" time="0.001"/>
+  <testcase name="testControlloDatiFornituraAssenti" classname="RF15NuovaFornitura" time="0.0"/>
+  <testcase name="testControlloDatiFornituraMisti" classname="RF15NuovaFornitura" time="0.002"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

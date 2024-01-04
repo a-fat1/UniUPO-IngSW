@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="RF19RicercaUtente" tests="15" skipped="0" failures="0" errors="0" timestamp="2024-01-02T17:31:28" hostname="DESKTOP-PFP63N9" time="0.028">
+  <properties/>
+  <testcase name="testDatabase0" classname="RF19RicercaUtente" time="0.004"/>
+  <testcase name="testDatabase1" classname="RF19RicercaUtente" time="0.003"/>
+  <testcase name="testDatabase2" classname="RF19RicercaUtente" time="0.003"/>
+  <testcase name="testDatabase3" classname="RF19RicercaUtente" time="0.002"/>
+  <testcase name="testDatabase4" classname="RF19RicercaUtente" time="0.002"/>
+  <testcase name="testDatabase5" classname="RF19RicercaUtente" time="0.003"/>
+  <testcase name="testDatabase6" classname="RF19RicercaUtente" time="0.004"/>
+  <testcase name="testDatabase7" classname="RF19RicercaUtente" time="0.002"/>
+  <testcase name="testControlloParametriUsername1" classname="RF19RicercaUtente" time="0.0"/>
+  <testcase name="testControlloParametriNomeCognome0" classname="RF19RicercaUtente" time="0.001"/>
+  <testcase name="testControlloParametriNomeCognome1" classname="RF19RicercaUtente" time="0.0"/>
+  <testcase name="testControlloParametriNomeCognome2" classname="RF19RicercaUtente" time="0.001"/>
+  <testcase name="testControlloParametriNomeCognome8" classname="RF19RicercaUtente" time="0.001"/>
+  <testcase name="testControlloParametriNomeCognome9" classname="RF19RicercaUtente" time="0.0"/>
+  <testcase name="testControlloParametriUsername" classname="RF19RicercaUtente" time="0.0"/>
+  <system-out><![CDATA[DbUtenti: SELECT Utente.nome, Utente.cognome, Utente.username, Utente.tipo, Credenziali.attivo
+FROM Utente JOIN Credenziali ON Utente.username = Credenziali.username
+WHERE Utente.username LIKE "aldo%";
+
+DbUtenti: SELECT Utente.nome, Utente.cognome, Utente.username, Utente.tipo, Credenziali.attivo
+FROM Utente JOIN Credenziali ON Utente.username = Credenziali.username
+WHERE Utente.nome LIKE "Aldo%" AND Utente.cognome LIKE "Bianchi%";
+
+DbUtenti: SELECT Utente.nome, Utente.cognome, Utente.username, Utente.tipo, Credenziali.attivo
+FROM Utente JOIN Credenziali ON Utente.username = Credenziali.username
+WHERE Utente.nome LIKE "Aldo%" AND Utente.cognome LIKE "Bianchi%";
+
+DbUtenti: SELECT Utente.nome, Utente.cognome, Utente.username, Utente.tipo, Credenziali.attivo
+FROM Utente JOIN Credenziali ON Utente.username = Credenziali.username
+WHERE Utente.nome LIKE "Alfio%" AND Utente.cognome LIKE "Verdi%";
+
+DbUtenti: SELECT Utente.nome, Utente.cognome, Utente.username, Utente.tipo, Credenziali.attivo
+FROM Utente JOIN Credenziali ON Utente.username = Credenziali.username
+WHERE Utente.username LIKE "alfio%";
+
+DbUtenti: SELECT Utente.nome, Utente.cognome, Utente.username, Utente.tipo, Credenziali.attivo
+FROM Utente JOIN Credenziali ON Utente.username = Credenziali.username
+WHERE Utente.nome LIKE "Aldo%" AND Utente.cognome LIKE "Bianchi%" AND CREDENZIALI.attivo == 1;
+
+DbUtenti: SELECT Utente.nome, Utente.cognome, Utente.username, Utente.tipo, Credenziali.attivo
+FROM Utente JOIN Credenziali ON Utente.username = Credenziali.username
+WHERE Utente.username LIKE "alfio%" AND Credenziali.attivo == 1;
+
+DbUtenti: SELECT Utente.nome, Utente.cognome, Utente.username, Utente.tipo, Credenziali.attivo
+FROM Utente JOIN Credenziali ON Utente.username = Credenziali.username
+WHERE Utente.username LIKE "alfio%" AND Credenziali.attivo == 1;
+
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

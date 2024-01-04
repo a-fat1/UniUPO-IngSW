@@ -1,0 +1,216 @@
+"GestoreAccessi.ricercaUtente(dcr)
+
+8DbUtenti: SELECT * FROM Utente WHERE username = "dcr" ;
+
+#GestoreAccessi.ricercaUtente(aldo)
+
+9DbUtenti: SELECT * FROM Utente WHERE username = "aldo" ;
+
+2GestoreAccessi.controllaFormatoCredenziali(dcr, )
+
+2GestoreAccessi.controllaFormatoCredenziali(, 123)
+
+/GestoreAccessi.controllaFormatoCredenziali(, )
+
+5GestoreAccessi.controllaFormatoCredenziali(dcr, 123)
+
+-GestoreAccessi.ricercaCredenziali(aldo, xyz)
+
+SDbUtenti: SELECT * FROM Credenziali WHERE username = "aldo" AND password = "xyz" ;
+
+	/GestoreAccessi.ricercaCredenziali(dcr, abc123)
+	
+	UDbUtenti: SELECT * FROM Credenziali WHERE username = "dcr" AND password = "abc123" ;
+	
+
+,GestoreAccessi.ricercaCredenziali(dcr, xyz)
+
+
+
+RDbUtenti: SELECT * FROM Credenziali WHERE username = "dcr" AND password = "xyz" ;
+
+
+1GestoreAccessi.ricercaCredenziali(alfio, abc123)
+
+WDbUtenti: SELECT * FROM Credenziali WHERE username = "alfio" AND password = "abc123" ;
+
+0GestoreAccessi.ricercaCredenziali(aldo, abc123)
+
+VDbUtenti: SELECT * FROM Credenziali WHERE username = "aldo" AND password = "abc123" ;
+
+$GestoreCarrelli.cercaElementi(clio)
+
+ÄDbProdotti: SELECT * FROM Carrello JOIN Prodotto ON Carrello.codiceProdotto = Prodotto.codice WHERE Carrello.username = "clio";
+
+ÌGestoreCarrelli.verificaQuantita(7, {editore=EMI, tipo=CD, titolo=The Dark Side Of The Moon, anno=1973, codice=100000, prezzo=20.0, codiceProdotto=100000, quantita=8, disponibile=1, username=clio, quantitaProdotto=1, autore=Pink Floyd})
+
+$GestoreCarrelli.cercaElementi(ciro)
+
+ÄDbProdotti: SELECT * FROM Carrello JOIN Prodotto ON Carrello.codiceProdotto = Prodotto.codice WHERE Carrello.username = "ciro";
+
+›GestoreCarrelli.verificaQuantita(2, {editore=EMI, tipo=CD, titolo=Fireball, anno=1971, codice=100002, prezzo=18.0, codiceProdotto=100002, quantita=0, disponibile=1, username=ciro, quantitaProdotto=1, autore=Deep Purple})
+
+$GestoreCarrelli.cercaElementi(ciro)
+
+ÄDbProdotti: SELECT * FROM Carrello JOIN Prodotto ON Carrello.codiceProdotto = Prodotto.codice WHERE Carrello.username = "ciro";
+
+ %GestoreCarrelli.cercaElementi(carlo)
+ 
+ ÅDbProdotti: SELECT * FROM Carrello JOIN Prodotto ON Carrello.codiceProdotto = Prodotto.codice WHERE Carrello.username = "carlo";
+ 
+!$GestoreCarrelli.cercaElementi(clio)
+!
+!ÄDbProdotti: SELECT * FROM Carrello JOIN Prodotto ON Carrello.codiceProdotto = Prodotto.codice WHERE Carrello.username = "clio";
+!
+!ÌGestoreCarrelli.verificaQuantita(0, {editore=EMI, tipo=CD, titolo=The Dark Side Of The Moon, anno=1973, codice=100000, prezzo=20.0, codiceProdotto=100000, quantita=8, disponibile=1, username=clio, quantitaProdotto=1, autore=Pink Floyd})
+!
+!ÌGestoreCarrelli.verificaQuantita(1, {editore=EMI, tipo=CD, titolo=The Dark Side Of The Moon, anno=1973, codice=100000, prezzo=20.0, codiceProdotto=100000, quantita=8, disponibile=1, username=clio, quantitaProdotto=1, autore=Pink Floyd})
+!
+#"*GestoreRicerche.ricercaPerProdotto(87688)
+#"
+#"ùDbProdotti: SELECT Ordine.username,Ordine.dataOrdine,Ordine.codiceProdotto,Ordine.quantitaProdotto,Prodotto.autore,Prodotto.titolo,Prodotto.editore,Prodotto.tipo,Prodotto.anno,Prodotto.prezzo FROM Ordine JOIN Prodotto ON Ordine.codiceProdotto = Prodotto.codice WHERE codice = "87688";
+#"
+#$(GestoreRicerche.ricercaPerUtente(Fabio)
+#$
+#$üDbProdotti: SELECT Ordine.username,Ordine.dataOrdine,Ordine.codiceProdotto,Ordine.quantitaProdotto,Prodotto.autore,Prodotto.titolo,Prodotto.editore,Prodotto.tipo,Prodotto.anno,Prodotto.prezzo FROM Ordine JOIN Prodotto ON Ordine.codiceProdotto = Prodotto.codice WHERE username = "Fabio";
+#$
+#%*GestoreRicerche.ricercaPerUtente(claudia)
+#%
+#%°DbProdotti: SELECT Ordine.username,Ordine.dataOrdine,Ordine.codiceProdotto,Ordine.quantitaProdotto,Prodotto.autore,Prodotto.titolo,Prodotto.editore,Prodotto.tipo,Prodotto.anno,Prodotto.prezzo FROM Ordine JOIN Prodotto ON Ordine.codiceProdotto = Prodotto.codice WHERE username = "claudia";
+#%
+#&+GestoreRicerche.ricercaPerProdotto(100004)
+#&
+#&ûDbProdotti: SELECT Ordine.username,Ordine.dataOrdine,Ordine.codiceProdotto,Ordine.quantitaProdotto,Prodotto.autore,Prodotto.titolo,Prodotto.editore,Prodotto.tipo,Prodotto.anno,Prodotto.prezzo FROM Ordine JOIN Prodotto ON Ordine.codiceProdotto = Prodotto.codice WHERE codice = "100004";
+#&
+('BGestoreRicerche.ricercaListaPagamentiData(01/12/2023, 31/12/2023)
+('
+('%DbProdotti: SELECT * FROM Pagamento;
+('
+(' DbUtenti: SELECT * FROM Utente;
+('
+('BGestoreRicerche.ricercaListaPagamentiData(01/12/2023, 31/12/2023)
+('
+('%DbProdotti: SELECT * FROM Pagamento;
+('
+(' DbUtenti: SELECT * FROM Utente;
+('
+()BGestoreRicerche.ricercaListaPagamentiData(01/12/2023, 05/12/2023)
+()
+()%DbProdotti: SELECT * FROM Pagamento;
+()
+() DbUtenti: SELECT * FROM Utente;
+()
+()BGestoreRicerche.ricercaListaPagamentiData(01/12/2023, 05/12/2023)
+()
+()%DbProdotti: SELECT * FROM Pagamento;
+()
+() DbUtenti: SELECT * FROM Utente;
+()
+(*BGestoreRicerche.ricercaListaPagamentiData(01/12/2023, 04/12/2023)
+(*
+(*%DbProdotti: SELECT * FROM Pagamento;
+(*
+(* DbUtenti: SELECT * FROM Utente;
+(*
+(*BGestoreRicerche.ricercaListaPagamentiData(01/12/2023, 04/12/2023)
+(*
+(*%DbProdotti: SELECT * FROM Pagamento;
+(*
+(* DbUtenti: SELECT * FROM Utente;
+(*
+(+5GestoreRicerche.ricercaListaPagamentiUtente(claudia)
+(+
+(+%DbProdotti: SELECT * FROM Pagamento;
+(+
+(+;DbUtenti: SELECT * FROM Utente WHERE username = "claudia";
+(+
+(+5GestoreRicerche.ricercaListaPagamentiUtente(claudia)
+(+
+(+%DbProdotti: SELECT * FROM Pagamento;
+(+
+(+;DbUtenti: SELECT * FROM Utente WHERE username = "claudia";
+(+
+(,2GestoreRicerche.ricercaListaPagamentiUtente(ciro)
+(,
+(,%DbProdotti: SELECT * FROM Pagamento;
+(,
+(,8DbUtenti: SELECT * FROM Utente WHERE username = "ciro";
+(,
+(,2GestoreRicerche.ricercaListaPagamentiUtente(ciro)
+(,
+(,%DbProdotti: SELECT * FROM Pagamento;
+(,
+(,8DbUtenti: SELECT * FROM Utente WHERE username = "ciro";
+(,
+(-BGestoreRicerche.ricercaListaPagamentiUtente(utente_non_esistente)
+(-
+(-%DbProdotti: SELECT * FROM Pagamento;
+(-
+(-HDbUtenti: SELECT * FROM Utente WHERE username = "utente_non_esistente";
+(-
+34»DbProdotti: SELECT f.*, p.autore ,p.autore, p.editore FROM Fornitura AS f JOIN Prodotto AS p on f.codiceProdotto=p.codice WHERE f.dataFornitura BETWEEN '2023-01-12 00:00:00' AND '2023-04-12 23:59:59'
+34
+34»DbProdotti: SELECT f.*, p.autore ,p.autore, p.editore FROM Fornitura AS f JOIN Prodotto AS p on f.codiceProdotto=p.codice WHERE f.dataFornitura BETWEEN '2023-12-01 00:00:00' AND '2023-12-04 23:59:59'
+34
+35@DbProdotti: SELECT * FROM Fornitura WHERE codiceProdotto=100006
+35
+35;DbProdotti: SELECT * FROM Fornitura WHERE codiceProdotto=2
+35
+35@DbProdotti: SELECT * FROM Fornitura WHERE codiceProdotto=100006
+35
+<=ãDbProdotti: SELECT * FROM Prodotto WHERE autore = "autore" AND titolo = "titolo" AND editore = "editore" AND anno = "2000" AND tipo = "CD"
+<=
+<=ïDbProdotti: SELECT * FROM Prodotto WHERE autore = "autore1, autore2" AND titolo = "titolo" AND editore = "editore" AND anno = "2000" AND tipo = "CD"
+<=
+<=ûDbProdotti: SELECT * FROM Prodotto WHERE autore = "Pink Floyd" AND titolo = "The Dark Side Of The Moon" AND editore = "EMI" AND anno = "1973" AND tipo = "CD"
+<=
+<=‘DbProdotti: SELECT * FROM Prodotto WHERE autore = "Paul Deitel, Harvey Deitel" AND titolo = "Il linguaggio C. Fondamenti e tecniche di programmazione" AND editore = "Pearson" AND anno = "2022" AND tipo = "Libro"
+<=
+<>±DbProdotti: INSERT INTO Prodotto(autore, titolo, editore, anno, tipo, prezzo, quantita, disponibile) VALUES ("Franco", "Gallette", "Zanichelli", "2023", "Libro", null, 0, True)
+<>
+<>UDbProdotti: SELECT * FROM Prodotto WHERE Codice = (SELECT MAX(Codice) FROM Prodotto)
+<>
+<>6DbProdotti: DELETE FROM Prodotto WHERE codice=100018;
+<>
+<>øDbProdotti: INSERT INTO Prodotto(autore, titolo, editore, anno, tipo, prezzo, quantita, disponibile) VALUES ("Leonardo, Nicholas", "Gallette 2", "Zanichelli", "2024", "Libro", null, 0, True)
+<>
+<>UDbProdotti: SELECT * FROM Prodotto WHERE Codice = (SELECT MAX(Codice) FROM Prodotto)
+<>
+<>6DbProdotti: DELETE FROM Prodotto WHERE codice=100019;
+<>
+CE7DbProdotti: SELECT * FROM Prodotto WHERE Quantita <= 5
+CE
+CH8DbProdotti: SELECT * FROM Prodotto WHERE Quantita <= -1
+CH
+LK_DbUtenti: SELECT Utente.nome, Utente.cognome, Utente.username, Utente.tipo, Credenziali.attivo
+LKGFROM Utente JOIN Credenziali ON Utente.username = Credenziali.username
+LK$WHERE Utente.username LIKE "aldo%";
+LK
+LM_DbUtenti: SELECT Utente.nome, Utente.cognome, Utente.username, Utente.tipo, Credenziali.attivo
+LMGFROM Utente JOIN Credenziali ON Utente.username = Credenziali.username
+LMCWHERE Utente.nome LIKE "Aldo%" AND Utente.cognome LIKE "Bianchi%";
+LM
+LN_DbUtenti: SELECT Utente.nome, Utente.cognome, Utente.username, Utente.tipo, Credenziali.attivo
+LNGFROM Utente JOIN Credenziali ON Utente.username = Credenziali.username
+LNCWHERE Utente.nome LIKE "Aldo%" AND Utente.cognome LIKE "Bianchi%";
+LN
+LO_DbUtenti: SELECT Utente.nome, Utente.cognome, Utente.username, Utente.tipo, Credenziali.attivo
+LOGFROM Utente JOIN Credenziali ON Utente.username = Credenziali.username
+LOBWHERE Utente.nome LIKE "Alfio%" AND Utente.cognome LIKE "Verdi%";
+LO
+LP_DbUtenti: SELECT Utente.nome, Utente.cognome, Utente.username, Utente.tipo, Credenziali.attivo
+LPGFROM Utente JOIN Credenziali ON Utente.username = Credenziali.username
+LP%WHERE Utente.username LIKE "alfio%";
+LP
+LQ_DbUtenti: SELECT Utente.nome, Utente.cognome, Utente.username, Utente.tipo, Credenziali.attivo
+LQGFROM Utente JOIN Credenziali ON Utente.username = Credenziali.username
+LQ_WHERE Utente.nome LIKE "Aldo%" AND Utente.cognome LIKE "Bianchi%" AND CREDENZIALI.attivo == 1;
+LQ
+LR_DbUtenti: SELECT Utente.nome, Utente.cognome, Utente.username, Utente.tipo, Credenziali.attivo
+LRGFROM Utente JOIN Credenziali ON Utente.username = Credenziali.username
+LRAWHERE Utente.username LIKE "alfio%" AND Credenziali.attivo == 1;
+LR
+LS_DbUtenti: SELECT Utente.nome, Utente.cognome, Utente.username, Utente.tipo, Credenziali.attivo
+LSGFROM Utente JOIN Credenziali ON Utente.username = Credenziali.username
+LSAWHERE Utente.username LIKE "alfio%" AND Credenziali.attivo == 1;
+LS
