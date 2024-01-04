@@ -60,7 +60,7 @@ public class GestoreRicerche implements GestoreRicercheInterfaccia
 
 		return ordini;
 	}
-	public int controlloParametri(String dataInizio, String dataFine) throws RemoteException
+	public int controlloParametriListaPagamenti(String dataInizio, String dataFine) throws RemoteException
 	{
 		//RF12: Lista Pagamenti
 		//autori: Broglio, Cartieri

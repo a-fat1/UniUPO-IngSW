@@ -12,9 +12,12 @@ public interface GestoreRicercheInterfaccia extends Remote
     //autore: Marino & Vecchio
     public ArrayList<HashMap<String, Object>> ricercaPerUtente(String username) throws RemoteException;
     public ArrayList<HashMap<String, Object>> ricercaPerProdotto(int codiceProdotto) throws RemoteException;
-    public int controlloParametri(String dataInizio, String dataFine) throws RemoteException;
-    public ArrayList<HashMap<String, Object>> ricercaListaPagamentiData(String dataInizio, String dataFine) throws RemoteException;
 
+    //RF12: Lista Pagamenti
+    //autori: Broglio, Cartieri
+    public int controlloParametriListaPagamenti(String dataInizio, String dataFine) throws RemoteException;
+    public ArrayList<HashMap<String, Object>> ricercaListaPagamentiData(String dataInizio, String dataFine) throws RemoteException;
+    public ArrayList<HashMap<String, Object>> ricercaListaPagamentiUtente(String username) throws RemoteException;
     // RF18 Prodotti in esaurimento
     // Alessandro Fatone, Dario Guidotti
     int controlloGiacenza(String giacenza) throws RemoteException;
