@@ -147,14 +147,36 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 		testoLabel = new JLabel("Inserisci testo notifica:");
 		testoField.setToolTipText("Testo");
 
-		modificaNotificaPanel = new JPanel(new GridLayout(2,2));
+		modificaNotificaPanel = new JPanel(new GridBagLayout());
+		GridBagConstraints constraints = new GridBagConstraints();
 
-		modificaNotificaPanel.add(dataLabel);
-		modificaNotificaPanel.add(dataField);
-		modificaNotificaPanel.add(oraLabel);
-		modificaNotificaPanel.add(oraField);
-		modificaNotificaPanel.add(testoLabel);
-		modificaNotificaPanel.add(testoField);
+		constraints.gridy=0;
+		constraints.gridx=0;
+		modificaNotificaPanel.add(dataLabel,constraints);
+
+		constraints.gridy=0;
+		constraints.gridx=2;
+		constraints.gridwidth=1;
+		modificaNotificaPanel.add(dataField,constraints);
+
+		constraints.gridy=1;
+		constraints.gridx=0;
+		modificaNotificaPanel.add(oraLabel,constraints);
+
+		constraints.gridy=1;
+		constraints.gridx=2;
+		constraints.gridwidth=1;
+		modificaNotificaPanel.add(oraField,constraints);
+
+		constraints.gridy=3;
+		constraints.gridx=0;
+		modificaNotificaPanel.add(testoLabel,constraints);
+
+		constraints.gridy=3;
+		constraints.gridx=2;
+		constraints.gridwidth=5;
+		modificaNotificaPanel.add(testoField,constraints);
+
 	}
 
 	/**
