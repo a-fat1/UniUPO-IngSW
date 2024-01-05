@@ -134,49 +134,47 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 		dataPubblicazione = new HashMap<>();
 		dataScadenza = new HashMap<>();
 
-		dataField = new JTextField("", 20);
-		dataLabel = new JLabel("Inserisci data di scadenza: ");
-		dataField.setToolTipText("Data");
+		dataField = new JTextField("", 10);
+		dataLabel = new JLabel("Inserire data scadenza: ");
+		dataField.setToolTipText("formato YYYY-MM-DD");
 
-		oraField = new JTextField("", 20);
-		oraLabel = new JLabel("Inserisci l'ora di scadenza: ");
-		oraField.setToolTipText("Ora");
+		oraField = new JTextField("", 10);
+		oraLabel = new JLabel("Inserire ora scadenza: ");
+		oraField.setToolTipText("formato HH:mm:ss");
 
-		testoField = new JTextArea(10, 40);
+		testoField = new JTextArea(5, 30);
 		testoField.setLineWrap(true);
-		testoLabel = new JLabel("Inserisci testo notifica:");
-		testoField.setToolTipText("Testo");
+		testoLabel = new JLabel("Inserire testo notifica:");
+		testoField.setToolTipText("testo");
 
-		modificaNotificaPanel = new JPanel(new GridBagLayout());
-		GridBagConstraints constraints = new GridBagConstraints();
+		modificaNotificaPanel = new JPanel();
 
-		constraints.gridy=0;
-		constraints.gridx=0;
-		modificaNotificaPanel.add(dataLabel,constraints);
+		modificaNotificaPanel.setLayout(new GridBagLayout());
+		GridBagConstraints gbc = new GridBagConstraints();
 
-		constraints.gridy=0;
-		constraints.gridx=2;
-		constraints.gridwidth=1;
-		modificaNotificaPanel.add(dataField,constraints);
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.insets = new Insets(4, 4, 4, 4);
+		gbc.anchor = GridBagConstraints.WEST;
+		modificaNotificaPanel.add(dataLabel, gbc);
+		gbc.gridx++;
+		modificaNotificaPanel.add(dataField, gbc);
+		gbc.gridx++;
+		modificaNotificaPanel.add(oraLabel, gbc);
+		gbc.gridx++;
+		modificaNotificaPanel.add(oraField, gbc);
 
-		constraints.gridy=1;
-		constraints.gridx=0;
-		modificaNotificaPanel.add(oraLabel,constraints);
+		gbc.gridx = 0;
+		gbc.gridy++;
+		gbc.anchor = GridBagConstraints.NORTHWEST;
+		modificaNotificaPanel.add(testoLabel, gbc);
 
-		constraints.gridy=1;
-		constraints.gridx=2;
-		constraints.gridwidth=1;
-		modificaNotificaPanel.add(oraField,constraints);
+		gbc.gridx++;
+		gbc.gridwidth = 3;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		modificaNotificaPanel.add(testoField, gbc);
 
-		constraints.gridy=3;
-		constraints.gridx=0;
-		modificaNotificaPanel.add(testoLabel,constraints);
-
-		constraints.gridy=3;
-		constraints.gridx=2;
-		constraints.gridwidth=5;
-		modificaNotificaPanel.add(testoField,constraints);
-
+		(testoField).setBorder(new JTextField().getBorder());
 	}
 
 	/**
