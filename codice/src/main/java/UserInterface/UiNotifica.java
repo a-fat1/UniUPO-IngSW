@@ -184,18 +184,16 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 	 *
 	 * @author Linda Monfermoso, Gabriele Magenta Biasina
 	 * @param tipoNotifica il tipo di notifica da generare (avviso, nuovo utente, nuovo prodotto, nuovo ordine)
-	 * @param prodotto il prodotto da includere nella notifica (NULL se non utilizzato)
-	 * @param ordine l'ordine da includere nella notifica (NULL se non utilizzato)
-	 * @param utente l'utente da includere nella notifica (NULL se non utilizzato)
+	 * @param oggetto l'oggetto (prodotto, utente, ordine) da includere nella notifica (NULL se non utilizzato)
 	 * @param tipoUtente il tipo di utente a cui mostrare la notifica
 	 * @throws RemoteException
 	 */
-	public void avvioGeneraNotifica(String tipoNotifica, HashMap<String, Object> prodotto, HashMap<String, Object> ordine, HashMap<String, Object> utente, String tipoUtente) throws RemoteException {
+	public void avvioGeneraNotifica(String tipoNotifica, HashMap<String, Object> oggetto, String tipoUtente) throws RemoteException {
 		switch (tipoNotifica) {
 			case "nuovo prodotto":
 			case "avviso":
 				if (tipoNotifica.equals("nuovo prodotto"))
-					testoNotifica = gestoreNotifiche.generaTestoNotificaProdotto(prodotto);
+					testoNotifica = gestoreNotifiche.generaTestoNotificaProdotto(oggetto);
 				else
 					testoNotifica = gestoreNotifiche.generaTestoNotificaAvviso();
 				do {
@@ -209,12 +207,12 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 				gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), dataScadenza, testoField.getText(), tipoUtente);
 				break;
 			case "nuovo ordine":
-				testoNotifica = gestoreNotifiche.generaTestoNotificaOrdine(ordine);
-				gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), setDataScadenzaDefault(), testoField.getText(), tipoUtente);
+				testoNotifica = gestoreNotifiche.generaTestoNotificaOrdine(oggetto);
+				gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), setDataScadenzaDefault(), testoNotifica, tipoUtente);
 				break;
 			case "nuovo utente":
-				testoNotifica = gestoreNotifiche.generaTestoNotificaUtente(utente);
-				gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), setDataScadenzaDefault(), testoField.getText(), tipoUtente);
+				testoNotifica = gestoreNotifiche.generaTestoNotificaUtente(oggetto);
+				gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), setDataScadenzaDefault(), testoNotifica, tipoUtente);
 				break;
 			default:
 				throw new IllegalStateException("Valore inatteso: " + tipoNotifica);
@@ -288,7 +286,7 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 	/**
 	 * RF04: Imposta la data di scadenza di una notifica, richiesto dai metodi generaTestoNotificaAvviso e generaTestoNotificaUtente.
 	 *
-	 * @return la data entro la quale la notifica scadrà (una settimana dalla data di pubblicazione)
+	 * @return la data entro la quale la notifica scadrà (un giorno dalla data di pubblicazione)
 	 */
 	private HashMap<String, String> setDataScadenzaDefault() {
 		dataScadenza.put("data", LocalDate.now().plusDays(1).toString());
