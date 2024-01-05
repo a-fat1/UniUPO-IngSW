@@ -7,6 +7,6 @@ public interface UiUtenteInterfaccia extends Remote
 {
 	void avvioCreaUtente() throws RemoteException;
 	void avvioBloccaSbloccaUtente() throws RemoteException;
-	void avvioAggiornaDomicilio() throws RemoteException;
+	void avvioAggiornaDomicilio(String username) throws RemoteException;
 }
 

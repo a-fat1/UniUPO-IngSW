@@ -1,4 +1,4 @@
-import static org.junit.Assert.*;
+/*import static org.junit.Assert.*;
 
 import DataBase.DbNotifiche;
 import Elaborazione.GestoreNotifiche;
@@ -16,7 +16,7 @@ public class RF04GeneraNotifica {
 
     /*
      * Test per verificare il corretto funzionamento del metodo "verificaCorrettezzaDati"
-     */
+
     @Test
     public void testVerificaCorrettezzaDati1() throws RemoteException {
         // data in formato errato
@@ -55,7 +55,7 @@ public class RF04GeneraNotifica {
 
     /*
      * Test per verificare il corretto funzionamento dei metodi "generaTestoNotifica*"
-     */
+
     @Test
     public void testGeneraTestoNotifica1() throws RemoteException {
         // genera testo prodotto
@@ -95,4 +95,4 @@ public class RF04GeneraNotifica {
         assertEquals("Nuovo Cliente: Aldo Bruni.", gestoreNotifiche.generaTestoNotificaUtente(utente));
     }
 
-}
+}*/

@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.awt.Color;
 
 import java.rmi.registry.Registry; 
 import java.rmi.registry.LocateRegistry; 
@@ -32,10 +33,11 @@ public class UiUtente extends JOptionPane implements UiUtenteInterfaccia
 	// attributi
 	
 	// elementi grafici
-	//RF02
 	private JPanel contentPane;
-	private JTextField textField;
-	private JTextField textField_1;
+	private JTextField textField_via;
+	private JTextField textField_civico;
+	private JTextField textField_localita;
+	private JTextField textField_cap;
 	private String pulsantiRegistrazione[];
 	
 	public UiUtente(String hostGestore) throws RemoteException, NotBoundException
@@ -45,9 +47,6 @@ public class UiUtente extends JOptionPane implements UiUtenteInterfaccia
 
 		uiNotifica = (UiNotificaInterfaccia) registryUI.lookup("uiNotifica");
 		gestoreAccessi = (GestoreAccessiInterfaccia) registryGestore.lookup("gestoreAccessi");
-
-		// RF24
-		avvioAggiornaDomicilio();
 	}
 	
 	public void avvioCreaUtente() throws RemoteException
@@ -60,17 +59,17 @@ public class UiUtente extends JOptionPane implements UiUtenteInterfaccia
 		lblNewLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		contentPane.add(lblNewLabel);
 		
-		textField_1 = new JTextField();
-		contentPane.add(textField_1);
-		textField_1.setColumns(10);
+		textField_via = new JTextField();
+		contentPane.add(textField_via);
+		textField_via.setColumns(10);
 		
 		JLabel lblCognome = new JLabel("Cognome");
 		lblCognome.setHorizontalAlignment(SwingConstants.RIGHT);
 		contentPane.add(lblCognome);
 		
-		textField = new JTextField();
-		contentPane.add(textField);
-		textField.setColumns(10);
+		textField_civico = new JTextField();
+		contentPane.add(textField_civico);
+		textField_civico.setColumns(10);
 		pulsantiRegistrazione = new String[2];
 		pulsantiRegistrazione[0] = "Cancella";
 		pulsantiRegistrazione[1] = "Avanti";
@@ -82,92 +81,114 @@ public class UiUtente extends JOptionPane implements UiUtenteInterfaccia
 	{ 	// RF20	
 	}
 
-	public void avvioAggiornaDomicilio() throws RemoteException {
-		String username = "";
-		// Creazione della finestra di dialogo
-		JFrame frame = new JFrame("Aggiorna Domicilio");
-		frame.setSize(400, 200);
-		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		frame.setLayout(new GridLayout(0, 2, 10, 10));
+	public void avvioAggiornaDomicilio(String username) throws RemoteException {
+		setBounds(100, 100, 450, 300);
+		contentPane = new JPanel(new GridLayout(0, 2, 50, 5));
 
-		// Campi di input
-		JLabel labelVia = new JLabel("Via:");
-		JTextField textFieldVia = new JTextField();
-		JLabel labelCivico = new JLabel("Civico:");
-		JTextField textFieldCivico = new JTextField();
-		JLabel labelCap = new JLabel("CAP:");
-		JTextField textFieldCap = new JTextField();
-		JLabel labelLocalita = new JLabel("Località:");
-		JTextField textFieldLocalita = new JTextField();
+		JLabel lblVia = new JLabel("Via");
+		lblVia.setHorizontalAlignment(SwingConstants.RIGHT);
+		contentPane.add(lblVia);
 
-		// Bottone di conferma
-		JButton confermaButton = new JButton("Conferma");
+		textField_via = new JTextField();
+		contentPane.add(textField_via);
+		textField_via.setColumns(10);
 
-		// Aggiungi i componenti al frame
-		frame.add(labelVia);
-		frame.add(textFieldVia);
-		frame.add(labelCivico);
-		frame.add(textFieldCivico);
-		frame.add(labelCap);
-		frame.add(textFieldCap);
-		frame.add(labelLocalita);
-		frame.add(textFieldLocalita);
-		frame.add(new JLabel()); // spazio vuoto
-		frame.add(confermaButton);
+		JLabel lblCivico = new JLabel("Civico");
+		lblCivico.setHorizontalAlignment(SwingConstants.RIGHT);
+		contentPane.add(lblCivico);
 
-		// ActionListener per il bottone di conferma
-		confermaButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				try {
-					// Recupera i valori inseriti dall'utente
-					String via = textFieldVia.getText();
-					String civico = textFieldCivico.getText();
-					String cap = textFieldCap.getText();
-					String localita = textFieldLocalita.getText();
+		textField_civico = new JTextField();
+		contentPane.add(textField_civico);
+		textField_civico.setColumns(10);
 
-					int ckFormato = gestoreAccessi.controllaFormatoDomicilio(via,civico,cap,localita);
-					if (ckFormato != 0)
-						mostraErroreForamtoDomicilio(ckFormato);
-					/*
-						showMessageDialog(null, "Successo", "Successo", INFORMATION_MESSAGE);
-					 */
-					// Chiudi la finestra di dialogo
-					frame.dispose();
+		JLabel lblLocalita = new JLabel("Località");
+		lblLocalita.setHorizontalAlignment(SwingConstants.RIGHT);
+		contentPane.add(lblLocalita);
 
-					// Chiamata al metodo per aggiornare il domicilio
-					gestoreAccessi.promptSalvaDomicilio(username, via, civico, cap, localita);
-				} catch (RemoteException ex) {
-					ex.printStackTrace();
-				}
+		textField_localita = new JTextField();
+		contentPane.add(textField_localita);
+		textField_localita.setColumns(10);
+
+		JLabel lblCap = new JLabel("Cap");
+		lblCap.setHorizontalAlignment(SwingConstants.RIGHT);
+		contentPane.add(lblCap);
+
+		textField_cap = new JTextField();
+		contentPane.add(textField_cap);
+		textField_cap.setColumns(10);
+
+		pulsantiRegistrazione = new String[2];
+		pulsantiRegistrazione[0] = "Cancella";
+		pulsantiRegistrazione[1] = "Conferma";
+
+
+		int ckFormato = 0;
+
+		do {
+			// Utilizza una variabile per memorizzare la scelta dell'utente
+			int scelta = JOptionPane.showOptionDialog(null, contentPane, "Aggiornamento Domicilio (clicca su X o cancella per uscire)", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, pulsantiRegistrazione, "Aggiorna");
+			textField_via.setBackground(Color.WHITE);
+			textField_cap.setBackground(Color.WHITE);
+			textField_localita.setBackground(Color.WHITE);
+			textField_civico.setBackground(Color.WHITE);
+
+			// Recupera i valori inseriti dall'utente
+			String via = textField_via.getText();
+			String civico = textField_civico.getText();
+			String cap = textField_cap.getText();
+			String localita = textField_localita.getText();
+
+			// Controlla se ci sono errori di formato
+			ckFormato = gestoreAccessi.controllaFormatoDomicilio(via, civico, cap, localita);
+			if (ckFormato > 0) {
+				System.out.println("1");
+				this.mostraErroreFormatoDomicilio(ckFormato);
+				System.out.println("2");
+			} else {
+				// Chiudi la finestra di dialogo
+				// Chiamata al metodo per aggiornare il domicilio
+				gestoreAccessi.promptSalvaDomicilio(username, via, civico, cap, localita);
+				this.mostraSuccessoAggiornamentoDomicilio();
 			}
-		});
-
-		// Rendi la finestra di dialogo visibile
-		frame.setVisible(true);
+		} while(ckFormato > 0);
 	}
 
-
-	private void mostraErroreForamtoDomicilio(int msg) {
+	// Rimuovi l'etichetta @Override se non stai implementando un'interfaccia o una classe astratta
+	private void mostraErroreFormatoDomicilio(int msg) {
+		String messaggio = "";
 
 		switch (msg) {
 			case 1:
-				showMessageDialog(null, "Via vuota", "Errore", ERROR_MESSAGE);
+				messaggio = "Via vuota";
+				textField_via.setBackground(Color.YELLOW);
 				break;
 			case 2:
-				showMessageDialog(null, "Numero civico assente, nullo o negativo", "Errore", ERROR_MESSAGE);
+				messaggio = "Il cap non ha 5 cifre";
+				textField_cap.setBackground(Color.YELLOW);
 				break;
 			case 3:
-				showMessageDialog(null, "Il cap non ha 5 cifre", "Errore", ERROR_MESSAGE);
+				messaggio = "Località assente";
+				textField_localita.setBackground(Color.YELLOW);
 				break;
 			case 4:
-				showMessageDialog(null, "Località assente", "Errore", ERROR_MESSAGE);
+				messaggio = "Numero civico assente, nullo o negativo";
+				textField_civico.setBackground(Color.YELLOW);
 				break;
 			case 5:
-				showMessageDialog(null, "Vari campi errati", "Errore", ERROR_MESSAGE);
+				messaggio = "Vari campi errati";
 				break;
 		}
+
+		messaggio = messaggio + "\n(clicca su OK o X per continuare)";
+
+		this.showMessageDialog(null, messaggio, "Errore", this.ERROR_MESSAGE);
 	}
 
+	private void mostraSuccessoAggiornamentoDomicilio() {
+		String messaggio = "Successo!";
 
+		messaggio = messaggio + "\n(clicca su OK o X per continuare)";
+
+		this.showMessageDialog(null, messaggio, "Errore", this.INFORMATION_MESSAGE);
+	}
 }

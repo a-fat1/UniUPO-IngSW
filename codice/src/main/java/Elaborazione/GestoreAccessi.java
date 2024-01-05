@@ -294,19 +294,15 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 
 		DbUtenti dbUtenti = new DbUtenti();
 
-		String selectQueryBefore = "SELECT COUNT(*) FROM Domicilio WHERE Username = '" + username + "'";
+		String selectQueryBefore = "SELECT COUNT() FROM Utente WHERE Username = '" + username + "'";
 		// numero di record prima dell'esecuzione del metodo
-		int esiste = (int) dbUtenti.query(selectQueryBefore).get(0).get("COUNT(*)");
+		int esiste = (int) dbUtenti.query(selectQueryBefore).get(0).get("COUNT()");
 
-		// Se esiste già un indirizzo per l'username, esegui l'update
-		if(esiste != 0){
-			// Comando SQL di Update
-			String updateQuery = "UPDATE Domicilio SET via = '" + via + "', civico = '" + civico + "', cap = '" + cap + "', localita = '" + localita + "' WHERE Username = '" + username + "'";
+		if (esiste != 0)
+		{
+			String Domicilio = via + " " + civico + "," + " " + cap + " " + localita;
+			String updateQuery = "UPDATE Utente SET domicilio = '" + Domicilio + "' WHERE Username = '" + username + "'";
 			dbUtenti.update(updateQuery);
-		} else {
-			// Altrimenti, esegui l'insert
-			String insertQuery = "INSERT INTO Domicilio (Username, via, civico, cap, localita) VALUES ('" + username + "', '" + via + "', '" + civico + "', '" + cap + "', '" + localita + "')";
-			dbUtenti.update(insertQuery);
 		}
 	}
 }

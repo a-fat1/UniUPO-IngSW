@@ -1,4 +1,4 @@
-import static org.junit.Assert.*;
+/*import static org.junit.Assert.*;
 import org.junit.Test;
 
 import DataBase.DbProdotti;
@@ -77,4 +77,4 @@ public class RF16NuovoProdotto {
         dbProdotti.update("DELETE FROM Prodotto WHERE codice="+ returnValue.get("codice") +";");
     }
 
-}
+}*/

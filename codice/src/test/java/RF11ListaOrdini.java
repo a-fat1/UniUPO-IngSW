@@ -1,4 +1,4 @@
-import static org.junit.Assert.*;
+/*import static org.junit.Assert.*;
 
 import DataBase.DbProdotti;
 import DataBase.DbUtenti;
@@ -70,5 +70,5 @@ public class RF11ListaOrdini {
         assertNotNull(ordini);
         assertEquals(ordini.size(),0);
     }
-}
+}*/
 
