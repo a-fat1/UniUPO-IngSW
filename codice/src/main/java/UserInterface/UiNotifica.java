@@ -187,10 +187,12 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 	 * @param prodotto il prodotto da includere nella notifica (NULL se non utilizzato)
 	 * @param ordine l'ordine da includere nella notifica (NULL se non utilizzato)
 	 * @param utente l'utente da includere nella notifica (NULL se non utilizzato)
-	 * @param tipoUtente il tipo di utente a cui mostrare la notifica
 	 * @throws RemoteException
 	 */
-	public void avvioGeneraNotifica(String tipoNotifica, HashMap<String, Object> prodotto, HashMap<String, Object> ordine, HashMap<String, Object> utente, String tipoUtente) throws RemoteException {
+	public void avvioGeneraNotifica(String tipoNotifica, HashMap<String, Object> prodotto, HashMap<String, Object> ordine, HashMap<String, Object> utente) throws RemoteException {
+		// ottiene il tipo dell'utente dall'hashmap "utente"
+		String tipoUtente = utente.get("tipo").toString();
+
 		switch (tipoNotifica) {
 			case "nuovo prodotto":
 			case "avviso":
