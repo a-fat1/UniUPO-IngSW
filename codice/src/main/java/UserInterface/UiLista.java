@@ -13,6 +13,7 @@ import java.rmi.RemoteException;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.Color;
 import java.awt.Dialog.ModalityType;
 import java.awt.Window.Type;
 import java.awt.event.ActionListener;
@@ -38,6 +39,13 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 
 	// componenti
 	private GestoreRicercheInterfaccia gestoreRicerche;
+
+	//RF12: Lista Pagamenti
+	//autori: Broglio, Cartieri
+	private int scelta;
+	private String[] pulsanteRicerca;
+	private JTable tableListaPagamenti;
+	private JScrollPane scrollPanelListaPagamenti;
 
 	// attributi
 	// RF 13 Benetti-Chiappa
@@ -75,7 +83,9 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 		panelData.add(fieldDataFine);
 		tableListaForniture = new JTable();
 		scrollPanelListaForniture = new JScrollPane(tableListaForniture);
-		
+
+		pulsanteRicerca = new String[1];
+		pulsanteRicerca[0]="Cerca";
 	}
 
 	public void avvioListaOrdini(String username, int codiceProdotto) throws RemoteException {
@@ -150,7 +160,140 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 		JOptionPane.showMessageDialog(null, paneOrdini, "Lista Ordini", JOptionPane.INFORMATION_MESSAGE, null);
 	}
 
-	public void avvioListaPagamenti() throws RemoteException { // RF12
+	public void avvioListaPagamenti(String username) throws RemoteException
+	{
+		//RF12: Lista Pagamenti
+		//autori: Broglio, Cartieri
+		ArrayList<HashMap<String, Object>> listaPagamenti;
+		if(username!=null)
+		{
+			listaPagamenti=gestoreRicerche.ricercaListaPagamentiUtente(username);
+			if(listaPagamenti.size()==0)
+				mostraErroreListaPagamenti(3);
+			else
+			{
+				mostraListaPagamenti(listaPagamenti);
+				this.showMessageDialog(null, scrollPanelListaPagamenti, "Lista pagamenti (ricerca per utente: "+username+")" , JOptionPane.PLAIN_MESSAGE);
+			}
+		}
+		else
+		{
+			do
+			{
+				mostraFormRicercaPagamentiData();
+				if(scelta==0)
+				{
+					esitoControllo=gestoreRicerche.controlloParametriListaPagamenti(dataInizio,dataFine);
+					if(esitoControllo==1 || esitoControllo==2)
+						mostraErroreListaPagamenti(esitoControllo);
+					else
+					{
+						listaPagamenti=gestoreRicerche.ricercaListaPagamentiData(dataInizio,dataFine);
+						if(listaPagamenti.size()==0)
+							mostraErroreListaPagamenti(3);
+						else
+						{
+							mostraListaPagamenti(listaPagamenti);
+							this.showMessageDialog(null, scrollPanelListaPagamenti, "Lista pagamenti (ricerca per data da "+ dataInizio + " a " + dataFine+")" , JOptionPane.PLAIN_MESSAGE);
+						}
+					}
+
+				}
+			} while(esitoControllo==1 || esitoControllo==2 || scelta==1);
+		}
+	}
+
+	private void mostraErroreListaPagamenti(int tipoErrore)
+	{
+		//RF12: Lista Pagamenti
+		//autori: Broglio, Cartieri
+		String messaggio="";
+
+		if (tipoErrore==1)
+		{
+			messaggio="Errore nel formato della data. Usare dd/MM/yyyy.";
+			fieldDataInizio.setBackground(Color.YELLOW);
+			fieldDataFine.setBackground(Color.YELLOW);
+		}
+		if (tipoErrore==2)
+		{
+			messaggio="La data di inizio deve essere precedente alla data di fine.";
+			fieldDataInizio.setBackground(Color.YELLOW);
+			fieldDataFine.setBackground(Color.YELLOW);
+		}
+		if (tipoErrore==3)
+		{
+			messaggio="Non sono presenti pagamenti.";
+		}
+
+		messaggio = messaggio + "\n(clicca su OK o X per continuare)";
+
+		this.showMessageDialog(null, messaggio, "Errore", this.ERROR_MESSAGE);
+	}
+
+	public void mostraFormRicercaPagamentiData() throws RemoteException
+	{
+		//RF12: Lista Pagamenti
+		//autori: Broglio, Cartieri
+
+	}
+
+	public void mostraListaPagamenti(ArrayList<HashMap<String, Object>> listaPagamenti) throws RemoteException
+	{
+		//RF12: Lista Pagamenti
+		//autori: Broglio, Cartieri
+		Vector<Object> colonne=new Vector<>();
+		Vector<Vector<Object>> righe = new Vector<>();
+
+		for (String colonna: listaPagamenti.get(0).keySet())
+		{
+			if(!colonna.equals("username") && !colonna.equals("nome") && !colonna.equals("cognome"))
+			{
+				colonne.add(colonna);
+			}
+		}
+		// colonne nome e cognome avvicinate
+		colonne.add(4, "nome");
+		colonne.add(5, "cognome");
+
+		for (HashMap<String, Object> rigaPagamenti : listaPagamenti)
+		{
+			Vector<Object> riga = new Vector<>();
+			for (Object colonna: colonne)
+			{
+				riga.add(rigaPagamenti.get(colonna));
+			}
+			righe.add(riga);
+		}
+
+		tableListaPagamenti = new JTable(righe,colonne)
+		{
+			public boolean editCellAt(int row, int column, java.util.EventObject e)
+			{
+				return false;
+			}
+		};
+		// correzione nomi e larghezza delle colonne
+		ridimensionaListaPagamenti(tableListaPagamenti);
+
+		scrollPanelListaPagamenti = new JScrollPane(tableListaPagamenti);
+	}
+
+	private void ridimensionaListaPagamenti(JTable tableListaPagamenti) throws RemoteException
+	{
+		tableListaPagamenti.getColumn("importo").setPreferredWidth(60);
+		tableListaPagamenti.getColumn("importo").setHeaderValue("Importo");
+		tableListaPagamenti.getColumn("nome").setPreferredWidth(80);
+		tableListaPagamenti.getColumn("nome").setHeaderValue("Nome");
+		tableListaPagamenti.getColumn("cognome").setPreferredWidth(80);
+		tableListaPagamenti.getColumn("cognome").setHeaderValue("Cognome");
+		tableListaPagamenti.getColumn("dataOrdine").setPreferredWidth(150);
+		tableListaPagamenti.getColumn("dataOrdine").setHeaderValue("Data Ordine");
+		tableListaPagamenti.getColumn("numeroCarta").setPreferredWidth(150);
+		tableListaPagamenti.getColumn("numeroCarta").setHeaderValue("Numero Carta");
+		tableListaPagamenti.getColumn("tipoCarta").setPreferredWidth(80);
+		tableListaPagamenti.getColumn("tipoCarta").setHeaderValue("Tipo Carta");
+		tableListaPagamenti.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 	}
 
 	@Override

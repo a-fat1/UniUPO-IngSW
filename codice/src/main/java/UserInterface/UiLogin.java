@@ -215,7 +215,7 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 							if (sceltaMenu==4 && ((String)utente.get("tipo")).equals("amministratore"))
 								uiNotifica.avvioRicercaNotifiche();
 							if (sceltaMenu==5 && !((String)utente.get("tipo")).equals("amministratore"))
-								uiLista.avvioListaPagamenti();
+								uiLista.avvioListaPagamenti(null);
 							if (sceltaMenu==6 && !((String)utente.get("tipo")).equals("amministratore"))
 								uiRicerca.avvioProdottiPiuVenduti();
 							if (sceltaMenu==7 && ((String)utente.get("tipo")).equals("cliente"))
