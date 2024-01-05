@@ -1,6 +1,7 @@
 package UserInterface;
 
-import java.rmi.Remote; 
+import java.rmi.NotBoundException;
+import java.rmi.Remote;
 import java.rmi.RemoteException; 
 import java.rmi.NotBoundException;
 
