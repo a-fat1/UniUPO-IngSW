@@ -168,7 +168,7 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 		nuovaPasswordPanel.add(new JLabel("e contenere almeno una lettera e un numero"));
 	}
 	
-	public void avvioLogin() throws RemoteException
+	public void avvioLogin() throws RemoteException, NotBoundException
 	{	
 		//RF00: login
     		//autore: Codetta
@@ -177,7 +177,7 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 			this.mostraFormLogin();
 			
 			if (scelta==0) 
-				uiUtente.avvioCreaUtente();
+				uiUtente.avvioCreaUtente(true);
 
 			if (scelta==1) // login
 			{		
@@ -203,7 +203,7 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 							if (sceltaMenu==2 && !((String)utente.get("tipo")).equals("amministratore"))
 								uiRicerca.avvioRicercaProdotto();
 							if (sceltaMenu==2 && ((String)utente.get("tipo")).equals("amministratore"))			
-								uiUtente.avvioCreaUtente();
+								uiUtente.avvioCreaUtente(false);
 							if (sceltaMenu==3 && ((String)utente.get("tipo")).equals("cliente"))
 								uiCarrello.avvioVisualizzaCarrello();
 							if (sceltaMenu==3 && !((String)utente.get("tipo")).equals("cliente"))

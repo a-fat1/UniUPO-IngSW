@@ -1,13 +1,12 @@
 package UserInterface;
 
+import java.awt.*;
 import java.util.HashMap;
 import java.util.ArrayList;
 
 import java.rmi.registry.Registry; 
 import java.rmi.registry.LocateRegistry; 
 import java.rmi.RemoteException;
-import java.awt.Font;
-import java.awt.GridLayout;
 import java.awt.Frame.*;
 import java.rmi.NotBoundException;
 
@@ -49,14 +48,24 @@ public class UiUtente extends JOptionPane implements UiUtenteInterfaccia
 	public UiUtente(String hostGestore) throws RemoteException, NotBoundException
 	{
 		registryUI = LocateRegistry.getRegistry("127.0.0.1", 1100); // default: 1099
-		registryGestore = LocateRegistry.getRegistry(hostGestore, 1099); 
+		registryGestore = LocateRegistry.getRegistry(hostGestore, 1099);
 
+		uiLogin = null;
 		uiNotifica = (UiNotificaInterfaccia) registryUI.lookup("uiNotifica");
 		gestoreAccessi = (GestoreAccessiInterfaccia) registryGestore.lookup("gestoreAccessi");
 	}
-	
-	public void avvioCreaUtente(boolean cliente) throws RemoteException
+
+	/**
+	 * Metodo che implementa la logica del diagramma di sequenza.
+	 * @param cliente se settato a true, chi visualizza la form è un cliente, altrimenti è un amministratore.
+	 * @throws RemoteException
+	 * @throws NotBoundException
+	 */
+	public void avvioCreaUtente(boolean cliente) throws RemoteException, NotBoundException
 	{ 	// RF02
+		if (uiLogin == null)
+			uiLogin = (UiLoginInterfaccia) registryUI.lookup("uiLogin");
+
 		String username = "";
 		do
 		{
@@ -73,7 +82,7 @@ public class UiUtente extends JOptionPane implements UiUtenteInterfaccia
 			}
 			else if (esitoControllo == 0)
 			{
-				//gestoreAccessi.promptSalvaAccount(nome, cognome);   //commentato in quanto lavora sul db
+				gestoreAccessi.promptSalvaAccount(nome, cognome);
 				username = nome+"."+cognome;
 				clienteAmministratore.put("username", username);
 				clienteAmministratore.put("nome", nome);
@@ -88,11 +97,11 @@ public class UiUtente extends JOptionPane implements UiUtenteInterfaccia
 				else
 				{
 					mostraFormTipoUtente();
+					if (annullamentoRichiesta) break;
 				}
 
-				//lavorano sul DB, quindi sono commentati
-				//gestoreAccessi.richiestaAttivazioneAccount(nome, cognome, tipoUtente);
-				//gestoreAccessi.aggiuntaCredenziali(nome+"."+cognome);
+				gestoreAccessi.richiestaAttivazioneAccount(nome, cognome, tipoUtente);
+				gestoreAccessi.aggiuntaCredenziali(nome+"."+cognome);
 				uiLogin.avvioAggiornaUsername();
 				uiLogin.avvioAggiornaPassword(true, username, "");
 			}
@@ -100,25 +109,40 @@ public class UiUtente extends JOptionPane implements UiUtenteInterfaccia
 
 		}while (!annullamentoRichiesta && esitoControllo!=0);
 	}
-	
+
+	/**
+	 * metodo che implementa (e visualizza) la form di registrazione. Visibile sia da clienti che da amministratori.
+	 * Fa immettere nome e cognome per la registrazione dell'account.
+	 * @throws RemoteException
+	 */
 	private void mostraFormRegistrazione() throws RemoteException {
 		
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel(new GridLayout(0, 2, 5, 5));
 		
-		JLabel lblNewLabel = new JLabel("Nome");
-		lblNewLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		JLabel lblNewLabel = new JLabel("nome");
+		lblNewLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		contentPane.add(lblNewLabel);
-		
+
 		textFieldNome = new JTextField();
+
+		//In caso di errore sul formato del nome, mostra all'utente il textField incriminato
+		if (esitoControllo==1) textFieldNome.setBackground(Color.YELLOW);
+		else textFieldNome.setBackground(Color.WHITE);
+
 		contentPane.add(textFieldNome);
 		textFieldNome.setColumns(10);
 		
-		JLabel lblCognome = new JLabel("Cognome");
-		lblCognome.setHorizontalAlignment(SwingConstants.RIGHT);
+		JLabel lblCognome = new JLabel("cognome");
+		lblCognome.setHorizontalAlignment(SwingConstants.LEFT);
 		contentPane.add(lblCognome);
 		
 		textFieldCognome = new JTextField();
+
+		//In caso di errore sul formato del cognome, mostra all'utente il textField incriminato
+		if (esitoControllo==2) textFieldCognome.setBackground(Color.YELLOW);
+		else textFieldCognome.setBackground(Color.WHITE);
+
 		contentPane.add(textFieldCognome);
 		textFieldCognome.setColumns(10);
 		pulsantiRegistrazione = new String[2];
@@ -126,12 +150,16 @@ public class UiUtente extends JOptionPane implements UiUtenteInterfaccia
 		pulsantiRegistrazione[1] = "Avanti";
 
 		int scelta = JOptionPane.showOptionDialog(null, contentPane, "Registrazione (clicca su X o cancella per uscire)", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, pulsantiRegistrazione, "Registrati");
-		
-		if (scelta == 0) {
+		if (scelta == 0 || scelta == -1) {
 			annullamentoRichiesta = true;    //utente vuole quittare
 		} else annullamentoRichiesta = false;
 	}
-	
+
+	/**
+	 * metodo necessario a mostrare l'errore commesso dall'utente nell'input di nome e cognome,
+	 * in mostraFormRegistrazione().
+	 * @param esitoControllo se settato a 1, viene mostrato 'errore nome', se settato a 2 viene mostrato 'errore cognome'.
+	 */
 	private void mostraErrore(int esitoControllo)
 	{
 		
@@ -165,6 +193,10 @@ public class UiUtente extends JOptionPane implements UiUtenteInterfaccia
 		}
 	}
 
+	/**
+	 * metodo che implementa la visualizzazione (solo per amministratori) della tendina per la scelta del
+	 * ruolo dell'utente appena registrato.
+	 */
 	private void mostraFormTipoUtente(){
 		//creazione di contentPaneError
 		setBounds(100, 100, 450, 300);
@@ -173,7 +205,7 @@ public class UiUtente extends JOptionPane implements UiUtenteInterfaccia
 		contentPaneDialog.setLayout(new GridLayout(0, 2, 30, 50));
 
 		JLabel lblNewLabel = new JLabel("ruolo");
-		lblNewLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		contentPaneDialog.add(lblNewLabel);
 
 		// array of string containing cities
@@ -188,8 +220,9 @@ public class UiUtente extends JOptionPane implements UiUtenteInterfaccia
 		contentPaneDialog.add(c1);
 
 		//visualizzazione contentPaneError
-		JOptionPane.showConfirmDialog(null, contentPaneDialog, "registra utente (clicca X per uscire)", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null);
+		int scelta = JOptionPane.showConfirmDialog(null, contentPaneDialog, "registra utente (clicca X per uscire)", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null);
 
+		if (scelta==-1) annullamentoRichiesta = true;
 		//ottieni il tipoUtente selezionato
 		tipoUtente = (String)c1.getSelectedItem();
 	}
