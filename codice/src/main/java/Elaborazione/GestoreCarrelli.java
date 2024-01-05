@@ -31,7 +31,7 @@ public class GestoreCarrelli implements GestoreCarrelliInterfaccia
 		// autori: Bossola Fancesco, Oppezzo Raul
 
 		System.out.println("GestoreCarrelli.cercaElementi(" + username + ")\n");
-		
+
 		return dbProdotti.query("SELECT * "
 				+ "FROM Carrello JOIN Prodotto ON Carrello.codiceProdotto = Prodotto.codice "
 				+ "WHERE Carrello.username = \"" + username + "\";");
@@ -79,8 +79,8 @@ public class GestoreCarrelli implements GestoreCarrelliInterfaccia
 				+ elemento.get("quantita") + ((int) elemento.get("quantitaProdotto") - nuovaQuantita)
 				+ "WHERE Prodotto.codice = " + elemento.get("codice") + ";");
 	}
-	
-	public void rimozioneProdottoDalCarrello(HashMap<String, Object> elemento, String username) throws RemoteException {
+
+		public void rimozioneProdottoDalCarrello(HashMap<String, Object> elemento, String username) throws RemoteException {
 		// RF07: rimuovi prodotto dal carrello
 		// autori: Simone Aldo Borsa, Andrea Padoan
 
@@ -98,8 +98,16 @@ public class GestoreCarrelli implements GestoreCarrelliInterfaccia
 		// RF07: rimuovi prodotto dal carrello
 		// autori: Simone Aldo Borsa, Andrea Padoan
 		
+		if(carrello.size() == 0) return;
+		
 		for(HashMap<String, Object> elemento : carrello) {
-			rimozioneProdottoDalCarrello(elemento, username);
+			dbProdotti.update("UPDATE Prodotto "
+					+ "SET Prodotto.quantita = "
+					+ elemento.get("quantita") + (int) elemento.get("quantitaProdotto")
+					+ "WHERE Carrello.codiceProdotto = " + elemento.get("codiceProdotto") + ";");
 		}
+		
+		dbProdotti.update("DELETE FROM Carrello "
+				+ "WHERE Carrello.username = \"" + username + ";");
 	}
 }
