@@ -184,16 +184,20 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 	 *
 	 * @author Linda Monfermoso, Gabriele Magenta Biasina
 	 * @param tipoNotifica il tipo di notifica da generare (avviso, nuovo utente, nuovo prodotto, nuovo ordine)
-	 * @param oggetto l'oggetto (prodotto, utente, ordine) da includere nella notifica (NULL se non utilizzato)
-	 * @param tipoUtente il tipo di utente a cui mostrare la notifica
+	 * @param prodotto il prodotto da includere nella notifica (NULL se non utilizzato)
+	 * @param ordine l'ordine da includere nella notifica (NULL se non utilizzato)
+	 * @param utente l'utente da includere nella notifica (NULL se non utilizzato)
 	 * @throws RemoteException
 	 */
-	public void avvioGeneraNotifica(String tipoNotifica, HashMap<String, Object> oggetto, String tipoUtente) throws RemoteException {
+	public void avvioGeneraNotifica(String tipoNotifica, HashMap<String, Object> prodotto, HashMap<String, Object> ordine, HashMap<String, Object> utente) throws RemoteException {
+		// ottiene il tipo dell'utente dall'hashmap "utente"
+		String tipoUtente = utente.get("tipo").toString();
+
 		switch (tipoNotifica) {
 			case "nuovo prodotto":
 			case "avviso":
 				if (tipoNotifica.equals("nuovo prodotto"))
-					testoNotifica = gestoreNotifiche.generaTestoNotificaProdotto(oggetto);
+					testoNotifica = gestoreNotifiche.generaTestoNotificaProdotto(prodotto);
 				else
 					testoNotifica = gestoreNotifiche.generaTestoNotificaAvviso();
 				do {
@@ -207,11 +211,11 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 				gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), dataScadenza, testoField.getText(), tipoUtente);
 				break;
 			case "nuovo ordine":
-				testoNotifica = gestoreNotifiche.generaTestoNotificaOrdine(oggetto);
+				testoNotifica = gestoreNotifiche.generaTestoNotificaOrdine(ordine);
 				gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), setDataScadenzaDefault(), testoNotifica, tipoUtente);
 				break;
 			case "nuovo utente":
-				testoNotifica = gestoreNotifiche.generaTestoNotificaUtente(oggetto);
+				testoNotifica = gestoreNotifiche.generaTestoNotificaUtente(utente);
 				gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), setDataScadenzaDefault(), testoNotifica, tipoUtente);
 				break;
 			default:
