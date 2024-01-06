@@ -411,13 +411,13 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 			if (scelta == 0) {		// Scelta = 0 quando viene premuto ok in mostraFormGiacenza()
 				esitoGiacenza = gestoreRicerche.controlloGiacenza(giacenza);	// Viene richiamato controlloGiacenza per controllare la giacenza
 				if(esitoGiacenza == 1 || esitoGiacenza == 2 || esitoGiacenza == 3)
-					mostraErrore(esitoGiacenza);	// In caso di errore viene richiamato mostraErrore per visualizzare l'errore specifico
+					mostraErroreGiacenza(esitoGiacenza);	// In caso di errore viene richiamato mostraErroreGiacenza per visualizzare l'errore specifico
 				else {
 					System.out.println("esitoGiacenza = " + esitoGiacenza + "\n");
-					listaProdotti = gestoreRicerche.ricercaProdotti(giacenza);		// Con la giacenza corretta viene richiamato ricercaProdotti per recuperare i dati dei prodotti
+					listaProdotti = gestoreRicerche.ricercaProdottiConGiacenza(giacenza);		// Con la giacenza corretta viene richiamato ricercaProdottiConGiacenza per recuperare i dati dei prodotti
 					if(listaProdotti.size() == 0) {
 						System.out.println("dimensione listaProdotti = " + listaProdotti.size() + "\n");
-						mostraErrore(4);		// Se l'ArrayList non ha i dati si richiama mostraErrore con parametro 4
+						mostraErroreGiacenza(4);		// Se l'ArrayList non ha i dati si richiama mostraErroreGiacenza con parametro 4
 					}
 					else
 						mostraListaProdotti(listaProdotti);		// mostraListaProdotti viene richiamato per visualizzare i dati in modo adeguato
@@ -467,7 +467,7 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 				System.out.println("scelta = " + scelta + " --> pulsante X\n");
 	}
 	
-	private void mostraErrore(int tipoErrore) {
+	private void mostraErroreGiacenza(int tipoErrore) {
 
 		// RF18: Prodotti in esaurimento
 		// Alessandro Fatone, Dario Guidotti
