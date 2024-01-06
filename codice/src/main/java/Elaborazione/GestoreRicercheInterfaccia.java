@@ -21,7 +21,7 @@ public interface GestoreRicercheInterfaccia extends Remote
     // RF18 Prodotti in esaurimento
     // Alessandro Fatone, Dario Guidotti
     int controlloGiacenza(String giacenza) throws RemoteException;
-	ArrayList<HashMap<String, Object>> ricercaProdotti(String giacenza) throws RemoteException;
+	ArrayList<HashMap<String, Object>> ricercaProdottiConGiacenza(String giacenza) throws RemoteException;
 
     // RF19 RicercaUtente
     // Nazzari Riccardo, Andrea Benedetto
