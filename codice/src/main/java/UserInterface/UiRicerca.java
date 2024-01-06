@@ -35,9 +35,10 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 	private GestoreRicercheInterfaccia gestoreRicerche;
 
 	// attributi
-	private int scelta, esitoGiacenza = -1;		// RF18
-	private String giacenza;	// RF18
-	ArrayList<HashMap<String, Object>> listaProdotti;		//RF18
+	// RF18
+	private int scelta, esitoGiacenza = -1;
+	private String giacenza;
+	ArrayList<HashMap<String, Object>> listaProdotti;
 	//RF08
 	private static final String _CD_ = "CD"; 
 	private static final String _DVD_ = "DVD";
@@ -50,11 +51,12 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 	private static final String _AGGIUNGI_AL_CARRELLO = "Aggiungi al Carrello";
 	
 	// elementi grafici
-	private JPanel pannelloGiacenza;	// RF18
-	private JTextField campoGiacenza;	// RF18
-	private JTable tabellaProdotti;		// RF18
-	private JScrollPane pannelloGiacenzaScorrevole;		// RF18
-	private String giacenzaPulsanti[] = new String[2];	// RF18
+	// RF18
+	private JPanel pannelloGiacenza;
+	private JTextField campoGiacenza;
+	private JTable tabellaProdotti;
+	private JScrollPane pannelloGiacenzaScorrevole;
+	private String giacenzaPulsanti[] = new String[2];
 	//RF08
 	JPanel ricercaPanel;
 	JPanel mainPanel;
