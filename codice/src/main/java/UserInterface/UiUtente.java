@@ -123,34 +123,35 @@ public class UiUtente extends JOptionPane implements UiUtenteInterfaccia
 
 
 		int ckFormato = 0;
+		int scelta = 0;
 
 		do {
 			// Utilizza una variabile per memorizzare la scelta dell'utente
-			int scelta = JOptionPane.showOptionDialog(null, contentPane, "Aggiornamento Domicilio (clicca su X o cancella per uscire)", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, pulsantiRegistrazione, "Aggiorna");
-			textField_via.setBackground(Color.WHITE);
-			textField_cap.setBackground(Color.WHITE);
-			textField_localita.setBackground(Color.WHITE);
-			textField_civico.setBackground(Color.WHITE);
+			scelta = JOptionPane.showOptionDialog(null, contentPane, "Aggiornamento Domicilio (clicca su X o cancella per uscire)", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, pulsantiRegistrazione, "Aggiorna");
+			if (scelta == 1) {
+				textField_via.setBackground(Color.WHITE);
+				textField_cap.setBackground(Color.WHITE);
+				textField_localita.setBackground(Color.WHITE);
+				textField_civico.setBackground(Color.WHITE);
 
-			// Recupera i valori inseriti dall'utente
-			String via = textField_via.getText();
-			String civico = textField_civico.getText();
-			String cap = textField_cap.getText();
-			String localita = textField_localita.getText();
+				// Recupera i valori inseriti dall'utente
+				String via = textField_via.getText();
+				String civico = textField_civico.getText();
+				String cap = textField_cap.getText();
+				String localita = textField_localita.getText();
 
-			// Controlla se ci sono errori di formato
-			ckFormato = gestoreAccessi.controllaFormatoDomicilio(via, civico, cap, localita);
-			if (ckFormato > 0) {
-				System.out.println("1");
-				this.mostraErroreFormatoDomicilio(ckFormato);
-				System.out.println("2");
-			} else {
-				// Chiudi la finestra di dialogo
-				// Chiamata al metodo per aggiornare il domicilio
-				gestoreAccessi.promptSalvaDomicilio(username, via, civico, cap, localita);
-				this.mostraSuccessoAggiornamentoDomicilio();
+				// Controlla se ci sono errori di formato
+				ckFormato = gestoreAccessi.controllaFormatoDomicilio(via, civico, cap, localita);
+				if (ckFormato > 0) {
+					this.mostraErroreFormatoDomicilio(ckFormato);
+				} else {
+					// Chiudi la finestra di dialogo
+					// Chiamata al metodo per aggiornare il domicilio
+					gestoreAccessi.promptSalvaDomicilio(username, via, civico, cap, localita);
+					this.mostraSuccessoAggiornamentoDomicilio();
+				}
 			}
-		} while(ckFormato > 0);
+		} while(ckFormato > 0 && scelta == 1);
 	}
 
 	// Rimuovi l'etichetta @Override se non stai implementando un'interfaccia o una classe astratta
@@ -189,6 +190,6 @@ public class UiUtente extends JOptionPane implements UiUtenteInterfaccia
 
 		messaggio = messaggio + "\n(clicca su OK o X per continuare)";
 
-		this.showMessageDialog(null, messaggio, "Errore", this.INFORMATION_MESSAGE);
+		this.showMessageDialog(null, messaggio, "Successo", this.INFORMATION_MESSAGE);
 	}
 }
