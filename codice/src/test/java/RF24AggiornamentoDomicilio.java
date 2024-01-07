@@ -1,4 +1,4 @@
-/*import static org.junit.Assert.*;
+import static org.junit.Assert.*;
 
 import org.junit.After;
 import org.junit.Test;
@@ -130,6 +130,33 @@ public class RF24AggiornamentoDomicilio {
         // Verifica che il campo domicilio sia stato valorizzato correttamente
         assertEquals(Domicilio, resultAfter.get(0).get("domicilio"));
 
-
     }
-}*/
+
+    @Test
+    public void testPromptRecuperaDomicilio() throws RemoteException {
+        // Inizializza il database con un record per l'utente di test
+        setUp();
+        String usernameTest = "sirio";
+        String viaTest = "Via Roma";
+        String civicoTest = "42";
+        String capTest = "10100";
+        String localitaTest = "Torino";
+        String domicilioTest = viaTest + "|" + civicoTest + "|" + capTest + "|" + localitaTest;
+
+        // Inserisci l'indirizzo di test nel database per l'utente di test
+        String insertQuery = "INSERT INTO Utente (Username, Domicilio) VALUES ('" + usernameTest + "', '" + domicilioTest + "')";
+        dbUtenti.update(insertQuery);
+
+        // Esegue promptRecuperaDomicilio per recuperare l'indirizzo
+        String[] result = gestoreAccessi.promptRecuperaDomicilio(usernameTest);
+
+        // Verifica che l'array result sia di lunghezza 4
+        assertEquals(4, result.length);
+
+        // Verifica che le parti dell'indirizzo siano corrette
+        assertEquals(viaTest, result[0]);
+        assertEquals(civicoTest, result[1]);
+        assertEquals(capTest, result[2]);
+        assertEquals(localitaTest, result[3]);
+    }
+}
