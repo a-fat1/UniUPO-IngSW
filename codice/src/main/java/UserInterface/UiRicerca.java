@@ -29,9 +29,9 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 	private GestoreRicercheInterfaccia gestoreRicerche;
 
 	// attributi
-	
+
+	// RF19 - Ricerca Utente
 	// elementi grafici
-	// RF19
 	private JPanel searchPanel;
 	private JLabel labelUsername;
 	private JLabel labelNome;
@@ -41,13 +41,17 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 	private JTextField fieldNome;
 	private JTextField fieldCognome;
 
-	private JFrame frameRicercaUtente;
-	private int result;
+	// RF19 - Ricerca Utente
+	// variabili
+	private int sceltaUtente; // variabile per determinare l'uscita o meno dall'interfaccia di Ricerca utente
 	private String nome;
 	private String cognome;
 	private String username;
 	private ArrayList<HashMap<String, Object>> elencoUtenti;
-	private String scelta;
+	private String sceltaRicerca;
+
+	// RF19 - Ricerca Utente
+	// Array di String per i pulsanti di ricerca e le colonne per la tabella dei dati estratti dal database
 	private final String[] pulsanteRicerca;
 	private final String[] pulsanteElencoUtentiStaff;
 	private final String[] pulsanteElencoUtentiAdmin;
@@ -64,22 +68,19 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 		uiProdotto = (UiProdottoInterfaccia) registryUI.lookup("uiProdotto");
 		gestoreRicerche = (GestoreRicercheInterfaccia) registryGestore.lookup("gestoreRicerche");
 
+		// RF19 - Ricerca Utente
+		// settings per UIRicercaUtente
+
+		// campi username, nome e cognome con i relativi field
 		labelUsername = new JLabel("Inserisci uno username");
 		labelNome = new JLabel("Inserisci un nome");
 		labelCognome = new JLabel("Inserisci un cognome");
-		fieldUsername = new JTextField("", 10);
-		fieldNome = new JTextField("", 10);
-		fieldCognome = new JTextField("", 10);
+		fieldUsername = new JTextField("", 20);
+		fieldNome = new JTextField("", 20);
+		fieldCognome = new JTextField("", 20);
 
-		String[] scelteMenuRicercaUtente = new String[2];
-		scelteMenuRicercaUtente[0] = "Ricerca per nome-cognome";
-		scelteMenuRicercaUtente[1] = "Ricerca per username";
-		comboMenu = new JComboBox<>(scelteMenuRicercaUtente);
-
-		colonneAmministratore = new String[]{"Nome", "Cognome", "Username", "Attivo"};
-
-		colonneStaff = new String[]{"Nome", "Cognome", "Username", "Tipo utente", "Attivo"};
-
+		// RF19 - Ricerca Utente
+		// creo il panel per l'interfaccia di inserimento nome, cognome o username
 		searchPanel = new JPanel(new GridLayout(7, 1));
 		searchPanel.add(comboMenu);
 		searchPanel.add(labelUsername);
@@ -90,14 +91,30 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 		searchPanel.add(fieldCognome);
 		pulsanteRicerca = new String[1];
 		pulsanteRicerca[0] = "Invia";
+
+		// RF19 - Ricerca Utente
+		// stringhe per il menu' per la ricerca
+		String[] scelteMenuRicercaUtente = new String[2];
+		scelteMenuRicercaUtente[0] = "Ricerca per nome-cognome";
+		scelteMenuRicercaUtente[1] = "Ricerca per username";
+		comboMenu = new JComboBox<>(scelteMenuRicercaUtente);
+
+		// RF19 - Ricerca Utente
+		// colonne per staff e amministratore, servono per mostrare i campi della ricerca nel database
+		colonneStaff = new String[]{"Nome", "Cognome", "Username", "Tipo utente"};
+		colonneAmministratore = new String[]{"Nome", "Cognome", "Username", "Tipo utente", "Attivo"};
+
+		// RF19 - Ricerca Utente
+		// pulsanti necessari per la parte in cui si decide cosa fare con un utente selezionato tra quelli
+		// trovati nel database
 		pulsanteElencoUtentiStaff = new String[2];
 		pulsanteElencoUtentiStaff[0] = "Lista pagamenti";
 		pulsanteElencoUtentiStaff[1] = "Lista ordini";
 		pulsanteElencoUtentiAdmin = new String[1];
 		pulsanteElencoUtentiAdmin[0] = "Blocca\\Sblocca utente";
 
-
-
+		// RF19 - Ricerca Utente
+		// Inizializzazione di ArrayList per gli utenti trovati
 		elencoUtenti = new ArrayList<>();
 
 	}
@@ -111,36 +128,38 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 	}
 
 	public void avvioRicercaUtente(String genereUtente) throws RemoteException
-	{	// RF19
+	{
+		// RF19 - Ricerca Utente
+		// Riccardo Nazzari, Andrea Benedetto
 
 		// set di esitoControllo con valore iniziale
-
 		int esitoControllo = 0;
-		result = 0;
+		// set di result = 0 per iniziare il ciclo
+		sceltaUtente = 0;
 
 		// loop fino a quando il controllo non è positivo (o l'utente esce dalla finestra)
-		while((esitoControllo != 4) && (result != -1)){
+		while((esitoControllo != 4) && (sceltaUtente != -1)){
 
 			// mostra il form della ricerca
 			mostraFormRicerca();
 
 			// se viene selezionato nome-cognome, viene controllato tramite la funzione apposita per il nome
 			// e cognome
-			if(scelta.equals("Ricerca per nome-cognome"))
+			if(sceltaRicerca.equals("Ricerca per nome-cognome"))
 			{
 				esitoControllo = gestoreRicerche.controlloParametriRicercaUtente(nome, cognome);
 				// result != -1, altrimenti viene mostrato questo errore quando viene chiusa la finestra per uscire
-				if((esitoControllo == 2 || esitoControllo == 3) && (result != -1))
+				if((esitoControllo == 2 || esitoControllo == 3) && (sceltaUtente != -1))
 				{
 					mostraErroreRicercaUtente(esitoControllo);
 				}
 			}
 			// se viene selezionato username, viene controllato tramite la funzione apposita per lo username
-			else if(scelta.equals("Ricerca per username"))
+			else if(sceltaRicerca.equals("Ricerca per username"))
 			{
 				esitoControllo = gestoreRicerche.controlloParametriRicercaUtente(username);
 				// result != -1, altrimenti viene mostrato questo errore quando viene chiusa la finestra per uscire
-				if((esitoControllo == 1) && (result != -1))
+				if((esitoControllo == 1) && (sceltaUtente != -1))
 				{
 					mostraErroreRicercaUtente(1);
 				}
@@ -149,11 +168,13 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 			// se il controllo è andato a buon fine e l'utente è dello staff, si ricercano gli utenti NON bloccati
 			if((esitoControllo == 4) && genereUtente.equals("staff"))
 			{
-				if(scelta.equals("Ricerca per nome-cognome"))
+				// ricerca per nome-cognome di utenti non bloccati
+				if(sceltaRicerca.equals("Ricerca per nome-cognome"))
 				{
 					elencoUtenti = gestoreRicerche.cercaUtenteNonBloccato(nome, cognome);
 				}
-				else if(scelta.equals("Ricerca per username"))
+				// ricerca per username di utenti non bloccati
+				else if(sceltaRicerca.equals("Ricerca per username"))
 				{
 					elencoUtenti = gestoreRicerche.cercaUtenteNonBloccato(username);
 				}
@@ -162,26 +183,27 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 			// non bloccati
 			else if((esitoControllo == 4) && genereUtente.equals("amministratore"))
 			{
-				if(scelta.equals("Ricerca per nome-cognome"))
+				// ricerca per nome-cognome di utenti bloccati e non bloccati
+				if(sceltaRicerca.equals("Ricerca per nome-cognome"))
 				{
 					elencoUtenti = gestoreRicerche.cercaUtenteBloccatoNonBloccato(nome, cognome);
 				}
-				else if(scelta.equals("Ricerca per username"))
+				// ricerca per username di utenti bloccati e non bloccati
+				else if(sceltaRicerca.equals("Ricerca per username"))
 				{
 					elencoUtenti = gestoreRicerche.cercaUtenteBloccatoNonBloccato(username);
 				}
 			}
 
 			// se non sono stati trovati utenti viene mostrato il messaggio di errore
-			if((elencoUtenti.isEmpty()) && (result != -1) && (esitoControllo == 4))
+			if((elencoUtenti.isEmpty()) && (sceltaUtente != -1) && (esitoControllo == 4))
 			{
 				mostraErroreRicercaUtente(5);
 			}
 
 			// se sono stati trovati utenti viene mostrata la tabella con le relative opzioni
-			if((!elencoUtenti.isEmpty()) && (result != -1) && (esitoControllo == 4))
+			if((!elencoUtenti.isEmpty()) && (sceltaUtente != -1) && (esitoControllo == 4))
 			{
-				// TO DO
 				mostraElencoRicercaUtente(elencoUtenti, genereUtente);
 			}
 		}
@@ -189,109 +211,140 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 
 	private void mostraFormRicerca() throws RemoteException
 	{
+		// RF19 - Ricerca Utente
+		// Riccardo Nazzari, Andrea Benedetto
 
-		result = JOptionPane.showOptionDialog(null, searchPanel, "Ricerca utente (clicca X per uscire)",
+		// mostro a schermo la finestra di inserimento dati per la ricerca
+		sceltaUtente = JOptionPane.showOptionDialog(null, searchPanel, "Ricerca utente (clicca X per uscire)",
 				DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, pulsanteRicerca, "Ricerca");
 
-		scelta = Objects.requireNonNull(comboMenu.getSelectedItem()).toString();
+		// estraggo i dati
+		sceltaRicerca = Objects.requireNonNull(comboMenu.getSelectedItem()).toString();
 		nome = fieldNome.getText();
 		cognome = fieldCognome.getText();
 		username = fieldUsername.getText();
 
+		// reset dei campi di ingresso per operazioni future
+		fieldNome.setText("");
+		fieldCognome.setText("");
+		fieldUsername.setText("");
 	}
 
 
-	private void mostraErroreRicercaUtente(int tipo) throws RemoteException
-	{
+	private void mostraErroreRicercaUtente(int tipo) throws RemoteException {
+		// RF19 - Ricerca Utente
+		// Riccardo Nazzari, Andrea Benedetto
+
+		// creo variabile per il messaggio di errore da mostrare
 		String messaggio;
 
-		if(tipo == 1)
-		{
-			messaggio = "format username errato: assicurati di inserire\nalmeno tre caratteri nel campo \"username\".";
-			showMessageDialog(null, messaggio, "errore username (clicca X per chiudere)", ERROR_MESSAGE);
+		switch (tipo) {
+			case 1: {
+				messaggio = "format username errato: assicurati di inserire\nalmeno tre caratteri nel campo \"username\".";
+				showMessageDialog(null, messaggio, "errore username (clicca X per chiudere)", ERROR_MESSAGE);
+				break;
+			}
+			case 2: {
+				messaggio = "format nome errato: assicurati di inserire\nalmeno tre caratteri nel campo \"nome\" e di\n" +
+						    "inserire solo caratteri letterali";
+				showMessageDialog(null, messaggio, "errore nome (clicca X per chiudere)", ERROR_MESSAGE);
+				break;
+			}
+			case 3: {
+				messaggio = "format cognome errato: assicurati di inserire\nalmeno tre caratteri nel campo \"cognome\" e di\n" +
+						    "inserire solo caratteri letterali";
+				showMessageDialog(null, messaggio, "errore cognome (clicca X per chiudere)", ERROR_MESSAGE);
+				break;
+			}
+			case 5: {
+				messaggio = "Non sono stati trovati risultati per la tua ricerca";
+				showMessageDialog(null, messaggio, "nessun risultato (clicca X per chiudere)", ERROR_MESSAGE);
+				break;
+			}
 
-		}
-
-		if(tipo == 2)
-		{
-			messaggio = "format nome errato: assicurati di inserire\nalmeno tre caratteri nel campo \"nome\" e di\n" +
-						"inserire solo caratteri letterali";
-			showMessageDialog(null, messaggio, "errore nome (clicca X per chiudere)", ERROR_MESSAGE);
-		}
-
-		if(tipo == 3)
-		{
-			messaggio = "format cognome errato: assicurati di inserire\nalmeno tre caratteri nel campo \"cognome\" e di\n" +
-						"inserire solo caratteri letterali";
-			showMessageDialog(null, messaggio, "errore cognome (clicca X per chiudere)", ERROR_MESSAGE);
-		}
-
-		if(tipo == 5)
-		{
-			messaggio = "Non sono stati trovati risultati per la tua ricerca";
-			showMessageDialog(null, messaggio, "nessun risultato (clicca X per chiudere)", ERROR_MESSAGE);
 		}
 	}
 
 	private void mostraElencoRicercaUtente(ArrayList<HashMap<String, Object>> elencoUtenti, String genereUtente) throws RemoteException
 	{
 
+		// RF19 - Ricerca Utente
+		// Riccardo Nazzari, Andrea Benedetto
+
+		// inizializzazione variabili
 		Object[][] utentiTabella;
 		JTable table = null;
 		int azione = -3;
 
+		// se l'utente che ha richiesto è di genere "staff", allora inizializzo la tabella con 4 colonne in quanto
+		// deve essere mostrato solo nome-cognome-username-tipo
 		if(genereUtente.equals("staff"))
 		{
 			utentiTabella = new Object[elencoUtenti.size()][colonneStaff.length];
 
+			// estraggo i campi
 			for(int i=0; i < elencoUtenti.size(); i++)
 			{
 				utentiTabella[i][0] = elencoUtenti.get(i).get("nome");
 				utentiTabella[i][1] = elencoUtenti.get(i).get("cognome");
 				utentiTabella[i][2] = elencoUtenti.get(i).get("username");
 				utentiTabella[i][3] = elencoUtenti.get(i).get("tipo");
-				utentiTabella[i][4] = elencoUtenti.get(i).get("attivo");
 			}
+			// creo la tabella
 			table = new JTable(utentiTabella, colonneStaff);
 		}
+
+		// se l'utente che ha richiesto è di genere "amministratore", allora inizializzo la tabella con 5 colonne in quanto
+		// deve essere mostrato nome-cognome-username-tipo-attivo
 		else if(genereUtente.equals("amministratore"))
 		{
 			utentiTabella = new Object[elencoUtenti.size()][colonneAmministratore.length];
 
+			// estraggo i campi
 			for(int i=0; i < elencoUtenti.size(); i++)
 			{
 				utentiTabella[i][0] = elencoUtenti.get(i).get("nome");
 				utentiTabella[i][1] = elencoUtenti.get(i).get("cognome");
 				utentiTabella[i][2] = elencoUtenti.get(i).get("username");
+				utentiTabella[i][3] = elencoUtenti.get(i).get("tipo");
 				if(elencoUtenti.get(i).get("attivo").toString().equals("1")) {
-					utentiTabella[i][3] = "True";
+					utentiTabella[i][4] = "True";
 				}
 				else {
-					utentiTabella[i][3] = "False";
+					utentiTabella[i][4] = "False";
 				}
 			}
+			// creo la tabella
 			table = new JTable(utentiTabella, colonneAmministratore);
 		}
 
+		// mi assicuro che la tabella sia stata creata correttamente
         assert table != null;
+
+		// setto la tabella in modo che si possa selezionare solo un campo
         ListSelectionModel selectionModel = table.getSelectionModel();
 		selectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
+		// creo la tabella scroll e ne gestisco le dimensioni
 		JScrollPane tabella = new JScrollPane(table);
 		tabella.setPreferredSize((new Dimension(500, 200)));
 
+		// ciclo while che dura fino a quando non viene selezionato un campo utente e un'azione relativa, oppure
+		// fino a quando l'utente non chiude la finestra per uscire
 		while(table.getSelectedRow() == -1 && azione != -1)
 		{
+			// se il genereUtente è di tipo "staff" mostro solo i pulsanti per lo staff
 			if(genereUtente.equals("staff"))
 				azione = showOptionDialog(null, tabella, "elenco utenti",
 						DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null,
 						pulsanteElencoUtentiStaff, null);
 
+			// se il genereUtente è di tipo "amministratore" mostro solo i pulsanti per l'amministratore
 			else if(genereUtente.equals("amministratore"))
 				azione = showOptionDialog(null, tabella, "elenco utenti",
 						DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null,
 						pulsanteElencoUtentiAdmin, null);
-			
+
 		}
 
 		if(azione == 0 && genereUtente.equals("staff"))
@@ -301,12 +354,12 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 		}
 		else if(azione == 1 && genereUtente.equals("staff"))
 		{
-			//uiLista.avvioListaOrdini(table.getModel().getValueAt(table.getSelectedRow(), 2).toString());
+			//uiLista.avvioListaOrdini(table.getModel().getValueAt(table.getSelectedRow(), 2).toString(), -1);
 			// richiamo lista ordini
 		}
 		else if(azione == 0 && genereUtente.equals("amministratore"))
 		{
-			System.out.println(value);
+			//System.out.println(value);
 			// richiamo blocca\sblocca utente
 			//uiUtente.avvioBloccaSbloccaUtente(table.getModel().getValueAt(table.getSelectedRow(), 2).toString());
 			// devo mandare anche il parametro per vedere se è attivo o meno
