@@ -315,7 +315,7 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 		String domicilio = (String) result.get(0).get("domicilio");
 
 		// Dividi il campo Domicilio in 4 parti
-		String[] partiDomicilio = domicilio.split("|");
+		String[] partiDomicilio = domicilio.split("\\|");
 
 		if (partiDomicilio.length == 4) {
 			return partiDomicilio;

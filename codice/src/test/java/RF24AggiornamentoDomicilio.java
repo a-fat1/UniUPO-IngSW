@@ -109,43 +109,18 @@ public class RF24AggiornamentoDomicilio {
         assertEquals(5, result3);
     }
 
-@Test
-    public void testPromptSalvaDomicilio() throws RemoteException {
-        // Inizializza il database con un record per l'utente di test
-        setUp();
-        String usernameTest = "sirio";
-        String viaTest = "Via Roma";
-        String civicoTest = "42";
-        String capTest = "10100";
-        String localitaTest = "Torino";
-        String Domicilio = viaTest + " " + civicoTest + "," + " " + capTest + " " + localitaTest;
-
-        // Esegue promptSalvaDomicilio per aggiornare l'indirizzo
-        gestoreAccessi.promptSalvaDomicilio(usernameTest, viaTest, civicoTest, capTest, localitaTest);
-
-        // Verifica che l'indirizzo sia stato aggiornato correttamente
-        String selectQueryAfter = "SELECT domicilio FROM Utente WHERE Username = '" + usernameTest + "'";
-        ArrayList<HashMap<String, Object>> resultAfter = dbUtenti.query(selectQueryAfter);
-
-        // Verifica che il campo domicilio sia stato valorizzato correttamente
-        assertEquals(Domicilio, resultAfter.get(0).get("domicilio"));
-
-    }
-
     @Test
-    public void testPromptRecuperaDomicilio() throws RemoteException {
-        // Inizializza il database con un record per l'utente di test
+    public void testSalvaERecuperaDomicilio() throws RemoteException {
         setUp();
-        String usernameTest = "sirio";
-        String viaTest = "Via Roma";
-        String civicoTest = "42";
+        // Dati di test
+        String usernameTest = "sisto";
+        String viaTest = "Via Vittorio";
+        String civicoTest = "101";
         String capTest = "10100";
         String localitaTest = "Torino";
-        String domicilioTest = viaTest + "|" + civicoTest + "|" + capTest + "|" + localitaTest;
 
-        // Inserisci l'indirizzo di test nel database per l'utente di test
-        String insertQuery = "INSERT INTO Utente (Username, Domicilio) VALUES ('" + usernameTest + "', '" + domicilioTest + "')";
-        dbUtenti.update(insertQuery);
+        // Esegue promptSalvaDomicilio per inserire l'indirizzo
+        gestoreAccessi.promptSalvaDomicilio(usernameTest, viaTest, civicoTest, capTest, localitaTest);
 
         // Esegue promptRecuperaDomicilio per recuperare l'indirizzo
         String[] result = gestoreAccessi.promptRecuperaDomicilio(usernameTest);
@@ -158,5 +133,7 @@ public class RF24AggiornamentoDomicilio {
         assertEquals(civicoTest, result[1]);
         assertEquals(capTest, result[2]);
         assertEquals(localitaTest, result[3]);
+
     }
+
 }
