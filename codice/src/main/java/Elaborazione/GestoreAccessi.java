@@ -294,15 +294,33 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 
 		DbUtenti dbUtenti = new DbUtenti();
 
-		String selectQueryBefore = "SELECT COUNT() FROM Utente WHERE Username = '" + username + "'";
+		String selectQuery = "SELECT COUNT() FROM Utente WHERE Username = '" + username + "'";
 		// numero di record prima dell'esecuzione del metodo
-		int esiste = (int) dbUtenti.query(selectQueryBefore).get(0).get("COUNT()");
+		int esiste = (int) dbUtenti.query(selectQuery).get(0).get("COUNT()");
 
 		if (esiste != 0)
 		{
-			String Domicilio = via + " " + civico + "," + " " + cap + " " + localita;
+			String Domicilio = via + "|" + civico + "|" + cap + "|" + localita;
 			String updateQuery = "UPDATE Utente SET domicilio = '" + Domicilio + "' WHERE Username = '" + username + "'";
 			dbUtenti.update(updateQuery);
+		}
+	}
+
+	public String[] promptRecuperaDomicilio(String username) throws RemoteException {
+		DbUtenti dbUtenti = new DbUtenti();
+
+		String selectQuery = "SELECT domicilio FROM Utente WHERE Username = '" + username + "'";
+		ArrayList<HashMap<String, Object>> result = dbUtenti.query(selectQuery);
+
+		String domicilio = (String) result.get(0).get("domicilio");
+
+		// Dividi il campo Domicilio in 4 parti
+		String[] partiDomicilio = domicilio.split("|");
+
+		if (partiDomicilio.length == 4) {
+			return partiDomicilio;
+		} else {
+			return new String[0];
 		}
 	}
 }

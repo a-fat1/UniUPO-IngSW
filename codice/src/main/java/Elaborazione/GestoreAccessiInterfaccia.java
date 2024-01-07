@@ -14,4 +14,5 @@ public interface GestoreAccessiInterfaccia extends Remote
    int controlloNuovaPassword(String nuovaPassword) throws RemoteException;
    int controllaFormatoDomicilio(String via, String numero, String cap, String localita) throws RemoteException;
    void promptSalvaDomicilio(String username, String via, String civico, String cap, String localita) throws RemoteException;
+   String[] promptRecuperaDomicilio(String username) throws RemoteException;
 } 
