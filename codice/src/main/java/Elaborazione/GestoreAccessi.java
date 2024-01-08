@@ -98,7 +98,6 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 		return utente;
 	}
 
-<<<<<<< HEAD
 	public void bloccoUtente(String username) throws RemoteException {
 		// RF20 BloccaSblocca
 		// Autori: 20044037, 20039081
@@ -121,7 +120,6 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 
 
 
-=======
 	public int verificaCredenziali(String passwordAttuale, String password)throws RemoteException{
 
 		//RF03: Aggiorna password
@@ -238,5 +236,4 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 		comandoSql = "UPDATE credenziali SET password=\"" + nuovaPassword + "\" WHERE username=\"" + username + "\" ;";
 		dbUtenti.update(comandoSql);
 	}
->>>>>>> 1855847a08ab915903caf747e4ced5b2af9178a1
 }

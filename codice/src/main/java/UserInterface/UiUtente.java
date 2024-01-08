@@ -29,11 +29,9 @@ public class UiUtente extends JOptionPane implements UiUtenteInterfaccia
 	
 
 	// attributi
-<<<<<<< HEAD
 	private int selezione;
 	// elementi grafici
 
-=======
 	//RF02
 	private String nome;
 	private String cognome;
@@ -51,7 +49,7 @@ public class UiUtente extends JOptionPane implements UiUtenteInterfaccia
 	private JComboBox c1;
 	private String pulsantiRegistrazione[];
 	
->>>>>>> 1855847a08ab915903caf747e4ced5b2af9178a1
+
 	public UiUtente(String hostGestore) throws RemoteException, NotBoundException
 	{
 		registryUI = LocateRegistry.getRegistry("127.0.0.1", 1100); // default: 1099
@@ -62,9 +60,7 @@ public class UiUtente extends JOptionPane implements UiUtenteInterfaccia
 		gestoreAccessi = (GestoreAccessiInterfaccia) registryGestore.lookup("gestoreAccessi");
 	}
 
-<<<<<<< HEAD
-	public void avvioCreaUtente() throws RemoteException
-=======
+
 	/**
 	 * Metodo che implementa la logica del diagramma di sequenza.
 	 * @param cliente se settato a true, chi visualizza la form è un cliente, altrimenti è un amministratore.
@@ -72,7 +68,6 @@ public class UiUtente extends JOptionPane implements UiUtenteInterfaccia
 	 * @throws NotBoundException
 	 */
 	public void avvioCreaUtente(boolean cliente) throws RemoteException, NotBoundException
->>>>>>> 1855847a08ab915903caf747e4ced5b2af9178a1
 	{ 	// RF02
 		if (uiLogin == null)
 			uiLogin = (UiLoginInterfaccia) registryUI.lookup("uiLogin");

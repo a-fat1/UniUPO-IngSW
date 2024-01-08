@@ -10,11 +10,9 @@ public interface GestoreAccessiInterfaccia extends Remote
    String controllaFormatoCredenziali(String username, String password) throws RemoteException;
    String ricercaCredenziali(String username, String password) throws RemoteException;
    HashMap<String, Object> ricercaUtente(String username) throws RemoteException;
-<<<<<<< HEAD
    public void bloccoUtente(String username) throws RemoteException;
    public void sbloccoUtente(String username) throws RemoteException;
-}
-=======
+
    int verificaCredenziali(String password, String passwordAttuale) throws RemoteException;
    int controlloNuovaPassword(String nuovaPassword) throws RemoteException;
    void AggiornaPassword(String username, String nuovaPassword) throws RemoteException;
@@ -25,4 +23,3 @@ public interface GestoreAccessiInterfaccia extends Remote
    void richiestaAttivazioneAccount(String nome, String cognome, String tipoUtente) throws RemoteException;
    void aggiuntaCredenziali(String username) throws RemoteException;
 } 
->>>>>>> 1855847a08ab915903caf747e4ced5b2af9178a1
