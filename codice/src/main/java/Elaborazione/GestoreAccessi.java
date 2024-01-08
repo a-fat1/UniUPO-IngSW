@@ -3,8 +3,8 @@ package Elaborazione;
 import java.util.HashMap;
 import java.util.ArrayList;
 
-import java.rmi.registry.Registry; 
-import java.rmi.registry.LocateRegistry; 
+import java.rmi.registry.Registry;
+import java.rmi.registry.LocateRegistry;
 import java.rmi.RemoteException;
 import java.rmi.NotBoundException;
 import java.util.regex.Matcher;
@@ -19,7 +19,7 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 
 	public GestoreAccessi(String host) throws RemoteException, NotBoundException
 	{
-		registry = LocateRegistry.getRegistry(host, 1098); 
+		registry = LocateRegistry.getRegistry(host, 1098);
        	 	dbUtenti = (DbUtentiInterfaccia) registry.lookup("dbUtenti");
 	}
 
@@ -40,7 +40,7 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 
 		len1=username.length();
 		len2=password.length();
-		
+
 		if (len1==0 && len2==0)
 			esitoControllo="erroreCredenziali";
 		else
@@ -53,7 +53,7 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 					esitoControllo="ok";
 
 		return esitoControllo;
-	}		
+	}
 
 	public String ricercaCredenziali(String username, String password) throws RemoteException
 	{
@@ -67,8 +67,8 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 		System.out.println("GestoreAccessi.ricercaCredenziali(" + username + ", " + password + ")\n");
 
 		comandoSql = "SELECT * FROM Credenziali WHERE username = \"" + username + "\" AND password = \"" + password + "\" ;";
-		credenziali=dbUtenti.query(comandoSql);	
-		
+		credenziali=dbUtenti.query(comandoSql);
+
 		if (credenziali.size()==0)
 			esitoRicerca="erroreAssente";
 		else
@@ -76,8 +76,8 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 				esitoRicerca="attivo";
 			else
 				esitoRicerca="erroreDisattivato";
-		
-		return esitoRicerca;			
+
+		return esitoRicerca;
 	}
 
 	public HashMap<String, Object> ricercaUtente(String username) throws RemoteException
@@ -93,15 +93,40 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 
 		comandoSql = "SELECT * FROM Utente WHERE username = \"" + username + "\" ;";
 		utenti = dbUtenti.query(comandoSql);
-		
+
 		if (utenti.size() == 1)
 			utente = utenti.get(0);
-		
-		return utente;			
+
+		return utente;
 	}
 
-	public int verificaCredenziali(String passwordAttuale, String password) throws RemoteException{
-		//RF03: Aggiorna Password
+	public void bloccoUtente(String username) throws RemoteException {
+		// RF20 BloccaSblocca
+		// Autori: 20044037, 20039081
+
+		String comandoSql;
+		comandoSql = "UPDATE Credenziali SET attivo= false WHERE Credenziali.username= \"" + username+"\";";
+		dbUtenti.update(comandoSql);
+  }
+
+	public void sbloccoUtente(String username) throws RemoteException {
+		// RF20 BloccaSblocca
+		// Autori: 20044037, 20039081
+
+		String comandoSql;
+		comandoSql = "UPDATE Credenziali SET attivo= true WHERE Credenziali.username= \"" + username+"\";";
+		dbUtenti.update(comandoSql);
+	}
+
+
+
+
+
+	public int verificaCredenziali(String passwordAttuale, String password)throws RemoteException{
+
+		//RF03: Aggiorna password
+		//autori: Pietro Balossino, Andrija Jovic
+
 		if(password.equals(passwordAttuale)){
 			return 0;  //le password sono uguali
 		}
@@ -110,8 +135,11 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 		}
 	}
 
-	public int controlloNuovaPassword (String nuovaPassword) throws RemoteException{
-		//RF03: Aggiorna Password
+	public int controlloNuovaPassword (String nuovaPassword)throws RemoteException{
+
+		//RF03: Aggiorna password
+		//autori: Pietro Balossino, Andrija Jovic
+
 		int len;
 		boolean alpha;
 		boolean num;
@@ -198,7 +226,20 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 		dbUtenti.update("INSERT INTO Credenziali ('password', 'username', 'attivo') VALUES ('', '"+username+"', 1);");
 	}
 
-	 /**
+	public void AggiornaPassword(String username, String nuovaPassword) throws RemoteException {
+
+		//RF03: Aggiorna password
+		//autori: Pietro Balossino, Andrija Jovic
+
+		String comandoSql;
+
+		System.out.println("GestoreAccessi.AggiornaPassword(\""+ username + "\")");
+
+		comandoSql = "UPDATE credenziali SET password=\"" + nuovaPassword + "\" WHERE username=\"" + username + "\" ;";
+		dbUtenti.update(comandoSql);
+	}
+
+	/**
 	 * Verifica se la stringa contiene solo caratteri dell'alfabeto, inclusi eventuali spazi e apostrofi.
 	 *
 	 * @param input La stringa da verificare.
@@ -212,7 +253,6 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 		Matcher matcher = pattern.matcher(input);
 		return matcher.matches();
 	}
-
 	/**
 	 * Verifica se la stringa rappresenta un numero intero positivo
 	 *
@@ -269,27 +309,27 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 				&& isNumeroInteroPositivo(cap) && lenLocalita > 0 && controllaValiditaStringaAlfabetica(localita))
 			esitoControllo = 0;
 
-		// controllo formato 'via'
+			// controllo formato 'via'
 		else if ((lenVia == 0 || !controllaValiditaStringaAlfabetica(via)) && isValidoNumeroCivico(numero) && lenCap == 5
 				&& isNumeroInteroPositivo(cap) && lenLocalita > 0 && controllaValiditaStringaAlfabetica(localita))
 			esitoControllo = 1;
 
-		// controllo formato 'cap'
+			// controllo formato 'cap'
 		else if (lenVia > 0 && controllaValiditaStringaAlfabetica(via) && isValidoNumeroCivico(numero) && (lenCap != 5
 				|| !isNumeroInteroPositivo(cap)) && lenLocalita > 0 && controllaValiditaStringaAlfabetica(localita))
 			esitoControllo = 2;
 
-		//controllo formato 'localita'
+			//controllo formato 'localita'
 		else if (lenVia > 0 && controllaValiditaStringaAlfabetica(via) && isValidoNumeroCivico(numero) && lenCap == 5
 				&& isNumeroInteroPositivo(cap) && (lenLocalita == 0 || !controllaValiditaStringaAlfabetica(localita)))
 			esitoControllo = 3;
 
-		//controllo formato 'numero'
+			//controllo formato 'numero'
 		else if (lenVia > 0 && controllaValiditaStringaAlfabetica(via) && !isValidoNumeroCivico(numero) && lenCap == 5
 				&& isNumeroInteroPositivo(cap) && lenLocalita > 0 && controllaValiditaStringaAlfabetica(localita))
 			esitoControllo = 4;
 
-		//ci sono più campi errati
+			//ci sono più campi errati
 		else esitoControllo = 5;
 
 		return esitoControllo;
