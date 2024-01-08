@@ -13,9 +13,9 @@ public class RF15NuovaFornitura {
     // ===========================================================
 
     @Test
-     public void testcontrolloDatiFornituraCorretti() {
+     public void testControlloDatiFornituraCorretti() {
         HashMap<String, Boolean> expected = new HashMap<>();
-        for(String s : new String[] {"esitoData", "esitoCosto", "esitoQuantita"}) expected.put(s, true);
+        for(String s : new String[] {"esitoData", "esitoCosto", "esitoQuantità"}) expected.put(s, true);
         // data corretta, costo corretto, quantità corretta
         assertEquals(expected, gestoreProdotti.controlloDatiFornitura("2020-12-01", 25.0f, 5));
         assertEquals(expected, gestoreProdotti.controlloDatiFornitura("2020-02-29", 0.10f, 1));
@@ -27,9 +27,9 @@ public class RF15NuovaFornitura {
     }
 
     @Test
-    public void testcontrolloDatiFornituraScorretti() {
+    public void testControlloDatiFornituraScorretti() {
         HashMap<String, Boolean> expected = new HashMap<>();
-        for(String s : new String[] {"esitoData", "esitoCosto", "esitoQuantita"}) expected.put(s, false);
+        for(String s : new String[] {"esitoData", "esitoCosto", "esitoQuantità"}) expected.put(s, false);
         // data errata, costo errata, quantità errata
         assertEquals(expected, gestoreProdotti.controlloDatiFornitura("2021-02-29", -25.0f, -5));
         assertEquals(expected, gestoreProdotti.controlloDatiFornitura("17-01-2020", 0.0f, 0));
@@ -40,10 +40,10 @@ public class RF15NuovaFornitura {
     }
 
     @Test
-    public void testcontrolloDatiFornituraAssenti() {
+    public void testControlloDatiFornituraAssenti() {
         // data assente, costo assente, quantità assente
         HashMap<String, Boolean> expected = new HashMap<>();
-        for(String s : new String[] {"esitoData", "esitoCosto", "esitoQuantita"}) expected.put(s, null);
+        for(String s : new String[] {"esitoData", "esitoCosto", "esitoQuantità"}) expected.put(s, null);
         assertEquals(expected, gestoreProdotti.controlloDatiFornitura(null, null, null));
         assertEquals(expected, gestoreProdotti.controlloDatiFornitura("", null, null));
 
@@ -57,25 +57,25 @@ public class RF15NuovaFornitura {
 
         expected.put("esitoData", null);
         expected.put("esitoCosto", true);
-        expected.put("esitoQuantita", true);
+        expected.put("esitoQuantità", true);
         // data assente, costo corretto, quantità corretta
         assertEquals(expected, gestoreProdotti.controlloDatiFornitura(null, 1.5f, 3));
         assertEquals(expected, gestoreProdotti.controlloDatiFornitura("", 0.5f, 5));
 
         expected.put("esitoCosto", false);
-        expected.put("esitoQuantita", false);
+        expected.put("esitoQuantità", false);
         // data assente, costo errato, quantità errata
         assertEquals(expected, gestoreProdotti.controlloDatiFornitura(null, -1.5f, -3));
         assertEquals(expected, gestoreProdotti.controlloDatiFornitura("", 0.0f, 0));
     }
 
     @Test
-    public void testcontrolloDatiFornituraMisti() {
+    public void testControlloDatiFornituraMisti() {
         HashMap<String, Boolean> expected = new HashMap<>();
 
         expected.put("esitoData", true);
         expected.put("esitoCosto", false);
-        expected.put("esitoQuantita", false);
+        expected.put("esitoQuantità", false);
         //data corretta, costo errato, quantità errata
         assertEquals(expected, gestoreProdotti.controlloDatiFornitura("2021-02-28", -0.5f, -5));
         assertEquals(expected, gestoreProdotti.controlloDatiFornitura("2021-04-30", 0.0f, 0));
@@ -89,7 +89,7 @@ public class RF15NuovaFornitura {
         assertEquals(expected, gestoreProdotti.controlloDatiFornitura("2021-04-aa", 0.1f, -1));
 
         expected.put("esitoCosto", false);
-        expected.put("esitoQuantita", true);
+        expected.put("esitoQuantità", true);
         //data errata, costo errato, quantità corretta
         assertEquals(expected, gestoreProdotti.controlloDatiFornitura("2021-02-29", -0.5f, 5));
         assertEquals(expected, gestoreProdotti.controlloDatiFornitura("2021-04-31", 0.0f, 1));
@@ -109,7 +109,7 @@ public class RF15NuovaFornitura {
         assertEquals(expected, gestoreProdotti.controlloDatiFornitura("2021-05-31", -0.1f, 1));
 
         expected.put("esitoCosto", true);
-        expected.put("esitoQuantita", false);
+        expected.put("esitoQuantità", false);
         //data corretta, costo corretto, quantità errata
         assertEquals(expected, gestoreProdotti.controlloDatiFornitura("2021-02-28", 0.5f, -5));
         assertEquals(expected, gestoreProdotti.controlloDatiFornitura("2021-04-30", 25.0f, 0));
