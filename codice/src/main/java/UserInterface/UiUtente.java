@@ -92,7 +92,7 @@ public class UiUtente extends JOptionPane implements UiUtenteInterfaccia
 					tipoUtente = "cliente";
 					clienteAmministratore.put("tipo", tipoUtente);
 					avvioAggiornaDomicilio();
-					uiNotifica.avvioGeneraNotifica("nuovo utente", null, null, clienteAmministratore);
+					uiNotifica.avvioGeneraNotifica("nuovo utente", clienteAmministratore);
 				}
 				else
 				{
@@ -103,7 +103,7 @@ public class UiUtente extends JOptionPane implements UiUtenteInterfaccia
 				gestoreAccessi.richiestaAttivazioneAccount(nome, cognome, tipoUtente);
 				gestoreAccessi.aggiuntaCredenziali(nome+"."+cognome);
 				uiLogin.avvioAggiornaUsername();
-				uiLogin.avvioAggiornaPassword(true, username, "");
+				uiLogin.avvioAggiornaPassword(false, username, "");
 			}
 
 
