@@ -161,7 +161,7 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 
 		//RF08
 		//if(ricercaPanel==null)
-
+		ricercaPanel = new JPanel();
         // Etichetta in cima al corpo della finestra
         JLabel labelText = new JLabel("Inserire titolo e/o autore e premere OK");
         labelText.setBounds(20, 10, 300, 20); // Posizione e dimensioni
