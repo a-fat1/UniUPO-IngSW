@@ -10,6 +10,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.time.Year;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Objects;
@@ -286,13 +287,19 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 			int scelta = showConfirmDialog(null, nuovoProdottoPanel, "Nuovo Prodotto, X per uscire", JOptionPane.OK_CANCEL_OPTION);
 			if(scelta == JOptionPane.CLOSED_OPTION || scelta == JOptionPane.CANCEL_OPTION) return;
 
-			String[] autori = new String[]{autoriProdottoField[0].getText()};
+			ArrayList<String> autoriList = new ArrayList<>();
+			for(JTextField autoreF: autoriProdottoField){
+				if(autoreF.getText().isEmpty()) break;
+				autoriList.add(autoreF.getText());
+			}
+			String[] autori = autoriList.toArray(new String[0]);
 			String titolo = titoloProdottoField.getText();
 			String editore = editoreProdottoField.getText();
 			String tipo = Objects.requireNonNull(tipoProdottoCombo.getSelectedItem()).toString();
 			int anno = Integer.parseInt(Objects.requireNonNull(annoProdottoCombo.getSelectedItem()).toString());
 
-			mostraErroreControllo();
+			System.out.println(Arrays.toString(autori));
+
 			//TODO verifica campi, controllo unicità, aggiunta prodotto
 		} while(esitoVerifica != 0 || esitoControllo==false); // se i dati inseriti non sono corretti o il prodotto esiste già cicla
 	}
