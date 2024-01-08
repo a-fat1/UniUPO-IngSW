@@ -643,7 +643,7 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 
 		// set di esitoControllo con valore iniziale
 		int esitoControllo = 0;
-		// set di result = 0 per iniziare il ciclo
+		// set di sceltaUtente = 0 per iniziare il ciclo
 		sceltaUtente = 0;
 
 		// loop fino a quando il controllo non è positivo (o l'utente esce dalla finestra)
