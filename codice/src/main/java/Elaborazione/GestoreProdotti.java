@@ -1,24 +1,22 @@
 package Elaborazione;
 
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-import java.time.format.ResolverStyle;
-import java.time.Year;
-import java.util.HashMap;
-import java.util.ArrayList;
-import java.util.Collections;
+import DataBase.DbProdotti;
+import DataBase.DbProdottiInterfaccia;
+
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.Year;
 import java.time.format.DateTimeFormatter;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.RemoteException;
-import java.rmi.NotBoundException;
-
-import DataBase.*;
+import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class GestoreProdotti implements GestoreProdottiInterfaccia {
 	private Registry registry;
@@ -119,7 +117,20 @@ public class GestoreProdotti implements GestoreProdottiInterfaccia {
 		dbProdotti.update("UPDATE Prodotto SET quantita = quantita + "+quantita+" WHERE codice = "+codProdotto);
 	}
 
-	public int verificaCampi(String[] autori, String titolo, String editore, int anno){
+	/**
+	 * @param autori array String di autori inseriti dall'utente
+	 * @param titolo String titolo
+	 * @param editore String editore
+	 * @param anno int anno
+	 * @return int codice di successo 0, o il codice di errore 1-4
+	 * @throws RemoteException
+	 *
+	 * Controlla che i campi inseriti siano corretti, al primo
+	 * errato che incontra ritorna il codice di errore corrispondente
+	 */
+	@Override
+	public int verificaCampi(String[] autori, String titolo, String editore, int anno) throws RemoteException{
+		//RF16
 		int lenTitolo = titolo.length();
 		if(lenTitolo == 0) return 1; //titolo mancante
 
@@ -135,7 +146,21 @@ public class GestoreProdotti implements GestoreProdottiInterfaccia {
 		return 0;
 	}
 
+	/**
+	 * @param autori array String di autori inseriti dall'utente
+	 * @param titolo String titolo
+	 * @param editore String editore
+	 * @param anno int anno
+	 * @param tipo String tipo
+	 * @return true se il prodotto è unico, altrimenti false
+	 * @throws RemoteException
+	 *
+	 * Effettua una query al database cercando prodotti con gli stessi dati di quelli inseriti
+	 * Se nulla viene ritornato allora ritorna true (successo, prodotto unico) altrimenti false
+	 */
+	@Override
 	public boolean controlloUnicita(String[] autori, String titolo, String editore, int anno, String tipo) throws RemoteException {
+		//RF16
 		ArrayList<HashMap<String, Object>> prodotti = dbProdotti.query(
 				"SELECT * FROM Prodotto " +
 						"WHERE autore = \""+ String.join(", ", autori)+"\" AND titolo = \""+titolo+"\" AND editore = \""+editore+"\" AND anno = \"" + anno + "\" AND tipo = \"" + tipo + "\""
@@ -144,7 +169,22 @@ public class GestoreProdotti implements GestoreProdottiInterfaccia {
 		return prodotti.isEmpty();
 	}
 
+	/**
+	 * @param autori array String di autori inseriti dall'utente
+	 * @param titolo String titolo
+	 * @param editore String editore
+	 * @param anno int anno
+	 * @param tipo String tipo
+	 * @return HashMap<String, Object> cha rappresenta il prodotto appena aggiunto
+	 * @throws RemoteException
+	 *
+	 * Effettua una query al database che aggiunge in nuovo prodotto
+	 * Il database assegna un Codice al prodotto appena inserito (AUTOINCREMENT)
+	 * Effettua una query per ricevere il prodotto con codice più alto (quello appena inserito) e lo ritorna
+	 */
+	@Override
 	public HashMap<String, Object> aggiungiProdotto(String[] autori, String titolo, String editore, int anno, String tipo) throws RemoteException {
+		//RF16
 		dbProdotti.update(
 				"INSERT INTO Prodotto(autore, titolo, editore, anno, tipo, prezzo, quantita, disponibile) " +
 						"VALUES (\""+ String.join(", ", autori) +"\", \""+ titolo +"\", \""+ editore +"\", \""+ anno +"\", \""+ tipo +"\", null, 0, True)"
