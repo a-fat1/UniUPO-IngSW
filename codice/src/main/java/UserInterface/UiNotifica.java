@@ -251,19 +251,19 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 	// RED per quanto riguarda il mancato inserimento
 		switch(tipoErrore) {
 			case "errore formato data":
-				messaggio = "La data fornita non e' in formato YYYY-MM-DD.";
+				messaggio = "La data fornita non e' in formato YYYY-MM-DD.\n(clicca ok o X per continuare)";
 				dataField.setBackground(Color.YELLOW);
 				break;
 			case "errore formato ora":
-				messaggio = "L'ora fornita non e' in formato HH:mm:ss.";
+				messaggio = "L'ora fornita non e' in formato HH:mm:ss.\n(clicca ok o X per continuare)";
 				oraField.setBackground(Color.YELLOW);
 				break;
 			case "errore data":
-				messaggio = "La data fornita non e' compatibile con la data di pubblicazione.";
+				messaggio = "La data fornita non e' compatibile con la data di pubblicazione.\n(clicca ok o X per continuare)";
 				dataField.setBackground(Color.YELLOW);
 				break;
 			case "errore testo notifica":
-				messaggio = "Il testo della notifica non può essere vuoto.";
+				messaggio = "Il testo della notifica non può essere vuoto.\n(clicca ok o X per continuare)";
 				testoField.setBackground(Color.RED);
 				break;
 		}
