@@ -187,7 +187,7 @@ public class GestoreRicerche implements GestoreRicercheInterfaccia
 		return 0;
 	}
 	
-	public ArrayList<HashMap<String, Object>> ricercaProdotti(String giacenza) throws RemoteException {
+	public ArrayList<HashMap<String, Object>> ricercaProdottiConGiacenza(String giacenza) throws RemoteException {
 
         // RF18: Prodotti in esaurimento
 		// Alessandro Fatone, Dario Guidotti
