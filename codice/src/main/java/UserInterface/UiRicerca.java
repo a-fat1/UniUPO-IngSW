@@ -80,6 +80,13 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 		fieldCognome = new JTextField("", 20);
 
 		// RF19 - Ricerca Utente
+		// stringhe per il menu' per la ricerca
+		String[] scelteMenuRicercaUtente = new String[2];
+		scelteMenuRicercaUtente[0] = "Ricerca per nome-cognome";
+		scelteMenuRicercaUtente[1] = "Ricerca per username";
+		comboMenu = new JComboBox<>(scelteMenuRicercaUtente);
+
+		// RF19 - Ricerca Utente
 		// creo il panel per l'interfaccia di inserimento nome, cognome o username
 		searchPanel = new JPanel(new GridLayout(7, 1));
 		searchPanel.add(comboMenu);
@@ -91,13 +98,6 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 		searchPanel.add(fieldCognome);
 		pulsanteRicerca = new String[1];
 		pulsanteRicerca[0] = "Invia";
-
-		// RF19 - Ricerca Utente
-		// stringhe per il menu' per la ricerca
-		String[] scelteMenuRicercaUtente = new String[2];
-		scelteMenuRicercaUtente[0] = "Ricerca per nome-cognome";
-		scelteMenuRicercaUtente[1] = "Ricerca per username";
-		comboMenu = new JComboBox<>(scelteMenuRicercaUtente);
 
 		// RF19 - Ricerca Utente
 		// colonne per staff e amministratore, servono per mostrare i campi della ricerca nel database
@@ -126,6 +126,12 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 	public void avvioProdottiInEsaurimento() throws RemoteException
 	{	// RF18	
 	}
+
+	/**
+	 * Funzione che avvia la funzione di Ricerca Utente
+	 * @param genereUtente il tipo di utente (admin o staff) di chi vuole iniziare la ricerca
+	 * @throws RemoteException
+	 */
 
 	public void avvioRicercaUtente(String genereUtente) throws RemoteException
 	{
@@ -209,6 +215,12 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 		}
 	}
 
+	/**
+	 * Funzione che mostra a schermo il form di Ricerca Utente.
+	 * Alla variabile sceltaUtente viene assegnato il valore risultante da quello che l'utente
+	 * decide sul form.
+	 * @throws RemoteException
+	 */
 	private void mostraFormRicerca() throws RemoteException
 	{
 		// RF19 - Ricerca Utente
@@ -230,7 +242,12 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 		fieldUsername.setText("");
 	}
 
-
+	/**
+	 * Funzione che mostra a schermo un errore specifico in base a cosa non va bene nelle diverse fasi
+	 * della Ricerca Utente.
+	 * @param tipo il tipo di errore che arriva dalla funzione che si occupa di controllare i parametri
+	 * @throws RemoteException
+	 */
 	private void mostraErroreRicercaUtente(int tipo) throws RemoteException {
 		// RF19 - Ricerca Utente
 		// Riccardo Nazzari, Andrea Benedetto
@@ -265,6 +282,12 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 		}
 	}
 
+	/**
+	 * Funzione che mostra l'elenco degli utenti trovati nel database.
+	 * @param elencoUtenti l'elenco di utenti trovati dopo l'interrogazione al database.
+	 * @param genereUtente il tipo di utente che ha effettuato la ricerca.
+	 * @throws RemoteException
+	 */
 	private void mostraElencoRicercaUtente(ArrayList<HashMap<String, Object>> elencoUtenti, String genereUtente) throws RemoteException
 	{
 
@@ -321,13 +344,16 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 		// mi assicuro che la tabella sia stata creata correttamente
         assert table != null;
 
+		// modifico la dimensione della riga per ogni tabella
+		table.setRowHeight(25);
+
 		// setto la tabella in modo che si possa selezionare solo un campo
         ListSelectionModel selectionModel = table.getSelectionModel();
 		selectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		// creo la tabella scroll e ne gestisco le dimensioni
 		JScrollPane tabella = new JScrollPane(table);
-		tabella.setPreferredSize((new Dimension(500, 200)));
+		tabella.setPreferredSize((new Dimension(500, 150)));
 
 		// ciclo while che dura fino a quando non viene selezionato un campo utente e un'azione relativa, oppure
 		// fino a quando l'utente non chiude la finestra per uscire
@@ -335,13 +361,13 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 		{
 			// se il genereUtente è di tipo "staff" mostro solo i pulsanti per lo staff
 			if(genereUtente.equals("staff"))
-				azione = showOptionDialog(null, tabella, "elenco utenti",
+				azione = showOptionDialog(null, tabella, "Elenco utenti",
 						DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null,
 						pulsanteElencoUtentiStaff, null);
 
 			// se il genereUtente è di tipo "amministratore" mostro solo i pulsanti per l'amministratore
 			else if(genereUtente.equals("amministratore"))
-				azione = showOptionDialog(null, tabella, "elenco utenti",
+				azione = showOptionDialog(null, tabella, "Elenco utenti",
 						DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null,
 						pulsanteElencoUtentiAdmin, null);
 
