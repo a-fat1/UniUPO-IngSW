@@ -48,32 +48,32 @@ public class UiUtente extends JOptionPane implements UiUtenteInterfaccia
 		uiNotifica = (UiNotificaInterfaccia) registryUI.lookup("uiNotifica");
 		gestoreAccessi = (GestoreAccessiInterfaccia) registryGestore.lookup("gestoreAccessi");
 	}
-	
+
 	public void avvioCreaUtente() throws RemoteException
 	{ 	// RF02
 		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel(new GridLayout(0, 2, 50, 5));
-		
+
 		JLabel lblNewLabel = new JLabel("Nome");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		contentPane.add(lblNewLabel);
-		
+
 		textField_via = new JTextField();
 		contentPane.add(textField_via);
 		textField_via.setColumns(10);
-		
+
 		JLabel lblCognome = new JLabel("Cognome");
 		lblCognome.setHorizontalAlignment(SwingConstants.RIGHT);
 		contentPane.add(lblCognome);
-		
+
 		textField_civico = new JTextField();
 		contentPane.add(textField_civico);
 		textField_civico.setColumns(10);
 		pulsantiRegistrazione = new String[2];
 		pulsantiRegistrazione[0] = "Cancella";
 		pulsantiRegistrazione[1] = "Avanti";
-		
+
 		JOptionPane.showOptionDialog(null, contentPane, "Registrazione (clicca su X o cancella per uscire)", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, pulsantiRegistrazione, "Registrati");
 	}
 
@@ -81,10 +81,11 @@ public class UiUtente extends JOptionPane implements UiUtenteInterfaccia
 	{ 	// RF20	
 	}
 
-	public void avvioAggiornaDomicilio(String username) throws RemoteException {
+	public void avvioAggiornaDomicilio(String username, boolean nuovo) throws RemoteException {
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel(new GridLayout(0, 2, 50, 5));
 
+		nuovo = true;
 		JLabel lblVia = new JLabel("Via");
 		lblVia.setHorizontalAlignment(SwingConstants.RIGHT);
 		contentPane.add(lblVia);
@@ -118,16 +119,44 @@ public class UiUtente extends JOptionPane implements UiUtenteInterfaccia
 		textField_cap.setColumns(10);
 
 		pulsantiRegistrazione = new String[2];
-		pulsantiRegistrazione[0] = "Cancella";
+		pulsantiRegistrazione[0] = "Indietro";
 		pulsantiRegistrazione[1] = "Conferma";
-
 
 		int ckFormato = 0;
 		int scelta = 0;
 
 		do {
-			// Utilizza una variabile per memorizzare la scelta dell'utente
-			scelta = JOptionPane.showOptionDialog(null, contentPane, "Aggiornamento Domicilio (clicca su X o cancella per uscire)", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, pulsantiRegistrazione, "Aggiorna");
+			// Controlla se il metodo e' stato invocato da RF02 (creazione utente)
+			if (nuovo) {
+
+				scelta = JOptionPane.showOptionDialog(null,
+						contentPane,
+						"Aggiornamento Domicilio (clicca su X per uscire)",
+						JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE,
+						null,
+						new Object[]{pulsantiRegistrazione[1]},
+						"Aggiorna");
+			}
+			else { // Il metodo è invocato dal menu' del client
+				String[] partiDomicilio = gestoreAccessi.promptRecuperaDomicilio(username);
+
+				if (partiDomicilio.length == 4) {
+					System.out.println("4");
+					textField_via.setText(partiDomicilio[0]);
+					textField_civico.setText(partiDomicilio[1]);
+					textField_cap.setText(partiDomicilio[2]);
+					textField_localita.setText(partiDomicilio[3]);
+				}
+
+				scelta = JOptionPane.showOptionDialog(null,
+						contentPane,
+						"Aggiornamento Domicilio (clicca su X o Indietro per uscire)",
+						JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE,
+						null,
+						pulsantiRegistrazione,
+						"Aggiorna");
+			}
+
 			if (scelta == 1) {
 				textField_via.setBackground(Color.WHITE);
 				textField_cap.setBackground(Color.WHITE);
@@ -145,7 +174,6 @@ public class UiUtente extends JOptionPane implements UiUtenteInterfaccia
 				if (ckFormato > 0) {
 					this.mostraErroreFormatoDomicilio(ckFormato);
 				} else {
-					// Chiudi la finestra di dialogo
 					// Chiamata al metodo per aggiornare il domicilio
 					gestoreAccessi.promptSalvaDomicilio(username, via, civico, cap, localita);
 					this.mostraSuccessoAggiornamentoDomicilio();
@@ -153,8 +181,7 @@ public class UiUtente extends JOptionPane implements UiUtenteInterfaccia
 			}
 		} while(ckFormato > 0 && scelta == 1);
 	}
-
-	// Rimuovi l'etichetta @Override se non stai implementando un'interfaccia o una classe astratta
+	
 	private void mostraErroreFormatoDomicilio(int msg) {
 		String messaggio = "";
 

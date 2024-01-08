@@ -135,6 +135,7 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 			}
 		}
 	}
+
 	/**
 	 * Controlla se l'utente ha inserito delle stringhe di nome e cognome valide.
 	 * @param nome Il nome dell'utente che si sta registrando sul sistema informatico.
@@ -197,7 +198,7 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 		dbUtenti.update("INSERT INTO Credenziali ('password', 'username', 'attivo') VALUES ('', '"+username+"', 1);");
 	}
 
-		/**
+	 /**
 	 * Verifica se la stringa contiene solo caratteri dell'alfabeto, inclusi eventuali spazi e apostrofi.
 	 *
 	 * @param input La stringa da verificare.
@@ -264,23 +265,28 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 		int lenLocalita = localita.length();
 
 		// controllo se tutti i campi sono corretti
-		if (lenVia > 0 && controllaValiditaStringaAlfabetica(via) && isValidoNumeroCivico(numero) && lenCap == 5 && isNumeroInteroPositivo(cap) && lenLocalita > 0 && controllaValiditaStringaAlfabetica(localita))
+		if (lenVia > 0 && controllaValiditaStringaAlfabetica(via) && isValidoNumeroCivico(numero) && lenCap == 5
+				&& isNumeroInteroPositivo(cap) && lenLocalita > 0 && controllaValiditaStringaAlfabetica(localita))
 			esitoControllo = 0;
 
 		// controllo formato 'via'
-		else if ((lenVia == 0 || !controllaValiditaStringaAlfabetica(via)) && isValidoNumeroCivico(numero) && lenCap == 5 && isNumeroInteroPositivo(cap) && lenLocalita > 0 && controllaValiditaStringaAlfabetica(localita))
+		else if ((lenVia == 0 || !controllaValiditaStringaAlfabetica(via)) && isValidoNumeroCivico(numero) && lenCap == 5
+				&& isNumeroInteroPositivo(cap) && lenLocalita > 0 && controllaValiditaStringaAlfabetica(localita))
 			esitoControllo = 1;
 
 		// controllo formato 'cap'
-		else if (lenVia > 0 && controllaValiditaStringaAlfabetica(via) && isValidoNumeroCivico(numero) && (lenCap != 5 || !isNumeroInteroPositivo(cap)) && lenLocalita > 0 && controllaValiditaStringaAlfabetica(localita))
+		else if (lenVia > 0 && controllaValiditaStringaAlfabetica(via) && isValidoNumeroCivico(numero) && (lenCap != 5
+				|| !isNumeroInteroPositivo(cap)) && lenLocalita > 0 && controllaValiditaStringaAlfabetica(localita))
 			esitoControllo = 2;
 
 		//controllo formato 'localita'
-		else if (lenVia > 0 && controllaValiditaStringaAlfabetica(via) && isValidoNumeroCivico(numero) && lenCap == 5 && (lenLocalita == 0 || !controllaValiditaStringaAlfabetica(localita)))
+		else if (lenVia > 0 && controllaValiditaStringaAlfabetica(via) && isValidoNumeroCivico(numero) && lenCap == 5
+				&& (lenLocalita == 0 || !controllaValiditaStringaAlfabetica(localita)))
 			esitoControllo = 3;
 
 		//controllo formato 'numero'
-		else if (lenVia > 0 && controllaValiditaStringaAlfabetica(via) && !isValidoNumeroCivico(numero) && lenCap == 5 && isNumeroInteroPositivo(cap) && lenLocalita > 0 && controllaValiditaStringaAlfabetica(localita))
+		else if (lenVia > 0 && controllaValiditaStringaAlfabetica(via) && !isValidoNumeroCivico(numero) && lenCap == 5
+				&& isNumeroInteroPositivo(cap) && lenLocalita > 0 && controllaValiditaStringaAlfabetica(localita))
 			esitoControllo = 4;
 
 		//ci sono più campi errati
@@ -289,7 +295,19 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 		return esitoControllo;
 	}
 
-	@Override
+	/**
+	 * Salva il domicilio di un utente nel database.
+	 *
+	 * @param username Nome utente dell'utente.
+	 * @param via Nome della via.
+	 * @param civico Numero civico.
+	 * @param cap Codice di Avviamento Postale (CAP).
+	 * @param localita Nome della località.
+	 * @throws RemoteException Lanciata in caso di errore remoto.
+	 *
+	 * RF24: AggiornamentoDomicilio
+	 * Autore: Mondelli e Reci
+	 */
 	public void promptSalvaDomicilio(String username, String via, String civico, String cap, String localita) throws RemoteException {
 
 		DbUtenti dbUtenti = new DbUtenti();
@@ -306,6 +324,17 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 		}
 	}
 
+	/**
+	 * Recupera il domicilio di un utente dal database.
+	 *
+	 * @param username Nome utente dell'utente.
+	 * @return Un array di stringhe contenente via, numero civico, CAP e località.
+	 *         Se l'utente non ha un domicilio valido, restituisce un array vuoto.
+	 * @throws RemoteException Lanciata in caso di errore remoto.
+	 *
+	 * RF24: AggiornamentoDomicilio
+	 * Autore: Mondelli e Reci
+	 */
 	public String[] promptRecuperaDomicilio(String username) throws RemoteException {
 		DbUtenti dbUtenti = new DbUtenti();
 

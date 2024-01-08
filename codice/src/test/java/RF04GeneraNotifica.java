@@ -1,4 +1,4 @@
-/*import static org.junit.Assert.*;
+import static org.junit.Assert.*;
 
 import DataBase.DbNotifiche;
 import Elaborazione.GestoreNotifiche;
@@ -95,4 +95,4 @@ public class RF04GeneraNotifica {
         assertEquals("Nuovo Cliente: Aldo Bruni.", gestoreNotifiche.generaTestoNotificaUtente(utente));
     }
 
-}*/
+}

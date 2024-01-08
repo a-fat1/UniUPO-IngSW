@@ -1,4 +1,4 @@
-/*import static org.junit.Assert.*;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
 import java.util.HashMap;
@@ -115,4 +115,4 @@ public class RF15NuovaFornitura {
         assertEquals(expected, gestoreProdotti.controlloDatiFornitura("2021-04-30", 25.0f, 0));
         assertEquals(expected, gestoreProdotti.controlloDatiFornitura("2021-05-31", 0.1f, -1));
     }
-}*/
+}

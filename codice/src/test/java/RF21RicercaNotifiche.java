@@ -1,4 +1,4 @@
-/*import static org.junit.Assert.*;
+import static org.junit.Assert.*;
 
 import DataBase.DbNotifiche;
 import org.junit.Test;
@@ -61,4 +61,4 @@ public class RF21RicercaNotifiche {
         }
     }
 
-}*/
+}

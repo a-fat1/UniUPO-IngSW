@@ -1,4 +1,4 @@
-/*import static org.junit.Assert.*;
+import static org.junit.Assert.*;
 import org.junit.Test;
 import java.rmi.RemoteException;
 
@@ -93,4 +93,3 @@ public class RF00Login
         assertNotNull(gestoreAccessi.ricercaUtente("aldo"));
     }
 }
-*/

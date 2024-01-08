@@ -1,4 +1,4 @@
-/*import static org.junit.Assert.*;
+import static org.junit.Assert.*;
 
 import Elaborazione.GestoreAccessi;
 import org.junit.Test;
@@ -93,4 +93,3 @@ public class RF12ListaPagamenti
         assertNull(gestoreRicerche.ricercaListaPagamentiUtente("utente_non_esistente"));
     }
 }
-*/

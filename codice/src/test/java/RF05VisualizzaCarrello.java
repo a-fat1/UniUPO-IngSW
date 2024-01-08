@@ -1,4 +1,4 @@
-/*import static org.junit.Assert.*;
+import static org.junit.Assert.*;
 import org.junit.Test;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -89,4 +89,4 @@ public class RF05VisualizzaCarrello {
         assertEquals(2, esito);
     }
 
-}*/
+}

@@ -1,4 +1,4 @@
-/*import DataBase.DbUtenti;
+import DataBase.DbUtenti;
 import Elaborazione.GestoreAccessi;
 import org.junit.Test;
 
@@ -33,4 +33,3 @@ public class RF03AggiornaPassword {
         assertEquals(0, gestoreAccessi.controlloNuovaPassword("abc123"));
     }
 }
-*/

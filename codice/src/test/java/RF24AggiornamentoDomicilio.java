@@ -95,7 +95,7 @@ public class RF24AggiornamentoDomicilio {
     }
 
     @Test
-    public void testPiuCampiErrati() {
+    public void testVariCampiErrati() {
         int result = gestoreAccessi.controllaFormatoDomicilio("Via Roma", "1", "1234", "");
         assertEquals(5, result);
 
