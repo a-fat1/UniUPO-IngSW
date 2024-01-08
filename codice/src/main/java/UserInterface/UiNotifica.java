@@ -18,9 +18,7 @@ import java.rmi.NotBoundException;
 import java.time.LocalTime;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 
-import UserInterface.*;
 import Elaborazione.*;
 
 public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
@@ -134,93 +132,90 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 		dataPubblicazione = new HashMap<>();
 		dataScadenza = new HashMap<>();
 
-		dataField = new JTextField("", 20);
-		dataLabel = new JLabel("Inserisci data di scadenza: ");
-		dataField.setToolTipText("Data");
+		dataField = new JTextField("", 10);
+		dataLabel = new JLabel("Inserire data scadenza: ");
+		dataField.setToolTipText("formato YYYY-MM-DD");
 
-		oraField = new JTextField("", 20);
-		oraLabel = new JLabel("Inserisci l'ora di scadenza: ");
-		oraField.setToolTipText("Ora");
+		oraField = new JTextField("", 10);
+		oraLabel = new JLabel("Inserire ora scadenza: ");
+		oraField.setToolTipText("formato HH:mm:ss");
 
-		testoField = new JTextArea(10, 40);
+		testoField = new JTextArea(5, 30);
 		testoField.setLineWrap(true);
-		testoLabel = new JLabel("Inserisci testo notifica:");
-		testoField.setToolTipText("Testo");
+		testoLabel = new JLabel("Inserire testo notifica:");
+		testoField.setToolTipText("testo");
 
-		modificaNotificaPanel = new JPanel(new GridBagLayout());
-		GridBagConstraints constraints = new GridBagConstraints();
+		modificaNotificaPanel = new JPanel();
 
-		constraints.gridy=0;
-		constraints.gridx=0;
-		modificaNotificaPanel.add(dataLabel,constraints);
+		modificaNotificaPanel.setLayout(new GridBagLayout());
+		GridBagConstraints gbc = new GridBagConstraints();
 
-		constraints.gridy=0;
-		constraints.gridx=2;
-		constraints.gridwidth=1;
-		modificaNotificaPanel.add(dataField,constraints);
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.insets = new Insets(4, 4, 4, 4);
+		gbc.anchor = GridBagConstraints.WEST;
+		modificaNotificaPanel.add(dataLabel, gbc);
+		gbc.gridx++;
+		modificaNotificaPanel.add(dataField, gbc);
+		gbc.gridx++;
+		modificaNotificaPanel.add(oraLabel, gbc);
+		gbc.gridx++;
+		modificaNotificaPanel.add(oraField, gbc);
 
-		constraints.gridy=1;
-		constraints.gridx=0;
-		modificaNotificaPanel.add(oraLabel,constraints);
+		gbc.gridx = 0;
+		gbc.gridy++;
+		gbc.anchor = GridBagConstraints.NORTHWEST;
+		modificaNotificaPanel.add(testoLabel, gbc);
 
-		constraints.gridy=1;
-		constraints.gridx=2;
-		constraints.gridwidth=1;
-		modificaNotificaPanel.add(oraField,constraints);
+		gbc.gridx++;
+		gbc.gridwidth = 3;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		modificaNotificaPanel.add(testoField, gbc);
 
-		constraints.gridy=3;
-		constraints.gridx=0;
-		modificaNotificaPanel.add(testoLabel,constraints);
-
-		constraints.gridy=3;
-		constraints.gridx=2;
-		constraints.gridwidth=5;
-		modificaNotificaPanel.add(testoField,constraints);
-
+		(testoField).setBorder(new JTextField().getBorder());
 	}
 
-	/**
-	 * RF04: Avvia la generazione di una notifica.
-	 *
-	 * @author Linda Monfermoso, Gabriele Magenta Biasina
-	 * @param tipoNotifica il tipo di notifica da generare (avviso, nuovo utente, nuovo prodotto, nuovo ordine)
-	 * @param prodotto il prodotto da includere nella notifica (NULL se non utilizzato)
-	 * @param ordine l'ordine da includere nella notifica (NULL se non utilizzato)
-	 * @param utente l'utente da includere nella notifica (NULL se non utilizzato)
-	 * @throws RemoteException
-	 */
-	public void avvioGeneraNotifica(String tipoNotifica, HashMap<String, Object> prodotto, HashMap<String, Object> ordine, HashMap<String, Object> utente) throws RemoteException {
-		// ottiene il tipo dell'utente dall'hashmap "utente"
-		String tipoUtente = utente.get("tipo").toString();
-
+	// RF04
+	public void avvioGeneraNotifica(String tipoNotifica, HashMap<String, Object> oggetto) throws RemoteException {
 		switch (tipoNotifica) {
 			case "nuovo prodotto":
+				testoNotifica = gestoreNotifiche.generaTestoNotificaProdotto(oggetto);
+				loopVerificaDatiNotifica();
+				gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), dataScadenza, testoField.getText(), "cliente");
+				break;
 			case "avviso":
-				if (tipoNotifica.equals("nuovo prodotto"))
-					testoNotifica = gestoreNotifiche.generaTestoNotificaProdotto(prodotto);
-				else
-					testoNotifica = gestoreNotifiche.generaTestoNotificaAvviso();
-				do {
-					this.mostraFormNotifica(testoNotifica);
-					testoNotifica = testoField.getText();
-					esitoVerifica = gestoreNotifiche.verificaCorrettezzaDati(dataScadenza.get("data"), dataScadenza.get("ora"), testoNotifica);
-					if (esitoVerifica.contains("errore")) {
-						mostraErrore(esitoVerifica);
-					}
-				} while (!Objects.equals(esitoVerifica, "ok"));
-				gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), dataScadenza, testoField.getText(), tipoUtente);
+				testoNotifica = gestoreNotifiche.generaTestoNotificaAvviso();
+				loopVerificaDatiNotifica();
+				gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), dataScadenza, testoField.getText(), "tutti");
 				break;
 			case "nuovo ordine":
-				testoNotifica = gestoreNotifiche.generaTestoNotificaOrdine(ordine);
-				gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), setDataScadenzaDefault(), testoField.getText(), tipoUtente);
+				testoNotifica = gestoreNotifiche.generaTestoNotificaOrdine(oggetto);
+				gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), setDataScadenzaDefault(), testoNotifica, "staff");
 				break;
 			case "nuovo utente":
-				testoNotifica = gestoreNotifiche.generaTestoNotificaUtente(utente);
-				gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), setDataScadenzaDefault(), testoField.getText(), tipoUtente);
+				testoNotifica = gestoreNotifiche.generaTestoNotificaUtente(oggetto);
+				gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), setDataScadenzaDefault(), testoNotifica, "amministratore");
 				break;
 			default:
 				throw new IllegalStateException("Valore inatteso: " + tipoNotifica);
 		}
+	}
+
+	/**
+	 * RF04: Metodo per evitare duplicazione del codice.
+	 *
+	 * @author Linda Monfermoso, Gabriele Magenta Biasina
+	 * @throws RemoteException
+	 */
+	private void loopVerificaDatiNotifica() throws RemoteException {
+		do {
+			this.mostraFormNotifica(this.testoNotifica);
+			this.testoNotifica = testoField.getText();
+			esitoVerifica = gestoreNotifiche.verificaCorrettezzaDati(this.dataScadenza.get("data"), this.dataScadenza.get("ora"), this.testoNotifica);
+			if (esitoVerifica.contains("errore")) {
+				mostraErrore(esitoVerifica);
+			}
+		} while (!Objects.equals(esitoVerifica, "ok"));
 	}
 
 	/**
@@ -256,19 +251,19 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 	// RED per quanto riguarda il mancato inserimento
 		switch(tipoErrore) {
 			case "errore formato data":
-				messaggio = "La data fornita non e' in formato YYYY-MM-DD.";
+				messaggio = "La data fornita non e' in formato YYYY-MM-DD.\n(clicca ok o X per continuare)";
 				dataField.setBackground(Color.YELLOW);
 				break;
 			case "errore formato ora":
-				messaggio = "L'ora fornita non e' in formato HH:mm:ss.";
+				messaggio = "L'ora fornita non e' in formato HH:mm:ss.\n(clicca ok o X per continuare)";
 				oraField.setBackground(Color.YELLOW);
 				break;
 			case "errore data":
-				messaggio = "La data fornita non e' compatibile con la data di pubblicazione.";
+				messaggio = "La data fornita non e' compatibile con la data di pubblicazione.\n(clicca ok o X per continuare)";
 				dataField.setBackground(Color.YELLOW);
 				break;
 			case "errore testo notifica":
-				messaggio = "Il testo della notifica non può essere vuoto.";
+				messaggio = "Il testo della notifica non può essere vuoto.\n(clicca ok o X per continuare)";
 				testoField.setBackground(Color.RED);
 				break;
 		}
@@ -290,7 +285,7 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 	/**
 	 * RF04: Imposta la data di scadenza di una notifica, richiesto dai metodi generaTestoNotificaAvviso e generaTestoNotificaUtente.
 	 *
-	 * @return la data entro la quale la notifica scadrà (una settimana dalla data di pubblicazione)
+	 * @return la data entro la quale la notifica scadrà (un giorno dalla data di pubblicazione)
 	 */
 	private HashMap<String, String> setDataScadenzaDefault() {
 		dataScadenza.put("data", LocalDate.now().plusDays(1).toString());
