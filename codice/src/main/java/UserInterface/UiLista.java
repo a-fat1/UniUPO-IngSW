@@ -235,7 +235,19 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 	{
 		//RF12: Lista Pagamenti
 		//autori: Broglio, Cartieri
+		JPanel panelData = new JPanel(new GridLayout(2, 2));
+		panelData.add(labelDataInizio);
+		panelData.add(fieldDataInizio);
+		panelData.add(labelDataFine);
+		panelData.add(fieldDataFine);
 
+		scelta = this.showOptionDialog(null, panelData, "Ricerca pagamenti", DEFAULT_OPTION, QUESTION_MESSAGE, null, pulsanteRicerca, "Cerca");
+
+		if (scelta == 0)
+		{
+			dataInizio = fieldDataInizio.getText();
+			dataFine = fieldDataFine.getText();
+		}
 	}
 
 	public void mostraListaPagamenti(ArrayList<HashMap<String, Object>> listaPagamenti) throws RemoteException
