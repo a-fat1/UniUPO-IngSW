@@ -92,7 +92,7 @@ public class UiUtente extends JOptionPane implements UiUtenteInterfaccia
 					tipoUtente = "cliente";
 					clienteAmministratore.put("tipo", tipoUtente);
 					avvioAggiornaDomicilio();
-					uiNotifica.avvioGeneraNotifica("nuovo utente", null, null, clienteAmministratore);
+					uiNotifica.avvioGeneraNotifica("nuovo utente", clienteAmministratore);
 				}
 				else
 				{

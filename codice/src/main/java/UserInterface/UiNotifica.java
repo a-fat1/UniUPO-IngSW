@@ -18,9 +18,7 @@ import java.rmi.NotBoundException;
 import java.time.LocalTime;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 
-import UserInterface.*;
 import Elaborazione.*;
 
 public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
@@ -177,48 +175,47 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 		(testoField).setBorder(new JTextField().getBorder());
 	}
 
-	/**
-	 * RF04: Avvia la generazione di una notifica.
-	 *
-	 * @author Linda Monfermoso, Gabriele Magenta Biasina
-	 * @param tipoNotifica il tipo di notifica da generare (avviso, nuovo utente, nuovo prodotto, nuovo ordine)
-	 * @param prodotto il prodotto da includere nella notifica (NULL se non utilizzato)
-	 * @param ordine l'ordine da includere nella notifica (NULL se non utilizzato)
-	 * @param utente l'utente da includere nella notifica (NULL se non utilizzato)
-	 * @throws RemoteException
-	 */
-	public void avvioGeneraNotifica(String tipoNotifica, HashMap<String, Object> prodotto, HashMap<String, Object> ordine, HashMap<String, Object> utente) throws RemoteException {
-		// ottiene il tipo dell'utente dall'hashmap "utente"
-		String tipoUtente = utente.get("tipo").toString();
-
+	// RF04
+	public void avvioGeneraNotifica(String tipoNotifica, HashMap<String, Object> oggetto) throws RemoteException {
 		switch (tipoNotifica) {
 			case "nuovo prodotto":
+				testoNotifica = gestoreNotifiche.generaTestoNotificaProdotto(oggetto);
+				loopVerificaDatiNotifica();
+				gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), dataScadenza, testoField.getText(), "cliente");
+				break;
 			case "avviso":
-				if (tipoNotifica.equals("nuovo prodotto"))
-					testoNotifica = gestoreNotifiche.generaTestoNotificaProdotto(prodotto);
-				else
-					testoNotifica = gestoreNotifiche.generaTestoNotificaAvviso();
-				do {
-					this.mostraFormNotifica(testoNotifica);
-					testoNotifica = testoField.getText();
-					esitoVerifica = gestoreNotifiche.verificaCorrettezzaDati(dataScadenza.get("data"), dataScadenza.get("ora"), testoNotifica);
-					if (esitoVerifica.contains("errore")) {
-						mostraErrore(esitoVerifica);
-					}
-				} while (!Objects.equals(esitoVerifica, "ok"));
-				gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), dataScadenza, testoField.getText(), tipoUtente);
+				testoNotifica = gestoreNotifiche.generaTestoNotificaAvviso();
+				loopVerificaDatiNotifica();
+				gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), dataScadenza, testoField.getText(), "tutti");
 				break;
 			case "nuovo ordine":
-				testoNotifica = gestoreNotifiche.generaTestoNotificaOrdine(ordine);
-				gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), setDataScadenzaDefault(), testoNotifica, tipoUtente);
+				testoNotifica = gestoreNotifiche.generaTestoNotificaOrdine(oggetto);
+				gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), setDataScadenzaDefault(), testoNotifica, "staff");
 				break;
 			case "nuovo utente":
-				testoNotifica = gestoreNotifiche.generaTestoNotificaUtente(utente);
-				gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), setDataScadenzaDefault(), testoNotifica, tipoUtente);
+				testoNotifica = gestoreNotifiche.generaTestoNotificaUtente(oggetto);
+				gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), setDataScadenzaDefault(), testoNotifica, "amministratore");
 				break;
 			default:
 				throw new IllegalStateException("Valore inatteso: " + tipoNotifica);
 		}
+	}
+
+	/**
+	 * RF04: Metodo per evitare duplicazione del codice.
+	 *
+	 * @author Linda Monfermoso, Gabriele Magenta Biasina
+	 * @throws RemoteException
+	 */
+	private void loopVerificaDatiNotifica() throws RemoteException {
+		do {
+			this.mostraFormNotifica(this.testoNotifica);
+			this.testoNotifica = testoField.getText();
+			esitoVerifica = gestoreNotifiche.verificaCorrettezzaDati(this.dataScadenza.get("data"), this.dataScadenza.get("ora"), this.testoNotifica);
+			if (esitoVerifica.contains("errore")) {
+				mostraErrore(esitoVerifica);
+			}
+		} while (!Objects.equals(esitoVerifica, "ok"));
 	}
 
 	/**
