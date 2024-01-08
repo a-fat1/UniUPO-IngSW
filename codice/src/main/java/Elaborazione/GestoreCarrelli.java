@@ -80,10 +80,12 @@ public class GestoreCarrelli implements GestoreCarrelliInterfaccia
 				+ "WHERE Prodotto.codice = " + elemento.get("codice") + ";");
 	}
 
-		public void rimozioneProdottoDalCarrello(HashMap<String, Object> elemento, String username) throws RemoteException {
+	public void rimozioneProdottoDalCarrello(ArrayList<HashMap<String, Object>> carrello, HashMap<String, Object> elemento, String username) throws RemoteException {
 		// RF07: rimuovi prodotto dal carrello
 		// autori: Simone Aldo Borsa, Andrea Padoan
 
+		if(carrello.size() == 0) return;
+		
 		dbProdotti.update("UPDATE Prodotto "
 				+ "SET Prodotto.quantita = "
 				+ elemento.get("quantita") + (int) elemento.get("quantitaProdotto")
@@ -92,6 +94,8 @@ public class GestoreCarrelli implements GestoreCarrelliInterfaccia
 		dbProdotti.update("DELETE FROM Carrello "
 				+ "WHERE Carrello.username = \"" + username
 				+ "\" AND Carrello.codiceProdotto = " + elemento.get("codice") + ";");
+		
+		carrello.remove(elemento);
 	}
 	
 	public void svuotaCarrello(ArrayList<HashMap<String, Object>> carrello, String username) throws RemoteException {
@@ -109,5 +113,7 @@ public class GestoreCarrelli implements GestoreCarrelliInterfaccia
 		
 		dbProdotti.update("DELETE FROM Carrello "
 				+ "WHERE Carrello.username = \"" + username + ";");
+		
+		carrello.clear();
 	}
 }
