@@ -296,12 +296,12 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 		ridimensionaListaPagamenti(tableListaPagamenti);
 
 		scrollPanelListaPagamenti = new JScrollPane(tableListaPagamenti);
-		scrollPanelListaPagamenti.setPreferredSize(new Dimension(753, 250));
+		scrollPanelListaPagamenti.setPreferredSize(new Dimension(600, 250));
 	}
 
 	private void ridimensionaListaPagamenti(JTable tableListaPagamenti) throws RemoteException
 	{
-		tableListaPagamenti.getColumn("importo").setPreferredWidth(60);
+		tableListaPagamenti.getColumn("importo").setPreferredWidth(57);
 		tableListaPagamenti.getColumn("importo").setHeaderValue("Importo");
 		tableListaPagamenti.getColumn("nome").setPreferredWidth(80);
 		tableListaPagamenti.getColumn("nome").setHeaderValue("Nome");
