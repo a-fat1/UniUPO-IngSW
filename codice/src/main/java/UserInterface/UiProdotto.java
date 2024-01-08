@@ -1,20 +1,19 @@
 package UserInterface;
 
-import java.awt.*;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.ArrayList;
-
-import java.rmi.registry.Registry; 
-import java.rmi.registry.LocateRegistry; 
-import java.rmi.RemoteException;
-import java.rmi.NotBoundException;
-import java.util.stream.Collectors;
+import Elaborazione.GestoreProdottiInterfaccia;
 
 import javax.swing.*;
-
-import UserInterface.*;
-import Elaborazione.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.time.Year;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 {
@@ -42,7 +41,27 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 	private JLabel successoFornituraLabel; //RF15
 	private JPanel successoFornituraPanel; //RF15
 	private JPanel erroreFornituraPanel; //RF15
-	
+
+
+
+	// RF16 Nuova Fornitura Galliera, Ternullo
+	private JPanel nuovoProdottoPanel;
+	private JLabel titoloProdottoLabel;
+	private JLabel annoProdottoLabel;
+	private JLabel editoreProdottoLabel;
+	private JLabel autoriProdottoLabel;
+	private JLabel tipoProdottoLabel;
+	private JTextField titoloProdottoField;
+	private JTextField editoreProdottoField;
+	private JTextField[] autoriProdottoField;
+	private static final int NUM_AUTORI = 5;
+	private JComboBox<Integer> annoProdottoCombo;
+	private JComboBox<String> tipoProdottoCombo;
+	private JPanel erroreVerificaPanel;
+	private JLabel messaggioErrore;
+	private JPanel erroreControlloPanel;
+
+
 	
 	public UiProdotto(String hostGestore) throws RemoteException, NotBoundException
 	{
@@ -71,6 +90,72 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 		successoFornituraPanel = new JPanel();
 		erroreFornituraPanel = new JPanel();
 		erroreFornituraPanel.setLayout(new BoxLayout(erroreFornituraPanel, BoxLayout.PAGE_AXIS));
+
+
+		// RF 16
+		nuovoProdottoPanel = new JPanel(new GridBagLayout());
+		GridBagConstraints constraints = new GridBagConstraints();
+		constraints.anchor = GridBagConstraints.LINE_START;
+		nuovoProdottoPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+		titoloProdottoLabel = new JLabel("Titolo");
+		annoProdottoLabel = new JLabel("Anno Pubblicazione  ");
+		editoreProdottoLabel = new JLabel("Editore");
+		autoriProdottoLabel = new JLabel("Autori");
+		tipoProdottoLabel = new JLabel("Tipo");
+		titoloProdottoField = new JTextField("",10);
+		editoreProdottoField = new JTextField("",10);
+
+		annoProdottoCombo = new JComboBox<>();
+		for (int year=1900; year <= Year.now().getValue(); year++) {
+			annoProdottoCombo.addItem(year);
+		}
+
+		autoriProdottoField = new JTextField[NUM_AUTORI];
+		JPanel autoriPanel = new JPanel(new GridLayout(NUM_AUTORI, 1));
+		for(int i=0; i<NUM_AUTORI; i++){
+			autoriProdottoField[i] = new JTextField("", 10);
+			autoriPanel.add(autoriProdottoField[i]);
+		}
+
+		tipoProdottoCombo = new JComboBox<>();
+		tipoProdottoCombo.addItem("CD");
+		tipoProdottoCombo.addItem("DVD");
+		tipoProdottoCombo.addItem("Libro");
+
+		constraints.gridy = 0;
+		constraints.gridx = 0;
+		nuovoProdottoPanel.add(titoloProdottoLabel, constraints);
+		constraints.gridx = 1;
+		nuovoProdottoPanel.add(titoloProdottoField, constraints);
+
+		constraints.gridy = 1;
+		constraints.gridx = 0;
+		nuovoProdottoPanel.add(annoProdottoLabel, constraints);
+		constraints.gridx = 1;
+		annoProdottoCombo.setBorder(new EmptyBorder(5, 0, 5, 0));
+		nuovoProdottoPanel.add(annoProdottoCombo, constraints);
+
+		constraints.gridy = 2;
+		constraints.gridx = 0;
+		nuovoProdottoPanel.add(editoreProdottoLabel, constraints);
+		constraints.gridx = 1;
+		nuovoProdottoPanel.add(editoreProdottoField, constraints);
+
+		constraints.gridy = 3;
+		constraints.gridx = 0;
+		constraints.gridheight = NUM_AUTORI;
+		nuovoProdottoPanel.add(autoriProdottoLabel, constraints);
+		constraints.gridx = 1;
+		autoriPanel.setBorder(new EmptyBorder(5, 0, 0, 0));
+		nuovoProdottoPanel.add(autoriPanel, constraints);
+
+		constraints.gridy = NUM_AUTORI+4;
+		constraints.gridx = 0;
+		constraints.gridheight = 1;
+		nuovoProdottoPanel.add(tipoProdottoLabel, constraints);
+		constraints.gridx = 1;
+		tipoProdottoCombo.setBorder(new EmptyBorder(5, 0, 0, 0));
+		nuovoProdottoPanel.add(tipoProdottoCombo, constraints);
 	}
 
 	public void avvioRimuoviRipristinaNelCatalogo() throws RemoteException
@@ -89,6 +174,7 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 
 	public void avvioNuovoProdotto() throws RemoteException
 	{	// RF16
+		mostraFormNuovoProdotto();
 	}
 
 	public void avvioIncrementaDecrementaPrezzi() throws RemoteException
@@ -183,5 +269,57 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 		}
 
 		showMessageDialog(null, erroreFornituraPanel, "Errore", JOptionPane.ERROR_MESSAGE);
+	}
+
+	private void mostraFormNuovoProdotto() throws RemoteException {
+		//RF16
+		int esitoVerifica = 0;
+		boolean esitoControllo = false;
+
+		// elimina dati preinseriti
+		titoloProdottoField.setText("");
+		editoreProdottoField.setText("");
+		for(JTextField t: autoriProdottoField) t.setText("");
+
+		// cicla finchè il prodotto inserito possa venire aggiunto
+		do{
+			int scelta = showConfirmDialog(null, nuovoProdottoPanel, "Nuovo Prodotto, X per uscire", JOptionPane.OK_CANCEL_OPTION);
+			if(scelta == JOptionPane.CLOSED_OPTION || scelta == JOptionPane.CANCEL_OPTION) return;
+
+			String[] autori = new String[]{autoriProdottoField[0].getText()};
+			String titolo = titoloProdottoField.getText();
+			String editore = editoreProdottoField.getText();
+			String tipo = Objects.requireNonNull(tipoProdottoCombo.getSelectedItem()).toString();
+			int anno = Integer.parseInt(Objects.requireNonNull(annoProdottoCombo.getSelectedItem()).toString());
+
+			mostraErroreControllo();
+			//TODO verifica campi, controllo unicità, aggiunta prodotto
+		} while(esitoVerifica != 0 || esitoControllo==false); // se i dati inseriti non sono corretti o il prodotto esiste già cicla
+	}
+
+	private void mostraErroreVerifica(int codice){
+		//RF16
+
+		erroreVerificaPanel = new JPanel();
+		messaggioErrore = new JLabel();
+		switch (codice) {
+			case 1 -> messaggioErrore.setText("Errore: Titolo mancante");
+			case 2 -> messaggioErrore.setText("Errore: Anno errato");
+			case 3 -> messaggioErrore.setText("Errore: Editore mancante");
+			case 4 -> messaggioErrore.setText("Errore: Autore mancante");
+
+			default -> messaggioErrore.setText("Errore");
+		}
+		erroreVerificaPanel.add(messaggioErrore);
+		showMessageDialog(null, erroreVerificaPanel, "ERRORE, x o OK per confermare lettura", JOptionPane.ERROR_MESSAGE);
+	}
+
+	private void mostraErroreControllo(){
+		//RF16
+
+		erroreControlloPanel = new JPanel();
+		messaggioErrore = new JLabel("Errore: Prototto gia' esistente");
+		erroreControlloPanel.add(messaggioErrore);
+		showMessageDialog(null, erroreControlloPanel, "ERRORE, x o OK per confermare lettura", JOptionPane.ERROR_MESSAGE);
 	}
 }

@@ -1,24 +1,22 @@
 package Elaborazione;
 
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-import java.time.format.ResolverStyle;
-import java.time.Year;
-import java.util.HashMap;
-import java.util.ArrayList;
-import java.util.Collections;
+import DataBase.DbProdotti;
+import DataBase.DbProdottiInterfaccia;
+
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.Year;
 import java.time.format.DateTimeFormatter;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.RemoteException;
-import java.rmi.NotBoundException;
-
-import DataBase.*;
+import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class GestoreProdotti implements GestoreProdottiInterfaccia {
 	private Registry registry;
@@ -119,7 +117,9 @@ public class GestoreProdotti implements GestoreProdottiInterfaccia {
 		dbProdotti.update("UPDATE Prodotto SET quantita = quantita + "+quantita+" WHERE codice = "+codProdotto);
 	}
 
-	public int verificaCampi(String[] autori, String titolo, String editore, int anno){
+	@Override
+	public int verificaCampi(String[] autori, String titolo, String editore, int anno) throws RemoteException{
+		//RF16
 		int lenTitolo = titolo.length();
 		if(lenTitolo == 0) return 1; //titolo mancante
 
@@ -135,7 +135,9 @@ public class GestoreProdotti implements GestoreProdottiInterfaccia {
 		return 0;
 	}
 
+	@Override
 	public boolean controlloUnicita(String[] autori, String titolo, String editore, int anno, String tipo) throws RemoteException {
+		//RF16
 		ArrayList<HashMap<String, Object>> prodotti = dbProdotti.query(
 				"SELECT * FROM Prodotto " +
 						"WHERE autore = \""+ String.join(", ", autori)+"\" AND titolo = \""+titolo+"\" AND editore = \""+editore+"\" AND anno = \"" + anno + "\" AND tipo = \"" + tipo + "\""
@@ -144,7 +146,9 @@ public class GestoreProdotti implements GestoreProdottiInterfaccia {
 		return prodotti.isEmpty();
 	}
 
+	@Override
 	public HashMap<String, Object> aggiungiProdotto(String[] autori, String titolo, String editore, int anno, String tipo) throws RemoteException {
+		//RF16
 		dbProdotti.update(
 				"INSERT INTO Prodotto(autore, titolo, editore, anno, tipo, prezzo, quantita, disponibile) " +
 						"VALUES (\""+ String.join(", ", autori) +"\", \""+ titolo +"\", \""+ editore +"\", \""+ anno +"\", \""+ tipo +"\", null, 0, True)"
