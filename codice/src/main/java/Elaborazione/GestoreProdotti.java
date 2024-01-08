@@ -117,6 +117,17 @@ public class GestoreProdotti implements GestoreProdottiInterfaccia {
 		dbProdotti.update("UPDATE Prodotto SET quantita = quantita + "+quantita+" WHERE codice = "+codProdotto);
 	}
 
+	/**
+	 * @param autori array String di autori inseriti dall'utente
+	 * @param titolo String titolo
+	 * @param editore String editore
+	 * @param anno int anno
+	 * @return int codice di successo 0, o il codice di errore 1-4
+	 * @throws RemoteException
+	 *
+	 * Controlla che i campi inseriti siano corretti, al primo
+	 * errato che incontra ritorna il codice di errore corrispondente
+	 */
 	@Override
 	public int verificaCampi(String[] autori, String titolo, String editore, int anno) throws RemoteException{
 		//RF16
@@ -135,6 +146,18 @@ public class GestoreProdotti implements GestoreProdottiInterfaccia {
 		return 0;
 	}
 
+	/**
+	 * @param autori array String di autori inseriti dall'utente
+	 * @param titolo String titolo
+	 * @param editore String editore
+	 * @param anno int anno
+	 * @param tipo String tipo
+	 * @return true se il prodotto è unico, altrimenti false
+	 * @throws RemoteException
+	 *
+	 * Effettua una query al database cercando prodotti con gli stessi dati di quelli inseriti
+	 * Se nulla viene ritornato allora ritorna true (successo, prodotto unico) altrimenti false
+	 */
 	@Override
 	public boolean controlloUnicita(String[] autori, String titolo, String editore, int anno, String tipo) throws RemoteException {
 		//RF16
@@ -146,6 +169,19 @@ public class GestoreProdotti implements GestoreProdottiInterfaccia {
 		return prodotti.isEmpty();
 	}
 
+	/**
+	 * @param autori array String di autori inseriti dall'utente
+	 * @param titolo String titolo
+	 * @param editore String editore
+	 * @param anno int anno
+	 * @param tipo String tipo
+	 * @return HashMap<String, Object> cha rappresenta il prodotto appena aggiunto
+	 * @throws RemoteException
+	 *
+	 * Effettua una query al database che aggiunge in nuovo prodotto
+	 * Il database assegna un Codice al prodotto appena inserito (AUTOINCREMENT)
+	 * Effettua una query per ricevere il prodotto con codice più alto (quello appena inserito) e lo ritorna
+	 */
 	@Override
 	public HashMap<String, Object> aggiungiProdotto(String[] autori, String titolo, String editore, int anno, String tipo) throws RemoteException {
 		//RF16

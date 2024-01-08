@@ -23,11 +23,9 @@ public interface GestoreProdottiInterfaccia extends Remote
     void aggiungiFornitura(Integer codProdotto, String data, Float costo, Integer quantita) throws RemoteException;
 
 
-    //RF16
+    //RF16 Leonardo Galliera, Nicholas Ternullo
     int verificaCampi(String[] autori, String titolo, String editore, int anno) throws RemoteException;
-
     boolean controlloUnicita(String[] autori, String titolo, String editore, int anno, String tipo) throws RemoteException;
-
     HashMap<String, Object> aggiungiProdotto(String[] autori, String titolo, String editore, int anno, String tipo) throws RemoteException;
 
 
