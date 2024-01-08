@@ -79,4 +79,41 @@ public class GestoreCarrelli implements GestoreCarrelliInterfaccia
 				+ elemento.get("quantita") + ((int) elemento.get("quantitaProdotto") - nuovaQuantita)
 				+ "WHERE Prodotto.codice = " + elemento.get("codice") + ";");
 	}
+
+	public void rimozioneProdottoDalCarrello(ArrayList<HashMap<String, Object>> carrello, HashMap<String, Object> elemento, String username) throws RemoteException {
+		// RF07: rimuovi prodotto dal carrello
+		// autori: Simone Aldo Borsa, Andrea Padoan
+
+		if(carrello.size() == 0) return;
+		
+		dbProdotti.update("UPDATE Prodotto "
+				+ "SET Prodotto.quantita = "
+				+ elemento.get("quantita") + (int) elemento.get("quantitaProdotto")
+				+ "WHERE Carrello.codiceProdotto = " + elemento.get("codiceProdotto") + ";");
+		
+		dbProdotti.update("DELETE FROM Carrello "
+				+ "WHERE Carrello.username = \"" + username
+				+ "\" AND Carrello.codiceProdotto = " + elemento.get("codice") + ";");
+		
+		carrello.remove(elemento);
+	}
+	
+	public void svuotaCarrello(ArrayList<HashMap<String, Object>> carrello, String username) throws RemoteException {
+		// RF07: rimuovi prodotto dal carrello
+		// autori: Simone Aldo Borsa, Andrea Padoan
+		
+		if(carrello.size() == 0) return;
+		
+		for(HashMap<String, Object> elemento : carrello) {
+			dbProdotti.update("UPDATE Prodotto "
+					+ "SET Prodotto.quantita = "
+					+ elemento.get("quantita") + (int) elemento.get("quantitaProdotto")
+					+ "WHERE Carrello.codiceProdotto = " + elemento.get("codiceProdotto") + ";");
+		}
+		
+		dbProdotti.update("DELETE FROM Carrello "
+				+ "WHERE Carrello.username = \"" + username + ";");
+		
+		carrello.clear();
+	}
 }

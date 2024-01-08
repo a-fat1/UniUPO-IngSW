@@ -168,7 +168,7 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 		nuovaPasswordPanel.add(new JLabel("e contenere almeno una lettera e un numero"));
 	}
 	
-	public void avvioLogin() throws RemoteException
+	public void avvioLogin() throws RemoteException, NotBoundException
 	{	
 		//RF00: login
     		//autore: Codetta
@@ -177,7 +177,7 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 			this.mostraFormLogin();
 			
 			if (scelta==0) 
-				uiUtente.avvioCreaUtente();
+				uiUtente.avvioCreaUtente(true);
 
 			if (scelta==1) // login
 			{		
@@ -192,7 +192,7 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 					else
 					{
 						utente=gestoreAccessi.ricercaUtente(username);
-						uiNotifica.avvioVisualizzaNotifiche();
+						uiNotifica.avvioVisualizzaNotifiche((String)utente.get("tipo"));
 						do
 						{
 							this.mostraMenu((String)utente.get("nome"), ((String)utente.get("tipo")));
@@ -201,9 +201,9 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 							if (sceltaMenu==1)
 								this.avvioAggiornaPassword(true,username,password);
 							if (sceltaMenu==2 && !((String)utente.get("tipo")).equals("amministratore"))
-								uiRicerca.avvioRicercaProdotto();
+								uiRicerca.avvioRicercaProdotto((String)utente.get("tipo"), username);
 							if (sceltaMenu==2 && ((String)utente.get("tipo")).equals("amministratore"))			
-								uiUtente.avvioCreaUtente();
+								uiUtente.avvioCreaUtente(false);
 							if (sceltaMenu==3 && ((String)utente.get("tipo")).equals("cliente"))
 								uiCarrello.avvioVisualizzaCarrello();
 							if (sceltaMenu==3 && !((String)utente.get("tipo")).equals("cliente"))
@@ -211,7 +211,7 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 							if (sceltaMenu==4 && ((String)utente.get("tipo")).equals("staff"))
 								uiLista.avvioListaForniture();
 							if (sceltaMenu==4 && ((String)utente.get("tipo")).equals("cliente"))
-								uiLista.avvioListaOrdini();
+								uiLista.avvioListaOrdini((String) utente.get("username"), -1 );
 							if (sceltaMenu==4 && ((String)utente.get("tipo")).equals("amministratore"))
 								uiNotifica.avvioRicercaNotifiche();
 							if (sceltaMenu==5 && !((String)utente.get("tipo")).equals("amministratore"))
@@ -367,7 +367,7 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 				this.mostraErrore(3);
 			}
 			if(esitoControlloPassword==0){
-				//query utente
+				gestoreAccessi.AggiornaPassword(username, nuovaPassword);
 				this.mostraMessaggioDiSuccesso();
             }
 
