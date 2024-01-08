@@ -101,7 +101,7 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 		titoloProdottoLabel = new JLabel("Titolo");
 		annoProdottoLabel = new JLabel("Anno Pubblicazione  ");
 		editoreProdottoLabel = new JLabel("Editore");
-		autoriProdottoLabel = new JLabel("Autori");
+		autoriProdottoLabel = new JLabel("Autori (Riempi dall'alto)");
 		tipoProdottoLabel = new JLabel("Tipo");
 		titoloProdottoField = new JTextField("",10);
 		editoreProdottoField = new JTextField("",10);
@@ -274,8 +274,15 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 
 	private void mostraFormNuovoProdotto() throws RemoteException {
 		//RF16
-		int esitoVerifica = 0;
-		boolean esitoControllo = false;
+		int esitoVerifica;
+		boolean esitoControllo;
+		HashMap<String, Object> ultimoProdotto;
+
+		String[] autori;
+		String titolo;
+		String editore;
+		String tipo;
+		int anno;
 
 		// elimina dati preinseriti
 		titoloProdottoField.setText("");
@@ -284,7 +291,7 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 
 		// cicla finchè il prodotto inserito possa venire aggiunto
 		do{
-			int scelta = showConfirmDialog(null, nuovoProdottoPanel, "Nuovo Prodotto, X per uscire", JOptionPane.OK_CANCEL_OPTION);
+			int scelta = showConfirmDialog(null, nuovoProdottoPanel, "Nuovo Prodotto (x per uscire)", JOptionPane.OK_CANCEL_OPTION);
 			if(scelta == JOptionPane.CLOSED_OPTION || scelta == JOptionPane.CANCEL_OPTION) return;
 
 			ArrayList<String> autoriList = new ArrayList<>();
@@ -292,16 +299,28 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 				if(autoreF.getText().isEmpty()) break;
 				autoriList.add(autoreF.getText());
 			}
-			String[] autori = autoriList.toArray(new String[0]);
-			String titolo = titoloProdottoField.getText();
-			String editore = editoreProdottoField.getText();
-			String tipo = Objects.requireNonNull(tipoProdottoCombo.getSelectedItem()).toString();
-			int anno = Integer.parseInt(Objects.requireNonNull(annoProdottoCombo.getSelectedItem()).toString());
+			autori = autoriList.toArray(new String[0]);
 
-			System.out.println(Arrays.toString(autori));
+			titolo = titoloProdottoField.getText();
+			editore = editoreProdottoField.getText();
+			tipo = Objects.requireNonNull(tipoProdottoCombo.getSelectedItem()).toString();
+			anno = Integer.parseInt(Objects.requireNonNull(annoProdottoCombo.getSelectedItem()).toString());
 
-			//TODO verifica campi, controllo unicità, aggiunta prodotto
-		} while(esitoVerifica != 0 || esitoControllo==false); // se i dati inseriti non sono corretti o il prodotto esiste già cicla
+			// verifica campi
+			esitoVerifica = gestoreProdotti.verificaCampi(autori, titolo, editore, anno);
+			if(esitoVerifica != 0) mostraErroreVerifica(esitoVerifica);
+
+			// controllo unicita'
+			esitoControllo = gestoreProdotti.controlloUnicita(autori, titolo, editore, anno, tipo);
+			if(!esitoControllo) mostraErroreControllo();
+
+		} while(esitoVerifica != 0 || !esitoControllo); // se i dati inseriti non sono corretti o il prodotto esiste già cicla
+
+		ultimoProdotto = gestoreProdotti.aggiungiProdotto(autori, titolo, editore, anno, tipo);
+
+		//avvioAggiornaPrezzo(ultimoProdotto);
+		avvioNuovaFornitura((Integer) ultimoProdotto.get("codice"), true);
+		//UserInterface.UiNotifica.avvioGeneraNotifica("nuovo prodotto", ultimoProdotto);
 	}
 
 	private void mostraErroreVerifica(int codice){
@@ -318,7 +337,7 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 			default -> messaggioErrore.setText("Errore");
 		}
 		erroreVerificaPanel.add(messaggioErrore);
-		showMessageDialog(null, erroreVerificaPanel, "ERRORE, x o OK per confermare lettura", JOptionPane.ERROR_MESSAGE);
+		showMessageDialog(null, erroreVerificaPanel, "ERRORE (x o OK per confermare lettura)", JOptionPane.ERROR_MESSAGE);
 	}
 
 	private void mostraErroreControllo(){
@@ -327,6 +346,6 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 		erroreControlloPanel = new JPanel();
 		messaggioErrore = new JLabel("Errore: Prototto gia' esistente");
 		erroreControlloPanel.add(messaggioErrore);
-		showMessageDialog(null, erroreControlloPanel, "ERRORE, x o OK per confermare lettura", JOptionPane.ERROR_MESSAGE);
+		showMessageDialog(null, erroreControlloPanel, "ERRORE (x o OK per confermare lettura)", JOptionPane.ERROR_MESSAGE);
 	}
 }
