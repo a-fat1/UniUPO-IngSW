@@ -35,9 +35,10 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 	private GestoreRicercheInterfaccia gestoreRicerche;
 
 	// attributi
-	private int scelta, esitoGiacenza = -1;		// RF18
-	private String giacenza;	// RF18
-	ArrayList<HashMap<String, Object>> listaProdotti;		//RF18
+	// RF18
+	private int scelta, esitoGiacenza = -1;
+	private String giacenza;
+	ArrayList<HashMap<String, Object>> listaProdotti;
 	//RF08
 	private static final String _CD_ = "CD"; 
 	private static final String _DVD_ = "DVD";
@@ -50,11 +51,12 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 	private static final String _AGGIUNGI_AL_CARRELLO = "Aggiungi al Carrello";
 	
 	// elementi grafici
-	private JPanel pannelloGiacenza;	// RF18
-	private JTextField campoGiacenza;	// RF18
-	private JTable tabellaProdotti;		// RF18
-	private JScrollPane pannelloGiacenzaScorrevole;		// RF18
-	private String giacenzaPulsanti[] = new String[2];	// RF18
+	// RF18
+	private JPanel pannelloGiacenza;
+	private JTextField campoGiacenza;
+	private JTable tabellaProdotti;
+	private JScrollPane pannelloGiacenzaScorrevole;
+	private String giacenzaPulsanti[] = new String[2];
 	//RF08
 	JPanel ricercaPanel;
 	JPanel mainPanel;
@@ -253,7 +255,7 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 		switch (pulsantePremuto) {
 			case _NUOVA_FORNITURA:
 				//RF15	
-				//uiProdotto.avvioNuovaFornitura(codiceProdotto,);			
+				//uiProdotto.avvioNuovaFornitura(codiceProdotto, false);		
 				break;
 			case _AGGIORNA_PREZZO:
 				//RF14
@@ -335,7 +337,8 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
         panel.add(jTextField);
         return jTextField;
     }
-	//RF08 Raffaele Camera e Vanessa Tafarella
+
+	//RF08 Raffaele Camera
 	public void avvioRicercaProdotto(String tipo_utente, String username) throws RemoteException
 	{	
 		if(mostraBarraRicerca(tipo_utente)==OK_OPTION) {
@@ -423,13 +426,13 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 			if (scelta == 0) {		// Scelta = 0 quando viene premuto ok in mostraFormGiacenza()
 				esitoGiacenza = gestoreRicerche.controlloGiacenza(giacenza);	// Viene richiamato controlloGiacenza per controllare la giacenza
 				if(esitoGiacenza == 1 || esitoGiacenza == 2 || esitoGiacenza == 3)
-					mostraErrore(esitoGiacenza);	// In caso di errore viene richiamato mostraErrore per visualizzare l'errore specifico
+					mostraErroreGiacenza(esitoGiacenza);	// In caso di errore viene richiamato mostraErroreGiacenza per visualizzare l'errore specifico
 				else {
 					System.out.println("esitoGiacenza = " + esitoGiacenza + "\n");
-					listaProdotti = gestoreRicerche.ricercaProdotti(giacenza);		// Con la giacenza corretta viene richiamato ricercaProdotti per recuperare i dati dei prodotti
+					listaProdotti = gestoreRicerche.ricercaProdottiConGiacenza(giacenza);		// Con la giacenza corretta viene richiamato ricercaProdottiConGiacenza per recuperare i dati dei prodotti
 					if(listaProdotti.size() == 0) {
 						System.out.println("dimensione listaProdotti = " + listaProdotti.size() + "\n");
-						mostraErrore(4);		// Se l'ArrayList non ha i dati si richiama mostraErrore con parametro 4
+						mostraErroreGiacenza(4);		// Se l'ArrayList non ha i dati si richiama mostraErroreGiacenza con parametro 4
 					}
 					else
 						mostraListaProdotti(listaProdotti);		// mostraListaProdotti viene richiamato per visualizzare i dati in modo adeguato
@@ -479,7 +482,7 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 				System.out.println("scelta = " + scelta + " --> pulsante X\n");
 	}
 	
-	private void mostraErrore(int tipoErrore) {
+	private void mostraErroreGiacenza(int tipoErrore) {
 
 		// RF18: Prodotti in esaurimento
 		// Alessandro Fatone, Dario Guidotti
