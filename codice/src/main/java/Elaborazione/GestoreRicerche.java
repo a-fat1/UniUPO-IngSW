@@ -38,7 +38,7 @@ public class GestoreRicerche implements GestoreRicercheInterfaccia
 		//autore: Marino & Vecchio
 
 		String comandoSql;
-		ArrayList<HashMap<String, Object>> ordini;
+		ArrayList<HashMap<String, Object>> ordini = null;
 
 		System.out.println("GestoreRicerche.ricercaPerUtente(" + username + ")\n");
 		comandoSql = "SELECT Ordine.username,Ordine.dataOrdine,Ordine.codiceProdotto,Ordine.quantitaProdotto,Prodotto.autore,Prodotto.titolo,Prodotto.editore,Prodotto.tipo,Prodotto.anno,Prodotto.prezzo FROM Ordine JOIN Prodotto ON Ordine.codiceProdotto = Prodotto.codice WHERE username = \"" + username + "\";";
@@ -52,7 +52,7 @@ public class GestoreRicerche implements GestoreRicercheInterfaccia
 		//autore: Marino & Vecchio
 
 		String comandoSql;
-		ArrayList<HashMap<String, Object>> ordini;
+		ArrayList<HashMap<String, Object>> ordini = null;
 
 		System.out.println("GestoreRicerche.ricercaPerProdotto(" + codiceProdotto + ")\n");
 		comandoSql = "SELECT Ordine.username,Ordine.dataOrdine,Ordine.codiceProdotto,Ordine.quantitaProdotto,Prodotto.autore,Prodotto.titolo,Prodotto.editore,Prodotto.tipo,Prodotto.anno,Prodotto.prezzo FROM Ordine JOIN Prodotto ON Ordine.codiceProdotto = Prodotto.codice WHERE codice = \"" + codiceProdotto + "\";";
@@ -60,7 +60,7 @@ public class GestoreRicerche implements GestoreRicercheInterfaccia
 
 		return ordini;
 	}
-	public int controlloParametri(String dataInizio, String dataFine) throws RemoteException
+	public int controlloParametriListaPagamenti(String dataInizio, String dataFine) throws RemoteException
 	{
 		//RF12: Lista Pagamenti
 		//autori: Broglio, Cartieri
@@ -164,32 +164,38 @@ public class GestoreRicerche implements GestoreRicercheInterfaccia
 		return listaPagamenti;
 	}
 
-	@Override
 	public int controlloGiacenza(String giacenza) throws RemoteException {
 
-		// RF18 Prodotti in esaurimento
+	    // RF18: Prodotti in esaurimento
 		// Alessandro Fatone, Dario Guidotti
 
-		if (giacenza == null) 
+		if (giacenza == null || !giacenza.matches("\\d+"))	// Controllo per giacenza nulla e caratteri numerici
 			return 1;
-		if (!giacenza.matches("\\d+"))
+
+		String valoreMassimoIntero = String.valueOf(Integer.MAX_VALUE);		// Controllo lunghezza giacenza con Integer.MAX_VALUE
+		if (giacenza.length() > valoreMassimoIntero.length())
 			return 2;
-		if (Integer.parseInt(giacenza) == 0)
+		else
+			if(giacenza.length() == valoreMassimoIntero.length())	// Quando hanno la stessa lunghezza
+				for (int i = 0; i < valoreMassimoIntero.length(); i++)	// Controllo giacenza con Integer.MAX_VALUE per ogni carattere
+					if(giacenza.charAt(i) > valoreMassimoIntero.charAt(i))
+						return 2;
+
+		if (Integer.parseInt(giacenza) == 0)	// Controllo giacenza diversa da zero
 			return 3;
 
 		return 0;
 	}
 	
-	@Override
-	public ArrayList<HashMap<String, Object>> ricercaProdotti(String giacenza) throws RemoteException {
-		
-		// RF18 Prodotti in esaurimento
-		// Alessandro Fatone, Dario Guidotti
+	public ArrayList<HashMap<String, Object>> ricercaProdottiConGiacenza(String giacenza) throws RemoteException {
 
-		try {
+        // RF18: Prodotti in esaurimento
+		// Alessandro Fatone, Dario Guidotti
+		
+		try {	// Se la query ha successo ritorna un ArrayList con il contenuto desiderato
 			return dbProdotti.query("SELECT * FROM Prodotto WHERE Quantita <= " + giacenza);
 		} catch (RemoteException e) {
-			return new ArrayList<>();
+			return new ArrayList<>();	// In caso contrario viene ritornato un ArrayList vuoto
 		}
     }
 
@@ -341,5 +347,61 @@ public class GestoreRicerche implements GestoreRicercheInterfaccia
 		utenti = dbUtenti.query(comandoSql);
 
 		return utenti;
+	}
+
+	//RF08 Raffaele Camera
+	public boolean controllaParametri(String titolo, String autore, String editore, String anno, ArrayList<String> tipoList) {
+        boolean isTitoloEmptyOrNull = titolo==null || titolo.isEmpty();
+		boolean isAutoreEmptyOrNull =autore==null || autore.isEmpty();
+		boolean isEditoreEmptyOrNull =editore==null || editore.isEmpty();
+		boolean isAnnoEmptyOrNull = anno == null || anno.isEmpty();
+		boolean isTipoEmptyOrNull = tipoList==null || tipoList.size()==0;
+
+		boolean isCompiledAtLeastOne = !isTitoloEmptyOrNull || !isAutoreEmptyOrNull || !isEditoreEmptyOrNull || !isAnnoEmptyOrNull || !isTipoEmptyOrNull; 
+        
+        // se tutte le lunghezze di tutti i paramentri è 0 torna false , altrimenti true
+        return isCompiledAtLeastOne;
+    }
+	//RF08 Raffaele Camera
+    // Metodo che effettua la chiamata a dbProdotti solo se passa il check sui campi
+	public ArrayList<HashMap<String, Object>> ricercaProdotto(String titolo, String autore, String editore, String anno,
+			ArrayList<String> tipoList, boolean isCliente) throws RemoteException {
+        
+		ArrayList<HashMap<String, Object>> risultati = null;
+
+        
+		String comandoSql = "SELECT * FROM Prodotto WHERE 1=1 ";
+
+		if (titolo != null && !titolo.isEmpty())
+			comandoSql += "AND Titolo LIKE '%"+titolo+"%' ";
+		if (autore != null && !autore.isEmpty())
+			comandoSql += "AND Autore LIKE '%"+autore+"%' ";
+		if (editore != null && !editore.isEmpty())
+			comandoSql += "AND Editore LIKE '%"+editore+"%' ";
+		if (anno != null && !anno.isEmpty())
+			comandoSql += "AND Anno = "+anno+" ";
+		
+		
+		if (tipoList != null && tipoList.size()>0){
+			comandoSql += "AND Tipo IN ( ";
+			for(int i=0; i<tipoList.size(); i++){
+				comandoSql += " '"+tipoList.get(i)+"' ";
+				// Aggiungi la virgola se non è l'ultimo elemento
+				if (i < tipoList.size() - 1) {
+					comandoSql += ",";
+				}
+			}
+			comandoSql+=")";
+		}
+
+		if(isCliente){
+			comandoSql += " AND (disponibile = 1 OR quantita > 0) ";
+		}
+			
+		risultati = dbProdotti.query(comandoSql);
+		if(risultati!=null){
+			System.out.println( risultati.size());
+		   }
+		return risultati;
 	}
 }

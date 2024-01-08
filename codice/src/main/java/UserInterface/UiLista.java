@@ -1,5 +1,8 @@
 package UserInterface;
 
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Vector;
 import java.util.ArrayList;
@@ -9,6 +12,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.RemoteException;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.Dialog.ModalityType;
 import java.awt.Window.Type;
 import java.awt.event.ActionListener;
@@ -19,6 +23,7 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
+import com.google.common.collect.Table;
 import org.checkerframework.checker.units.qual.t;
 
 import DataBase.DbProdotti;
@@ -41,6 +46,11 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 	private String dataFine;
 	private int esitoControllo;
 
+	// RF11 Marino-Vecchio
+	private ArrayList<HashMap<String,Object>> ordini;
+	private ArrayList<String> headerOrdini;
+
+
 	// elementi grafici
 	// RF 13 Benetti-Chiappa
 	private JLabel labelDataInizio;
@@ -61,20 +71,82 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 
 		labelDataInizio = new JLabel("Data iniziale");
 		labelDataFine = new JLabel("Data finale");
-		fieldDataInizio = new JTextField("", 40);
-		fieldDataFine = new JTextField("", 40);
-		panelData = new JPanel();
-		panelData.setLayout(new BoxLayout(panelData, BoxLayout.PAGE_AXIS));
+		fieldDataInizio = new JTextField("", 10);
+		fieldDataFine = new JTextField("", 10);
+		panelData = new JPanel(new GridLayout(2,2));
 		panelData.add(labelDataInizio);
 		panelData.add(fieldDataInizio);
 		panelData.add(labelDataFine);
 		panelData.add(fieldDataFine);
 		tableListaForniture = new JTable();
 		scrollPanelListaForniture = new JScrollPane(tableListaForniture);
-		
+
+		ordini = null;
+		headerOrdini = new ArrayList<>(Arrays.asList("username","data ordine","codice prodotto","titolo","autore","editore","tipo","anno","prezzo","quantita'"));
 	}
 
-	public void avvioListaOrdini() throws RemoteException { // RF11
+	public void avvioListaOrdini(String username, int codiceProdotto) throws RemoteException {
+		// RF11
+		if(!username.isEmpty())
+			ordini = gestoreRicerche.ricercaPerUtente(username);
+		else
+			ordini = gestoreRicerche.ricercaPerProdotto(codiceProdotto);
+
+		if(ordini.isEmpty())
+			this.mostraErroreOrdini();
+		else
+			this.mostraOrdini(ordini);
+	}
+
+	private void mostraErroreOrdini() {
+		showMessageDialog(null, "Non ci sono ordini. \n (clicca OK o X per proseguire)", "Errore", ERROR_MESSAGE);
+	}
+
+	private void mostraOrdini(ArrayList<HashMap<String,Object>> ordini){
+		JTable tableOrdini;
+		JScrollPane paneOrdini;
+
+		tableOrdini = new JTable(ordini.size(),10){
+			public boolean editCellAt(int row,int column,java.util.EventObject e){
+				return false;
+			}
+		};
+
+		for(int i = 0; i < 10; i++){
+			tableOrdini.getColumnModel().getColumn(i).setHeaderValue(headerOrdini.get(i));
+			tableOrdini.getColumnModel().getColumn(i).setPreferredWidth(100);
+		}
+
+		for(int i = 0; i < ordini.size(); i++){
+			tableOrdini.setValueAt((String) ordini.get(i).get("username"),i,0);
+			tableOrdini.setValueAt((String) ordini.get(i).get("dataOrdine"),i,1);
+			tableOrdini.setValueAt((int) ordini.get(i).get("codiceProdotto"),i,2);
+			tableOrdini.setValueAt((String) ordini.get(i).get("titolo"),i,3);
+			tableOrdini.setValueAt((String) ordini.get(i).get("autore"),i,4);
+			tableOrdini.setValueAt((String) ordini.get(i).get("editore"),i,5);
+			tableOrdini.setValueAt((String) ordini.get(i).get("tipo"),i,6);
+			tableOrdini.setValueAt((int) ordini.get(i).get("anno"),i,7);
+			tableOrdini.setValueAt((double) ordini.get(i).get("prezzo"),i,8);
+			tableOrdini.setValueAt((int) ordini.get(i).get("quantitaProdotto"),i,9);
+		}
+
+		tableOrdini.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				if (e.getClickCount() == 2) {
+					Object cellValue = tableOrdini.getValueAt(tableOrdini.getSelectedRow(), tableOrdini.getSelectedColumn());
+					JOptionPane.showMessageDialog(null, cellValue,"Valore della cella", JOptionPane.INFORMATION_MESSAGE);
+				}
+			}
+		});
+
+		tableOrdini.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		tableOrdini.setSelectionMode(DefaultListSelectionModel.SINGLE_SELECTION);
+
+		paneOrdini = new JScrollPane(tableOrdini);
+
+		paneOrdini.setPreferredSize(new Dimension(1002, 100));
+
+		JOptionPane.showMessageDialog(null, paneOrdini, "Lista Ordini", JOptionPane.INFORMATION_MESSAGE, null);
 	}
 
 	public void avvioListaPagamenti() throws RemoteException { // RF12
