@@ -326,7 +326,7 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
         return jTextField;
     }
 	//RF08 Raffaele Camera
-	public void avvioRicercaProdotto(String tipo_utente) throws RemoteException
+	public void avvioRicercaProdotto(String tipo_utente, String username) throws RemoteException
 	{	
 		if(mostraBarraRicerca(tipo_utente)==OK_OPTION) {
 			
