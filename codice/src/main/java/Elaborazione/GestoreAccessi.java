@@ -281,7 +281,7 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 
 		//controllo formato 'localita'
 		else if (lenVia > 0 && controllaValiditaStringaAlfabetica(via) && isValidoNumeroCivico(numero) && lenCap == 5
-				&& (lenLocalita == 0 || !controllaValiditaStringaAlfabetica(localita)))
+				&& isNumeroInteroPositivo(cap) && (lenLocalita == 0 || !controllaValiditaStringaAlfabetica(localita)))
 			esitoControllo = 3;
 
 		//controllo formato 'numero'

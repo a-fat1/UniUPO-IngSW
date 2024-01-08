@@ -30,8 +30,6 @@ public class UiUtente extends JOptionPane implements UiUtenteInterfaccia
 	private UiNotificaInterfaccia uiNotifica;
 	private GestoreAccessiInterfaccia gestoreAccessi;
 
-	// attributi
-	
 	// elementi grafici
 	private JPanel contentPane;
 	private JTextField textField_via;
