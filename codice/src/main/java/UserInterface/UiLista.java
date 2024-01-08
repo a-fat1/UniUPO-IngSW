@@ -228,10 +228,17 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 
 		messaggio = messaggio + "\n(clicca su OK o X per continuare)";
 
-		this.showMessageDialog(null, messaggio, "Errore", this.ERROR_MESSAGE);
+		if (tipoErrore==1 || tipoErrore==2)
+		{
+			this.showMessageDialog(null, messaggio, "Errore", this.ERROR_MESSAGE);
+		}
+		else
+		{
+			this.showMessageDialog(null, messaggio, "Lista pagamenti", this.INFORMATION_MESSAGE);
+		}
 	}
 
-	public void mostraFormRicercaPagamentiData() throws RemoteException
+	private void mostraFormRicercaPagamentiData() throws RemoteException
 	{
 		//RF12: Lista Pagamenti
 		//autori: Broglio, Cartieri
@@ -250,7 +257,7 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 		}
 	}
 
-	public void mostraListaPagamenti(ArrayList<HashMap<String, Object>> listaPagamenti) throws RemoteException
+	private void mostraListaPagamenti(ArrayList<HashMap<String, Object>> listaPagamenti) throws RemoteException
 	{
 		//RF12: Lista Pagamenti
 		//autori: Broglio, Cartieri
@@ -289,6 +296,7 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 		ridimensionaListaPagamenti(tableListaPagamenti);
 
 		scrollPanelListaPagamenti = new JScrollPane(tableListaPagamenti);
+		scrollPanelListaPagamenti.setPreferredSize(new Dimension(753, 250));
 	}
 
 	private void ridimensionaListaPagamenti(JTable tableListaPagamenti) throws RemoteException
