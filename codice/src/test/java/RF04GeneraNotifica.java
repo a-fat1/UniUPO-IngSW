@@ -2,8 +2,16 @@ import static org.junit.Assert.*;
 
 import DataBase.DbNotifiche;
 import Elaborazione.GestoreNotifiche;
+import UserInterface.UiNotifica;
+import UserInterface.UiNotificaInterfaccia;
+import org.junit.Before;
 import org.junit.Test;
+
+import java.rmi.AlreadyBoundException;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.HashMap;
 
 import DataBase.DbUtenti;
@@ -14,9 +22,28 @@ public class RF04GeneraNotifica {
     DbNotifiche dbNotifiche = new DbNotifiche();
     GestoreNotifiche gestoreNotifiche = new GestoreNotifiche(dbNotifiche);
 
+    HashMap<String, Object> ordine;
+    HashMap<String, Object> prodotto;
+    HashMap<String, Object> utente;
+
+    @Before
+    public void inizializzaHashMap() {
+        ordine = new HashMap<>();
+        prodotto = new HashMap<>();
+        utente = new HashMap<>();
+
+
+        ordine.put("username", "clea99");
+        prodotto.put("tipo", "Libro");
+        prodotto.put("autore", "Nikolaj S. Piskunov");
+        prodotto.put("titolo", "Calcolo Integrale e Differenziale 2");
+        utente.put("nome", "Aldo");
+        utente.put("cognome", "Bruni");
+    }
+
     /*
      * Test per verificare il corretto funzionamento del metodo "verificaCorrettezzaDati"
-
+     */
     @Test
     public void testVerificaCorrettezzaDati1() throws RemoteException {
         // data in formato errato
@@ -55,26 +82,16 @@ public class RF04GeneraNotifica {
 
     /*
      * Test per verificare il corretto funzionamento dei metodi "generaTestoNotifica*"
-
+     */
     @Test
     public void testGeneraTestoNotifica1() throws RemoteException {
         // genera testo prodotto
-        HashMap<String, Object> prodotto = new HashMap<>();
-
-        prodotto.put("tipo", "Libro");
-        prodotto.put("autore", "Nikolaj S. Piskunov");
-        prodotto.put("titolo", "Calcolo Integrale e Differenziale 2");
-
         assertEquals("Nuovo Libro: Nikolaj S. Piskunov, Calcolo Integrale e Differenziale 2.", gestoreNotifiche.generaTestoNotificaProdotto(prodotto));
     }
 
     @Test
     public void testGeneraTestoNotifica2() throws RemoteException {
         // genera testo ordine
-        HashMap<String, Object> ordine = new HashMap<>();
-
-        ordine.put("username", "clea99");
-
         assertEquals("Nuovo Ordine: effettuato da clea99.", gestoreNotifiche.generaTestoNotificaOrdine(ordine));
     }
 
@@ -87,11 +104,6 @@ public class RF04GeneraNotifica {
     @Test
     public void testGeneraTestoNotifica4() throws RemoteException {
         // genera testo utente
-        HashMap<String, Object> utente = new HashMap<>();
-
-        utente.put("nome", "Aldo");
-        utente.put("cognome", "Bruni");
-
         assertEquals("Nuovo Cliente: Aldo Bruni.", gestoreNotifiche.generaTestoNotificaUtente(utente));
     }
 

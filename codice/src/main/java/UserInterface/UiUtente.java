@@ -85,7 +85,6 @@ public class UiUtente extends JOptionPane implements UiUtenteInterfaccia
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel(new GridLayout(0, 2, 50, 5));
 
-		nuovo = true;
 		JLabel lblVia = new JLabel("Via");
 		lblVia.setHorizontalAlignment(SwingConstants.RIGHT);
 		contentPane.add(lblVia);
@@ -181,7 +180,7 @@ public class UiUtente extends JOptionPane implements UiUtenteInterfaccia
 			}
 		} while(ckFormato > 0 && scelta == 1);
 	}
-	
+
 	private void mostraErroreFormatoDomicilio(int msg) {
 		String messaggio = "";
 
