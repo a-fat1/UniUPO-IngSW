@@ -336,6 +336,13 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 
 			default -> messaggioErrore.setText("Errore");
 		}*/
+		switch(codice) {
+			case 1: messaggioErrore.setText("Errore: Titolo mancante"); break;
+			case 2: messaggioErrore.setText("Errore: Anno errato"); break;
+			case 3: messaggioErrore.setText("Errore: Editore mancante"); break;
+			case 4: messaggioErrore.setText("Errore: Autore mancante"); break;
+			default: messaggioErrore.setText("Errore"); break;
+		}
 		erroreVerificaPanel.add(messaggioErrore);
 		showMessageDialog(null, erroreVerificaPanel, "ERRORE (x o OK per confermare lettura)", JOptionPane.ERROR_MESSAGE);
 	}

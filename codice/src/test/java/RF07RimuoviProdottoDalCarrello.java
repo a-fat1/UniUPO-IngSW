@@ -3,12 +3,13 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.junit.jupiter.api.Test;
+//import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import DataBase.DbProdotti;
 import Elaborazione.GestoreCarrelli;
 
-class RF07RimuoviProdottoDalCarrello {
+public class RF07RimuoviProdottoDalCarrello {
 	// RF07: rimuovi prodotto dal carrello
 	// autori: Simone Aldo Borsa, Andrea Padoan
 
@@ -18,7 +19,7 @@ class RF07RimuoviProdottoDalCarrello {
     int valorePrevisto;
     
 	@Test
-	void testRimozioneProdottoDalCarrello() throws RemoteException {
+	public void testRimozioneProdottoDalCarrello() throws RemoteException {
 		Carrello = gestoreCarrelli.cercaElementi(username);
 		if(Carrello.size() == 0) return;
 		valorePrevisto = Carrello.size() - 1;
@@ -29,7 +30,7 @@ class RF07RimuoviProdottoDalCarrello {
 	}
 	
 	@Test
-	void testSvuotaCarrello() throws RemoteException {
+	public void testSvuotaCarrello() throws RemoteException {
 		Carrello = gestoreCarrelli.cercaElementi(username);
 		valorePrevisto = 0;
 		

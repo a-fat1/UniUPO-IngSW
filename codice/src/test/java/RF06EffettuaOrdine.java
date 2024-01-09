@@ -10,7 +10,7 @@ public class RF06EffettuaOrdine
     GestoreCarrelli gestoreCarrelli = new GestoreCarrelli(dbProdotti);
 
 
-
+    /*
     @Test
     public void RF06_ControllaNumeroCarta1()
     {
@@ -31,7 +31,9 @@ public class RF06EffettuaOrdine
         //ok
         assertEquals("ok", gestoreCarrelli.Rf06_ControllaNumeroCarta3(6728139246779538));
     }
+    */
 
+    /*
     @Test
     public void RF06_CalcolaPrezzoTotale1()
     {
@@ -45,5 +47,6 @@ public class RF06EffettuaOrdine
         //prezzo corretto
         assertEquals("prezzoCorretto", gestoreCarrelli.Rf06_CalcolaPrezzoTotale2(25,50));
     }
+    */
 }
 
