@@ -128,12 +128,13 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 		pulsantiMenuCliente[6] = "Prodotti piu' venduti";
 		pulsantiMenuCliente[7] = "Aggiorna domicilio";
 		
-		pulsantiMenuAmministratore = new String[5];
+		pulsantiMenuAmministratore = new String[6];
 		pulsantiMenuAmministratore[0] = "Aggiorna username";
 		pulsantiMenuAmministratore[1] = "Aggiorna password";
 		pulsantiMenuAmministratore[2] = "Crea utente";
 		pulsantiMenuAmministratore[3] = "Ricerca utente";
 		pulsantiMenuAmministratore[4] = "Ricerca notifiche";
+		pulsantiMenuAmministratore[5] = "Genera notifica";
 
 		menuLabel1 = new JLabel();
 		menuLabel2 = new JLabel("Seleziona servizio. (X per logout)");
@@ -226,6 +227,8 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 								uiProdotto.avvioIncrementaDecrementaPrezzi();
 							if (sceltaMenu==9 && ((String)utente.get("tipo")).equals("staff"))
 								uiRicerca.avvioProdottiInEsaurimento();
+							if (sceltaMenu==5 && ((String)utente.get("tipo")).equals("amministratore"))
+								uiNotifica.avvioGeneraNotifica("avviso", null);
 						}
 						while (sceltaMenu != -1);
 					}
