@@ -395,7 +395,7 @@ public class GestoreRicerche implements GestoreRicercheInterfaccia
 		}
 
 		if(isCliente){
-			comandoSql += " AND (disponibile = 1 OR quantita > 0) ";
+			comandoSql += " AND (disponibile = 1 AND quantita > 0) ";
 		}
 			
 		risultati = dbProdotti.query(comandoSql);
