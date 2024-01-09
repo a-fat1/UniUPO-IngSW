@@ -175,13 +175,10 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 
 	public void avvioRimuoviRipristinaNelCatalogo(Integer codProdotto, Integer Disponibile) throws RemoteException
 	{	// RF10
-		if(Disponibile==1){
-			mostraFormRimozione(codProdotto);
-		}
-		else if(Disponibile==0){
-			mostraFormRipristino(codProdotto);
-		}else{
-			System.out.println("Errore");
+		switch (Disponibile) {
+			case 0 -> mostraFormRipristino(codProdotto);
+			case 1 -> mostraFormRimozione(codProdotto);
+			default -> mostraErroreDisponibile(codProdotto);
 		}
 	}
 
@@ -385,6 +382,8 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 	}
 	//RF10
 	private void mostraFormRimozione(Integer codProdotto) throws RemoteException {
+		labelRimozione=new JLabel("Prodotto n."+codProdotto);
+		rimozionePanel.add(labelRimozione);
 		int scelta;
 		String[] scelte={"Annulla", "Conferma"};
 
@@ -398,6 +397,10 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 	}
 	//RF10
 	private void mostraFormRipristino(Integer codProdotto) throws RemoteException {
+
+		labelRipristino=new JLabel("Prodotto n."+codProdotto);
+		ripristinoPanel.add(labelRipristino);
+
 		int scelta;
 		String[] scelte={"Annulla", "Conferma"};
 
@@ -412,7 +415,7 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 	//RF10
 	private void mostraSuccessoRipristino(Integer codProdotto){
 		String messaggio;
-		messaggio="Ripristino prodotto n." +codProdotto +" avvenuta con successo";
+		messaggio="Ripristino prodotto n." +codProdotto +" avvenuto con successo";
 		this.showMessageDialog(null,messaggio,"Esito ripristino", this.INFORMATION_MESSAGE,null);
 	}
 	//RF10
@@ -421,5 +424,11 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 		messaggio="Rimozione prodotto n." +codProdotto +" avvenuta con successo";
 		this.showMessageDialog(null,messaggio,"Esito rimozione", this.INFORMATION_MESSAGE,null);
 
+	}
+	//RF10
+	private void mostraErroreDisponibile(Integer codProdotto){
+		String messaggio;
+		messaggio="Valore 'Disponibile' per il prodotto n." +codProdotto+ " diverso da 0 o 1, correggere valore";
+		this.showMessageDialog(null,messaggio,"errore",this.ERROR_MESSAGE,null);
 	}
 }
