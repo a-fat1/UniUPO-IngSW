@@ -255,6 +255,6 @@ public class UiCarrello extends JOptionPane implements UiCarrelloInterfaccia
 						System.out.println("Scelta annullata.");
 						break;
 				}
-	
+		}
 
 }
