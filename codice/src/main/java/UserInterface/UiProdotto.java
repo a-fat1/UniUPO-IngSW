@@ -392,6 +392,7 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 		if(scelta==JOptionPane.CLOSED_OPTION || scelta==0) return;
 		if(scelta==1){
 			gestoreProdotti.rimuoviProdotto(codProdotto);
+			mostraSuccessoRimozione(codProdotto);
 		}
 
 	}
@@ -404,7 +405,21 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 		if(scelta==JOptionPane.CLOSED_OPTION || scelta==0) return;
 		if(scelta==1){
 			gestoreProdotti.ripristinaProdotto(codProdotto);
+			mostraSuccessoRipristino(codProdotto);
 		}
+	}
+
+	//RF10
+	private void mostraSuccessoRipristino(Integer codProdotto){
+		String messaggio;
+		messaggio="Ripristino prodotto n." +codProdotto +" avvenuta con successo";
+		this.showMessageDialog(null,messaggio,"Esito ripristino", this.INFORMATION_MESSAGE,null);
+	}
+	//RF10
+	private void mostraSuccessoRimozione(Integer codProdotto){
+		String messaggio;
+		messaggio="Rimozione prodotto n." +codProdotto +" avvenuta con successo";
+		this.showMessageDialog(null,messaggio,"Esito rimozione", this.INFORMATION_MESSAGE,null);
 
 	}
 }
