@@ -145,11 +145,18 @@ public class GestoreCarrelli implements GestoreCarrelliInterfaccia
 		//autori: Fasano Lorenzo, Iacobucci Luca;
 		public void aggiornamentoQuantita(int quantita, int codiceProdotto, String username) throws RemoteException{
 		String query = "UPDATE Prodotto SET quantita = quantita - " + 
-		quantita + " WHERE codiceProdotto =" + codiceProdotto +" AND username = " + username + ";";
+		quantita + " WHERE codiceProdotto =" + codiceProdotto + /*" AND username = " + username +*/ ";";
 		
 		dbProdotti.update(query);
 
 		System.out.println("Aggiornamento riuscito.");
+
+		
+		query = "INSERT INTO Carrello (username, codiceProdotto, quantitaProdotto) VALUES ('" + username + "'," + codiceProdotto + "," + quantita + ");" ;
+
+		dbProdotti.update(query);
+
+		System.out.println("Aggiornamento carrello riuscito.");
 
 		}
 
