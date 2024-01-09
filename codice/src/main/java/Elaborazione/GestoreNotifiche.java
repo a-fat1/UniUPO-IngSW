@@ -1,13 +1,6 @@
 package Elaborazione;
 
-import java.time.LocalDateTime;
-import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.HashMap;
@@ -87,7 +80,13 @@ public class GestoreNotifiche implements GestoreNotificheInterfaccia {
     }
 
     public void inserimentoNotifica(HashMap<String, String> dataPubblicazione, HashMap<String, String> dataScadenza, String testoNotifica, String tipoUtente) throws RemoteException {
-        String comandoSql = "INSERT INTO Notifica (dataPubblicazione, dataScadenza, testo, tipoUtente) values (\"" + dataPubblicazione.get("data") + " " + dataPubblicazione.get("ora") + "\", \"" + dataScadenza.get("data") + " " + dataScadenza.get("ora") + "\", \"" + testoNotifica + "\", \"" + tipoUtente + "\");";
+        String comandoSql = "INSERT INTO Notifica (dataPubblicazione, dataScadenza, testo, tipoUtente) values (\"" +
+                dataPubblicazione.get("data") + " " +
+                dataPubblicazione.get("ora") + "\", \"" +
+                dataScadenza.get("data") + " " +
+                dataScadenza.get("ora") + "\", \"" +
+                testoNotifica + "\", \"" +
+                tipoUtente + "\");";
 
         dbNotifiche.update(comandoSql);
     }

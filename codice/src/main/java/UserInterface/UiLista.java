@@ -54,6 +54,11 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 	private String dataFine;
 	private int esitoControllo;
 
+	// RF11 Marino-Vecchio
+	private ArrayList<HashMap<String,Object>> ordini;
+	private ArrayList<String> headerOrdini;
+
+
 	// elementi grafici
 	// RF 13 Benetti-Chiappa
 	private JLabel labelDataInizio;
@@ -86,12 +91,14 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 
 		pulsanteRicerca = new String[1];
 		pulsanteRicerca[0]="Cerca";
+
+		ordini = null;
+		headerOrdini = new ArrayList<>(Arrays.asList("username","data ordine","codice prodotto","titolo","autore","editore","tipo","anno","prezzo","quantita'"));
+
 	}
 
 	public void avvioListaOrdini(String username, int codiceProdotto) throws RemoteException {
 		// RF11
-		ArrayList<HashMap<String,Object>> ordini = null;
-
 		if(!username.isEmpty())
 			ordini = gestoreRicerche.ricercaPerUtente(username);
 		else
@@ -110,22 +117,19 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 	private void mostraOrdini(ArrayList<HashMap<String,Object>> ordini){
 		JTable tableOrdini;
 		JScrollPane paneOrdini;
-		int r = ordini.size();
 
-		tableOrdini = new JTable(r,10){
+		tableOrdini = new JTable(ordini.size(),10){
 			public boolean editCellAt(int row,int column,java.util.EventObject e){
 				return false;
 			}
 		};
 
-		ArrayList<String> header = new ArrayList<>(Arrays.asList("username","data ordine","codice prodotto","titolo","autore","editore","tipo","anno","prezzo","quantita'"));
-
 		for(int i = 0; i < 10; i++){
-			tableOrdini.getColumnModel().getColumn(i).setHeaderValue(header.get(i));
+			tableOrdini.getColumnModel().getColumn(i).setHeaderValue(headerOrdini.get(i));
 			tableOrdini.getColumnModel().getColumn(i).setPreferredWidth(100);
 		}
 
-		for(int i = 0; i < r; i++){
+		for(int i = 0; i < ordini.size(); i++){
 			tableOrdini.setValueAt((String) ordini.get(i).get("username"),i,0);
 			tableOrdini.setValueAt((String) ordini.get(i).get("dataOrdine"),i,1);
 			tableOrdini.setValueAt((int) ordini.get(i).get("codiceProdotto"),i,2);
@@ -141,10 +145,7 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 		tableOrdini.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() == 2) {
-					int selectedRow = tableOrdini.getSelectedRow();
-					int selectedColumn = tableOrdini.getSelectedColumn();
-					Object cellValue = tableOrdini.getValueAt(selectedRow, selectedColumn);
-
+					Object cellValue = tableOrdini.getValueAt(tableOrdini.getSelectedRow(), tableOrdini.getSelectedColumn());
 					JOptionPane.showMessageDialog(null, cellValue,"Valore della cella", JOptionPane.INFORMATION_MESSAGE);
 				}
 			}
