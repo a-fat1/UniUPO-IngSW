@@ -249,7 +249,7 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 		//RF12: Lista Pagamenti
 		//autori: Broglio, Cartieri
 		scelta = this.showOptionDialog(null, panelData, "Ricerca pagamenti", DEFAULT_OPTION, QUESTION_MESSAGE, null, pulsanteRicerca, "Cerca");
-		System.out.println("scelta: "+scelta+"\n");
+
 		if (scelta == 0)
 		{
 			dataInizio = fieldDataInizio.getText();
