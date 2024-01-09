@@ -214,19 +214,19 @@ public class UiCarrello extends JOptionPane implements UiCarrelloInterfaccia
 		gestoreCarrelli.aggiornamentoQuantita(quantita,
 		codiceProdotto,username);
 		
-		this.showMessageDialog(null, "Il carrello e' stato aggiornato", "Carrello 			aggiornato", this.PLAIN_MESSAGE, null);
+		this.showMessageDialog(null, "Il carrello e' stato aggiornato", "Carrello aggiornato", this.PLAIN_MESSAGE, null);
 
 	}
 
 	
-		public void mostraForm() throws RemoteException
+	public void mostraForm() throws RemoteException
 	{	// RF09	: Aggiunta al carrello
 		// Autori: Fasano Lorenzo, Iacobucci Luca;
 
 		sceltaQuantita = this.showOptionDialog(null, formPanel, "Inserire quantita'", 		DEFAULT_OPTION, QUESTION_MESSAGE, null, pulsanteOK, "OK");
 
 		//utente preme X
-				if(sceltaQuantita == -1){
+		if(sceltaQuantita == -1){
 			System.out.println("Scelta annullata.");
 			mostraErrore(sceltaQuantita);
 		}
@@ -239,22 +239,22 @@ public class UiCarrello extends JOptionPane implements UiCarrelloInterfaccia
 		}
 	}
 		//RF09 : Aggiunta al carrello
-		public void mostraErrore(int numberError)throws RemoteException{
-		// RF09	: Aggiunta al carrello
-		// Autori: Fasano Lorenzo, Iacobucci Luca;
-				switch (numberError) {
-					case 1:
-						this.showMessageDialog(null, "Prodotto non disponibile", "Errore disponibilita' prodotto", this.PLAIN_MESSAGE, null);
-						break;
-					
-					case 2:
-						this.showMessageDialog(null, "La quantita' deve essere compresa tra 1 e 3", "Errore quantita'", this.PLAIN_MESSAGE, null);
-						break;
-					
-					default:
-						System.out.println("Scelta annullata.");
-						break;
-				}
+	public void mostraErrore(int numberError)throws RemoteException{
+	// RF09	: Aggiunta al carrello
+	// Autori: Fasano Lorenzo, Iacobucci Luca;
+		switch (numberError) {
+			case 1:
+				this.showMessageDialog(null, "Prodotto non disponibile", "Errore disponibilita' prodotto", this.PLAIN_MESSAGE, null);
+				break;
+			
+			case 2:
+				this.showMessageDialog(null, "La quantita' deve essere compresa tra 1 e 3", "Errore quantita'", this.PLAIN_MESSAGE, null);
+				break;
+				
+				default:
+					System.out.println("Scelta annullata.");
+					break;
+			}
 		}
 
 }
