@@ -177,28 +177,27 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 
 	// RF04
 	public void avvioGeneraNotifica(String tipoNotifica, HashMap<String, Object> oggetto) throws RemoteException {
-		switch (tipoNotifica) {
-			case "nuovo prodotto":
-				testoNotifica = gestoreNotifiche.generaTestoNotificaProdotto(oggetto);
-				loopVerificaDatiNotifica();
-				gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), dataScadenza, testoField.getText(), "cliente");
-				break;
-			case "avviso":
-				testoNotifica = gestoreNotifiche.generaTestoNotificaAvviso();
-				loopVerificaDatiNotifica();
-				gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), dataScadenza, testoField.getText(), "tutti");
-				break;
-			case "nuovo ordine":
-				testoNotifica = gestoreNotifiche.generaTestoNotificaOrdine(oggetto);
-				gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), setDataScadenzaDefault(), testoNotifica, "staff");
-				break;
-			case "nuovo utente":
-				testoNotifica = gestoreNotifiche.generaTestoNotificaUtente(oggetto);
-				gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), setDataScadenzaDefault(), testoNotifica, "amministratore");
-				break;
-			default:
-				throw new IllegalStateException("Valore inatteso: " + tipoNotifica);
-		}
+        switch (tipoNotifica) {
+            case "nuovo prodotto" -> {
+                testoNotifica = gestoreNotifiche.generaTestoNotificaProdotto(oggetto);
+                loopVerificaDatiNotifica();
+                gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), dataScadenza, testoField.getText(), "cliente");
+            }
+            case "avviso" -> {
+                testoNotifica = gestoreNotifiche.generaTestoNotificaAvviso();
+                loopVerificaDatiNotifica();
+                gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), dataScadenza, testoField.getText(), "tutti");
+            }
+            case "nuovo ordine" -> {
+                testoNotifica = gestoreNotifiche.generaTestoNotificaOrdine(oggetto);
+                gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), setDataScadenzaDefault(), testoNotifica, "staff");
+            }
+            case "nuovo utente" -> {
+                testoNotifica = gestoreNotifiche.generaTestoNotificaUtente(oggetto);
+                gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), setDataScadenzaDefault(), testoNotifica, "amministratore");
+            }
+            default -> throw new IllegalStateException("Valore inatteso: " + tipoNotifica);
+        }
 	}
 
 	/**
@@ -249,24 +248,24 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 		String messaggio = "";
 	// YELLOW per quanto riguarda errori di inserimento/sintassi
 	// RED per quanto riguarda il mancato inserimento
-		switch(tipoErrore) {
-			case "errore formato data":
-				messaggio = "La data fornita non e' in formato YYYY-MM-DD.\n(clicca ok o X per continuare)";
-				dataField.setBackground(Color.YELLOW);
-				break;
-			case "errore formato ora":
-				messaggio = "L'ora fornita non e' in formato HH:mm:ss.\n(clicca ok o X per continuare)";
-				oraField.setBackground(Color.YELLOW);
-				break;
-			case "errore data":
-				messaggio = "La data fornita non e' compatibile con la data di pubblicazione.\n(clicca ok o X per continuare)";
-				dataField.setBackground(Color.YELLOW);
-				break;
-			case "errore testo notifica":
-				messaggio = "Il testo della notifica non può essere vuoto.\n(clicca ok o X per continuare)";
-				testoField.setBackground(Color.RED);
-				break;
-		}
+        switch (tipoErrore) {
+            case "errore formato data" -> {
+                messaggio = "La data fornita non e' in formato YYYY-MM-DD.\n(clicca ok o X per continuare)";
+                dataField.setBackground(Color.YELLOW);
+            }
+            case "errore formato ora" -> {
+                messaggio = "L'ora fornita non e' in formato HH:mm:ss.\n(clicca ok o X per continuare)";
+                oraField.setBackground(Color.YELLOW);
+            }
+            case "errore data" -> {
+                messaggio = "La data fornita non e' compatibile con la data di pubblicazione.\n(clicca ok o X per continuare)";
+                dataField.setBackground(Color.YELLOW);
+            }
+            case "errore testo notifica" -> {
+                messaggio = "Il testo della notifica non può essere vuoto.\n(clicca ok o X per continuare)";
+                testoField.setBackground(Color.RED);
+            }
+        }
 		this.showMessageDialog(null, messaggio, "Errore", this.ERROR_MESSAGE, null);
 	}
 
