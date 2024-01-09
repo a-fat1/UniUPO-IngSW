@@ -384,7 +384,7 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 		showMessageDialog(null, erroreControlloPanel, "ERRORE (x o OK per confermare lettura)", JOptionPane.ERROR_MESSAGE);
 	}
 	//RF10
-	public void mostraFormRimozione(Integer codProdotto) throws RemoteException {
+	private void mostraFormRimozione(Integer codProdotto) throws RemoteException {
 		int scelta;
 		String[] scelte={"Annulla", "Conferma"};
 
@@ -396,7 +396,7 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 
 	}
 	//RF10
-	public void mostraFormRipristino(Integer codProdotto) throws RemoteException {
+	private void mostraFormRipristino(Integer codProdotto) throws RemoteException {
 		int scelta;
 		String[] scelte={"Annulla", "Conferma"};
 
