@@ -175,12 +175,21 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 		int riga, colonna = 0;
 		System.out.println("Colonne tabella");
 		for (String attributo : listaProdotti.get(colonna).keySet()) {
-			tabellaProdotti.getColumnModel().getColumn(colonna).setHeaderValue(attributo);	// Aggiunge e definisce l'attributo della colonna
+			tabellaProdotti.getColumnModel().getColumn(colonna).setHeaderValue(attributo);		// Aggiunge e definisce l'attributo della colonna
 			System.out.println("\n" + attributo + ":");
 			riga = 0;
     		for (HashMap<String, Object> prodotto : listaProdotti) {
-				tabellaProdotti.setValueAt(prodotto.get(attributo), riga, colonna);		// Aggiunge il contenuto delle righe
-				System.out.println(prodotto.get(attributo));
+				if ("disponibile".equals(attributo)) {		// Quando attributo = disponibile, si sostituiscono 1 e 0 con si e no
+					Object valore = prodotto.get(attributo);
+					valore = ((Integer) valore == 1) ? "si" : "no";
+					tabellaProdotti.setValueAt(valore, riga, colonna);
+					System.out.println(valore);
+					
+				} else {
+					tabellaProdotti.setValueAt(prodotto.get(attributo), riga, colonna);		// Aggiunge il contenuto delle righe
+					System.out.println(prodotto.get(attributo));
+				}
+
 				riga++;
 			}
 			colonna++;
