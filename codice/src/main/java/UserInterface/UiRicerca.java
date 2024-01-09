@@ -66,7 +66,7 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 	private final String[] colonneStaff;
 	private final String[] colonneAmministratore;
 	// RF18
-	private int scelta, esitoGiacenza = -1;
+	private int sceltaGiacenza, esitoGiacenza = -1;
 	private String giacenza;
 	ArrayList<HashMap<String, Object>> listaProdotti;
 	//RF08
@@ -503,25 +503,21 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 		do {
 			this.mostraFormGiacenza();		// Mostra all'utente il form per inserire la giacenza
 
-			if (scelta == 0) {		// Scelta = 0 quando viene premuto ok in mostraFormGiacenza()
+			if (sceltaGiacenza == 0) {		// sceltaGiacenza = 0 quando viene premuto ok in mostraFormGiacenza()
 				esitoGiacenza = gestoreRicerche.controlloGiacenza(giacenza);	// Viene richiamato controlloGiacenza per controllare la giacenza
 				if(esitoGiacenza == 1 || esitoGiacenza == 2 || esitoGiacenza == 3)
 					mostraErroreGiacenza(esitoGiacenza);	// In caso di errore viene richiamato mostraErroreGiacenza per visualizzare l'errore specifico
 				else {
-					System.out.println("esitoGiacenza = " + esitoGiacenza + "\n");
 					listaProdotti = gestoreRicerche.ricercaProdottiConGiacenza(giacenza);		// Con la giacenza corretta viene richiamato ricercaProdottiConGiacenza per recuperare i dati dei prodotti
-					if(listaProdotti.size() == 0) {
-						System.out.println("dimensione listaProdotti = " + listaProdotti.size() + "\n");
+					if(listaProdotti.size() == 0) 
 						mostraErroreGiacenza(4);		// Se l'ArrayList non ha i dati si richiama mostraErroreGiacenza con parametro 4
-					}
 					else
 						mostraListaProdotti(listaProdotti);		// mostraListaProdotti viene richiamato per visualizzare i dati in modo adeguato
 				}
 			}
-		} while (scelta == 0);		// scelta != 0 quando l'utente preme torna al menu o il pulsante x
+		} while (sceltaGiacenza == 0);		// sceltaGiacenza != 0 quando l'utente preme torna al menu o il pulsante x
 
 		esitoGiacenza = -1;		// esitoGiacenza = -1 viene inizializzato all'inizio e alla fine di avvioProdottiInEsaurimento()
-		System.out.println("esitoGiacenza = " + esitoGiacenza + " --> fine avvioProdottiInEsaurimento()\n");
 	}
 	
 	private void mostraFormGiacenza() {
@@ -536,38 +532,24 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 		// Assegna a campoGiacenza una casella di testo e un setToolTipText
 		campoGiacenza = new JTextField("", 10);
 		campoGiacenza.setToolTipText("Scrivere qui la giacenza");
-		if (esitoGiacenza == 1 || esitoGiacenza == 2 || esitoGiacenza == 3) {
-			// Il background di campoGiacenza viene impostato con il rosso quando l'utente sbaglia a inserire la giacenza
-			campoGiacenza.setBackground(Color.RED);
-			System.out.println("esitoGiacenza = " + esitoGiacenza + " --> imposta background rosso\n");
-		}
-		else if (esitoGiacenza == -1)	// Con la prima esecuzione di mostraFormGiacenza(), invece, il background rimane bianco
-			System.out.println("esitoGiacenza = " + esitoGiacenza + " --> inizio avvioProdottiInEsaurimento()\n");
+		if (esitoGiacenza == 1 || esitoGiacenza == 2 || esitoGiacenza == 3)
+			campoGiacenza.setBackground(Color.RED);		// Il background di campoGiacenza viene impostato con il rosso quando l'utente sbaglia a inserire la giacenza
 		
 		pannelloGiacenza.add(campoGiacenza);	// Aggiunge JTextField nel pannello
 
 		// Definisce nome pulsanti e mostra interfaccia
 		giacenzaPulsanti[0] = "Ok";
 		giacenzaPulsanti[1] = "Torna al menu";
-		scelta = UiRicerca.showOptionDialog(null, pannelloGiacenza, "Prodotti in esaurimento", DEFAULT_OPTION, PLAIN_MESSAGE, null, giacenzaPulsanti, null);
+		sceltaGiacenza = UiRicerca.showOptionDialog(null, pannelloGiacenza, "Prodotti in esaurimento", DEFAULT_OPTION, PLAIN_MESSAGE, null, giacenzaPulsanti, null);
 
-		if (scelta == 0) {		// Quando viene premuto il pulsante ok il valore 0 viene memorizzato in scelta
+		if (sceltaGiacenza == 0)	// Quando viene premuto il pulsante ok il valore 0 viene memorizzato in sceltaGiacenza
 			giacenza = campoGiacenza.getText();		// E il contenuto scritto dall'utente viene salvato nella stringa giacenza
-			System.out.println("scelta = " + scelta + " --> ok\n");
-			System.out.println("giacenza = " + giacenza + "\n");
-		}
-		else if(scelta == 1)
-				System.out.println("scelta = " + scelta + " --> torna al menu\n");
-			else
-				System.out.println("scelta = " + scelta + " --> pulsante X\n");
 	}
 	
 	private void mostraErroreGiacenza(int tipoErrore) {
 
 		// RF18: Prodotti in esaurimento
 		// Alessandro Fatone, Dario Guidotti
-
-		System.out.println("tipoErrore = " + tipoErrore + "\n");
 
 		// In base al valore di tipoErrore viene visualizzata l'interfaccia che contiene il messaggio di errore specifico 
 		if (tipoErrore == 1)
@@ -584,18 +566,8 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 			// Definisce nome pulsanti e mostra interfaccia
 			giacenzaPulsanti[0] = "Nuova ricerca";
 			giacenzaPulsanti[1] = "Torna al menu";
-			scelta = UiRicerca.showOptionDialog(null, pannelloGiacenza, "Errore lista vuota", DEFAULT_OPTION, PLAIN_MESSAGE, null, giacenzaPulsanti, null);
+			sceltaGiacenza = UiRicerca.showOptionDialog(null, pannelloGiacenza, "Errore lista vuota", DEFAULT_OPTION, PLAIN_MESSAGE, null, giacenzaPulsanti, null);
 		}
-
-		if (scelta == 0)
-			if (tipoErrore == 1 || tipoErrore == 2 || tipoErrore == 3)
-				System.out.println("scelta = " + scelta + " --> ok o pulsante X\n");
-			else
-				System.out.println("scelta = " + scelta + " --> nuova ricerca\n");
-		else if(scelta == 1)
-				System.out.println("scelta = " + scelta + " --> torna al menu\n");
-			else
-				System.out.println("scelta = " + scelta + " --> pulsante X\n");
 	}
 	
 	private void mostraListaProdotti(ArrayList<HashMap<String, Object>> listaProdotti) {
@@ -613,19 +585,15 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 		
 		// Salva per colonne gli attributi e i valori all'interno di JTable
 		int riga, colonna = 0;
-		System.out.println("Colonne tabella");
 		for (String attributo : listaProdotti.get(colonna).keySet()) {
 			tabellaProdotti.getColumnModel().getColumn(colonna).setHeaderValue(attributo);	// Aggiunge e definisce l'attributo della colonna
-			System.out.println("\n" + attributo + ":");
 			riga = 0;
     		for (HashMap<String, Object> prodotto : listaProdotti) {
 				tabellaProdotti.setValueAt(prodotto.get(attributo), riga, colonna);		// Aggiunge il contenuto delle righe
-				System.out.println(prodotto.get(attributo));
 				riga++;
 			}
 			colonna++;
 		}
-		System.out.println();
 
 		tabellaProdotti.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);		// Disabilita ridimensionamento automatico
 
@@ -637,14 +605,7 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 		// Definisce nome pulsanti e mostra interfaccia
 		giacenzaPulsanti[0] = "Nuova ricerca";
 		giacenzaPulsanti[1] = "Torna al menu";
-		scelta = UiRicerca.showOptionDialog(null, pannelloGiacenza, "Lista prodotti", DEFAULT_OPTION, PLAIN_MESSAGE, null, giacenzaPulsanti, null);
-
-		if (scelta == 0)
-				System.out.println("scelta = " + scelta + " --> nuova ricerca\n");
-			else if(scelta == 1)
-					System.out.println("scelta = " + scelta + " --> torna al menu\n");
-				else
-					System.out.println("scelta = " + scelta + " --> pulsante X\n");
+		sceltaGiacenza = UiRicerca.showOptionDialog(null, pannelloGiacenza, "Lista prodotti", DEFAULT_OPTION, PLAIN_MESSAGE, null, giacenzaPulsanti, null);
 	}
 
 	/**
