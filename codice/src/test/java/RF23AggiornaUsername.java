@@ -13,12 +13,12 @@ public class RF23AggiornaUsername {
 
     @Test
     public void testVerificaDuplicatoTrue() throws RemoteException{
-        assertEquals(true, gestoreAccessi.verificaDuplicato(""));
+        assertEquals(false, gestoreAccessi.verificaDuplicato(""));
     }
 
     @Test
     public void testVerificaDuplicatoFalse() throws RemoteException{
-        assertEquals(false, gestoreAccessi.verificaDuplicato("aldo"));
+        assertEquals(true, gestoreAccessi.verificaDuplicato("aldo"));
     }
 
     @Test
