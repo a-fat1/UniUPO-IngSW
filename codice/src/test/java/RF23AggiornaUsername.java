@@ -12,12 +12,12 @@ public class RF23AggiornaUsername {
     GestoreAccessi gestoreAccessi = new GestoreAccessi(dbUtenti);
 
     @Test
-    public void testVerificaDuplicatoTrue() throws RemoteException{
+    public void testVerificaDuplicatoFalse() throws RemoteException{
         assertEquals(false, gestoreAccessi.verificaDuplicato(""));
     }
 
     @Test
-    public void testVerificaDuplicatoFalse() throws RemoteException{
+    public void testVerificaDuplicatoTrue() throws RemoteException{
         assertEquals(true, gestoreAccessi.verificaDuplicato("aldo"));
     }
 
