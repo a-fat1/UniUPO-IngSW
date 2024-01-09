@@ -239,7 +239,7 @@ public class UiCarrello extends JOptionPane implements UiCarrelloInterfaccia
 		}
 	}
 		//RF09 : Aggiunta al carrello
-		public void mostraErrore(int numberError){
+		public void mostraErrore(int numberError)throws RemoteException{
 		// RF09	: Aggiunta al carrello
 		// Autori: Fasano Lorenzo, Iacobucci Luca;
 				switch (numberError) {
