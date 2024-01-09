@@ -8,7 +8,7 @@ import org.junit.Test;
 import DataBase.DbProdotti;
 import Elaborazione.GestoreCarrelli;
 
-public class testAggiungiAlCarrello {
+public class RF09AggiungiAlCarrello {
      
     GestoreCarrelli gestore = new GestoreCarrelli(new DbProdotti());
     
