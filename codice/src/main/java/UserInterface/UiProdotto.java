@@ -175,10 +175,20 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 
 	public void avvioRimuoviRipristinaNelCatalogo(Integer codProdotto, Integer Disponibile) throws RemoteException
 	{	// RF10
+		/*
 		switch (Disponibile) {
 			case 0 -> mostraFormRipristino(codProdotto);
 			case 1 -> mostraFormRimozione(codProdotto);
 			default -> mostraErroreDisponibile(codProdotto);
+		}
+		*/
+		switch (Disponibile) {
+			case 0: mostraFormRipristino(codProdotto);
+			break;
+			case 1: mostraFormRimozione(codProdotto);
+			break;
+			default: mostraErroreDisponibile(codProdotto);
+			break;
 		}
 	}
 
