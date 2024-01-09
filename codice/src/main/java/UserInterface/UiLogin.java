@@ -213,13 +213,13 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 							if (sceltaMenu==1)
 								this.avvioAggiornaPassword(true,username,password);
 							if (sceltaMenu==2 && !((String)utente.get("tipo")).equals("amministratore"))
-								uiRicerca.avvioRicercaProdotto((String)utente.get("tipo"));
+								uiRicerca.avvioRicercaProdotto((String)utente.get("tipo"), username);
 							if (sceltaMenu==2 && ((String)utente.get("tipo")).equals("amministratore"))			
 								uiUtente.avvioCreaUtente(false);
 							if (sceltaMenu==3 && ((String)utente.get("tipo")).equals("cliente"))
 								uiCarrello.avvioVisualizzaCarrello();
 							if (sceltaMenu==3 && !((String)utente.get("tipo")).equals("cliente"))
-								uiRicerca.avvioRicercaUtente();
+								uiRicerca.avvioRicercaUtente((String)utente.get("tipo"));
 							if (sceltaMenu==4 && ((String)utente.get("tipo")).equals("staff"))
 								uiLista.avvioListaForniture();
 							if (sceltaMenu==4 && ((String)utente.get("tipo")).equals("cliente"))
@@ -477,7 +477,7 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 				this.mostraErrore(3);
 			}
 			if(esitoControlloPassword==0){
-				//gestoreAccessi.AggiornaPassword(username, nuovaPassword);
+				gestoreAccessi.AggiornaPassword(username, nuovaPassword);
 				this.mostraMessaggioDiSuccesso();
             }
 
