@@ -28,4 +28,11 @@ public interface GestoreCarrelliInterfaccia extends Remote
     // RF07: rimuovi prodotto dal carrello
   	// autori: Simone Aldo Borsa, Andrea Padoan
     public void svuotaCarrello(ArrayList<HashMap<String, Object>> carrello, String username) throws RemoteException;
+
+
+  //RF09: aggiunta al carrello
+  //Autori: Fasano Lorenzo, Iacobucci Luca;
+   public boolean controlloLimiteQuantita(int quantita);
+   public boolean controlloDisponibilita(int codiceProdotto) throws RemoteException;
+   public void aggiornamentoQuantita(int quantita, int codiceProdotto, String username) throws RemoteException;
 } 
