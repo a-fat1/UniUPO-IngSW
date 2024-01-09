@@ -193,6 +193,12 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 		// RF15 (Nicolò Bianchetto, Kristian Rigo)
 		this.codProdotto = codProdotto;
 		mostraFormNuovaFornitura(nuovoProdotto);
+		dataFornituraField.setText("");
+		costoFornituraField.setText("");
+		quantitaFornituraField.setText("");
+		dataFornituraField.setBackground(Color.WHITE);
+		costoFornituraField.setBackground(Color.WHITE);
+		quantitaFornituraField.setBackground(Color.WHITE);
 	}
 
 	public void avvioNuovoProdotto() throws RemoteException
