@@ -311,7 +311,9 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 			JOptionPane.DEFAULT_OPTION,
 			JOptionPane.PLAIN_MESSAGE, 
 			null, pulsanti, null);
-
+		//controllo se è stato cliccato su X
+		if(res==-1)
+			return;
 		String pulsantePremuto = pulsanti[res];
 		//System.out.println("Hai cliccato su: " + pulsantePremuto);
 		int selectedRow = table.getSelectedRow();
