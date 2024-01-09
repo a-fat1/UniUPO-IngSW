@@ -196,11 +196,16 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 						{
 							mostraListaPagamenti(listaPagamenti);
 							this.showMessageDialog(null, scrollPanelListaPagamenti, "Lista pagamenti (ricerca per data da "+ dataInizio + " a " + dataFine+")" , JOptionPane.PLAIN_MESSAGE);
+
+							// svuota i campi dataInizio e dataFine e rimuove il colore giallo di warning
+							fieldDataInizio.setText("");
+							fieldDataFine.setText("");
+							fieldDataInizio.setBackground(Color.WHITE);
+							fieldDataFine.setBackground(Color.WHITE);
 						}
 					}
-
 				}
-			} while(esitoControllo==1 || esitoControllo==2 || scelta==1);
+			} while(esitoControllo==1 || esitoControllo==2 || scelta==-1);
 		}
 	}
 
@@ -243,14 +248,8 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 	{
 		//RF12: Lista Pagamenti
 		//autori: Broglio, Cartieri
-		JPanel panelData = new JPanel(new GridLayout(2, 2));
-		panelData.add(labelDataInizio);
-		panelData.add(fieldDataInizio);
-		panelData.add(labelDataFine);
-		panelData.add(fieldDataFine);
-
 		scelta = this.showOptionDialog(null, panelData, "Ricerca pagamenti", DEFAULT_OPTION, QUESTION_MESSAGE, null, pulsanteRicerca, "Cerca");
-
+		System.out.println("scelta: "+scelta+"\n");
 		if (scelta == 0)
 		{
 			dataInizio = fieldDataInizio.getText();
