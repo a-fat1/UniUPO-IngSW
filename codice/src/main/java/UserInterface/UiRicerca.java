@@ -355,7 +355,7 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 						
 			case _AGGIUNGI_AL_CARRELLO:
 				//RF09
-				//uiCarrello.avvioAggiungiAlCarrello(username, codiceProdotto);
+				uiCarrello.avvioAggiungiAlCarrello(username, codiceProdotto);
 				break;
 			
 		}
