@@ -27,4 +27,10 @@ public interface GestoreAccessiInterfaccia extends Remote
    boolean verificaDuplicato(String nuovoUsername) throws RemoteException;
    int verifica(String vecchioUsername, String nuovoUsername) throws RemoteException;
    void cambio(String vecchioUsername, String nuovoUsername) throws RemoteException;
+
+   //RF09
+   public boolean controlloLimiteQuantita(int quantita);
+   public boolean controlloDisponibilita(int codiceProdotto) throws RemoteException;
+   public void aggiornamentoQuantita(int quantita, int codiceProdotto, String username) throws RemoteException;
+   
 } 
