@@ -116,4 +116,46 @@ public class GestoreCarrelli implements GestoreCarrelliInterfaccia
 		
 		carrello.clear();
 	}
+
+
+	//RF 09 - aggiunta al carrello
+	//autori: Fasano Lorenzo, Iacobucci Luca;
+	public boolean controlloLimiteQuantita(int quantita) throws RemoteException{
+		if(quantita > 0 && quantita < 4)
+			return true;
+		return false;
+	}
+
+	//RF 09 - aggiunta al carrello
+	//autori: Fasano Lorenzo, Iacobucci Luca;
+	public boolean controlloDisponibilita(int codiceProdotto) throws RemoteException{
+		
+		String query = "SELECT * FROM Prodotto WHERE codice =" + codiceProdotto + " AND disponibile = 1;";
+
+		//nel caso in cui venga ritornato un hasmap con almeno un elemento, la ricerca e' andata a buon fine
+		if(dbProdotti.query(query).size() != 0){
+			return true;
+		}
+
+		return false;
+
+		}
+
+		//RF 09 - aggiunta al carrello
+		//autori: Fasano Lorenzo, Iacobucci Luca;
+		public void aggiornamentoQuantita(int quantita, int codiceProdotto, String username) throws RemoteException{
+		String query = "UPDATE Prodotto SET quantita = quantita - " + 
+		quantita + " WHERE codiceProdotto =" + codiceProdotto +" AND username = " + username + ";";
+		
+		dbProdotti.update(query);
+
+		System.out.println("Aggiornamento riuscito.");
+
+		}
+
+
+
+
+
+
 }

@@ -98,6 +98,58 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 		return utente;
 	}
 
+	public boolean verificaDuplicato(String nuovoUsername) throws RemoteException{
+		//RF23 - Aggiorna Username
+		//autore: Brivio Marco, Serio Giulia
+        boolean esito;
+        String comando = "SELECT username FROM credenziali WHERE username = \"" + nuovoUsername + "\";";
+        ArrayList <HashMap<String, Object>> credenziali = null;
+		try{
+        	credenziali = dbUtenti.query(comando);
+		}
+		catch(Exception e){
+			System.out.println("Eccezione del database");
+			return true;
+		}
+
+        if(credenziali.size()==0){
+            esito = false; 
+        }
+        else
+            esito = true;
+        return esito;
+    }
+
+	public int verifica(String vecchioUsername, String nuovoUsername) throws RemoteException{
+		//RF23 - Aggiorna Username
+		//autore: Brivio Marco, Serio Giulia
+        int esito = -1;
+        int lunghezza = nuovoUsername.length();
+        if (lunghezza < 3) {
+            if (vecchioUsername.equals(nuovoUsername)) {
+                esito = 3;
+            } else {
+                esito = 1;
+            }
+        } else {
+            if (vecchioUsername.equals(nuovoUsername)) {
+                esito = 2;
+            } else {
+                esito = 0;
+            }
+        }
+        return esito;
+    }
+
+	public void cambio(String vecchioUsername, String nuovoUsername) throws RemoteException{
+		//RF23 - Aggiorna Username
+		//autore: Brivio Marco, Serio Giulia
+        String query = "UPDATE credenziali SET username = \"" + nuovoUsername + "\" WHERE username = \"" + vecchioUsername + "\";";
+        String query1 = "UPDATE utente SET username = \"" + nuovoUsername + "\" WHERE username = \"" + vecchioUsername + "\";";
+		dbUtenti.update(query);
+		dbUtenti.update(query1);
+    }
+
 	public void bloccoUtente(String username) throws RemoteException {
 		// RF20 BloccaSblocca
 		// Autori: 20044037, 20039081
