@@ -586,10 +586,17 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 		// Salva per colonne gli attributi e i valori all'interno di JTable
 		int riga, colonna = 0;
 		for (String attributo : listaProdotti.get(colonna).keySet()) {
-			tabellaProdotti.getColumnModel().getColumn(colonna).setHeaderValue(attributo);	// Aggiunge e definisce l'attributo della colonna
+			tabellaProdotti.getColumnModel().getColumn(colonna).setHeaderValue(attributo);		// Aggiunge e definisce l'attributo della colonna
 			riga = 0;
     		for (HashMap<String, Object> prodotto : listaProdotti) {
-				tabellaProdotti.setValueAt(prodotto.get(attributo), riga, colonna);		// Aggiunge il contenuto delle righe
+				if ("disponibile".equals(attributo)) {		// Quando attributo = disponibile, si sostituiscono 1 e 0 con si e no
+					Object valore = prodotto.get(attributo);
+					valore = ((Integer) valore == 1) ? "si" : "no";
+					tabellaProdotti.setValueAt(valore, riga, colonna);
+				}
+				else
+					tabellaProdotti.setValueAt(prodotto.get(attributo), riga, colonna);		// Aggiunge il contenuto delle righe
+
 				riga++;
 			}
 			colonna++;
