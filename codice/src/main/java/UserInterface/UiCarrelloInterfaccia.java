@@ -9,7 +9,13 @@ public interface UiCarrelloInterfaccia extends Remote
 {
 	void avvioVisualizzaCarrello() throws RemoteException;
 	void avvioEffettuaOrdine() throws RemoteException;
+	
+	
+    // RF07: rimuovi prodotto dal carrello
+ 	// autori: Simone Aldo Borsa, Andrea Padoan
 	void avvioRimuoviProdottiDalCarrello(boolean tipoDiRimozione, String username, ArrayList<HashMap<String, Object>> carrello, HashMap<String, Object> prodotto) throws RemoteException;
+	
+	
 	void avvioAggiungiAlCarrello() throws RemoteException;
 }
 
