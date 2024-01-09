@@ -18,7 +18,7 @@ public interface UiCarrelloInterfaccia extends Remote
 	
 	void avvioAggiungiAlCarrello(String username, int codiceProdotto) throws RemoteException;
 	public void mostraForm() throws RemoteException;
-	public void mostraErrore(int numberError);
+	public void mostraErrore(int numberError) throws RemoteException;
 
 }
 
