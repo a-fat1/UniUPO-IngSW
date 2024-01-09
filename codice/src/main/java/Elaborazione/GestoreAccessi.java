@@ -247,7 +247,7 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 	*/
 	public void promptSalvaAccount(String nome, String cognome) throws RemoteException
 	{
-		dbUtenti.update("INSERT INTO 'main'.'Utente' ('username', 'nome', 'cognome') VALUES ("+nome+'.'+cognome+", "+nome+"', "+cognome+");");
+		dbUtenti.update("INSERT INTO 'main'.'Utente' ('username', 'nome', 'cognome') VALUES (\""+nome+'.'+cognome+"\", \""+nome+"\", \""+cognome+"\");");
 	}
 	
 	/**
