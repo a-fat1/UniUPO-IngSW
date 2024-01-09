@@ -245,7 +245,7 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 	}
 
 	//RF08 Raffaele Camera e Vanessa Tafarella
-	private void mostraElenco(ArrayList<HashMap<String, Object>> risultato, String username, String tipoUtente){
+	private void mostraElenco(ArrayList<HashMap<String, Object>> risultato, String username, String tipoUtente) throws RemoteException{
 		//nel caso ho 0 risultati mostro dialog
 		if(risultato!=null && risultato.size()==0){					
 			mostraErrore("errorNoResult");
@@ -323,8 +323,8 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 		System.out.println("selectedRow = "+selectedRow);
 		HashMap<String,Object> prodotto = risultato.get(selectedRow);
 		System.out.println("oggetto selezionato: "+prodotto);
-		Integer codiceProdotto = (Integer) prodotto.get("codice");
-		Boolean disponibile = (Boolean) prodotto.get("disponibile");
+		int codiceProdotto = (int) prodotto.get("codice");
+		Integer disponibile = (Integer) prodotto.get("disponibile");
 		System.out.println("codice: "+codiceProdotto);
 		System.out.println("username: "+username);
 		System.out.println("disponibile: "+disponibile);
@@ -332,7 +332,8 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 		switch (pulsantePremuto) {
 			case _NUOVA_FORNITURA:
 				//RF15	
-				//uiProdotto.avvioNuovaFornitura(codiceProdotto, false);		
+				
+				uiProdotto.avvioNuovaFornitura(codiceProdotto, false);		
 				break;
 			case _AGGIORNA_PREZZO:
 				//RF14
@@ -344,10 +345,10 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 				break;
 			case _LISTA_FORNITURE:
 				//RF13
-				//UiLista.avvioListaForniture(risultato.get(selectedRow));
+				uiLista.avvioListaForniture(codiceProdotto);
 				break;
 			case _LISTA_ORDINI:
-				//uiLista.avvioListaOrdini("", codiceProdotto);
+				uiLista.avvioListaOrdini("", codiceProdotto);
 				break;
 						
 			case _AGGIUNGI_AL_CARRELLO:
