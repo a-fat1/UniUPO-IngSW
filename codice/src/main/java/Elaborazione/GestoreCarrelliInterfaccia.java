@@ -32,7 +32,7 @@ public interface GestoreCarrelliInterfaccia extends Remote
 
   //RF09: aggiunta al carrello
   //Autori: Fasano Lorenzo, Iacobucci Luca;
-   public boolean controlloLimiteQuantita(int quantita);
+   public boolean controlloLimiteQuantita(int quantita) throws RemoteException;
    public boolean controlloDisponibilita(int codiceProdotto) throws RemoteException;
    public void aggiornamentoQuantita(int quantita, int codiceProdotto, String username) throws RemoteException;
 } 
