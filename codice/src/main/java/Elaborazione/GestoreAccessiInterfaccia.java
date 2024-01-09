@@ -22,4 +22,9 @@ public interface GestoreAccessiInterfaccia extends Remote
    void promptSalvaAccount(String nome, String cognome) throws RemoteException;
    void richiestaAttivazioneAccount(String nome, String cognome, String tipoUtente) throws RemoteException;
    void aggiuntaCredenziali(String username) throws RemoteException;
+
+   //RF23
+   boolean verificaDuplicato(String nuovoUsername) throws RemoteException;
+   int verifica(String vecchioUsername, String nuovoUsername) throws RemoteException;
+   void cambio(String vecchioUsername, String nuovoUsername) throws RemoteException;
 } 
