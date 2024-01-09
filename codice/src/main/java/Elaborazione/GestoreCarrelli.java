@@ -120,7 +120,7 @@ public class GestoreCarrelli implements GestoreCarrelliInterfaccia
 
 	//RF 09 - aggiunta al carrello
 	//autori: Fasano Lorenzo, Iacobucci Luca;
-	public boolean controlloLimiteQuantita(int quantita){
+	public boolean controlloLimiteQuantita(int quantita) throws RemoteException{
 		if(quantita > 0 && quantita < 4)
 			return true;
 		return false;
