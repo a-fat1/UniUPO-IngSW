@@ -328,14 +328,14 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 
 		erroreVerificaPanel = new JPanel();
 		messaggioErrore = new JLabel();
-		switch (codice) {
+		/*switch (codice) {
 			case 1 -> messaggioErrore.setText("Errore: Titolo mancante");
 			case 2 -> messaggioErrore.setText("Errore: Anno errato");
 			case 3 -> messaggioErrore.setText("Errore: Editore mancante");
 			case 4 -> messaggioErrore.setText("Errore: Autore mancante");
 
 			default -> messaggioErrore.setText("Errore");
-		}
+		}*/
 		erroreVerificaPanel.add(messaggioErrore);
 		showMessageDialog(null, erroreVerificaPanel, "ERRORE (x o OK per confermare lettura)", JOptionPane.ERROR_MESSAGE);
 	}
