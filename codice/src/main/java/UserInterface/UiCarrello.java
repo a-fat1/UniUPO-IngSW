@@ -115,12 +115,6 @@ public class UiCarrello extends JOptionPane implements UiCarrelloInterfaccia
 				"Modifica quantità",
 				"Procedi all'ordine"};
 
-		formQuantitaField = new JTextField("", 5);
-		formQuantitaLabel = new JLabel("Nuova quantità: ");
-		formQuantitaPanel = new JPanel();
-		formQuantitaPanel.add(formQuantitaLabel);
-		formQuantitaPanel.add(formQuantitaField);
-
 	}
 
 	public void avvioVisualizzaCarrello(String username) throws RemoteException {
@@ -132,9 +126,6 @@ public class UiCarrello extends JOptionPane implements UiCarrelloInterfaccia
 
 		do {
 			listaProdottiCarrello = gestoreCarrelli.cercaProdottiCarrello(username);
-			/* if (richiestaOrdineEffettuata || richiestaRimozioneEffettuata) {
-				listaProdottiCarrello.clear();
-			} */
 			if (listaProdottiCarrello.isEmpty() && !(richiestaRimozioneEffettuata || richiestaOrdineEffettuata)) { // carrello vuoto
 				this.mostraErroreCarrello(0);
 			}
@@ -180,7 +171,7 @@ public class UiCarrello extends JOptionPane implements UiCarrelloInterfaccia
 	public void avvioRimuoviProdottiDalCarrello(boolean tipoDiRimozione, String username, ArrayList<HashMap<String, Object>> carrello, HashMap<String, Object> prodotto) throws RemoteException{
 		// RF07: rimuovi prodotto dal carrello
 		// autori: Simone Aldo Borsa, Andrea Padoan
-		
+
 		if(!tipoDiRimozione) {
 			mostraConfermaSvuotamento();
 			if(scelta == 0) {
@@ -195,7 +186,6 @@ public class UiCarrello extends JOptionPane implements UiCarrelloInterfaccia
 				mostraMessaggio(tipoDiRimozione);
 			}
 		}
-		
 	}
 	
 	private void mostraConfermaSvuotamento() {
@@ -354,7 +344,7 @@ public class UiCarrello extends JOptionPane implements UiCarrelloInterfaccia
 		carrelloTable.getColumnModel().getColumn(6).setHeaderValue("quantità");
 
 		carrelloTable.getColumnModel().getColumn(0).setMinWidth(150);
-		carrelloTable.getColumnModel().getColumn(1).setMinWidth(200);
+		carrelloTable.getColumnModel().getColumn(1).setMinWidth(250);
 		carrelloTable.getColumnModel().getColumn(2).setMinWidth(150);
 
 		for (int i = 0; i < listaProdottiCarrello.size(); i++) {
@@ -381,6 +371,12 @@ public class UiCarrello extends JOptionPane implements UiCarrelloInterfaccia
 	private void mostraFormQuantita() {
 		// RF05: visualizza carrello
 		// autori: Bossola Fancesco, Oppezzo Raul
+
+		formQuantitaField = new JTextField("", 5);
+		formQuantitaLabel = new JLabel("Nuova quantità: ");
+		formQuantitaPanel = new JPanel();
+		formQuantitaPanel.add(formQuantitaLabel);
+		formQuantitaPanel.add(formQuantitaField);
 
 		richiestaQuantita = showOptionDialog(null, formQuantitaPanel, "modifica quantità (clicca X per uscire)",
 				DEFAULT_OPTION, QUESTION_MESSAGE, null, new String[]{"OK"}, null);
