@@ -87,9 +87,6 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 	private JPanel rimozionePanel;//RF10
 	private JPanel ripristinoPanel;//RF10
 
-
-
-
 	public UiProdotto(String hostGestore) throws RemoteException, NotBoundException
 	{
 		registryUI = LocateRegistry.getRegistry("127.0.0.1", 1100); // default: 1099
@@ -530,7 +527,6 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 		}
 
 	}
-
 
 	//RF10
 	private void mostraFormRimozione(Integer codProdotto) throws RemoteException {
