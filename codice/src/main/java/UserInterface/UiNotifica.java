@@ -175,8 +175,24 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 		(testoField).setBorder(new JTextField().getBorder());
 	}
 
-	// RF04
+
+	/**
+	 * RF04: Avvia la generazione di una notifica.
+	 *
+	 * @author Linda Monfermoso, Gabriele Magenta Biasina
+	 * @param tipoNotifica il tipo di notifica da generare (avviso, nuovo utente, nuovo prodotto, nuovo ordine)
+	 * @param prodotto il prodotto da includere nella notifica (NULL se non utilizzato)
+	 * @param ordine l'ordine da includere nella notifica (NULL se non utilizzato)
+	 * @param utente l'utente da includere nella notifica (NULL se non utilizzato)
+	 * @throws RemoteException
+	 */
+	public void avvioGeneraNotifica(String tipoNotifica, HashMap<String, Object> prodotto, HashMap<String, Object> ordine, HashMap<String, Object> utente) throws RemoteException {
+		// ottiene il tipo dell'utente dall'hashmap "utente"
+		String tipoUtente = utente.get("tipo").toString();
+
+	}
 	public void avvioGeneraNotifica(String tipoNotifica, HashMap<String, Object> oggetto) throws RemoteException {
+
 		switch (tipoNotifica) {
             case "nuovo prodotto":
                 testoNotifica = gestoreNotifiche.generaTestoNotificaProdotto(oggetto);

@@ -8,6 +8,9 @@ public interface UiNotificaInterfaccia extends Remote
 {
 	void avvioVisualizzaNotifiche(String tipoUtente) throws RemoteException;
 
+	void avvioGeneraNotifica(String tipoNotifica, HashMap<String, Object> prodotto, HashMap<String, Object> ordine, HashMap<String, Object> utente) throws RemoteException;
+
+
 	/**
 	 * RF04: Avvia la generazione di una notifica.
 	 *
@@ -17,6 +20,7 @@ public interface UiNotificaInterfaccia extends Remote
 	 * @throws RemoteException
 	 */
 	void avvioGeneraNotifica(String tipoNotifica, HashMap<String, Object> oggetto) throws RemoteException;
+
 	void avvioRicercaNotifiche() throws RemoteException;
 }
 

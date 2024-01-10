@@ -97,10 +97,10 @@ public class GestoreRicerche implements GestoreRicercheInterfaccia
 
 		System.out.println("GestoreRicerche.ricercaListaPagamentiData(" + dataInizio +", " + dataFine+ ")\n");
 
-		comandoSql1 = "SELECT * FROM Pagamento;";
+		comandoSql1 = "SELECT dataOrdine,importo,numeroCarta,tipoCarta,username FROM Pagamento;";
 		pagamentiTot = dbProdotti.query(comandoSql1);
 
-		comandoSql2 = "SELECT * FROM Utente;";
+		comandoSql2 = "SELECT nome,cognome,username FROM Utente;";
 		utentiTot = dbUtenti.query(comandoSql2);
 
 		if(!pagamentiTot.isEmpty() && !utentiTot.isEmpty())
@@ -117,10 +117,10 @@ public class GestoreRicerche implements GestoreRicercheInterfaccia
 		ArrayList<HashMap<String, Object>> pagamentiTot, utentiTot, listaPagamenti=null;
 
 		System.out.println("GestoreRicerche.ricercaListaPagamentiUtente(" + username + ")\n");
-		comandoSql1 = "SELECT * FROM Pagamento;";
+		comandoSql1 = "SELECT dataOrdine,importo,numeroCarta,tipoCarta,username FROM Pagamento;";
 		pagamentiTot = dbProdotti.query(comandoSql1);
 
-		comandoSql2 = "SELECT * FROM Utente WHERE username = \"" + username + "\";";
+		comandoSql2 = "SELECT nome,cognome,username FROM Utente WHERE username = \"" + username + "\";";
 		utentiTot = dbUtenti.query(comandoSql2);
 
 		if(!pagamentiTot.isEmpty() && !utentiTot.isEmpty())

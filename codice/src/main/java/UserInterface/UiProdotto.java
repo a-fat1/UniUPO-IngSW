@@ -62,7 +62,6 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 	private JLabel messaggioErrore;
 	private JPanel erroreControlloPanel;
 
-
 	//RF17 Incrementa/Decrementa prezzi
 	private JPanel increDecrePanel;
 	private JTextField percentualeField;
@@ -83,15 +82,10 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 	private boolean esito;
 	private int sceltaVoce;
 
-
 	private JLabel labelRimozione; //RF10
 	private JLabel labelRipristino; //RF10
 	private JPanel rimozionePanel;//RF10
 	private JPanel ripristinoPanel;//RF10
-
-
-
-
 
 	public UiProdotto(String hostGestore) throws RemoteException, NotBoundException
 	{
@@ -227,7 +221,6 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 		ripristinoPanel.add(labelRipristino);
 		rimozionePanel=new JPanel(new FlowLayout());
 		rimozionePanel.add(labelRimozione);
-
 	}
 
 	public void avvioRimuoviRipristinaNelCatalogo(Integer codProdotto, Integer Disponibile) throws RemoteException
@@ -591,5 +584,4 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 		messaggio="Valore 'Disponibile' per il prodotto n." +codProdotto+ " diverso da 0 o 1, correggere valore";
 		this.showMessageDialog(null,messaggio,"errore",this.ERROR_MESSAGE,null);
 	}
-
 }
