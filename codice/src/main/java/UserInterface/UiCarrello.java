@@ -64,12 +64,6 @@ public class UiCarrello extends JOptionPane implements UiCarrelloInterfaccia
 	private boolean richiestaOrdineEffettuata;
 	
 	// elementi grafici
-	private final String[] pulsantiCarrello;
-	private final JTextField formQuantitaField;
-	private final JPanel formQuantitaPanel;
-
-	// RF05: visualizza carrello
-	// autori: Bossola Fancesco, Oppezzo Raul
 	private JTable carrelloTable;
 	private JScrollPane carrelloPanel;
 	private String[] pulsantiCarrello;
@@ -147,16 +141,12 @@ public class UiCarrello extends JOptionPane implements UiCarrelloInterfaccia
 			if (!listaProdottiCarrello.isEmpty()) {
 				this.visualizzaListaProdottiCarrello();
 				if (richiestaCarrello == 0) { // richiesta svuotamento
+					richiestaRimozioneEffettuata = true;
 					this.avvioRimuoviProdottiDalCarrello(false, username, listaProdottiCarrello, prodottoSelezionato);
 				}
 				if (richiestaCarrello == 1 && prodottoSelezionato != null) { // richiesta rimozione
+					richiestaRimozioneEffettuata = true;
 					this.avvioRimuoviProdottiDalCarrello(true, username, listaProdottiCarrello, prodottoSelezionato);
-					richiestaRimozioneEffettuata = true;
-					this.avvioRimuoviProdottiDalCarrello();
-				}
-				if (richiestaCarrello == 1 && prodottoSelezionato != null) { // richiesta rimozione
-					richiestaRimozioneEffettuata = true;
-					this.avvioRimuoviProdottiDalCarrello();
 				}
 				if (richiestaCarrello == 2 && prodottoSelezionato != null) { // richiesta modifica quantità
 					do {
