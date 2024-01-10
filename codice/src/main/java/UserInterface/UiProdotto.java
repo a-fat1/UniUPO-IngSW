@@ -62,7 +62,6 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 	private JLabel messaggioErrore;
 	private JPanel erroreControlloPanel;
 
-<<<<<<< HEAD
 	//RF17 Incrementa/Decrementa prezzi
 	private JPanel increDecrePanel;
 	private JTextField percentualeField;
@@ -83,12 +82,10 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 	private boolean esito;
 	private int sceltaVoce;
 
-=======
 	private JLabel labelRimozione; //RF10
 	private JLabel labelRipristino; //RF10
 	private JPanel rimozionePanel;//RF10
 	private JPanel ripristinoPanel;//RF10
->>>>>>> 069bda70328d624720c6e1f8e1ae6d9a1d87af10
 
 
 
@@ -187,7 +184,7 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 		tipoProdottoCombo.setBorder(new EmptyBorder(5, 0, 0, 0));
 		nuovoProdottoPanel.add(tipoProdottoCombo, constraints);
 
-<<<<<<< HEAD
+
 		//RF17
 
 		increDecrePanel=new JPanel(new GridBagLayout());
@@ -219,7 +216,7 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 		constraintss.gridy=2;
 		increDecrePanel.add(increDecreRadioButton[1],constraintss);
 		
-=======
+
 		//RF10 (Filidoro Michele, Mahfoud Ayoub)
 		labelRimozione= new JLabel("Rimuovere prodotto dal catalogo?");
 		labelRipristino=new JLabel("Ripristinare prodotto nel catalogo?");
@@ -227,7 +224,6 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 		ripristinoPanel.add(labelRipristino);
 		rimozionePanel=new JPanel(new FlowLayout());
 		rimozionePanel.add(labelRimozione);
->>>>>>> 069bda70328d624720c6e1f8e1ae6d9a1d87af10
 	}
 
 	public void avvioRimuoviRipristinaNelCatalogo(Integer codProdotto, Integer Disponibile) throws RemoteException
@@ -449,7 +445,7 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 		erroreControlloPanel.add(messaggioErrore);
 		showMessageDialog(null, erroreControlloPanel, "ERRORE (x o OK per confermare lettura)", JOptionPane.ERROR_MESSAGE);
 	}
-<<<<<<< HEAD
+
 	//RF17
 	private void mostraFormIncrementaDecrementa() throws RemoteException{
 		while((esito==false || sceltaVoce==-1)||(esito==false && sceltaVoce==-1)) {
@@ -535,7 +531,7 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 
 	}
 
-=======
+
 	//RF10
 	private void mostraFormRimozione(Integer codProdotto) throws RemoteException {
 		labelRimozione=new JLabel("Prodotto n."+codProdotto);
@@ -587,5 +583,4 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 		messaggio="Valore 'Disponibile' per il prodotto n." +codProdotto+ " diverso da 0 o 1, correggere valore";
 		this.showMessageDialog(null,messaggio,"errore",this.ERROR_MESSAGE,null);
 	}
->>>>>>> 069bda70328d624720c6e1f8e1ae6d9a1d87af10
 }
