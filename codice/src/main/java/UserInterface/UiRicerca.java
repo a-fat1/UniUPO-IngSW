@@ -859,7 +859,7 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 		}
 
 		if (azione == 0 && genereUtente.equals("staff")) {
-			//uiLista.avvioListaPagamenti(table.getModel().getValueAt(table.getSelectedRow(), 2).toString());
+			uiLista.avvioListaPagamenti(table.getModel().getValueAt(table.getSelectedRow(), 2).toString());
 			// richiamo lista pagamenti
 		} else if (azione == 1 && genereUtente.equals("staff")) {
 			uiLista.avvioListaOrdini(table.getModel().getValueAt(table.getSelectedRow(), 2).toString(), -1);
