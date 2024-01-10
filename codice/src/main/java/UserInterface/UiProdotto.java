@@ -62,6 +62,29 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 	private JLabel messaggioErrore;
 	private JPanel erroreControlloPanel;
 
+	//RF17 Incrementa/Decrementa prezzi
+	private JPanel increDecrePanel;
+	private JTextField percentualeField;
+	private JLabel percentualeLabel;
+	private JLabel sceltaLabel;
+	private JPanel letturaIncreDecrePanel;
+	private JRadioButton[] increDecreRadioButton;
+	private JButton okButton;
+	private JPanel errorePanel;
+	private JPanel letturaErrorePanel;
+	private JButton okErroreButton;
+	private JPanel prezziAggiornati;
+	private JPanel letturaPrezziAggiornatiPanel;
+	private JLabel prezziAggiornatiLabel;
+	private JButton okaggiornaButton;
+	private JLabel lavoroLabel;
+	private int percentuale;
+	private boolean esito;
+	private int sceltaVoce;
+
+
+
+
 
 	
 	public UiProdotto(String hostGestore) throws RemoteException, NotBoundException
@@ -157,6 +180,38 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 		constraints.gridx = 1;
 		tipoProdottoCombo.setBorder(new EmptyBorder(5, 0, 0, 0));
 		nuovoProdottoPanel.add(tipoProdottoCombo, constraints);
+
+		//RF17
+
+		increDecrePanel=new JPanel(new GridBagLayout());
+		GridBagConstraints constraintss = new GridBagConstraints();
+		constraintss.anchor = GridBagConstraints.LINE_START;
+		percentualeLabel= new JLabel("Percentuale");
+		sceltaLabel=new JLabel("Scelta");
+		percentualeField= new JTextField("",10);
+		increDecreRadioButton=new JRadioButton[2];
+		increDecreRadioButton[0]=new JRadioButton("Incrementa");
+		increDecreRadioButton[1]=new JRadioButton("Decrementa");
+
+
+		constraintss.gridx=0;
+		constraintss.gridy=0;
+		constraintss.gridwidth=1;
+		increDecrePanel.add(percentualeLabel,constraintss);
+		constraintss.gridx=1;
+		constraintss.gridy=0;
+		increDecrePanel.add(percentualeField,constraintss);
+		constraintss.gridx=0;
+		constraintss.gridy=1;
+		constraintss.gridwidth=1;
+		increDecrePanel.add(sceltaLabel,constraintss);
+		constraintss.gridx=1;
+		constraintss.gridy=1;
+		increDecrePanel.add(increDecreRadioButton[0],constraintss);
+		constraintss.gridx=1;
+		constraintss.gridy=2;
+		increDecrePanel.add(increDecreRadioButton[1],constraintss);
+		
 	}
 
 	public void avvioRimuoviRipristinaNelCatalogo() throws RemoteException
@@ -180,6 +235,8 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 
 	public void avvioIncrementaDecrementaPrezzi() throws RemoteException
 	{	// RF17
+		this.mostraFormIncrementaDecrementa();
+
 	}
 
 	private void mostraFormNuovaFornitura(boolean nuovoProdotto) throws RemoteException {
@@ -355,4 +412,89 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 		erroreControlloPanel.add(messaggioErrore);
 		showMessageDialog(null, erroreControlloPanel, "ERRORE (x o OK per confermare lettura)", JOptionPane.ERROR_MESSAGE);
 	}
+	//RF17
+	private void mostraFormIncrementaDecrementa() throws RemoteException{
+		while((esito==false || sceltaVoce==-1)||(esito==false && sceltaVoce==-1)) {
+			String[] scelta = {"ok"};
+			int sceltaPannello;
+			sceltaPannello = this.showOptionDialog(null, increDecrePanel, "Inserire percentuale e scelta (premere X per uscire)", this.DEFAULT_OPTION, this.QUESTION_MESSAGE, null, scelta, "ok");
+			if (sceltaPannello == this.CLOSED_OPTION) {
+				return;
+			} else {
+				String valore = percentualeField.getText();
+				if (valore.equals("")) {
+					this.mostraErrore();
+					//break;
+				} else {
+					percentuale = Integer.parseInt(valore);
+					this.controllaCredenzialiIncreDecrePrezzi();
+					this.selezioneControllo();
+
+					if (esito == false && sceltaVoce == -1) {
+						this.mostraErrori();
+					} else if (esito == false || sceltaVoce == -1) {
+						this.mostraErrore();
+					}
+				}
+
+				if (esito == true || sceltaVoce != -1) {
+					if(sceltaVoce==0){
+						gestoreProdotti.incrementaPrezzi(percentuale);
+					}else if(sceltaVoce==1){
+						gestoreProdotti.decrementaPrezzi(percentuale);
+					}
+
+					this.mostraPrezzi();
+
+				}
+			}
+		}
+
+	}
+	//RF17
+	private void controllaCredenzialiIncreDecrePrezzi(){
+		if (percentuale > 0 && percentuale <= 100) {
+			esito = true;
+		}
+	}
+	//RF17
+	private void selezioneControllo(){
+		sceltaVoce=-1;
+		for(int i=0; i<2; i++){
+			if(increDecreRadioButton[i].isSelected()){
+				sceltaVoce=i;
+			}
+		}
+	}
+	//RF17
+	private void mostraErrore(){
+		String message="";
+		if(esito==false){
+			message="Percentuale non idonea";
+			this.showMessageDialog(null,message,"Errore",this.ERROR_MESSAGE,null);
+
+		}
+		if(sceltaVoce==-1){
+			message="Selezionare incrementa o decrementa";
+			this.showMessageDialog(null,message,"Errore",this.ERROR_MESSAGE,null);
+		}
+
+	}
+	//RF17
+	private void mostraErrori(){
+		if(sceltaVoce==-1 && esito==false){
+			message="percentuale errata\n selezionare scelta";
+			this.showMessageDialog(null,message,"Errore",this.ERROR_MESSAGE,null);
+		}
+	}
+	//RF17
+	private void mostraPrezzi(){
+		String message="";
+		if(esito==true && sceltaVoce!=-1){
+			message="Prezzi aggiornati con successo";
+			this.showMessageDialog(null,message,"Prezzi aggiornati",this.INFORMATION_MESSAGE,null);
+		}
+
+	}
+
 }
