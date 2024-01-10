@@ -510,6 +510,8 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 		if(esito==false){
 			message="Percentuale non idonea";
 			this.showMessageDialog(null,message,"Errore",this.ERROR_MESSAGE,null);
+			percentualeField.setText("");
+			percentualeField.setBackground(Color.YELLOW);
 
 		}
 		if(sceltaVoce==-1){
@@ -523,6 +525,9 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 		if(sceltaVoce==-1 && esito==false){
 			message="percentuale errata\n selezionare scelta";
 			this.showMessageDialog(null,message,"Errore",this.ERROR_MESSAGE,null);
+			percentualeField.setText("");
+			percentualeField.setBackground(Color.YELLOW);
+
 		}
 	}
 	//RF17
