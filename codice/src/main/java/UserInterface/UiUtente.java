@@ -4,8 +4,8 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.ArrayList;
 
-import java.rmi.registry.Registry; 
-import java.rmi.registry.LocateRegistry; 
+import java.rmi.registry.Registry;
+import java.rmi.registry.LocateRegistry;
 import java.rmi.RemoteException;
 import java.awt.Frame.*;
 import java.rmi.NotBoundException;
@@ -26,8 +26,12 @@ public class UiUtente extends JOptionPane implements UiUtenteInterfaccia
 	private UiLoginInterfaccia uiLogin;
 	private UiNotificaInterfaccia uiNotifica;
 	private GestoreAccessiInterfaccia gestoreAccessi;
+	
 
 	// attributi
+	private int selezione;
+	// elementi grafici
+
 	//RF02
 	private String nome;
 	private String cognome;
@@ -45,6 +49,7 @@ public class UiUtente extends JOptionPane implements UiUtenteInterfaccia
 	private JComboBox c1;
 	private String pulsantiRegistrazione[];
 	
+
 	public UiUtente(String hostGestore) throws RemoteException, NotBoundException
 	{
 		registryUI = LocateRegistry.getRegistry("127.0.0.1", 1100); // default: 1099
@@ -54,6 +59,7 @@ public class UiUtente extends JOptionPane implements UiUtenteInterfaccia
 		uiNotifica = (UiNotificaInterfaccia) registryUI.lookup("uiNotifica");
 		gestoreAccessi = (GestoreAccessiInterfaccia) registryGestore.lookup("gestoreAccessi");
 	}
+
 
 	/**
 	 * Metodo che implementa la logica del diagramma di sequenza.
@@ -102,7 +108,7 @@ public class UiUtente extends JOptionPane implements UiUtenteInterfaccia
 
 				gestoreAccessi.richiestaAttivazioneAccount(nome, cognome, tipoUtente);
 				gestoreAccessi.aggiuntaCredenziali(nome+"."+cognome);
-				uiLogin.avvioAggiornaUsername();
+				uiLogin.avvioAggiornaUsername(username);
 				uiLogin.avvioAggiornaPassword(false, username, "");
 			}
 
@@ -125,9 +131,14 @@ public class UiUtente extends JOptionPane implements UiUtenteInterfaccia
 		contentPane.add(lblNewLabel);
 
 		textFieldNome = new JTextField();
+		textFieldCognome = new JTextField();
 
 		//In caso di errore sul formato del nome, mostra all'utente il textField incriminato
-		if (esitoControllo==1) textFieldNome.setBackground(Color.YELLOW);
+		if (esitoControllo==1) {
+			textFieldNome.setBackground(Color.YELLOW);
+			textFieldNome.setText(nome);
+			textFieldCognome.setText(cognome);
+		}
 		else textFieldNome.setBackground(Color.WHITE);
 
 		contentPane.add(textFieldNome);
@@ -136,11 +147,13 @@ public class UiUtente extends JOptionPane implements UiUtenteInterfaccia
 		JLabel lblCognome = new JLabel("cognome");
 		lblCognome.setHorizontalAlignment(SwingConstants.LEFT);
 		contentPane.add(lblCognome);
-		
-		textFieldCognome = new JTextField();
 
 		//In caso di errore sul formato del cognome, mostra all'utente il textField incriminato
-		if (esitoControllo==2) textFieldCognome.setBackground(Color.YELLOW);
+		if (esitoControllo==2) {
+			textFieldCognome.setBackground(Color.YELLOW);
+			textFieldNome.setText(nome);
+			textFieldCognome.setText(cognome);
+		}
 		else textFieldCognome.setBackground(Color.WHITE);
 
 		contentPane.add(textFieldCognome);
@@ -227,9 +240,55 @@ public class UiUtente extends JOptionPane implements UiUtenteInterfaccia
 		tipoUtente = (String)c1.getSelectedItem();
 	}
 
-	public void avvioBloccaSbloccaUtente() throws RemoteException
-	{ 	// RF20	
+	public void avvioBloccaSbloccaUtente(String username, boolean attivo) throws RemoteException
+	{ 	// RF20
+		if(attivo)
+		{
+			this.mostraFormBlocco();
+			if(selezione==1) {
+
+				gestoreAccessi.bloccoUtente(username);
+
+			}
+		}
+		else{
+			this.mostraFormSblocco();
+			if(selezione==1) {
+
+				gestoreAccessi.sbloccoUtente(username);
+
+			}
+		}
 	}
+
+	private void mostraFormBlocco() {
+		String[] scelte= { "ANNULLA","CONFERMA"};
+		selezione = JOptionPane.showOptionDialog(null, null, "FORM BLOCCO", 0, 2, null, scelte, null);
+
+		if (selezione == 1) {
+			JOptionPane.showMessageDialog(null, null, "Conferma lettura del messaggio(OK o X per continuare).", JOptionPane.INFORMATION_MESSAGE);
+		}
+
+		else {
+			JOptionPane.showMessageDialog(null, null, "annullamento", JOptionPane.ERROR_MESSAGE);
+		}
+	}
+
+	private void mostraFormSblocco() {
+		String[] scelte= { "ANNULLA","CONFERMA"};
+		selezione = JOptionPane.showOptionDialog(null, null, "FORM SBLOCCO", 0, 3, null, scelte, null);
+
+		if (selezione == 1) {
+			JOptionPane.showMessageDialog(null, null, "Conferma lettura del messaggio(OK o X per continuare).", JOptionPane.INFORMATION_MESSAGE);
+		}
+		else {
+			JOptionPane.showMessageDialog(null, null, "annullamento", JOptionPane.ERROR_MESSAGE);
+		}
+	}
+
+
+
+
 
 	public void avvioAggiornaDomicilio() throws RemoteException
 	{ 	// RF24

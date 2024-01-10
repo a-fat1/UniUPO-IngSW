@@ -349,7 +349,7 @@ public class GestoreRicerche implements GestoreRicercheInterfaccia
 		return utenti;
 	}
 
-	//RF08 Raffaele Camera
+	//RF08 Raffaele Camera e Vanessa Tafarella
 	public boolean controllaParametri(String titolo, String autore, String editore, String anno, ArrayList<String> tipoList) {
         boolean isTitoloEmptyOrNull = titolo==null || titolo.isEmpty();
 		boolean isAutoreEmptyOrNull =autore==null || autore.isEmpty();
@@ -362,7 +362,7 @@ public class GestoreRicerche implements GestoreRicercheInterfaccia
         // se tutte le lunghezze di tutti i paramentri è 0 torna false , altrimenti true
         return isCompiledAtLeastOne;
     }
-	//RF08 Raffaele Camera
+	//RF08 Raffaele Camera e Vanessa Tafarella
     // Metodo che effettua la chiamata a dbProdotti solo se passa il check sui campi
 	public ArrayList<HashMap<String, Object>> ricercaProdotto(String titolo, String autore, String editore, String anno,
 			ArrayList<String> tipoList, boolean isCliente) throws RemoteException {
@@ -395,7 +395,7 @@ public class GestoreRicerche implements GestoreRicercheInterfaccia
 		}
 
 		if(isCliente){
-			comandoSql += " AND (disponibile = 1 OR quantita > 0) ";
+			comandoSql += " AND (disponibile = 1 AND quantita > 0) ";
 		}
 			
 		risultati = dbProdotti.query(comandoSql);

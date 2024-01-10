@@ -32,7 +32,7 @@ public interface GestoreRicercheInterfaccia extends Remote
     ArrayList<HashMap<String, Object>> cercaUtenteBloccatoNonBloccato(String nome, String cognome) throws RemoteException;
     ArrayList<HashMap<String, Object>> cercaUtenteNonBloccato(String nome, String cognome) throws RemoteException;
 
-     //RF08 Raffaele Camera
+     //RF08 Raffaele Camera e Vanessa Tafarella
      public ArrayList<HashMap<String, Object>> ricercaProdotto(String titolo, String autore, String editore, String anno,
      ArrayList<String> tipoList, boolean isCliente) throws RemoteException;
     public boolean controllaParametri(String titolo, String autore, String editore, String anno, ArrayList<String> tipoList) throws RemoteException;

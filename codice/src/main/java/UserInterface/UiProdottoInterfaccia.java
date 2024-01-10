@@ -5,7 +5,7 @@ import java.rmi.RemoteException;
 
 public interface UiProdottoInterfaccia extends Remote
 {
-	void avvioRimuoviRipristinaNelCatalogo() throws RemoteException;
+	void avvioRimuoviRipristinaNelCatalogo(Integer codProdotto, Integer disponibile) throws RemoteException;
 	void avvioAggiornaPrezzo() throws RemoteException;
 	/**
 	 * nuovoProdotto = true se chiamato da RF16, false se chiamato da RF08

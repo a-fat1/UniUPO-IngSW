@@ -99,40 +99,5 @@ public class RF08RicercaProdotti
     }
     
 
-    /**
-     * verifico che il cliente non veda i risultati restituiti quando disponibile = 0 e quantita = 0 per stesso autore
-     * @throws RemoteException
-     */
-    /* 
-    @Test
-    public void testDisponibileAndQuantitaCliente2() throws RemoteException
-    {
-        ArrayList<HashMap<String, Object>> prodottiList = dbProdotti.query("SELECT * FROM Prodotto WHERE autore='Martin Fowler' and disponibile=0 AND quantita=0;");
-    	int size = prodottiList.size();
-    	
-    	ArrayList<HashMap<String, Object>> risultato = gestoreRicerche.ricercaProdotto("", "Martin Fowler", "", "", null, true);
-        assertNotNull(risultato);
-        assertTrue(risultato.isEmpty());
-        assertNotEquals(size, risultato.size()); 
-    }
-    */
-       /**
-     * verifico che per lo stesso autore venga visualizzato se non disponibile ma con quantita>0
-     * @throws RemoteException
-     */
-    /* 
-    @Test
-    public void testNonDisponibileAndQuantitaCliente1() throws RemoteException
-    {
-        String autore = "Raffaele";
-        ArrayList<HashMap<String, Object>> prodottiList = dbProdotti.query("SELECT * FROM Prodotto WHERE autore = '"+autore+"' AND disponibile=0 AND quantita>0");
-    	int size = prodottiList.size();
-    	
-    	ArrayList<HashMap<String, Object>> risultato = gestoreRicerche.ricercaProdotto("", autore, "", "", null, true);
-        assertNotNull(risultato);
-        assertFalse(risultato.isEmpty());
-        assertEquals(size, risultato.size()); 
-    }
-*/
     
 }
