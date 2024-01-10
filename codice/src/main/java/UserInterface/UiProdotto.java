@@ -476,7 +476,7 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 					}
 
 					this.mostraPrezzi();
-
+					return;
 				}
 			}
 		}
