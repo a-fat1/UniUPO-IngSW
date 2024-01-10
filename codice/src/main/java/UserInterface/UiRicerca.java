@@ -343,7 +343,7 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 				break;
 			case _RIMUOVI_RIPRISTINA:
 				//RF10
-				//uiProdotto.avvioRimuoviRipristinaNelCatalogo(codiceProdotto, disponibile);
+				uiProdotto.avvioRimuoviRipristinaNelCatalogo(codiceProdotto, disponibile);
 				break;
 			case _LISTA_FORNITURE:
 				//RF13

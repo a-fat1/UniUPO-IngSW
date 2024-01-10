@@ -26,58 +26,56 @@ public class GestoreCarrelli implements GestoreCarrelliInterfaccia
 		dbProdotti = d1;
 	}
 
-	public ArrayList<HashMap<String, Object>> cercaElementi(String username) throws RemoteException {
+	public ArrayList<HashMap<String, Object>> cercaProdottiCarrello(String username) throws RemoteException {
 		// RF05: visualizza carrello
 		// autori: Bossola Fancesco, Oppezzo Raul
-
-		System.out.println("GestoreCarrelli.cercaElementi(" + username + ")\n");
 
 		return dbProdotti.query("SELECT * "
 				+ "FROM Carrello JOIN Prodotto ON Carrello.codiceProdotto = Prodotto.codice "
 				+ "WHERE Carrello.username = \"" + username + "\";");
 	}
 
-	public int verificaQuantita(int nuovaQuantita, HashMap<String, Object> elemento) throws RemoteException {
+	public int verificaQuantita(String nuovaQuantita, HashMap<String, Object> prodottoSelezionato) throws RemoteException {
 		// RF05: visualizza carrello
 		// autori: Bossola Fancesco, Oppezzo Raul
 
-		System.out.println("GestoreCarrelli.verificaQuantita(" + nuovaQuantita + ", " + elemento + ")\n");
-
-		int quantitaCarrello = (int) elemento.get("quantitaProdotto");
-		int quantitaCatalogo = (int) elemento.get("quantita");
+		int quantitaCarrello = (int) prodottoSelezionato.get("quantitaProdotto");
+		int quantitaCatalogo = (int) prodottoSelezionato.get("quantita");
 		int quantitaRimanenteCatalogo;
 		int esito;
 
-		if (nuovaQuantita < 1 || nuovaQuantita == quantitaCarrello) { // nuovaQuantita non valida
+		try {
+			if (Integer.parseInt(nuovaQuantita) < 1 || Integer.parseInt(nuovaQuantita) == quantitaCarrello) { // nuovaQuantita non valida
+				esito = 1;
+			}
+			else {
+				quantitaRimanenteCatalogo = quantitaCatalogo + (quantitaCarrello - Integer.parseInt(nuovaQuantita));
+				if (quantitaRimanenteCatalogo < 0) { // nuovaQuantita non disponibile
+					esito = 2;
+				}
+				else { // nuovaQuantita valida
+					esito = 0;
+				}
+			}
+		} catch (NumberFormatException e) {
 			esito = 1;
-		}
-		else {
-			quantitaRimanenteCatalogo = quantitaCatalogo + (quantitaCarrello - nuovaQuantita);
-			if (quantitaRimanenteCatalogo < 0) { // nuovaQuantita non disponibile
-				esito = 2;
-			}
-			else { // nuovaQuantita valida
-				esito = 0;
-			}
 		}
 
 		return esito;
 	}
 
-	public void modificaQuantita(int nuovaQuantita, HashMap<String, Object> elemento, String username) throws RemoteException {
+	public void modificaQuantita(String nuovaQuantita, HashMap<String, Object> prodottoSelezionato, String username) throws RemoteException {
 		// RF05: visualizza carrello
 		// autori: Bossola Fancesco, Oppezzo Raul
 
-		System.out.println("GestoreCarrelli.modificaQuantita("  + nuovaQuantita + ", " + elemento + ", " + username + ")\n");
-
-		dbProdotti.query("UPDATE Carrello "
-				+ "SET Carrello.quantitaProdotto = " + nuovaQuantita
-				+ "WHERE Carrello.username = \"" + username
-				+ "\" AND Carrello.codiceProdotto = " + elemento.get("codice") + ";");
-		dbProdotti.query("UPDATE Prodotto "
-				+ "SET Prodotto.quantita = "
-				+ elemento.get("quantita") + ((int) elemento.get("quantitaProdotto") - nuovaQuantita)
-				+ "WHERE Prodotto.codice = " + elemento.get("codice") + ";");
+		dbProdotti.update("UPDATE Carrello "
+				+ "SET quantitaProdotto = " + nuovaQuantita + " "
+				+ "WHERE username = \"" + username + "\" "
+				+ "AND codiceProdotto = " + prodottoSelezionato.get("codice") + ";");
+		dbProdotti.update("UPDATE Prodotto "
+				+ "SET quantita = " + ((int) prodottoSelezionato.get("quantita")
+				+ ((int) prodottoSelezionato.get("quantitaProdotto") - Integer.parseInt(nuovaQuantita))) + " "
+				+ "WHERE codice = " + prodottoSelezionato.get("codice") + ";");
 	}
 
 	public void rimozioneProdottoDalCarrello(ArrayList<HashMap<String, Object>> carrello, HashMap<String, Object> elemento, String username) throws RemoteException {
@@ -116,7 +114,6 @@ public class GestoreCarrelli implements GestoreCarrelliInterfaccia
 		
 		carrello.clear();
 	}
-
 
 	//RF 09 - aggiunta al carrello
 	//autori: Fasano Lorenzo, Iacobucci Luca;
@@ -159,10 +156,5 @@ public class GestoreCarrelli implements GestoreCarrelliInterfaccia
 		System.out.println("Aggiornamento carrello riuscito.");
 
 		}
-
-
-
-
-
 
 }

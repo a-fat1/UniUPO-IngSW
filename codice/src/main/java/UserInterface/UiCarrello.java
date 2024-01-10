@@ -1,5 +1,6 @@
 package UserInterface;
 
+import java.awt.*;
 import java.util.HashMap;
 import java.util.ArrayList;
 
@@ -49,9 +50,27 @@ public class UiCarrello extends JOptionPane implements UiCarrelloInterfaccia
 	private JPanel formPanel;		/*RF09*/
 	private String[] pulsanteOK;	/*RF09*/
 
+	// RF05: visualizza carrello
+	// autori: Bossola Fancesco, Oppezzo Raul
 
-
+	//attributi
+	private ArrayList<HashMap<String, Object>> listaProdottiCarrello;
+	private HashMap<String, Object> prodottoSelezionato;
+	private int richiestaCarrello;
+	private int richiestaQuantita;
+	private String nuovaQuantita;
+	private int esitoQuantita;
+	private boolean richiestaRimozioneEffettuata;
+	private boolean richiestaOrdineEffettuata;
 	
+	// elementi grafici
+	private JTable carrelloTable;
+	private JScrollPane carrelloPanel;
+	private String[] pulsantiCarrello;
+	private JTextField formQuantitaField;
+	private JLabel formQuantitaLabel;
+	private JPanel formQuantitaPanel;
+
 	public UiCarrello(String hostGestore) throws RemoteException, NotBoundException
 	{
 		registryUI = LocateRegistry.getRegistry("127.0.0.1", 1100); // default: 1099
@@ -89,11 +108,68 @@ public class UiCarrello extends JOptionPane implements UiCarrelloInterfaccia
 		pulsanteOK[0] = "Ok"; 						//RF09
 
 
+		// RF05: Visualizza carrello
+		// autori: Bossola Francesco, Oppezzo Raul
+		pulsantiCarrello = new String[] {"Svuota carrello",
+				"Rimuovi prodotto",
+				"Modifica quantità",
+				"Procedi all'ordine"};
+
+		formQuantitaField = new JTextField("", 5);
+		formQuantitaLabel = new JLabel("Nuova quantità: ");
+		formQuantitaPanel = new JPanel();
+		formQuantitaPanel.add(formQuantitaLabel);
+		formQuantitaPanel.add(formQuantitaField);
 
 	}
-	
-	public void avvioVisualizzaCarrello() throws RemoteException
-	{	// RF05	
+
+	public void avvioVisualizzaCarrello(String username) throws RemoteException {
+		// RF05: visualizza carrello
+		// autori: Bossola Fancesco, Oppezzo Raul
+
+		richiestaRimozioneEffettuata = false;
+		richiestaOrdineEffettuata = false;
+
+		do {
+			listaProdottiCarrello = gestoreCarrelli.cercaProdottiCarrello(username);
+			/* if (richiestaOrdineEffettuata || richiestaRimozioneEffettuata) {
+				listaProdottiCarrello.clear();
+			} */
+			if (listaProdottiCarrello.isEmpty() && !(richiestaRimozioneEffettuata || richiestaOrdineEffettuata)) { // carrello vuoto
+				this.mostraErroreCarrello(0);
+			}
+			if (!listaProdottiCarrello.isEmpty()) {
+				this.visualizzaListaProdottiCarrello();
+				if (richiestaCarrello == 0) { // richiesta svuotamento
+					richiestaRimozioneEffettuata = true;
+					this.avvioRimuoviProdottiDalCarrello(false, username, listaProdottiCarrello, prodottoSelezionato);
+				}
+				if (richiestaCarrello == 1 && prodottoSelezionato != null) { // richiesta rimozione
+					richiestaRimozioneEffettuata = true;
+					this.avvioRimuoviProdottiDalCarrello(true, username, listaProdottiCarrello, prodottoSelezionato);
+				}
+				if (richiestaCarrello == 2 && prodottoSelezionato != null) { // richiesta modifica quantità
+					do {
+						this.mostraFormQuantita();
+						if (richiestaQuantita == 0) { // richiesta continua
+							esitoQuantita = gestoreCarrelli.verificaQuantita(nuovaQuantita, prodottoSelezionato);
+							if (esitoQuantita == 0) { // nuovaQuantita valida
+								gestoreCarrelli.modificaQuantita(nuovaQuantita, prodottoSelezionato, username);
+							} else {
+								this.mostraErroreCarrello(esitoQuantita);
+							}
+						}
+					} while (richiestaQuantita != CLOSED_OPTION && esitoQuantita != 0);
+				}
+				if (richiestaCarrello == 3) { // richiesta ordine
+					richiestaOrdineEffettuata = true;
+					this.avvioEffettuaOrdine();
+				}
+				if ((richiestaCarrello == 1 || richiestaCarrello == 2) && prodottoSelezionato == null) {
+					this.mostraErroreCarrello(3);
+				}
+			}
+		} while (richiestaCarrello != CLOSED_OPTION && !listaProdottiCarrello.isEmpty());
 	}
 
 	public void avvioEffettuaOrdine() throws RemoteException
@@ -217,7 +293,6 @@ public class UiCarrello extends JOptionPane implements UiCarrelloInterfaccia
 		this.showMessageDialog(null, "Il carrello e' stato aggiornato", "Carrello aggiornato", this.PLAIN_MESSAGE, null);
 
 	}
-
 	
 	public void mostraForm() throws RemoteException
 	{	// RF09	: Aggiunta al carrello
@@ -256,5 +331,79 @@ public class UiCarrello extends JOptionPane implements UiCarrelloInterfaccia
 					break;
 			}
 		}
+
+	private void visualizzaListaProdottiCarrello() {
+		// RF05: visualizza carrello
+		// autori: Bossola Fancesco, Oppezzo Raul
+
+		carrelloTable = new JTable(listaProdottiCarrello.size(), 7) {
+			public boolean editCellAt(int row, int column, java.util.EventObject e) {
+				return false;
+			}
+		};
+
+		carrelloTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		carrelloTable.setSelectionMode(DefaultListSelectionModel.SINGLE_SELECTION);
+
+		carrelloTable.getColumnModel().getColumn(0).setHeaderValue("autore");
+		carrelloTable.getColumnModel().getColumn(1).setHeaderValue("titolo");
+		carrelloTable.getColumnModel().getColumn(2).setHeaderValue("editore");
+		carrelloTable.getColumnModel().getColumn(3).setHeaderValue("tipo");
+		carrelloTable.getColumnModel().getColumn(4).setHeaderValue("anno");
+		carrelloTable.getColumnModel().getColumn(5).setHeaderValue("prezzo");
+		carrelloTable.getColumnModel().getColumn(6).setHeaderValue("quantità");
+
+		carrelloTable.getColumnModel().getColumn(0).setMinWidth(150);
+		carrelloTable.getColumnModel().getColumn(1).setMinWidth(200);
+		carrelloTable.getColumnModel().getColumn(2).setMinWidth(150);
+
+		for (int i = 0; i < listaProdottiCarrello.size(); i++) {
+			int j = 0;
+			carrelloTable.setValueAt(listaProdottiCarrello.get(i).get("autore"), i, j++);
+			carrelloTable.setValueAt(listaProdottiCarrello.get(i).get("titolo"), i, j++);
+			carrelloTable.setValueAt(listaProdottiCarrello.get(i).get("editore"), i, j++);
+			carrelloTable.setValueAt(listaProdottiCarrello.get(i).get("tipo"), i, j++);
+			carrelloTable.setValueAt(listaProdottiCarrello.get(i).get("anno").toString(), i, j++);
+			carrelloTable.setValueAt(listaProdottiCarrello.get(i).get("prezzo").toString(), i, j++);
+			carrelloTable.setValueAt(listaProdottiCarrello.get(i).get("quantitaProdotto").toString(), i, j);
+		}
+
+		carrelloPanel = new JScrollPane(carrelloTable);
+		carrelloPanel.setPreferredSize(new Dimension(250, 250));
+
+		richiestaCarrello = showOptionDialog(null, carrelloPanel, "Carrello (clicca X per uscire)",
+				DEFAULT_OPTION, PLAIN_MESSAGE, null, pulsantiCarrello, null);
+
+		prodottoSelezionato = carrelloTable.getSelectedRow() >= 0 ?
+				listaProdottiCarrello.get(carrelloTable.getSelectedRow()) : null;
+	}
+
+	private void mostraFormQuantita() {
+		// RF05: visualizza carrello
+		// autori: Bossola Fancesco, Oppezzo Raul
+
+		richiestaQuantita = showOptionDialog(null, formQuantitaPanel, "modifica quantità (clicca X per uscire)",
+				DEFAULT_OPTION, QUESTION_MESSAGE, null, new String[]{"OK"}, null);
+
+		nuovaQuantita = formQuantitaField.getText();
+	}
+
+	private void mostraErroreCarrello(int errore) {
+		// RF05: visualizza carrello
+		// autori: Bossola Fancesco, Oppezzo Raul
+
+		if (errore == 0) {
+			showMessageDialog(null, "Il carrello è vuoto.\n(clicca OK o X per uscire)", "Errore", ERROR_MESSAGE);
+		}
+		if (errore == 1) {
+			showMessageDialog(null, "Quantità non valida.\n(clicca OK o X per uscire)", "Errore", ERROR_MESSAGE);
+		}
+		if (errore == 2) {
+			showMessageDialog(null, "Quantità non disponibile.\n(clicca OK o X per uscire)", "Errore", ERROR_MESSAGE);
+		}
+		if (errore == 3) {
+			showMessageDialog(null, "Nessun prodotto selezionato.\n(clicca OK o X per uscire)", "Errore", ERROR_MESSAGE);
+		}
+	}
 
 }
