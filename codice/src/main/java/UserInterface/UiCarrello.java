@@ -60,11 +60,22 @@ public class UiCarrello extends JOptionPane implements UiCarrelloInterfaccia
 	private int richiestaQuantita;
 	private String nuovaQuantita;
 	private int esitoQuantita;
+	private boolean richiestaRimozioneEffettuata;
+	private boolean richiestaOrdineEffettuata;
 	
 	// elementi grafici
 	private final String[] pulsantiCarrello;
 	private final JTextField formQuantitaField;
 	private final JPanel formQuantitaPanel;
+
+	// RF05: visualizza carrello
+	// autori: Bossola Fancesco, Oppezzo Raul
+	private JTable carrelloTable;
+	private JScrollPane carrelloPanel;
+	private String[] pulsantiCarrello;
+	private JTextField formQuantitaField;
+	private JLabel formQuantitaLabel;
+	private JPanel formQuantitaPanel;
 
 	public UiCarrello(String hostGestore) throws RemoteException, NotBoundException
 	{
@@ -111,8 +122,9 @@ public class UiCarrello extends JOptionPane implements UiCarrelloInterfaccia
 				"Procedi all'ordine"};
 
 		formQuantitaField = new JTextField("", 5);
+		formQuantitaLabel = new JLabel("Nuova quantità: ");
 		formQuantitaPanel = new JPanel();
-		formQuantitaPanel.add(new JLabel("Nuova quantità: "));
+		formQuantitaPanel.add(formQuantitaLabel);
 		formQuantitaPanel.add(formQuantitaField);
 
 	}
@@ -121,18 +133,30 @@ public class UiCarrello extends JOptionPane implements UiCarrelloInterfaccia
 		// RF05: visualizza carrello
 		// autori: Bossola Fancesco, Oppezzo Raul
 
+		richiestaRimozioneEffettuata = false;
+		richiestaOrdineEffettuata = false;
+
 		do {
 			listaProdottiCarrello = gestoreCarrelli.cercaProdottiCarrello(username);
-			if (listaProdottiCarrello.isEmpty()) { // carrello vuoto
+			/* if (richiestaOrdineEffettuata || richiestaRimozioneEffettuata) {
+				listaProdottiCarrello.clear();
+			} */
+			if (listaProdottiCarrello.isEmpty() && !(richiestaRimozioneEffettuata || richiestaOrdineEffettuata)) { // carrello vuoto
 				this.mostraErroreCarrello(0);
 			}
-			else {
+			if (!listaProdottiCarrello.isEmpty()) {
 				this.visualizzaListaProdottiCarrello();
 				if (richiestaCarrello == 0) { // richiesta svuotamento
 					this.avvioRimuoviProdottiDalCarrello(false, username, listaProdottiCarrello, prodottoSelezionato);
 				}
 				if (richiestaCarrello == 1 && prodottoSelezionato != null) { // richiesta rimozione
 					this.avvioRimuoviProdottiDalCarrello(true, username, listaProdottiCarrello, prodottoSelezionato);
+					richiestaRimozioneEffettuata = true;
+					this.avvioRimuoviProdottiDalCarrello();
+				}
+				if (richiestaCarrello == 1 && prodottoSelezionato != null) { // richiesta rimozione
+					richiestaRimozioneEffettuata = true;
+					this.avvioRimuoviProdottiDalCarrello();
 				}
 				if (richiestaCarrello == 2 && prodottoSelezionato != null) { // richiesta modifica quantità
 					do {
@@ -148,6 +172,7 @@ public class UiCarrello extends JOptionPane implements UiCarrelloInterfaccia
 					} while (richiestaQuantita != CLOSED_OPTION && esitoQuantita != 0);
 				}
 				if (richiestaCarrello == 3) { // richiesta ordine
+					richiestaOrdineEffettuata = true;
 					this.avvioEffettuaOrdine();
 				}
 				if ((richiestaCarrello == 1 || richiestaCarrello == 2) && prodottoSelezionato == null) {
@@ -321,7 +346,7 @@ public class UiCarrello extends JOptionPane implements UiCarrelloInterfaccia
 		// RF05: visualizza carrello
 		// autori: Bossola Fancesco, Oppezzo Raul
 
-		JTable carrelloTable = new JTable(listaProdottiCarrello.size(), 7) {
+		carrelloTable = new JTable(listaProdottiCarrello.size(), 7) {
 			public boolean editCellAt(int row, int column, java.util.EventObject e) {
 				return false;
 			}
@@ -353,7 +378,7 @@ public class UiCarrello extends JOptionPane implements UiCarrelloInterfaccia
 			carrelloTable.setValueAt(listaProdottiCarrello.get(i).get("quantitaProdotto").toString(), i, j);
 		}
 
-		JScrollPane carrelloPanel = new JScrollPane(carrelloTable);
+		carrelloPanel = new JScrollPane(carrelloTable);
 		carrelloPanel.setPreferredSize(new Dimension(250, 250));
 
 		richiestaCarrello = showOptionDialog(null, carrelloPanel, "Carrello (clicca X per uscire)",

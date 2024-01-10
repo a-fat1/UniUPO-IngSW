@@ -156,5 +156,5 @@ public class GestoreCarrelli implements GestoreCarrelliInterfaccia
 		System.out.println("Aggiornamento carrello riuscito.");
 
 		}
-		
+
 }
