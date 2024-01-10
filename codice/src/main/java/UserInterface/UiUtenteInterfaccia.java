@@ -8,5 +8,9 @@ public interface UiUtenteInterfaccia extends Remote
 {
 	void avvioCreaUtente(boolean cliente) throws RemoteException, NotBoundException;
 	void avvioBloccaSbloccaUtente(String username, boolean attivo) throws RemoteException;
-	void avvioAggiornaDomicilio() throws RemoteException;
+	/**
+	 * RF24: AggiornamentoDomicilio
+	 * Autore: Mondelli e Reci
+	 */
+	void avvioAggiornaDomicilio(String username, boolean nuovo) throws RemoteException;
 }
