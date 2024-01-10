@@ -108,7 +108,7 @@ public class UiUtente extends JOptionPane implements UiUtenteInterfaccia
 
 				gestoreAccessi.richiestaAttivazioneAccount(nome, cognome, tipoUtente);
 				gestoreAccessi.aggiuntaCredenziali(nome+"."+cognome);
-				uiLogin.avvioAggiornaUsername();
+				uiLogin.avvioAggiornaUsername(username);
 				uiLogin.avvioAggiornaPassword(false, username, "");
 			}
 
@@ -131,9 +131,14 @@ public class UiUtente extends JOptionPane implements UiUtenteInterfaccia
 		contentPane.add(lblNewLabel);
 
 		textFieldNome = new JTextField();
+		textFieldCognome = new JTextField();
 
 		//In caso di errore sul formato del nome, mostra all'utente il textField incriminato
-		if (esitoControllo==1) textFieldNome.setBackground(Color.YELLOW);
+		if (esitoControllo==1) {
+			textFieldNome.setBackground(Color.YELLOW);
+			textFieldNome.setText(nome);
+			textFieldCognome.setText(cognome);
+		}
 		else textFieldNome.setBackground(Color.WHITE);
 
 		contentPane.add(textFieldNome);
@@ -142,11 +147,13 @@ public class UiUtente extends JOptionPane implements UiUtenteInterfaccia
 		JLabel lblCognome = new JLabel("cognome");
 		lblCognome.setHorizontalAlignment(SwingConstants.LEFT);
 		contentPane.add(lblCognome);
-		
-		textFieldCognome = new JTextField();
 
 		//In caso di errore sul formato del cognome, mostra all'utente il textField incriminato
-		if (esitoControllo==2) textFieldCognome.setBackground(Color.YELLOW);
+		if (esitoControllo==2) {
+			textFieldCognome.setBackground(Color.YELLOW);
+			textFieldNome.setText(nome);
+			textFieldCognome.setText(cognome);
+		}
 		else textFieldCognome.setBackground(Color.WHITE);
 
 		contentPane.add(textFieldCognome);

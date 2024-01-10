@@ -46,6 +46,18 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 	private String nuovaPassword;
 	private int esitoControlloPassword;
 	private int richiesta;
+
+	//attributi
+	// RF23: Aggiorna Usernamme
+	private String nuovo_username;
+	private String messaggioUsername;
+	private int esito;
+	private int richiestaUsername;
+
+	//elementi grafici
+	// RF23: Aggiorna Username
+	private JTextField fieldUsername = new JTextField("", 15);
+	JPanel panel;
 	
 	// elementi grafici
 	// RF00: login (Codetta)
@@ -128,12 +140,13 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 		pulsantiMenuCliente[6] = "Prodotti piu' venduti";
 		pulsantiMenuCliente[7] = "Aggiorna domicilio";
 		
-		pulsantiMenuAmministratore = new String[5];
+		pulsantiMenuAmministratore = new String[6];
 		pulsantiMenuAmministratore[0] = "Aggiorna username";
 		pulsantiMenuAmministratore[1] = "Aggiorna password";
 		pulsantiMenuAmministratore[2] = "Crea utente";
 		pulsantiMenuAmministratore[3] = "Ricerca utente";
 		pulsantiMenuAmministratore[4] = "Ricerca notifiche";
+		pulsantiMenuAmministratore[5] = "Genera notifica";
 
 		menuLabel1 = new JLabel();
 		menuLabel2 = new JLabel("Seleziona servizio. (X per logout)");
@@ -197,7 +210,7 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 						{
 							this.mostraMenu((String)utente.get("nome"), ((String)utente.get("tipo")));
 							if (sceltaMenu==0)
-								this.avvioAggiornaUsername();
+								this.avvioAggiornaUsername(username);
 							if (sceltaMenu==1)
 								this.avvioAggiornaPassword(true,username,password);
 							if (sceltaMenu==2 && !((String)utente.get("tipo")).equals("amministratore"))
@@ -205,7 +218,7 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 							if (sceltaMenu==2 && ((String)utente.get("tipo")).equals("amministratore"))			
 								uiUtente.avvioCreaUtente(false);
 							if (sceltaMenu==3 && ((String)utente.get("tipo")).equals("cliente"))
-								uiCarrello.avvioVisualizzaCarrello();
+								uiCarrello.avvioVisualizzaCarrello(username);
 							if (sceltaMenu==3 && !((String)utente.get("tipo")).equals("cliente"))
 								uiRicerca.avvioRicercaUtente((String)utente.get("tipo"));
 							if (sceltaMenu==4 && ((String)utente.get("tipo")).equals("staff"))
@@ -226,6 +239,8 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 								uiProdotto.avvioIncrementaDecrementaPrezzi();
 							if (sceltaMenu==9 && ((String)utente.get("tipo")).equals("staff"))
 								uiRicerca.avvioProdottiInEsaurimento();
+							if (sceltaMenu==5 && ((String)utente.get("tipo")).equals("amministratore"))
+								uiNotifica.avvioGeneraNotifica("avviso", null);
 						}
 						while (sceltaMenu != -1);
 					}
@@ -326,8 +341,106 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 			sceltaMenu = -1;
 	}
 
-	public void avvioAggiornaUsername() throws RemoteException
-	{ 	// RF23
+	public void avvioAggiornaUsername(String vecchio_username) throws RemoteException
+	{ 	
+		// RF23: Aggiorna Username
+		//Brivio Marco, Serio Giulia
+		esito = 0;
+		nuovo_username = "";
+		do {
+			this.mostraFormCambio(vecchio_username);
+			if (nuovo_username != null) {
+				try {
+					boolean dup = gestoreAccessi.verificaDuplicato(nuovo_username);
+	
+					if (dup) {
+						mostraErroreInterfaccia(4);
+					} else {
+						esito = gestoreAccessi.verifica(vecchio_username, nuovo_username);
+						if (esito == 1 || esito == 2 || esito == 3) {
+							mostraErroreInterfaccia(esito);
+						} else {
+							try{
+								gestoreAccessi.cambio(vecchio_username, nuovo_username);
+							}catch(Exception e){
+								System.out.println("Aggiornamento effettuato");
+							}
+							messaggioUsername = ("Cambio avvenuto con successo!");
+							this.messaggio(messaggioUsername);
+							username = nuovo_username;
+							fieldUsername.setText("");
+						}
+					}
+				} catch (RemoteException e) {
+					messaggioUsername = ("Errore generale, riprovare");
+					this.showMessageDialog(null, messaggioUsername, "Errore", this.OK_OPTION);
+					fieldUsername.setText("");
+				}
+			}
+		} while (esito != 0);
+	}
+
+	private void mostraFormCambio(String vecchio) {
+		// RF23: Aggiorna Username
+		// Brivio Marco, Serio Giulia
+		panel = new JPanel(new GridLayout(4, 2));
+		panel.add(new JLabel("Username attuale: " + vecchio));
+		panel.add(new JPanel());
+		panel.add(new JPanel());
+		panel.add(new JPanel());
+		panel.add(new JLabel("Nuova username: "));
+		panel.add(fieldUsername);
+
+		richiestaUsername = JOptionPane.showConfirmDialog(
+				null,
+				panel,
+				"Cambio Username",
+				JOptionPane.OK_CANCEL_OPTION
+		);
+		if (richiestaUsername == JOptionPane.OK_OPTION) {
+			nuovo_username = fieldUsername.getText();
+		} else {
+			nuovo_username = null;
+		}
+    }
+	private void mostraErroreInterfaccia(int valore){
+		// RF23: Aggiorna Username
+		// Brivio Marco, Serio Giulia
+		switch (valore) {
+			case 1:
+				messaggioUsername = "Formato username errato\ndeve avere almeno 3 caratteri";
+				this.showMessageDialog(null, messaggioUsername, "Errore lunghezza", this.ERROR_MESSAGE);
+				fieldUsername.setBackground(Color.YELLOW);
+				fieldUsername.setText("");
+				break;
+			case 2:
+				messaggioUsername = "Lo username deve essere\ndiverso da quello vecchio";
+				this.showMessageDialog(null, messaggioUsername, "Errore username", this.ERROR_MESSAGE);
+				fieldUsername.setBackground(Color.YELLOW);
+				fieldUsername.setText("");
+				break;
+			case 3:
+				messaggioUsername = "Lo username deve essere\ndiverso da quello vecchio e\ndeve avere almeno 3 caratteri"; 
+				this.showMessageDialog(null, messaggioUsername, "Errore generale", this.ERROR_MESSAGE);
+				fieldUsername.setBackground(Color.YELLOW);
+				fieldUsername.setText("");
+				break;
+			case 4:
+				messaggioUsername = ("Lo username esiste già");
+				this.showMessageDialog(null, messaggioUsername, "Username duplicato", this.ERROR_MESSAGE);
+				fieldUsername.setBackground(Color.YELLOW);
+				fieldUsername.setText("");
+				break;
+			default:
+				break;
+		}
+	}
+
+	public void messaggio(String msg){
+		// RF23: Aggiorna Username
+		// Brivio Marco, Serio Giulia
+		this.showMessageDialog(null, msg, "Cambio avvenuto", this.INFORMATION_MESSAGE);
+		fieldUsername.setBackground(Color.WHITE);
 	}
 
 	public void avvioAggiornaPassword(Boolean loggato, String username, String password) throws RemoteException

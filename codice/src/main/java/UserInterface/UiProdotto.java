@@ -62,6 +62,7 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 	private JLabel messaggioErrore;
 	private JPanel erroreControlloPanel;
 
+<<<<<<< HEAD
 	//RF17 Incrementa/Decrementa prezzi
 	private JPanel increDecrePanel;
 	private JTextField percentualeField;
@@ -82,11 +83,16 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 	private boolean esito;
 	private int sceltaVoce;
 
+=======
+	private JLabel labelRimozione; //RF10
+	private JLabel labelRipristino; //RF10
+	private JPanel rimozionePanel;//RF10
+	private JPanel ripristinoPanel;//RF10
+>>>>>>> 069bda70328d624720c6e1f8e1ae6d9a1d87af10
 
 
 
 
-	
 	public UiProdotto(String hostGestore) throws RemoteException, NotBoundException
 	{
 		registryUI = LocateRegistry.getRegistry("127.0.0.1", 1100); // default: 1099
@@ -181,6 +187,7 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 		tipoProdottoCombo.setBorder(new EmptyBorder(5, 0, 0, 0));
 		nuovoProdottoPanel.add(tipoProdottoCombo, constraints);
 
+<<<<<<< HEAD
 		//RF17
 
 		increDecrePanel=new JPanel(new GridBagLayout());
@@ -212,10 +219,34 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 		constraintss.gridy=2;
 		increDecrePanel.add(increDecreRadioButton[1],constraintss);
 		
+=======
+		//RF10 (Filidoro Michele, Mahfoud Ayoub)
+		labelRimozione= new JLabel("Rimuovere prodotto dal catalogo?");
+		labelRipristino=new JLabel("Ripristinare prodotto nel catalogo?");
+		ripristinoPanel=new JPanel(new FlowLayout());
+		ripristinoPanel.add(labelRipristino);
+		rimozionePanel=new JPanel(new FlowLayout());
+		rimozionePanel.add(labelRimozione);
+>>>>>>> 069bda70328d624720c6e1f8e1ae6d9a1d87af10
 	}
 
-	public void avvioRimuoviRipristinaNelCatalogo() throws RemoteException
+	public void avvioRimuoviRipristinaNelCatalogo(Integer codProdotto, Integer Disponibile) throws RemoteException
 	{	// RF10
+		/*
+		switch (Disponibile) {
+			case 0 -> mostraFormRipristino(codProdotto);
+			case 1 -> mostraFormRimozione(codProdotto);
+			default -> mostraErroreDisponibile(codProdotto);
+		}
+		*/
+		switch (Disponibile) {
+			case 0: mostraFormRipristino(codProdotto);
+			break;
+			case 1: mostraFormRimozione(codProdotto);
+			break;
+			default: mostraErroreDisponibile(codProdotto);
+			break;
+		}
 	}
 
 	public void avvioAggiornaPrezzo() throws RemoteException
@@ -226,6 +257,12 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 		// RF15 (Nicolò Bianchetto, Kristian Rigo)
 		this.codProdotto = codProdotto;
 		mostraFormNuovaFornitura(nuovoProdotto);
+		dataFornituraField.setText("");
+		costoFornituraField.setText("");
+		quantitaFornituraField.setText("");
+		dataFornituraField.setBackground(Color.WHITE);
+		costoFornituraField.setBackground(Color.WHITE);
+		quantitaFornituraField.setBackground(Color.WHITE);
 	}
 
 	public void avvioNuovoProdotto() throws RemoteException
@@ -412,6 +449,7 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 		erroreControlloPanel.add(messaggioErrore);
 		showMessageDialog(null, erroreControlloPanel, "ERRORE (x o OK per confermare lettura)", JOptionPane.ERROR_MESSAGE);
 	}
+<<<<<<< HEAD
 	//RF17
 	private void mostraFormIncrementaDecrementa() throws RemoteException{
 		while((esito==false || sceltaVoce==-1)||(esito==false && sceltaVoce==-1)) {
@@ -497,4 +535,57 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 
 	}
 
+=======
+	//RF10
+	private void mostraFormRimozione(Integer codProdotto) throws RemoteException {
+		labelRimozione=new JLabel("Prodotto n."+codProdotto);
+		rimozionePanel.add(labelRimozione);
+		int scelta;
+		String[] scelte={"Annulla", "Conferma"};
+
+		scelta=this.showOptionDialog(null,rimozionePanel,"Rimozione Prodotto", this.DEFAULT_OPTION,this.QUESTION_MESSAGE,null,scelte,"Annulla");
+		if(scelta==JOptionPane.CLOSED_OPTION || scelta==0) return;
+		if(scelta==1){
+			gestoreProdotti.rimuoviProdotto(codProdotto);
+			mostraSuccessoRimozione(codProdotto);
+		}
+
+	}
+	//RF10
+	private void mostraFormRipristino(Integer codProdotto) throws RemoteException {
+
+		labelRipristino=new JLabel("Prodotto n."+codProdotto);
+		ripristinoPanel.add(labelRipristino);
+
+		int scelta;
+		String[] scelte={"Annulla", "Conferma"};
+
+		scelta=this.showOptionDialog(null,ripristinoPanel,"Ripristino Prodotto", this.DEFAULT_OPTION,this.QUESTION_MESSAGE,null,scelte,"Annulla");
+		if(scelta==JOptionPane.CLOSED_OPTION || scelta==0) return;
+		if(scelta==1){
+			gestoreProdotti.ripristinaProdotto(codProdotto);
+			mostraSuccessoRipristino(codProdotto);
+		}
+	}
+
+	//RF10
+	private void mostraSuccessoRipristino(Integer codProdotto){
+		String messaggio;
+		messaggio="Ripristino prodotto n." +codProdotto +" avvenuto con successo";
+		this.showMessageDialog(null,messaggio,"Esito ripristino", this.INFORMATION_MESSAGE,null);
+	}
+	//RF10
+	private void mostraSuccessoRimozione(Integer codProdotto){
+		String messaggio;
+		messaggio="Rimozione prodotto n." +codProdotto +" avvenuta con successo";
+		this.showMessageDialog(null,messaggio,"Esito rimozione", this.INFORMATION_MESSAGE,null);
+
+	}
+	//RF10
+	private void mostraErroreDisponibile(Integer codProdotto){
+		String messaggio;
+		messaggio="Valore 'Disponibile' per il prodotto n." +codProdotto+ " diverso da 0 o 1, correggere valore";
+		this.showMessageDialog(null,messaggio,"errore",this.ERROR_MESSAGE,null);
+	}
+>>>>>>> 069bda70328d624720c6e1f8e1ae6d9a1d87af10
 }

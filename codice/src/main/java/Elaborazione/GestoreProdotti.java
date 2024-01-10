@@ -55,7 +55,7 @@ public class GestoreProdotti implements GestoreProdottiInterfaccia {
 				LocalDateTime dataFin = LocalDateTime.of(LocalDate.parse(dataFine, formatter), LocalTime.MAX);
 
 				return dbProdotti.query(
-						"SELECT f.*, p.autore ,p.autore, p.editore FROM Fornitura AS f JOIN Prodotto AS p on f.codiceProdotto=p.codice WHERE f.dataFornitura BETWEEN '"
+						"SELECT f.*, p.autore ,p.titolo, p.editore FROM Fornitura AS f JOIN Prodotto AS p on f.codiceProdotto=p.codice WHERE f.dataFornitura BETWEEN '"
 								+ dataIn.format(stringFormatter) + "' AND '" + dataFin.format(stringFormatter) + "'");
 			} catch (RemoteException e) {
 				return new ArrayList<>();

@@ -1,10 +1,8 @@
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
+import org.junit.Test;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
-
-//import org.junit.jupiter.api.Test;
-import org.junit.Test;
 
 import DataBase.DbProdotti;
 import Elaborazione.GestoreCarrelli;
