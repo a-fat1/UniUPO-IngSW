@@ -55,8 +55,8 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 	private String nome;
 	private String cognome;
 	private String username;
-	private ArrayList<HashMap<String, Object>> elencoUtenti;
 	private String sceltaRicerca;
+	private int esitoControllo;
 
 	// RF19 - Ricerca Utente
 	// Array di String per i pulsanti di ricerca e le colonne per la tabella dei dati estratti dal database
@@ -154,10 +154,6 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 		pulsanteElencoUtentiStaff[1] = "Lista ordini";
 		pulsanteElencoUtentiAdmin = new String[1];
 		pulsanteElencoUtentiAdmin[0] = "Blocca\\Sblocca utente";
-
-		// RF19 - Ricerca Utente
-		// Inizializzazione di ArrayList per gli utenti trovati
-		elencoUtenti = new ArrayList<>();
 
 		//RF08
 		//if(ricercaPanel==null)
@@ -626,10 +622,14 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 		// RF19 - Ricerca Utente
 		// Riccardo Nazzari, Andrea Benedetto
 
-		// set di esitoControllo con valore iniziale
-		int esitoControllo = 0;
 		// set di sceltaUtente = 0 per iniziare il ciclo
 		sceltaUtente = 0;
+
+		// imposto esitoControllo = 0
+		esitoControllo = 0;
+
+		// ArrayList per elenco degli utenti
+		ArrayList<HashMap<String, Object>> elencoUtenti = new ArrayList<>();
 
 		// loop fino a quando il controllo non è positivo (o l'utente esce dalla finestra)
 		while((esitoControllo != 4) && (sceltaUtente != -1)){
@@ -667,7 +667,7 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 			}
 
 			// se il controllo è andato a buon fine e l'utente è dello staff, si ricercano gli utenti NON bloccati
-			if((esitoControllo == 4) && genereUtente.equals("staff"))
+			if((esitoControllo == 4) && genereUtente.equals("staff") && sceltaUtente != -1)
 			{
 				// ricerca per nome-cognome di utenti non bloccati
 				if(sceltaRicerca.equals("Ricerca per nome-cognome"))
@@ -682,7 +682,7 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 			}
 			// se il controllo è andato a buon fine e l'utente è amministratore, si ricercano gli utenti bloccati e
 			// non bloccati
-			else if((esitoControllo == 4) && genereUtente.equals("amministratore"))
+			else if((esitoControllo == 4) && genereUtente.equals("amministratore") && sceltaUtente != -1)
 			{
 				// ricerca per nome-cognome di utenti bloccati e non bloccati
 				if(sceltaRicerca.equals("Ricerca per nome-cognome"))
