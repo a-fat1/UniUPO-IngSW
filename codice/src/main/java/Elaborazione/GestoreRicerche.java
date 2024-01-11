@@ -317,7 +317,7 @@ public class GestoreRicerche implements GestoreRicercheInterfaccia
 		String comandoSql;
 		ArrayList<HashMap<String, Object>> utenti;
 
-		comandoSql = "SELECT Utente.nome, Utente.cognome, Utente.username, Utente.tipo, Credenziali.attivo\n" +
+		comandoSql = "SELECT Utente.nome, Utente.cognome, Utente.username, Utente.tipo\n" +
 				     "FROM Utente JOIN Credenziali ON Utente.username = Credenziali.username\n" +
 				     "WHERE Utente.username LIKE \""+ username + "%\" AND Credenziali.attivo == 1;";
 		utenti = dbUtenti.query(comandoSql);
@@ -341,7 +341,7 @@ public class GestoreRicerche implements GestoreRicercheInterfaccia
 		String comandoSql;
 		ArrayList<HashMap<String, Object>> utenti;
 
-		comandoSql = "SELECT Utente.nome, Utente.cognome, Utente.username, Utente.tipo, Credenziali.attivo\n" +
+		comandoSql = "SELECT Utente.nome, Utente.cognome, Utente.username, Utente.tipo\n" +
 				     "FROM Utente JOIN Credenziali ON Utente.username = Credenziali.username\n" +
 				     "WHERE Utente.nome LIKE \""+ nome + "%\" AND Utente.cognome LIKE \""+ cognome + "%\" AND CREDENZIALI.attivo == 1;";
 		utenti = dbUtenti.query(comandoSql);
