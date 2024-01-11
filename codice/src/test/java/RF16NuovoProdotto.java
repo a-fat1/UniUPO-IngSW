@@ -1,10 +1,11 @@
-import static org.junit.Assert.*;
-import org.junit.Test;
-
 import DataBase.DbProdotti;
 import Elaborazione.GestoreProdotti;
+import org.junit.Test;
+
 import java.rmi.RemoteException;
 import java.util.HashMap;
+
+import static org.junit.Assert.*;
 
 
 public class RF16NuovoProdotto {
@@ -13,7 +14,7 @@ public class RF16NuovoProdotto {
     GestoreProdotti gestoreProdotti = new GestoreProdotti(dbProdotti);
 
     @Test
-    public void testVerificaCampi()
+    public void testVerificaCampi() throws RemoteException
     {
         // OK
         assertEquals(0, gestoreProdotti.verificaCampi(new String[]{"autore"}, "titolo", "editore", 2007));

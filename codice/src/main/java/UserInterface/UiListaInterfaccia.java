@@ -7,8 +7,9 @@ import java.util.HashMap;
 
 public interface UiListaInterfaccia extends Remote
 {
-	void avvioListaOrdini() throws RemoteException;
-	void avvioListaPagamenti() throws RemoteException;
+	// RF11 Marino-Vecchio
+	void avvioListaOrdini(String username, int codiceProdotto) throws RemoteException;
+	void avvioListaPagamenti(String username) throws RemoteException;
 
 	// RF 13 Benetti-Chiappa
 	void avvioListaForniture( int  codice) throws RemoteException; ;
