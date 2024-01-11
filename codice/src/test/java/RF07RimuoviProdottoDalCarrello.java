@@ -18,7 +18,7 @@ public class RF07RimuoviProdottoDalCarrello {
     
 	@Test
 	public void testRimozioneProdottoDalCarrello() throws RemoteException {
-		Carrello = gestoreCarrelli.cercaElementi(username);
+		Carrello = gestoreCarrelli.cercaProdottiCarrello(username);
 		if(Carrello.size() == 0) return;
 		valorePrevisto = Carrello.size() - 1;
 		
@@ -29,7 +29,7 @@ public class RF07RimuoviProdottoDalCarrello {
 	
 	@Test
 	public void testSvuotaCarrello() throws RemoteException {
-		Carrello = gestoreCarrelli.cercaElementi(username);
+		Carrello = gestoreCarrelli.cercaProdottiCarrello(username);
 		valorePrevisto = 0;
 		
 		gestoreCarrelli.svuotaCarrello(Carrello, username);
