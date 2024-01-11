@@ -12,23 +12,23 @@ public class RF14AggiornaPrezzo
     //========================================================================
     
     @Test
-    public void TestRF14_ControlloFormatoModificaPrezzo1()
+    public void TestControlloFormatoModificaPrezzo1()
     {
         //errore negativo
-         assertEquals("erroreNegativo", gestoreProdotti.Rf14_ControlloFormatoModificaPrezzo(-123, 69));
+         assertEquals(1, gestoreProdotti.controlloFormatoModificaPrezzo(-123, 69));
     }
 
     @Test
-    public void TestRF14_ControlloFormatoModificaPrezzo2()
+    public void TestControlloFormatoModificaPrezzo2()
     {
         //errore non modificato
-        assertEquals("erroreNonModificato", gestoreProdotti.Rf14_ControlloFormatoModificaPrezzo(2, 2));
+        assertEquals(2, gestoreProdotti.controlloFormatoModificaPrezzo(2, 2));
     }
 
     @Test
-    public void TestRF14_ControlloFormatoModificaPrezzo3()
+    public void TestControlloFormatoModificaPrezzo3()
     {
         //corretto
-        assertEquals("OK", gestoreProdotti.Rf14_ControlloFormatoModificaPrezzo(5, 2));
+        assertEquals(0, gestoreProdotti.controlloFormatoModificaPrezzo(5, 2));
     }
 }
