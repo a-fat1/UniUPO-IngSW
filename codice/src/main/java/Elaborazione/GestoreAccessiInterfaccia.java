@@ -16,12 +16,6 @@ public interface GestoreAccessiInterfaccia extends Remote
    int verificaCredenziali(String password, String passwordAttuale) throws RemoteException;
    int controlloNuovaPassword(String nuovaPassword) throws RemoteException;
    void AggiornaPassword(String username, String nuovaPassword) throws RemoteException;
-
-   boolean verificaDuplicato(String nuovoUsername) throws RemoteException;
-
-   int verifica(String vecchioUsername, String nuovoUsername) throws RemoteException;
-
-
    
    //RF02
    int controlloFormatoNomeCognome(String nome, String cognome)throws RemoteException;
