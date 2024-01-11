@@ -749,25 +749,25 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 
 		switch (tipo) {
 			case 1: {
-				messaggio = "format username errato: assicurati di inserire\nalmeno tre caratteri nel campo \"username\".";
-				showMessageDialog(null, messaggio, "errore username (clicca X per chiudere)", ERROR_MESSAGE);
+				messaggio = "Format username errato: assicurati di inserire\nalmeno tre caratteri nel campo \"username\".";
+				showMessageDialog(null, messaggio, "Errore username (clicca X per chiudere)", ERROR_MESSAGE);
 				break;
 			}
 			case 2: {
-				messaggio = "format nome errato: assicurati di inserire\nalmeno tre caratteri nel campo \"nome\" e di\n" +
-						    "inserire solo caratteri letterali";
-				showMessageDialog(null, messaggio, "errore nome (clicca X per chiudere)", ERROR_MESSAGE);
+				messaggio = "Format nome errato: assicurati di inserire\nalmeno tre caratteri nel campo \"nome\" e di\n" +
+						    "inserire solo caratteri letterali.";
+				showMessageDialog(null, messaggio, "Errore nome (clicca X per chiudere)", ERROR_MESSAGE);
 				break;
 			}
 			case 3: {
-				messaggio = "format cognome errato: assicurati di inserire\nalmeno tre caratteri nel campo \"cognome\" e di\n" +
-						    "inserire solo caratteri letterali";
-				showMessageDialog(null, messaggio, "errore cognome (clicca X per chiudere)", ERROR_MESSAGE);
+				messaggio = "Format cognome errato: assicurati di inserire\nalmeno tre caratteri nel campo \"cognome\" e di\n" +
+						    "inserire solo caratteri letterali.";
+				showMessageDialog(null, messaggio, "Errore cognome (clicca X per chiudere)", ERROR_MESSAGE);
 				break;
 			}
 			case 5: {
-				messaggio = "Non sono stati trovati risultati per la tua ricerca";
-				showMessageDialog(null, messaggio, "nessun risultato (clicca X per chiudere)", ERROR_MESSAGE);
+				messaggio = "Non sono stati trovati risultati per la tua ricerca.";
+				showMessageDialog(null, messaggio, "Nessun risultato (clicca X per chiudere)", ERROR_MESSAGE);
 				break;
 			}
 
