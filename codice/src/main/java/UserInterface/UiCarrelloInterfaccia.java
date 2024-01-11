@@ -1,13 +1,27 @@
 package UserInterface;
 
 import java.rmi.Remote; 
-import java.rmi.RemoteException; 
+import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.HashMap; 
 
 public interface UiCarrelloInterfaccia extends Remote
 {
-	void avvioVisualizzaCarrello() throws RemoteException;
+	// RF05: Visualizza Carrello
+	// autori: Bossola Francesco, Oppezzo Raul
+	void avvioVisualizzaCarrello(String username) throws RemoteException;
+
 	void avvioEffettuaOrdine() throws RemoteException;
-	void avvioRimuoviProdottiDalCarrello() throws RemoteException;
-	void avvioAggiungiAlCarrello() throws RemoteException;
+	
+	
+    // RF07: rimuovi prodotto dal carrello
+ 	// autori: Simone Aldo Borsa, Andrea Padoan
+	void avvioRimuoviProdottiDalCarrello(boolean tipoDiRimozione, String username, ArrayList<HashMap<String, Object>> carrello, HashMap<String, Object> prodotto) throws RemoteException;
+	
+	
+	void avvioAggiungiAlCarrello(String username, int codiceProdotto) throws RemoteException;
+	public void mostraForm() throws RemoteException;
+	public void mostraErrore(int numberError) throws RemoteException;
+
 }
 
