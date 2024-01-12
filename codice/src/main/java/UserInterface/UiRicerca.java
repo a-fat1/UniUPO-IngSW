@@ -335,7 +335,7 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 				break;
 			case _AGGIORNA_PREZZO:
 				//RF14
-				//uiProdotto.avvioAggiornaPrezzo(prodotto);
+				uiProdotto.avvioAggiornaPrezzo(prodotto);
 				break;
 			case _RIMUOVI_RIPRISTINA:
 				//RF10
