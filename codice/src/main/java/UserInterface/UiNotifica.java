@@ -180,12 +180,12 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 		switch (tipoNotifica) {
 			case "nuovo prodotto":
 				testoNotifica = gestoreNotifiche.generaTestoNotificaProdotto(oggetto);
-				loopVerificaDatiNotifica();
+				loopVerificaDatiNotifica(tipoNotifica);
 				gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), dataScadenza, testoField.getText(), "cliente");
 				break;
 			case "avviso":
 				testoNotifica = gestoreNotifiche.generaTestoNotificaAvviso();
-				loopVerificaDatiNotifica();
+				loopVerificaDatiNotifica(tipoNotifica);
 				gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), dataScadenza, testoField.getText(), "tutti");
 				break;
 			case "nuovo ordine":
@@ -207,7 +207,7 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 	 * @author Linda Monfermoso, Gabriele Magenta Biasina
 	 * @throws RemoteException
 	 */
-	private void loopVerificaDatiNotifica() throws RemoteException {
+	private void loopVerificaDatiNotifica(String tipoNotifica) throws RemoteException {
 		do {
 			this.mostraFormNotifica(this.testoNotifica);
 			this.testoNotifica = testoField.getText();
@@ -215,6 +215,10 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 			if (esitoVerifica.contains("errore")) {
 				mostraErrore(esitoVerifica);
 			}
+			if(tipoNotifica.equals("avviso")){
+				mostraErrore(tipoNotifica);
+			}
+
 		} while (!Objects.equals(esitoVerifica, "ok"));
 	}
 
@@ -250,6 +254,12 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 	// YELLOW per quanto riguarda errori di inserimento/sintassi
 	// RED per quanto riguarda il mancato inserimento
 		switch(tipoErrore) {
+			case "errore avviso":
+				messaggio="non è possibile annullare l'inserimento.\n(clicca ok o X per continuare)";
+				dataField.setBackground(Color.RED);
+				oraField.setBackground(Color.RED);
+				testoField.setBackground(Color.RED);
+				break;
 			case "errore formato data":
 				messaggio = "La data fornita non e' in formato YYYY-MM-DD.\n(clicca ok o X per continuare)";
 				dataField.setBackground(Color.YELLOW);
@@ -266,6 +276,7 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 				messaggio = "Il testo della notifica non può essere vuoto.\n(clicca ok o X per continuare)";
 				testoField.setBackground(Color.RED);
 				break;
+
 		}
 		this.showMessageDialog(null, messaggio, "Errore", this.ERROR_MESSAGE, null);
 	}
