@@ -5,7 +5,6 @@ import java.rmi.server.UnicastRemoteObject;
 import java.rmi.RemoteException; 
 import java.rmi.NotBoundException; 
 import java.rmi.AlreadyBoundException;
-import java.util.HashMap;
 
 import javax.swing.JFrame;
 
@@ -168,9 +167,9 @@ public class Prototipo extends JFrame
 
 			uiLogin = new UiLogin(host);
 			stubUiLogin = (UiLoginInterfaccia) UnicastRemoteObject.exportObject(uiLogin, 2007);	
-			registryUI.bind("uiLogin", stubUiLogin);
-			uiLogin.avvioLogin();
+ 	      	        registryUI.bind("uiLogin", stubUiLogin);
 
+			uiLogin.avvioLogin();	
 			System.exit(0);
 		}
   	}
