@@ -38,6 +38,14 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 	private HashMap<String, String> dataPubblicazione;
 	private String esitoVerifica;
 	private String testoNotifica;
+	
+	// RF21: RicercaNotifiche (Caviggia, Colombo)
+	private String dataPubblicazioneRF21;
+	private String dataScadenzaRF21;
+	private String tipoUtente = "";
+	private ArrayList<HashMap<String, Object>> notifica;
+	private String esitoControllo;
+	private int sceltaRF21;
 
 
 	// elementi grafici
@@ -52,6 +60,17 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 	// RF01 Galletti-Calcaterra
 	JPanel pannello = new JPanel(); // Nuova finestra
 	JScrollPane pannello_tabella;
+	
+	// RF21: RicercaNotifiche (Caviggia, Colombo)
+	private JLabel titoloLabel;
+	private JLabel dataPubblicazioneLabel;
+	private JLabel dataScadenzaLabel;
+	private JTextField dataPubblicazioneField;
+	private JTextField dataScadenzaField;
+	private JLabel tipoUtenteLabel;
+	private JButton cercaButton;
+	private JPanel mostraFormRicercaNotifichePanel;
+	private JCheckBox[] check;
 
 
 	public UiNotifica(String hostGestore) throws RemoteException, NotBoundException
@@ -63,6 +82,9 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 		gestoreNotifiche = (GestoreNotificheInterfaccia) registryGestore.lookup("gestoreNotifiche");
 
 		inizializzaUIRF04();
+		
+		// RF21: RicercaNotifiche (Caviggia, Colombo)
+		inizializzaUIRF21();
 	}
 
 	public void avvioVisualizzaNotifiche(String tipoUtente) throws RemoteException
@@ -259,10 +281,6 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 		return scelta;
 	}
 
-	public void avvioRicercaNotifiche() throws RemoteException
-	{ 	// RF21	
-	}
-
 	/**
 	 * RF04: Mostra una schermata di errore contenente informazioni riguardo all'errore riscontrato durante la generazione di una notifica.
 	 *
@@ -314,5 +332,170 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 
 		return dataScadenza;
 	}
+	
+	
+	public void inizializzaUIRF21(){
+		// RF21: RicercaNotifiche (Caviggia, Colombo)
+
+		titoloLabel = new JLabel("Inserire data di pubblicazione, data di scadenza e tipo utente");
+		dataPubblicazioneLabel = new JLabel("Data di pubblicazione (aaaa-mm-gg): ");
+		dataScadenzaLabel = new JLabel("Data di scadenza (aaaa-mm-gg): ");
+		dataPubblicazioneField = new JTextField("" ,10);
+		dataScadenzaField = new JTextField("", 10);
+		tipoUtenteLabel = new JLabel("Tipo utente: ");
+		cercaButton = new JButton("Cerca");
+		check = new JCheckBox[4];
+		check[0] = new JCheckBox("tutti");
+		check[1] = new JCheckBox("amministratore");
+		check[2] = new JCheckBox("cliente");
+		check[3] = new JCheckBox("staff");
+		mostraFormRicercaNotifichePanel = new JPanel(new GridBagLayout());
+		GridBagConstraints constraints = new GridBagConstraints();
+		GridBagConstraints constraintsForField = new GridBagConstraints();
+
+		constraints.anchor = GridBagConstraints.WEST;
+		constraintsForField.anchor = GridBagConstraints.EAST;
+		constraints.gridy = 0;
+		constraints.gridx = 0;
+		constraints.gridwidth = GridBagConstraints.REMAINDER;
+		constraints.insets = new Insets(0, 0, 10, 0);
+		mostraFormRicercaNotifichePanel.add(titoloLabel, constraints);
+		constraints.gridy = 2;
+		constraints.gridx = 0;
+		constraints.insets = new Insets(0, 0, 0, 0);
+		mostraFormRicercaNotifichePanel.add(dataPubblicazioneLabel, constraints);
+		constraintsForField.gridy = 2;
+		constraintsForField.gridx = 1;
+		constraints.insets = new Insets(0, 0, 0, 0);
+		mostraFormRicercaNotifichePanel.add(dataPubblicazioneField, constraintsForField);
+		constraints.gridy = 3;
+		constraints.gridx = 0;
+		constraints.insets = new Insets(0, 0, 10, 0);
+		mostraFormRicercaNotifichePanel.add(dataScadenzaLabel, constraints);
+		constraintsForField.gridy = 3;
+		constraintsForField.gridx = 1;
+		constraints.insets = new Insets(0, 0, 10, 0);
+		mostraFormRicercaNotifichePanel.add(dataScadenzaField, constraintsForField);
+		constraints.gridy = 5;
+		constraints.gridx = 0;
+		constraints.insets = new Insets(0, 0, 0, 0);
+		mostraFormRicercaNotifichePanel.add(tipoUtenteLabel, constraints);
+		constraints.gridy = 6;
+		constraints.gridx = 0;
+		constraints.insets = new Insets(0, 0, 0, 0);
+		mostraFormRicercaNotifichePanel.add(check[0], constraints);
+		constraints.gridy = 7;
+		constraints.gridx = 0;
+		constraints.insets = new Insets(0, 0, 0, 0);
+		mostraFormRicercaNotifichePanel.add(check[1], constraints);
+		constraints.gridy = 8;
+		constraints.gridx = 0;
+		constraints.insets = new Insets(0, 0, 0, 0);
+		mostraFormRicercaNotifichePanel.add(check[2], constraints);
+		constraints.gridy = 9;
+		constraints.gridx = 0;
+		constraints.insets = new Insets(0, 0, 0, 0);
+		mostraFormRicercaNotifichePanel.add(check[3], constraints);
+	}
+	
+	private void mostraFormRicercaNotifiche() throws RemoteException {
+		// RF21: RicercaNotifiche (Caviggia, Colombo)
+		sceltaRF21 = JOptionPane.OK_OPTION;
+		dataPubblicazioneRF21 = "";
+		dataScadenzaRF21 = "";
+		tipoUtente = "";
+		sceltaRF21 = showConfirmDialog(null, mostraFormRicercaNotifichePanel, "Ricerca notifiche", JOptionPane.OK_CANCEL_OPTION);
+		dataPubblicazioneRF21 = dataPubblicazioneField.getText();
+		dataScadenzaRF21 = dataScadenzaField.getText();
+
+
+		for(int i = 0; i < 3; i++){
+			if(check[i].isSelected()){
+				tipoUtente = check[i].getText();
+			}
+		}
+
+		if(sceltaRF21 == CANCEL_OPTION)
+			return;
+
+		if(tipoUtente.isEmpty())
+			mostraErroreRF21("Selezionare un tipo utente!");
+	
+	}
+	
+	public void avvioRicercaNotifiche() throws RemoteException
+	{
+		// RF21: RicercaNotifiche (Caviggia, Colombo)
+		do {
+			mostraFormRicercaNotifiche();
+			if(sceltaRF21 == CANCEL_OPTION || sceltaRF21 == CLOSED_OPTION)
+				break;
+			esitoControllo = gestoreNotifiche.controlloParametri(dataPubblicazioneRF21, dataScadenzaRF21);
+			if(esitoControllo.equals("Date non valide!") || esitoControllo.equals("Formato data non valido!") || esitoControllo.equals("Manca una data!"))
+				this.mostraErroreRF21(esitoControllo);
+			else{
+				notifica = gestoreNotifiche.cercaNotifiche(dataPubblicazioneRF21, dataScadenzaRF21, tipoUtente);
+				System.out.println(notifica);
+				if(notifica.isEmpty()){
+					this.mostraErroreRF21("Nessuna notifica trovata!");
+				}
+				else
+					this.mostraNotificheRF21(notifica);
+			}
+		} while(sceltaRF21 == OK_OPTION && ( esitoControllo.equals("Date non valide!") || esitoControllo.equals("Formato data non valido!") || esitoControllo.equals("Manca una data!") || notifica.isEmpty()));
+	
+	}
+	
+	private void mostraErroreRF21(String esitoControllo) {
+		// RF21: RicercaNotifiche (Caviggia, Colombo)
+		String messaggio = "";
+		switch (esitoControllo) {
+			case "Date non valide!":
+				messaggio = "La data di pubblicazione non può essere successiva alla data di scadenza!";
+				break;
+			case "Formato data non valido!":
+				messaggio = "Formato data non valido!";
+				break;
+			case "Manca una data!":
+				messaggio = "Manca una data!";
+				break;
+			case "Nessuna notifica trovata!":
+				messaggio = "Nessuna notifica trovata!";
+				break;
+			case "Selezionare un tipo utente!":
+				messaggio = "Selezionare un tipo utente!";
+				break;
+		}
+
+		showMessageDialog(null, messaggio, "Errore", JOptionPane.ERROR_MESSAGE, null);
+	}
+
+	public void mostraNotificheRF21(ArrayList<HashMap<String, Object>> notifica){
+		// RF21: RicercaNotifiche (Caviggia, Colombo)
+		int dim = notifica.size();
+
+		JTable tabellaRF21 = new JTable(dim, 4);
+
+		tabellaRF21.getColumnModel().getColumn(0).setPreferredWidth(100);
+		tabellaRF21.getColumnModel().getColumn(1).setPreferredWidth(100);
+		tabellaRF21.getColumnModel().getColumn(2).setPreferredWidth(100);
+		tabellaRF21.getColumnModel().getColumn(3).setPreferredWidth(300);
+		tabellaRF21.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+
+		for (int i = 0; i < dim; i++) {
+			String dataPubblicazione = (String) notifica.get(i).get("dataPubblicazione");
+			String dataScadenza = (String) notifica.get(i).get("dataScadenza");
+			String tipoUtente = (String) notifica.get(i).get("tipoUtente");
+			String testo = (String) notifica.get(i).get("testo");
+
+			tabellaRF21.setValueAt(dataPubblicazione, i, 0);
+			tabellaRF21.setValueAt(dataScadenza, i, 1);
+			tabellaRF21.setValueAt(tipoUtente, i, 2);
+			tabellaRF21.setValueAt(testo, i, 3);
+		}
+		showMessageDialog(null, tabellaRF21, "Notifiche trovate", JOptionPane.INFORMATION_MESSAGE, null);
+	}
+
+
 
 }
