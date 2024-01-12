@@ -96,17 +96,17 @@ public class GestoreNotifiche implements GestoreNotificheInterfaccia {
         //Colombo Giacomo, Riccardo Caviggia
 
         if (dataPubblicazione == null || dataScadenza == null || dataPubblicazione.isEmpty() || dataScadenza.isEmpty())
-            throw new IllegalArgumentException("Manca una data!");
+            return "Manca una data!";
         else {
             try {
                 LocalDate pubblicazione = LocalDate.parse(dataPubblicazione, FORMATO_DATA);
                 LocalDate scadenza = LocalDate.parse(dataScadenza, FORMATO_DATA);
 
                 if (pubblicazione.isAfter(scadenza))
-                    throw new IllegalArgumentException("Date non valide!");
+                    return "Date non valide!";
                 else return "Date corrette!";
             } catch (DateTimeParseException e) {
-                throw new IllegalArgumentException("Formato data non valido!");
+                return "Formato data non valido!";
             }
         }
     }
@@ -119,7 +119,7 @@ public class GestoreNotifiche implements GestoreNotificheInterfaccia {
         String comandoSql;
         ArrayList<HashMap<String, Object>> notifica = null;
 
-        comandoSql = "SELECT * FROM Notifica WHERE dataPubblicazione = \"" + dataPubblicazione + "\" AND dataScadenza = \"" + dataScadenza + "\" AND tipoUtente = \"" + tipoUtente + "\" ;";
+        comandoSql = "SELECT * FROM Notifica WHERE dataPubblicazione BETWEEN \""  +dataPubblicazione + " 00:00:00\" AND \"" + dataPubblicazione + " 23:59:59\" AND dataScadenza BETWEEN \"" + dataScadenza + " 00:00:00 \" AND \"" + dataScadenza + " 23:59:59 \" AND tipoUtente = \"" + tipoUtente + "\" ;";
 
         try {
             notifica = dbNotifiche.query(comandoSql);
