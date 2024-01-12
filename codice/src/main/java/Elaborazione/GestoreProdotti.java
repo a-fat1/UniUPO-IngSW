@@ -231,4 +231,31 @@ public class GestoreProdotti implements GestoreProdottiInterfaccia {
 			//RF17 Incrementea/Decrementa
 			dbProdotti.update("UPDATE Prodotto SET prezzo = prezzo * (1 - " + Percentuale + " / 100)");
 	}
+
+	public int controlloFormatoModificaPrezzo(float prezzoNuovo, float prezzoVecchio)
+	{	
+		//RF14
+		
+		int controllo;
+
+		if(prezzoNuovo <= 0)
+			controllo = 1;
+		else if(prezzoNuovo == prezzoVecchio)
+		{
+			controllo = 2;
+		}
+		else 
+		{
+			controllo = 0;
+		}
+		
+		return controllo;
+	}
+
+	public void modificaPrezzo(float prezzo, int codice) throws RemoteException
+	{
+		//RF14
+		String query = "UPDATE Prodotto SET prezzo ="+prezzo+" WHERE codice ="+codice;
+		dbProdotti.update(query);
+	}
 }
