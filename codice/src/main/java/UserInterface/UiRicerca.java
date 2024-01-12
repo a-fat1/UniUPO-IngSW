@@ -58,6 +58,8 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 	private String sceltaRicerca;
 	private int esitoControllo;
 
+	ArrayList<HashMap<String, Object>> elencoUtenti;
+
 	// RF19 - Ricerca Utente
 	// Array di String per i pulsanti di ricerca e le colonne per la tabella dei dati estratti dal database
 	private final String[] pulsanteRicerca;
@@ -154,6 +156,9 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 		pulsanteElencoUtentiStaff[1] = "Lista ordini";
 		pulsanteElencoUtentiAdmin = new String[1];
 		pulsanteElencoUtentiAdmin[0] = "Blocca\\Sblocca utente";
+
+		// ArrayList per elenco degli utenti
+		elencoUtenti = new ArrayList<>();
 
 		//RF08
 		//if(ricercaPanel==null)
@@ -627,9 +632,6 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 
 		// imposto esitoControllo = 0
 		esitoControllo = 0;
-
-		// ArrayList per elenco degli utenti
-		ArrayList<HashMap<String, Object>> elencoUtenti = new ArrayList<>();
 
 		// loop fino a quando il controllo non è positivo (o l'utente esce dalla finestra)
 		while((esitoControllo != 4) && (sceltaUtente != -1)){
