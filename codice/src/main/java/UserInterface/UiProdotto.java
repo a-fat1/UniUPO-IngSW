@@ -32,7 +32,8 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 
 	//RF14: aggiornaPrezzo
 	private int richiesta;
-	private float prezzo;
+	private float prezzoNuovoVal;
+	private float prezzoVecchioVal;
 	private int controllo;
 	
 	// elementi grafici
@@ -277,21 +278,23 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 	public void avvioAggiornaPrezzo(HashMap<String, Object> P) throws RemoteException
 	{
 		//RF14
+
+		prezzoVecchioVal = ((Double)P.get("prezzo")).floatValue();
 		do{
 			controllo = 0;
 			mostraFormAggiornaPrezzo(P);
-			if(richiesta==0 && (float)P.get("prezzo")==0){
+			if(richiesta==0 && prezzoVecchioVal==0){
 				mostraErrore(3);
 			}
 			else{
 				if(richiesta==1){
 					try{
-						prezzo = Float.parseFloat(prezzoNuovoField.getText());
-						controllo = gestoreProdotti.controlloFormatoModificaPrezzo(prezzo,(float)P.get("prezzo"));
+						prezzoNuovoVal = Float.parseFloat(prezzoNuovoField.getText());
+						controllo = gestoreProdotti.controlloFormatoModificaPrezzo(prezzoNuovoVal,prezzoVecchioVal);
 						if(controllo==1 || controllo==2)
 							mostraErrore(controllo);
 						else{
-							gestoreProdotti.modificaPrezzo(prezzo, (int)P.get("codice"));
+							gestoreProdotti.modificaPrezzo(prezzoNuovoVal, (int)P.get("codice"));
 							mostraMessaggio("Modifica confermata");
 						}
 					}
@@ -301,13 +304,13 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 					}
 				}
 			}
-		}while((richiesta==0 && (float)P.get("prezzo")==0) || controllo!=0);
+		}while((richiesta==0 && prezzoVecchioVal==0) || controllo!=0);
 	}
 
 	private void mostraFormAggiornaPrezzo(HashMap<String,Object> P) throws RemoteException
 	{
 		//RF14
-		prezzoVecchio.setText(P.get("prezzo").toString());
+		prezzoVecchio.setText(Float.toString(prezzoVecchioVal));
 		richiesta = this.showOptionDialog(null, modificaPrezzoPanel, "Aggiorna prezzo (clicca su X o annulla per uscire)", DEFAULT_OPTION, QUESTION_MESSAGE, null, pulsantiAggiornaPrezzo, "Modifica");
 	}
 
