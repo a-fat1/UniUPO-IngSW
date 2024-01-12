@@ -84,14 +84,16 @@ public class GestoreCarrelli implements GestoreCarrelliInterfaccia
 
 		if(carrello.size() == 0) return;
 		
-		dbProdotti.update("UPDATE Prodotto "
-				+ "SET Prodotto.quantita = "
-				+ elemento.get("quantita") + (int) elemento.get("quantitaProdotto")
-				+ "WHERE Carrello.codiceProdotto = " + elemento.get("codiceProdotto") + ";");
-		
-		dbProdotti.update("DELETE FROM Carrello "
-				+ "WHERE Carrello.username = \"" + username
-				+ "\" AND Carrello.codiceProdotto = " + elemento.get("codice") + ";");
+//		Codice commentato per evitare di modificare il database in fase di testing
+//		
+//		dbProdotti.update("UPDATE Prodotto "
+//				+ "SET Prodotto.quantita = "
+//				+ elemento.get("quantita") + (int) elemento.get("quantitaProdotto")
+//				+ "WHERE Carrello.codiceProdotto = " + elemento.get("codiceProdotto") + ";");
+//		
+//		dbProdotti.update("DELETE FROM Carrello "
+//				+ "WHERE Carrello.username = \"" + username
+//				+ "\" AND Carrello.codiceProdotto = " + elemento.get("codice") + ";");
 		
 		carrello.remove(elemento);
 	}
@@ -102,15 +104,17 @@ public class GestoreCarrelli implements GestoreCarrelliInterfaccia
 		
 		if(carrello.size() == 0) return;
 		
-		for(HashMap<String, Object> elemento : carrello) {
-			dbProdotti.update("UPDATE Prodotto "
-					+ "SET Prodotto.quantita = "
-					+ elemento.get("quantita") + (int) elemento.get("quantitaProdotto")
-					+ "WHERE Carrello.codiceProdotto = " + elemento.get("codiceProdotto") + ";");
-		}
-		
-		dbProdotti.update("DELETE FROM Carrello "
-				+ "WHERE Carrello.username = \"" + username + ";");
+//		Codice commentato per evitare di modificare il database in fase di testing
+//	
+//		for(HashMap<String, Object> elemento : carrello) {
+//			dbProdotti.update("UPDATE Prodotto "
+//					+ "SET Prodotto.quantita = "
+//					+ elemento.get("quantita") + (int) elemento.get("quantitaProdotto")
+//					+ "WHERE Carrello.codiceProdotto = " + elemento.get("codiceProdotto") + ";");
+//		}
+//		
+//		dbProdotti.update("DELETE FROM Carrello "
+//				+ "WHERE Carrello.username = \"" + username + ";");
 		
 		carrello.clear();
 	}
