@@ -457,7 +457,7 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 					}
 				}
 				if(richiesta==CANCEL_OPTION || richiesta==DEFAULT_OPTION){
-					return username;
+					return password;
 				}
 			} while(esitoControlloPassword!=0);
 		}
@@ -469,7 +469,7 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 
 			if(loggato) {
 				if (richiesta == CANCEL_OPTION || richiesta == DEFAULT_OPTION) {
-					return username;
+					return password;
 				}
 			}
 			if(esitoControlloPassword==1){
@@ -483,11 +483,12 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 			}
 			if(esitoControlloPassword==0){
 				gestoreAccessi.AggiornaPassword(username, nuovaPassword);
+				password=nuovaPassword;
 				this.mostraMessaggioDiSuccesso();
             }
 
 		}while (esitoControlloPassword!=0);
-		return nuovaPassword;
+		return password;
 	}
 
 	private void mostraFormPasswordAttuale(){
