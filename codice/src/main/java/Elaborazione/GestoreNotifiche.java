@@ -16,7 +16,7 @@ import DataBase.*;
 public class GestoreNotifiche implements GestoreNotificheInterfaccia {
     private Registry registry;
     private DbNotificheInterfaccia dbNotifiche;
-    private DateTimeFormatter FORMATO_DATA = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    private DateTimeFormatter FORMATO_DATA = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
 
     public GestoreNotifiche(String host) throws RemoteException, NotBoundException {
