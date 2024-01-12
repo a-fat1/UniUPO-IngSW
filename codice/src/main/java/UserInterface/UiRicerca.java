@@ -58,7 +58,7 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 	private String sceltaRicerca;
 	private int esitoControllo;
 
-	ArrayList<HashMap<String, Object>> elencoUtenti;
+	private ArrayList<HashMap<String, Object>> elencoUtenti;
 
 	// RF19 - Ricerca Utente
 	// Array di String per i pulsanti di ricerca e le colonne per la tabella dei dati estratti dal database
