@@ -215,7 +215,7 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 			if (esitoVerifica.contains("errore")) {
 				mostraErrore(esitoVerifica);
 			}
-			if(tipoNotifica.equals("avviso")){
+			if(tipoNotifica.contains("prodotto")){
 				mostraErrore(tipoNotifica);
 			}
 
@@ -254,8 +254,8 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 	// YELLOW per quanto riguarda errori di inserimento/sintassi
 	// RED per quanto riguarda il mancato inserimento
 		switch(tipoErrore) {
-			case "errore avviso":
-				messaggio="non è possibile annullare l'inserimento.\n(clicca ok o X per continuare)";
+			case "errore prodotto":
+				messaggio="non è possibile annullare l'inserimento, e' necessario compilare tutti i campi!";
 				dataField.setBackground(Color.RED);
 				oraField.setBackground(Color.RED);
 				testoField.setBackground(Color.RED);
