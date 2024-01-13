@@ -50,6 +50,7 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 	private String messaggioUsername;
 	private int esito;
 	private int richiestaUsername;
+	private boolean dup;
 
 	//elementi grafici
 	// RF23: Aggiorna Username
@@ -346,12 +347,12 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 		//Brivio Marco, Serio Giulia
 		esito = 0;
 		nuovo_username = "";
+		dup = false;
 		do {
 			this.mostraFormCambio(vecchio_username);
 			if (nuovo_username != null) {
 				try {
 					boolean dup = gestoreAccessi.verificaDuplicato(nuovo_username);
-	
 					if (dup) {
 						mostraErroreInterfaccia(4);
 					} else {
@@ -359,11 +360,7 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 						if (esito == 1 || esito == 2 || esito == 3) {
 							mostraErroreInterfaccia(esito);
 						} else {
-							try{
-								gestoreAccessi.cambio(vecchio_username, nuovo_username);
-							}catch(Exception e){
-								System.out.println("Aggiornamento effettuato");
-							}
+							gestoreAccessi.cambio(vecchio_username, nuovo_username);
 							messaggioUsername = ("Cambio avvenuto con successo!");
 							this.messaggio(messaggioUsername);
 							username = nuovo_username;
@@ -376,7 +373,7 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 					fieldUsername.setText("");
 				}
 			}
-		} while (esito != 0);
+		} while (dup == true || esito == 1 || esito == 2 || esito == 3);
 		return nuovo_username;
 	}
 
