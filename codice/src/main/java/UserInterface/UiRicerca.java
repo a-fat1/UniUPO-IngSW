@@ -772,6 +772,11 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 				showMessageDialog(null, messaggio, "Nessun risultato (clicca X per chiudere)", ERROR_MESSAGE);
 				break;
 			}
+			case 6: {
+				messaggio = "Seleziona una riga tra i risultati ottenuti!";
+				showMessageDialog(null, messaggio, "Nessun risultato selezionato", ERROR_MESSAGE);
+				break;
+			}
 
 		}
 	}
@@ -860,6 +865,11 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 				azione = showOptionDialog(null, tabella, "Elenco utenti",
 						DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null,
 						pulsanteElencoUtentiAdmin, null);
+
+			if(table.getSelectedRow() == -1 && azione != -1)
+			{
+				mostraErroreRicercaUtente(6);
+			}
 
 		}
 
