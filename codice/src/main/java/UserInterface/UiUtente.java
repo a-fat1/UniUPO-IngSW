@@ -124,7 +124,7 @@ public class UiUtente extends JOptionPane implements UiUtenteInterfaccia
 
 				gestoreAccessi.richiestaAttivazioneAccount(nome, cognome, tipoUtente);
 				gestoreAccessi.aggiuntaCredenziali(nome+"."+cognome);
-				uiLogin.avvioAggiornaUsername(username);
+				username = uiLogin.avvioAggiornaUsername(username);
 				uiLogin.avvioAggiornaPassword(false, username, "");
 			}
 
