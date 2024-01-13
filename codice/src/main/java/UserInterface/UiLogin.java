@@ -340,7 +340,7 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 			sceltaMenu = -1;
 	}
 
-	public void avvioAggiornaUsername(String vecchio_username) throws RemoteException
+	public String avvioAggiornaUsername(String vecchio_username) throws RemoteException
 	{ 	
 		// RF23: Aggiorna Username
 		//Brivio Marco, Serio Giulia
@@ -377,6 +377,7 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 				}
 			}
 		} while (esito != 0);
+		return nuovo_username;
 	}
 
 	private void mostraFormCambio(String vecchio) {
