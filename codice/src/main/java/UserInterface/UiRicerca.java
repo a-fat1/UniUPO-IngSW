@@ -834,6 +834,8 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 
 		// modifico la dimensione della riga per ogni tabella
 		table.setRowHeight(25);
+		// comando per evitare che si possano spostare le colonne
+		table.getTableHeader().setReorderingAllowed(false);
 
 		// setto la tabella in modo che si possa selezionare solo un campo
 		ListSelectionModel selectionModel = table.getSelectionModel();
@@ -842,6 +844,7 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 		// creo la tabella scroll e ne gestisco le dimensioni
 		JScrollPane tabella = new JScrollPane(table);
 		tabella.setPreferredSize((new Dimension(500, 150)));
+
 
 		// ciclo while che dura fino a quando non viene selezionato un campo utente e un'azione relativa, oppure
 		// fino a quando l'utente non chiude la finestra per uscire
