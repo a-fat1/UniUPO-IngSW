@@ -248,8 +248,6 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
                 testoNotifica = gestoreNotifiche.generaTestoNotificaUtente(oggetto);
                 gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), setDataScadenzaDefault(), testoNotifica, "amministratore");
             break;
-            default:
-		 throw new IllegalStateException("Valore inatteso: " + tipoNotifica);
         }
 	}
 
@@ -282,23 +280,23 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 		String messaggio = "";
 		switch (tipoErrore) {
             case "errore formato data":
-                messaggio = "La data fornita non e' in formato YYYY-MM-DD.\n(clicca ok o X per continuare)";
+                messaggio = "La data fornita non e' in formato YYYY-MM-DD.\n(clicca OK o X per continuare)";
                 dataField.setBackground(Color.YELLOW);
             	break;
             case "errore formato ora":
-                messaggio = "L'ora fornita non e' in formato HH:mm:ss.\n(clicca ok o X per continuare)";
+                messaggio = "L'ora fornita non e' in formato HH:mm:ss.\n(clicca OK o X per continuare)";
                 oraField.setBackground(Color.YELLOW);
             	break;
             case "errore data":
-                messaggio = "La data fornita non e' compatibile con la data di pubblicazione.\n(clicca ok o X per continuare)";
+                messaggio = "La data fornita non e' compatibile con la data di pubblicazione.\n(clicca OK o X per continuare)";
                 dataField.setBackground(Color.YELLOW);
             	break;
             case "errore testo notifica":
-                messaggio = "Il testo della notifica non può essere vuoto.\n(clicca ok o X per continuare)";
+                messaggio = "Il testo della notifica non può essere vuoto.\n(clicca OK o X per continuare)";
                 testoField.setBackground(Color.RED);
             	break;
 			case "errore uscita":
-				messaggio = "Non è possibile annullare la generazione di una notifica per un nuovo prodotto.\n(clicca ok o X per continuare)";
+				messaggio = "Non è possibile annullare la generazione di una notifica per un nuovo prodotto.\n(clicca OK o X per continuare)";
 				break;
         }
 		this.showMessageDialog(null, messaggio, "Errore", this.ERROR_MESSAGE, null);
