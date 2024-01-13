@@ -109,6 +109,7 @@ public class RF24AggiornamentoDomicilio {
         assertEquals(5, result3);
     }
 
+    /** TEST Commentanto per evitare di scrivere i dati sul DB come accordato con il professore
     @Test
     public void testSalvaERecuperaDomicilio() throws RemoteException {
         setUp();
@@ -135,5 +136,5 @@ public class RF24AggiornamentoDomicilio {
         assertEquals(localitaTest, result[3]);
 
     }
-
+    **/
 }
