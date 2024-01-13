@@ -22,11 +22,7 @@ RF06: richiede l'integrazione di RF05.
 RF07: richiede l'integrazione con RF05. 
 
 RF08: 
-- se si clicca su X si ha un eccezione: 
-  Exception in thread "main" java.lang.ArrayIndexOutOfBoundsException: -1
-        at UserInterface.UiRicerca.mostraElenco(UiRicerca.java:315)
-        at UserInterface.UiRicerca.avvioRicercaProdotto(UiRicerca.java:485)
-- Nella colonna disponibilita' bisognerebbe visualizzare SI/NO al posto di 1/0.
+- nella colonna disponibilita' bisognerebbe visualizzare SI/NO al posto di 1/0.
 - I prodotti fuori catalogo (disponibilita'==false) non dovrebbero essere visualizzati per il cliente.
 - Nella cartella diagrammi/RF08 ci sono vari file pdf. Bisognerebbe eliminare quelli piu' vecchi.
 - Non e' integrato con RF09, RF10, RF14.
