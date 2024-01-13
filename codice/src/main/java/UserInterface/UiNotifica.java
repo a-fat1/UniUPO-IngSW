@@ -197,34 +197,47 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 		(testoField).setBorder(new JTextField().getBorder());
 	}
 
-
 	/**
 	 * RF04: Avvia la generazione di una notifica.
 	 *
 	 * @author Linda Monfermoso, Gabriele Magenta Biasina
 	 * @param tipoNotifica il tipo di notifica da generare (avviso, nuovo utente, nuovo prodotto, nuovo ordine)
-	 * @param prodotto il prodotto da includere nella notifica (NULL se non utilizzato)
-	 * @param ordine l'ordine da includere nella notifica (NULL se non utilizzato)
-	 * @param utente l'utente da includere nella notifica (NULL se non utilizzato)
+	 * @param oggetto l'oggetto (utente, prodotto, ordine) per generare la notifica
 	 * @throws RemoteException
 	 */
-	public void avvioGeneraNotifica(String tipoNotifica, HashMap<String, Object> prodotto, HashMap<String, Object> ordine, HashMap<String, Object> utente) throws RemoteException {
-		// ottiene il tipo dell'utente dall'hashmap "utente"
-		String tipoUtente = utente.get("tipo").toString();
-
-	}
 	public void avvioGeneraNotifica(String tipoNotifica, HashMap<String, Object> oggetto) throws RemoteException {
+		int scelta;
 
 		switch (tipoNotifica) {
             case "nuovo prodotto":
                 testoNotifica = gestoreNotifiche.generaTestoNotificaProdotto(oggetto);
-                loopVerificaDatiNotifica();
+				do {
+					do {
+						scelta = this.mostraFormNotifica(this.testoNotifica);
+						if(scelta == -1)
+							mostraErrore("errore uscita");
+					} while (scelta != 0);
+					this.testoNotifica = testoField.getText();
+					esitoVerifica = gestoreNotifiche.verificaCorrettezzaDati(this.dataScadenza.get("data"), this.dataScadenza.get("ora"), this.testoNotifica);
+					if (esitoVerifica.contains("errore")) {
+						mostraErrore(esitoVerifica);
+					}
+				} while (!Objects.equals(esitoVerifica, "ok"));
                 gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), dataScadenza, testoField.getText(), "cliente");
-	    break;
+	    	break;
             
             case "avviso":
                 testoNotifica = gestoreNotifiche.generaTestoNotificaAvviso();
-                loopVerificaDatiNotifica();
+				do {
+					scelta = this.mostraFormNotifica(this.testoNotifica);
+					if(scelta == -1)
+						return;
+					this.testoNotifica = testoField.getText();
+					esitoVerifica = gestoreNotifiche.verificaCorrettezzaDati(this.dataScadenza.get("data"), this.dataScadenza.get("ora"), this.testoNotifica);
+					if (esitoVerifica.contains("errore")) {
+						mostraErrore(esitoVerifica);
+					}
+				} while (!Objects.equals(esitoVerifica, "ok"));
                 gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), dataScadenza, testoField.getText(), "tutti");
             break;
             case "nuovo ordine":
@@ -238,27 +251,6 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
             default:
 		 throw new IllegalStateException("Valore inatteso: " + tipoNotifica);
         }
-	}
-
-	/**
-	 * RF04: Metodo per evitare duplicazione del codice.
-	 *
-	 * @author Linda Monfermoso, Gabriele Magenta Biasina
-	 * @throws RemoteException
-	 */
-	private void loopVerificaDatiNotifica() throws RemoteException {
-		int scelta;
-
-		do {
-			do {
-				scelta = this.mostraFormNotifica(this.testoNotifica);
-			} while (scelta != 0);
-			this.testoNotifica = testoField.getText();
-			esitoVerifica = gestoreNotifiche.verificaCorrettezzaDati(this.dataScadenza.get("data"), this.dataScadenza.get("ora"), this.testoNotifica);
-			if (esitoVerifica.contains("errore")) {
-				mostraErrore(esitoVerifica);
-			}
-		} while (!Objects.equals(esitoVerifica, "ok"));
 	}
 
 	/**
@@ -292,19 +284,22 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
             case "errore formato data":
                 messaggio = "La data fornita non e' in formato YYYY-MM-DD.\n(clicca ok o X per continuare)";
                 dataField.setBackground(Color.YELLOW);
-            break;
+            	break;
             case "errore formato ora":
                 messaggio = "L'ora fornita non e' in formato HH:mm:ss.\n(clicca ok o X per continuare)";
                 oraField.setBackground(Color.YELLOW);
-            break;
+            	break;
             case "errore data":
                 messaggio = "La data fornita non e' compatibile con la data di pubblicazione.\n(clicca ok o X per continuare)";
                 dataField.setBackground(Color.YELLOW);
-            break;
+            	break;
             case "errore testo notifica":
                 messaggio = "Il testo della notifica non può essere vuoto.\n(clicca ok o X per continuare)";
                 testoField.setBackground(Color.RED);
-            break;
+            	break;
+			case "errore uscita":
+				messaggio = "Non è possibile annullare la generazione di una notifica per un nuovo prodotto.\n(clicca ok o X per continuare)";
+				break;
         }
 		this.showMessageDialog(null, messaggio, "Errore", this.ERROR_MESSAGE, null);
 	}
