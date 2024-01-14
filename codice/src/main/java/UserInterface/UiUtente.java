@@ -26,7 +26,7 @@ public class UiUtente extends JOptionPane implements UiUtenteInterfaccia
 	private UiLoginInterfaccia uiLogin;
 	private UiNotificaInterfaccia uiNotifica;
 	private GestoreAccessiInterfaccia gestoreAccessi;
-	
+
 
 	// attributi
 	private int selezione;
@@ -39,7 +39,7 @@ public class UiUtente extends JOptionPane implements UiUtenteInterfaccia
 	private int esitoControllo;
 	private String tipoUtente;
 	private HashMap<String, Object> clienteAmministratore = new HashMap<String, Object>();
-	
+
 	// elementi grafici
 	//RF02
 	private JPanel contentPane;
@@ -48,7 +48,23 @@ public class UiUtente extends JOptionPane implements UiUtenteInterfaccia
 	private JTextField textFieldNome;
 	private JComboBox c1;
 	private String pulsantiRegistrazione[];
-	
+
+	//RF24
+	private int ckFormato;
+	private JPanel contentDomicilio;
+	private JLabel lblVia;
+	private JLabel lblCivico;
+	private JLabel lblLocalita;
+	private JLabel lblCap;
+	private JTextField textField_via;
+	private JTextField textField_civico;
+	private JTextField textField_localita;
+	private JTextField textField_cap;
+	private String pulsantiDomicilio[];
+	private String via;
+	private String civico;
+	private String localita;
+	private String cap;
 
 	public UiUtente(String hostGestore) throws RemoteException, NotBoundException
 	{
@@ -97,7 +113,7 @@ public class UiUtente extends JOptionPane implements UiUtenteInterfaccia
 				{
 					tipoUtente = "cliente";
 					clienteAmministratore.put("tipo", tipoUtente);
-					avvioAggiornaDomicilio();
+					avvioAggiornaDomicilio(username,true);
 					uiNotifica.avvioGeneraNotifica("nuovo utente", clienteAmministratore);
 				}
 				else
@@ -108,7 +124,7 @@ public class UiUtente extends JOptionPane implements UiUtenteInterfaccia
 
 				gestoreAccessi.richiestaAttivazioneAccount(nome, cognome, tipoUtente);
 				gestoreAccessi.aggiuntaCredenziali(nome+"."+cognome);
-				uiLogin.avvioAggiornaUsername(username);
+				username = uiLogin.avvioAggiornaUsername(username);
 				uiLogin.avvioAggiornaPassword(false, username, "");
 			}
 
@@ -285,12 +301,205 @@ public class UiUtente extends JOptionPane implements UiUtenteInterfaccia
 			JOptionPane.showMessageDialog(null, null, "annullamento", JOptionPane.ERROR_MESSAGE);
 		}
 	}
+	/**
+	 * RF24: AggiornamentoDomicilio
+	 * Autore: Mondelli e Reci
+	 */
+	public void avvioAggiornaDomicilio(String username, boolean nuovo) throws RemoteException {
+		int sceltaPulsante = 0;
+
+		do {
+			sceltaPulsante = mostraFormDomicilio(username, nuovo);
+
+			ckFormato = 0;
+
+			if ((nuovo == true && sceltaPulsante == 0) || (nuovo == false && sceltaPulsante == 1)) {
+				// Recupera i valori inseriti dall'utente
+				via = textField_via.getText();
+				civico = textField_civico.getText();
+				cap = textField_cap.getText();
+				localita = textField_localita.getText();
+
+				// Controlla se ci sono errori di formato
+				ckFormato = gestoreAccessi.controllaFormatoDomicilio(via, civico, cap, localita);
+
+				if (ckFormato > 0)
+					this.mostraErroreFormatoDomicilio(ckFormato);
+				else {
+					// Chiamata al metodo per aggiornare il domicilio
+					gestoreAccessi.promptSalvaDomicilio(username, via, civico, cap, localita);
+					this.mostraSuccessoAggiornamentoDomicilio();
+				}
+			}
+		} while ((nuovo == true && (ckFormato > 0 || sceltaPulsante == - 1))
+					|| (nuovo == false && ckFormato > 0));
+	}
+
+	/**
+	 * RF24: AggiornamentoDomicilio
+	 * Autore: Mondelli e Reci
+	 */
+	private int mostraFormDomicilio(String username, boolean nuovo) throws RemoteException {
+		int sceltaPulsante = 0;
+
+		setBounds(100, 100, 450, 300);
+		contentDomicilio = new JPanel(new GridLayout(0, 2, 50, 5));
+
+		// Via
+		lblVia = new JLabel("Via");
+		lblVia.setHorizontalAlignment(SwingConstants.RIGHT);
+		contentDomicilio.add(lblVia);
+
+		textField_via = new JTextField();
+		contentDomicilio.add(textField_via);
+		textField_via.setColumns(10);
 
 
+		// Civico
+		lblCivico = new JLabel("Civico");
+		lblCivico.setHorizontalAlignment(SwingConstants.RIGHT);
+		contentDomicilio.add(lblCivico);
+
+		textField_civico = new JTextField();
+		contentDomicilio.add(textField_civico);
+		textField_civico.setColumns(10);
 
 
+		// Località
+		lblLocalita = new JLabel("Localita'");
+		lblLocalita.setHorizontalAlignment(SwingConstants.RIGHT);
+		contentDomicilio.add(lblLocalita);
 
-	public void avvioAggiornaDomicilio() throws RemoteException
-	{ 	// RF24
+		textField_localita = new JTextField();
+		contentDomicilio.add(textField_localita);
+		textField_localita.setColumns(10);
+
+
+		// CAP
+		lblCap = new JLabel("CAP");
+		lblCap.setHorizontalAlignment(SwingConstants.RIGHT);
+		contentDomicilio.add(lblCap);
+
+		textField_cap = new JTextField();
+		contentDomicilio.add(textField_cap);
+		textField_cap.setColumns(10);
+
+
+		// Pulsanti
+		pulsantiDomicilio = new String[2];
+		pulsantiDomicilio[0] = "Indietro";
+		pulsantiDomicilio[1] = "Conferma";
+
+		// Controlla se arrivo dal menu' cliente
+		if (nuovo == false) {
+			// Recupero dati del domicilio dal DB
+			String[] partiDomicilio = gestoreAccessi.promptRecuperaDomicilio(username);
+
+			if (partiDomicilio.length == 4) {
+				textField_via.setText(partiDomicilio[0]);
+				textField_civico.setText(partiDomicilio[1]);
+				textField_cap.setText(partiDomicilio[2]);
+				textField_localita.setText(partiDomicilio[3]);
+			}
+		}
+
+		// Controllo se ho avuto errori per colorare di rosso la textField errata
+		if (ckFormato == 1) {
+			textField_via.setBackground(Color.RED);
+		}
+		else
+			textField_via.setBackground(Color.WHITE);
+
+		if(ckFormato == 4) {
+			textField_civico.setBackground(Color.RED);
+		}
+		else
+			textField_civico.setBackground(Color.WHITE);
+
+		if(ckFormato == 3) {
+			textField_localita.setBackground(Color.RED);
+		}
+		else
+			textField_localita.setBackground(Color.WHITE);
+
+		if (ckFormato == 2) {
+			textField_cap.setBackground(Color.RED);
+		}
+		else
+			textField_cap.setBackground(Color.WHITE);
+
+		// Setto le textFields con i valori precedentemente inseriti
+		if (ckFormato > 0) {
+			textField_via.setText(via);
+			textField_civico.setText(civico);
+			textField_localita.setText(localita);
+			textField_cap.setText(cap);
+		}
+
+		/* Controlla se il metodo e' stato invocato da RF02 (creazione utente)
+		   per la generazione dei pulsanti*/
+		if (nuovo) {
+			sceltaPulsante = JOptionPane.showOptionDialog(
+					null,
+					contentDomicilio,
+					"Aggiornamento Domicilio (clicca X per resettare i campi)",
+					JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE,
+					null,
+					new Object[]{pulsantiDomicilio[1]},
+					"Aggiorna");
+		}
+		else { // Il metodo è invocato dal menu' del client
+			sceltaPulsante = JOptionPane.showOptionDialog(
+					null,
+					contentDomicilio,
+					"Aggiornamento Domicilio (clicca su X o Indietro per uscire)",
+					JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE,
+					null,
+					pulsantiDomicilio,
+					"Aggiorna");
+		}
+
+		return sceltaPulsante;
+	}
+	/**
+	 * RF24: AggiornamentoDomicilio
+	 * Autore: Mondelli e Reci
+	 */
+	private void mostraErroreFormatoDomicilio(int msg) {
+		String messaggio = "";
+
+		switch (msg) {
+			case 1:
+				messaggio = "Via vuota o formato errato";
+				break;
+			case 2:
+				messaggio = "Il cap non ha 5 cifre";
+				break;
+			case 3:
+				messaggio = "Localita' assente o formato errato";
+				break;
+			case 4:
+				messaggio = "Numero civico assente, nullo o negativo";
+				break;
+			case 5:
+				messaggio = "Vari campi errati";
+				break;
+
+		}
+
+		messaggio = messaggio + "\n(clicca su OK o X per continuare)";
+
+		this.showMessageDialog(null, messaggio, "Errore", this.ERROR_MESSAGE);
+	}
+	/**
+	 * RF24: AggiornamentoDomicilio
+	 * Autore: Mondelli e Reci
+	 */
+	private void mostraSuccessoAggiornamentoDomicilio() {
+		String messaggio = "Successo!";
+
+		messaggio = messaggio + "\n(clicca su OK o X per continuare)";
+
+		this.showMessageDialog(null, messaggio, "Successo", this.INFORMATION_MESSAGE);
 	}
 }

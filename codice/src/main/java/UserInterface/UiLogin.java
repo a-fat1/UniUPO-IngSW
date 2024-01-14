@@ -2,7 +2,6 @@ package UserInterface;
 
 import java.awt.*;
 import java.util.HashMap;
-import java.util.ArrayList;
 
 import java.rmi.registry.Registry; 
 import java.rmi.registry.LocateRegistry; 
@@ -11,8 +10,6 @@ import java.rmi.NotBoundException;
 
 import javax.swing.*;
 
-import DataBase.DbUtenti;
-import UserInterface.*;
 import Elaborazione.*;
 
 public class UiLogin extends JOptionPane implements UiLoginInterfaccia
@@ -53,6 +50,7 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 	private String messaggioUsername;
 	private int esito;
 	private int richiestaUsername;
+	private boolean dup;
 
 	//elementi grafici
 	// RF23: Aggiorna Username
@@ -212,7 +210,7 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 							if (sceltaMenu==0)
 								this.avvioAggiornaUsername(username);
 							if (sceltaMenu==1)
-								this.avvioAggiornaPassword(true,username,password);
+								password=this.avvioAggiornaPassword(true,username,password);
 							if (sceltaMenu==2 && !((String)utente.get("tipo")).equals("amministratore"))
 								uiRicerca.avvioRicercaProdotto((String)utente.get("tipo"), username);
 							if (sceltaMenu==2 && ((String)utente.get("tipo")).equals("amministratore"))			
@@ -234,7 +232,7 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 							if (sceltaMenu==6 && !((String)utente.get("tipo")).equals("amministratore"))
 								uiRicerca.avvioProdottiPiuVenduti();
 							if (sceltaMenu==7 && ((String)utente.get("tipo")).equals("cliente"))
-								uiUtente.avvioAggiornaDomicilio();
+								uiUtente.avvioAggiornaDomicilio(username, false);
 							if (sceltaMenu==7 && ((String)utente.get("tipo")).equals("staff"))
 								uiProdotto.avvioNuovoProdotto();
 							if (sceltaMenu==8 && ((String)utente.get("tipo")).equals("staff"))
@@ -343,18 +341,18 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 			sceltaMenu = -1;
 	}
 
-	public void avvioAggiornaUsername(String vecchio_username) throws RemoteException
+	public String avvioAggiornaUsername(String vecchio_username) throws RemoteException
 	{ 	
 		// RF23: Aggiorna Username
 		//Brivio Marco, Serio Giulia
 		esito = 0;
 		nuovo_username = "";
+		dup = false;
 		do {
 			this.mostraFormCambio(vecchio_username);
 			if (nuovo_username != null) {
 				try {
 					boolean dup = gestoreAccessi.verificaDuplicato(nuovo_username);
-	
 					if (dup) {
 						mostraErroreInterfaccia(4);
 					} else {
@@ -362,11 +360,7 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 						if (esito == 1 || esito == 2 || esito == 3) {
 							mostraErroreInterfaccia(esito);
 						} else {
-							try{
-								gestoreAccessi.cambio(vecchio_username, nuovo_username);
-							}catch(Exception e){
-								System.out.println("Aggiornamento effettuato");
-							}
+							gestoreAccessi.cambio(vecchio_username, nuovo_username);
 							messaggioUsername = ("Cambio avvenuto con successo!");
 							this.messaggio(messaggioUsername);
 							username = nuovo_username;
@@ -379,7 +373,8 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 					fieldUsername.setText("");
 				}
 			}
-		} while (esito != 0);
+		} while (dup == true || esito == 1 || esito == 2 || esito == 3);
+		return nuovo_username;
 	}
 
 	private void mostraFormCambio(String vecchio) {
@@ -445,8 +440,9 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 		fieldUsername.setBackground(Color.WHITE);
 	}
 
-	public void avvioAggiornaPassword(Boolean loggato, String username, String password) throws RemoteException
+	public String avvioAggiornaPassword(Boolean loggato, String username, String password) throws RemoteException
 	{ 	// RF03
+		//autori: Pietro Balossino, Andrija Jovic
 		if(loggato){
 			do{
 				this.mostraFormPasswordAttuale();
@@ -459,7 +455,7 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 					}
 				}
 				if(richiesta==CANCEL_OPTION || richiesta==DEFAULT_OPTION){
-					return;
+					return password;
 				}
 			} while(esitoControlloPassword!=0);
 		}
@@ -469,8 +465,10 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 
 			esitoControlloPassword=gestoreAccessi.controlloNuovaPassword(nuovaPassword);
 
-			if(richiesta==CANCEL_OPTION || richiesta==DEFAULT_OPTION){
-				return;
+			if(loggato) {
+				if (richiesta == CANCEL_OPTION || richiesta == DEFAULT_OPTION) {
+					return password;
+				}
 			}
 			if(esitoControlloPassword==1){
 				this.mostraErrore(1);
@@ -483,13 +481,19 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 			}
 			if(esitoControlloPassword==0){
 				gestoreAccessi.AggiornaPassword(username, nuovaPassword);
+				password=nuovaPassword;
 				this.mostraMessaggioDiSuccesso();
             }
 
-		}while (esitoControlloPassword!=0 && richiesta == OK_OPTION);
+		}while (esitoControlloPassword!=0);
+		return password;
 	}
 
 	private void mostraFormPasswordAttuale(){
+		// RF03
+		//autori: Pietro Balossino, Andrija Jovic
+		passwordAttualeField.setText("");
+
 		richiesta = this.showConfirmDialog(null, aggiornaPasswordPanel, "Aggiorna password", this.OK_CANCEL_OPTION);
 
 		passwordAttuale=new String(passwordAttualeField.getPassword());
@@ -498,7 +502,8 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 	}
 
 	private void mostraErrore(int nErrore){
-
+		// RF03
+		//autori: Pietro Balossino, Andrija Jovic
 		String messaggio="";
 
 		if(nErrore==4){
@@ -523,6 +528,10 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 	}
 
 	private void mostraFormNuovaPassword(){
+		// RF03
+		//autori: Pietro Balossino, Andrija Jovic
+		nuovaPasswordField.setText("");
+
 		richiesta = this.showConfirmDialog(null, nuovaPasswordPanel, "Aggiorna password", this.OK_CANCEL_OPTION);
 
 		nuovaPassword=new String(nuovaPasswordField.getPassword());
@@ -531,6 +540,8 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 	}
 
 	private void mostraMessaggioDiSuccesso(){
+		// RF03
+		//autori: Pietro Balossino, Andrija Jovic
 		String messaggio= "La password e' stata cambiata con successo!"+"\nOra potrai accedere con la tua nuova password";
 		this.showMessageDialog(null, messaggio, "Aggiorna Password", this.INFORMATION_MESSAGE);
 	}

@@ -55,8 +55,10 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 	private String nome;
 	private String cognome;
 	private String username;
-	private ArrayList<HashMap<String, Object>> elencoUtenti;
 	private String sceltaRicerca;
+	private int esitoControllo;
+
+	private ArrayList<HashMap<String, Object>> elencoUtenti;
 
 	// RF19 - Ricerca Utente
 	// Array di String per i pulsanti di ricerca e le colonne per la tabella dei dati estratti dal database
@@ -155,8 +157,7 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 		pulsanteElencoUtentiAdmin = new String[1];
 		pulsanteElencoUtentiAdmin[0] = "Blocca\\Sblocca utente";
 
-		// RF19 - Ricerca Utente
-		// Inizializzazione di ArrayList per gli utenti trovati
+		// ArrayList per elenco degli utenti
 		elencoUtenti = new ArrayList<>();
 
 		//RF08
@@ -339,7 +340,7 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 				break;
 			case _AGGIORNA_PREZZO:
 				//RF14
-				//uiProdotto.avvioAggiornaPrezzo(prodotto);
+				uiProdotto.avvioAggiornaPrezzo(prodotto);
 				break;
 			case _RIMUOVI_RIPRISTINA:
 				//RF10
@@ -626,13 +627,21 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 		// RF19 - Ricerca Utente
 		// Riccardo Nazzari, Andrea Benedetto
 
-		// set di esitoControllo con valore iniziale
-		int esitoControllo = 0;
 		// set di sceltaUtente = 0 per iniziare il ciclo
 		sceltaUtente = 0;
 
+		// imposto esitoControllo = 0
+		esitoControllo = 0;
+
 		// loop fino a quando il controllo non è positivo (o l'utente esce dalla finestra)
 		while((esitoControllo != 4) && (sceltaUtente != -1)){
+
+			// reset per il primo ciclo
+			if(esitoControllo == 0){
+				fieldNome.setText("");
+				fieldCognome.setText("");
+				fieldUsername.setText("");
+			}
 
 			// mostra il form della ricerca
 			mostraFormRicerca();
@@ -660,7 +669,7 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 			}
 
 			// se il controllo è andato a buon fine e l'utente è dello staff, si ricercano gli utenti NON bloccati
-			if((esitoControllo == 4) && genereUtente.equals("staff"))
+			if((esitoControllo == 4) && genereUtente.equals("staff") && sceltaUtente != -1)
 			{
 				// ricerca per nome-cognome di utenti non bloccati
 				if(sceltaRicerca.equals("Ricerca per nome-cognome"))
@@ -675,7 +684,7 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 			}
 			// se il controllo è andato a buon fine e l'utente è amministratore, si ricercano gli utenti bloccati e
 			// non bloccati
-			else if((esitoControllo == 4) && genereUtente.equals("amministratore"))
+			else if((esitoControllo == 4) && genereUtente.equals("amministratore") && sceltaUtente != -1)
 			{
 				// ricerca per nome-cognome di utenti bloccati e non bloccati
 				if(sceltaRicerca.equals("Ricerca per nome-cognome"))
@@ -725,9 +734,6 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 		username = fieldUsername.getText();
 
 		// reset dei campi di ingresso per operazioni future
-		fieldNome.setText("");
-		fieldCognome.setText("");
-		fieldUsername.setText("");
 	}
 
 	/**
@@ -745,25 +751,30 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 
 		switch (tipo) {
 			case 1: {
-				messaggio = "format username errato: assicurati di inserire\nalmeno tre caratteri nel campo \"username\".";
-				showMessageDialog(null, messaggio, "errore username (clicca X per chiudere)", ERROR_MESSAGE);
+				messaggio = "Format username errato: assicurati di inserire\nalmeno tre caratteri nel campo \"username\".";
+				showMessageDialog(null, messaggio, "Errore username (clicca X per chiudere)", ERROR_MESSAGE);
 				break;
 			}
 			case 2: {
-				messaggio = "format nome errato: assicurati di inserire\nalmeno tre caratteri nel campo \"nome\" e di\n" +
-						    "inserire solo caratteri letterali";
-				showMessageDialog(null, messaggio, "errore nome (clicca X per chiudere)", ERROR_MESSAGE);
+				messaggio = "Format nome errato: assicurati di inserire\nalmeno tre caratteri nel campo \"nome\" e di\n" +
+						    "inserire solo caratteri letterali.";
+				showMessageDialog(null, messaggio, "Errore nome (clicca X per chiudere)", ERROR_MESSAGE);
 				break;
 			}
 			case 3: {
-				messaggio = "format cognome errato: assicurati di inserire\nalmeno tre caratteri nel campo \"cognome\" e di\n" +
-						    "inserire solo caratteri letterali";
-				showMessageDialog(null, messaggio, "errore cognome (clicca X per chiudere)", ERROR_MESSAGE);
+				messaggio = "Format cognome errato: assicurati di inserire\nalmeno tre caratteri nel campo \"cognome\" e di\n" +
+						    "inserire solo caratteri letterali.";
+				showMessageDialog(null, messaggio, "Errore cognome (clicca X per chiudere)", ERROR_MESSAGE);
 				break;
 			}
 			case 5: {
-				messaggio = "Non sono stati trovati risultati per la tua ricerca";
-				showMessageDialog(null, messaggio, "nessun risultato (clicca X per chiudere)", ERROR_MESSAGE);
+				messaggio = "Non sono stati trovati risultati per la tua ricerca.";
+				showMessageDialog(null, messaggio, "Nessun risultato (clicca X per chiudere)", ERROR_MESSAGE);
+				break;
+			}
+			case 6: {
+				messaggio = "Seleziona una riga tra i risultati ottenuti!";
+				showMessageDialog(null, messaggio, "Nessun risultato selezionato", ERROR_MESSAGE);
 				break;
 			}
 
@@ -776,8 +787,7 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 	 * @param genereUtente il tipo di utente che ha effettuato la ricerca.
 	 * @throws RemoteException
 	 */
-	private void mostraElencoRicercaUtente(ArrayList<HashMap<String, Object>> elencoUtenti, String genereUtente) throws RemoteException
-	{
+	private void mostraElencoRicercaUtente(ArrayList<HashMap<String, Object>> elencoUtenti, String genereUtente) throws RemoteException {
 
 		// RF19 - Ricerca Utente
 		// Riccardo Nazzari, Andrea Benedetto
@@ -785,17 +795,15 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 		// inizializzazione variabili
 		Object[][] utentiTabella;
 		JTable table = null;
-		int azione = -3;
+		int azione;
 
 		// se l'utente che ha richiesto è di genere "staff", allora inizializzo la tabella con 4 colonne in quanto
 		// deve essere mostrato solo nome-cognome-username-tipo
-		if(genereUtente.equals("staff"))
-		{
+		if (genereUtente.equals("staff")) {
 			utentiTabella = new Object[elencoUtenti.size()][colonneStaff.length];
 
 			// estraggo i campi
-			for(int i=0; i < elencoUtenti.size(); i++)
-			{
+			for (int i = 0; i < elencoUtenti.size(); i++) {
 				utentiTabella[i][0] = elencoUtenti.get(i).get("nome");
 				utentiTabella[i][1] = elencoUtenti.get(i).get("cognome");
 				utentiTabella[i][2] = elencoUtenti.get(i).get("username");
@@ -807,22 +815,19 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 
 		// se l'utente che ha richiesto è di genere "amministratore", allora inizializzo la tabella con 5 colonne in quanto
 		// deve essere mostrato nome-cognome-username-tipo-attivo
-		else if(genereUtente.equals("amministratore"))
-		{
+		else if (genereUtente.equals("amministratore")) {
 			utentiTabella = new Object[elencoUtenti.size()][colonneAmministratore.length];
 
 			// estraggo i campi
-			for(int i=0; i < elencoUtenti.size(); i++)
-			{
+			for (int i = 0; i < elencoUtenti.size(); i++) {
 				utentiTabella[i][0] = elencoUtenti.get(i).get("nome");
 				utentiTabella[i][1] = elencoUtenti.get(i).get("cognome");
 				utentiTabella[i][2] = elencoUtenti.get(i).get("username");
 				utentiTabella[i][3] = elencoUtenti.get(i).get("tipo");
-				if(elencoUtenti.get(i).get("attivo").toString().equals("1")) {
-					utentiTabella[i][4] = "True";
-				}
-				else {
-					utentiTabella[i][4] = "False";
+				if (elencoUtenti.get(i).get("attivo").toString().equals("1")) {
+					utentiTabella[i][4] = "true";
+				} else {
+					utentiTabella[i][4] = "false";
 				}
 			}
 			// creo la tabella
@@ -830,56 +835,56 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 		}
 
 		// mi assicuro che la tabella sia stata creata correttamente
-        assert table != null;
+		assert table != null;
 
 		// modifico la dimensione della riga per ogni tabella
 		table.setRowHeight(25);
+		// comando per evitare che si possano spostare le colonne
+		table.getTableHeader().setReorderingAllowed(false);
 
 		// setto la tabella in modo che si possa selezionare solo un campo
-        ListSelectionModel selectionModel = table.getSelectionModel();
+		ListSelectionModel selectionModel = table.getSelectionModel();
 		selectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		// creo la tabella scroll e ne gestisco le dimensioni
 		JScrollPane tabella = new JScrollPane(table);
 		tabella.setPreferredSize((new Dimension(500, 150)));
 
-		// ciclo while che dura fino a quando non viene selezionato un campo utente e un'azione relativa, oppure
-		// fino a quando l'utente non chiude la finestra per uscire
-		while(table.getSelectedRow() == -1 && azione != -1)
-		{
+		do{
 			// se il genereUtente è di tipo "staff" mostro solo i pulsanti per lo staff
-			if(genereUtente.equals("staff"))
+			if (genereUtente.equals("staff"))
 				azione = showOptionDialog(null, tabella, "Elenco utenti",
 						DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null,
 						pulsanteElencoUtentiStaff, null);
 
-			// se il genereUtente è di tipo "amministratore" mostro solo i pulsanti per l'amministratore
-			else if(genereUtente.equals("amministratore"))
+			// se non è "staff" allora è sicuramente "amministratore" e mostro solo i pulsanti per quello
+			else
 				azione = showOptionDialog(null, tabella, "Elenco utenti",
 						DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null,
 						pulsanteElencoUtentiAdmin, null);
 
-		}
+			if(table.getSelectedRow() == -1 && azione != -1)
+			{
+				mostraErroreRicercaUtente(6);
+			}
+			// ciclo do-while che dura fino a quando non viene selezionato un campo utente e un'azione relativa, oppure
+			// fino a quando l'utente non chiude la finestra per uscire
+		}while (table.getSelectedRow() == -1 && azione != -1);
 
-		if(azione == 0 && genereUtente.equals("staff"))
-		{
-			//uiLista.avvioListaPagamenti(table.getModel().getValueAt(table.getSelectedRow(), 2).toString());
+
+		if (azione == 0 && genereUtente.equals("staff")) {
+			uiLista.avvioListaPagamenti(table.getModel().getValueAt(table.getSelectedRow(), 2).toString());
 			// richiamo lista pagamenti
-		}
-		else if(azione == 1 && genereUtente.equals("staff"))
-		{
-			//uiLista.avvioListaOrdini(table.getModel().getValueAt(table.getSelectedRow(), 2).toString(), -1);
+		} else if (azione == 1 && genereUtente.equals("staff")) {
+			uiLista.avvioListaOrdini(table.getModel().getValueAt(table.getSelectedRow(), 2).toString(), -1);
 			// richiamo lista ordini
-		}
-		else if(azione == 0 && genereUtente.equals("amministratore"))
-		{
-			//System.out.println(value);
-			// richiamo blocca\sblocca utente
-			//uiUtente.avvioBloccaSbloccaUtente(table.getModel().getValueAt(table.getSelectedRow(), 2).toString());
-			// devo mandare anche il parametro per vedere se è attivo o meno
+		} else if (azione == 0 && genereUtente.equals("amministratore")) {
+			// richiamo metodo blocca-sblocca
+			uiUtente.avvioBloccaSbloccaUtente(table.getModel().getValueAt(table.getSelectedRow(), 2).toString(),
+					Boolean.parseBoolean((table.getModel().getValueAt(table.getSelectedRow(), 4).toString())));
+
 		}
 	}
-
 
   	public void avvioProdottiPiuVenduti() throws RemoteException
 	{	// RF22

@@ -38,4 +38,8 @@ public interface GestoreProdottiInterfaccia extends Remote
     void incrementaPrezzi(int Percentuale) throws RemoteException;
     void decrementaPrezzi(int Percentuale) throws RemoteException;
 
+    //RF14
+    int controlloFormatoModificaPrezzo(float prezzoNuovo, float prezzoVecchio) throws RemoteException;
+    void modificaPrezzo(float prezzo, int codice) throws RemoteException;
+    
 } 

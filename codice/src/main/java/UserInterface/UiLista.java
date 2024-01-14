@@ -22,6 +22,8 @@ import java.rmi.NotBoundException;
 import javax.swing.*;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 
 import com.google.common.collect.Table;
@@ -69,7 +71,6 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 
 	private JScrollPane scrollPanelListaForniture;
 	private JTable tableListaForniture;
-	
 
 	public UiLista(String hostGestore) throws RemoteException, NotBoundException {
 		registryUI = LocateRegistry.getRegistry("127.0.0.1", 1100); // default: 1099
@@ -81,13 +82,16 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 		labelDataFine = new JLabel("Data finale");
 		fieldDataInizio = new JTextField("", 10);
 		fieldDataFine = new JTextField("", 10);
-		panelData = new JPanel(new GridLayout(2,2));
+		panelData = new JPanel(new GridLayout(2, 2));
 		panelData.add(labelDataInizio);
 		panelData.add(fieldDataInizio);
 		panelData.add(labelDataFine);
 		panelData.add(fieldDataFine);
 		tableListaForniture = new JTable();
+		tableListaForniture.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);  
 		scrollPanelListaForniture = new JScrollPane(tableListaForniture);
+
+
 
 		pulsanteRicerca = new String[1];
 		pulsanteRicerca[0]="Cerca";
@@ -321,7 +325,7 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 		DbProdotti dbProdotti = new DbProdotti();
 		GestoreProdotti gestoreProdotti = new GestoreProdotti(dbProdotti);
 		ArrayList<HashMap<String, Object>> listaForniture = gestoreProdotti.ricercaListaForniture(codice);
-		if (listaForniture.size() == 0){
+		if (listaForniture.size() == 0) {
 			mostraErrore(3);
 			return;
 		}
@@ -350,7 +354,8 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 					break;
 				}
 				mostraLista(listaForniture);
-				showMessageDialog(null, scrollPanelListaForniture, "Lista forniture da "+ dataInizio + " a " + dataFine , JOptionPane.PLAIN_MESSAGE);
+				showMessageDialog(null, scrollPanelListaForniture,
+						"Lista forniture da " + dataInizio + " a " + dataFine, JOptionPane.PLAIN_MESSAGE);
 			}
 		} while (esitoControllo == 1 || esitoControllo == 2);
 	}
@@ -404,7 +409,7 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 
 	@Override
 	public void mostraLista(ArrayList<HashMap<String, Object>> listaForniture) throws RemoteException {// RF 13
-																											// Benetti-Chiappa
+																										// Benetti-Chiappa
 		Vector<String> columnNames = new Vector<>();
 		Vector<Vector<Object>> data = new Vector<>();
 
@@ -425,6 +430,7 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 		}
 		DefaultTableModel model = new DefaultTableModel(data, columnNames);
 		tableListaForniture.setModel(model);
+		
 	}
 
 }

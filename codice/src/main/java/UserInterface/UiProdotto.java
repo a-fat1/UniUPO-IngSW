@@ -29,6 +29,12 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 
 	// attributi
 	private Integer codProdotto; //RF15
+
+	//RF14: aggiornaPrezzo
+	private int richiesta;
+	private float prezzoNuovoVal;
+	private float prezzoVecchioVal;
+	private int controllo;
 	
 	// elementi grafici
 	
@@ -86,6 +92,14 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 	private JLabel labelRipristino; //RF10
 	private JPanel rimozionePanel;//RF10
 	private JPanel ripristinoPanel;//RF10
+
+	//RF14: aggiornaPrezzo
+	private JLabel prezzoVecchioLabel;
+	private JLabel prezzoNuovoLabel;
+	private JLabel prezzoVecchio;
+	private JTextField prezzoNuovoField;
+	private JPanel modificaPrezzoPanel;
+	private String pulsantiAggiornaPrezzo[];
 
 	public UiProdotto(String hostGestore) throws RemoteException, NotBoundException
 	{
@@ -221,6 +235,25 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 		ripristinoPanel.add(labelRipristino);
 		rimozionePanel=new JPanel(new FlowLayout());
 		rimozionePanel.add(labelRimozione);
+
+		//RF14
+		prezzoVecchioLabel = new JLabel("prezzo precedente");
+		prezzoVecchio = new JLabel("");
+		prezzoVecchio.setHorizontalAlignment(JTextField.RIGHT);
+		prezzoNuovoLabel = new JLabel("prezzo nuovo");
+		prezzoNuovoField = new JTextField("0");
+		prezzoNuovoField.setHorizontalAlignment(JTextField.RIGHT);
+		prezzoNuovoField.setToolTipText("Inserire qui il nuovo prezzo");
+
+		modificaPrezzoPanel = new JPanel(new GridLayout(2,2));
+		modificaPrezzoPanel.add(prezzoVecchioLabel);
+		modificaPrezzoPanel.add(prezzoVecchio);
+		modificaPrezzoPanel.add(prezzoNuovoLabel);
+		modificaPrezzoPanel.add(prezzoNuovoField);
+
+		pulsantiAggiornaPrezzo = new String[2];
+		pulsantiAggiornaPrezzo[0] = "Annulla";
+		pulsantiAggiornaPrezzo[1] = "Modifica";
 	}
 
 	public void avvioRimuoviRipristinaNelCatalogo(Integer codProdotto, Integer Disponibile) throws RemoteException
@@ -242,8 +275,67 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 		}
 	}
 
-	public void avvioAggiornaPrezzo() throws RemoteException
-	{	// RF14	
+	public void avvioAggiornaPrezzo(HashMap<String, Object> P) throws RemoteException
+	{
+		//RF14
+
+		prezzoVecchioVal = ((Double)P.get("prezzo")).floatValue();
+		do{
+			controllo = 0;
+			mostraFormAggiornaPrezzo(P);
+			if(richiesta==0 && prezzoVecchioVal==0){
+				mostraErrore(3);
+			}
+			else{
+				if(richiesta==1){
+					try{
+						prezzoNuovoVal = Float.parseFloat(prezzoNuovoField.getText());
+						controllo = gestoreProdotti.controlloFormatoModificaPrezzo(prezzoNuovoVal,prezzoVecchioVal);
+						if(controllo==1 || controllo==2)
+							mostraErrore(controllo);
+						else{
+							gestoreProdotti.modificaPrezzo(prezzoNuovoVal, (int)P.get("codice"));
+							mostraMessaggio("Modifica confermata");
+						}
+					}
+					catch(NumberFormatException e){
+						controllo=4;
+						mostraErrore(controllo);
+					}
+				}
+			}
+		}while((richiesta==0 && prezzoVecchioVal==0) || controllo!=0);
+	}
+
+	private void mostraFormAggiornaPrezzo(HashMap<String,Object> P) throws RemoteException
+	{
+		//RF14
+		prezzoVecchio.setText(Float.toString(prezzoVecchioVal));
+		richiesta = this.showOptionDialog(null, modificaPrezzoPanel, "Aggiorna prezzo (clicca su X o annulla per uscire)", DEFAULT_OPTION, QUESTION_MESSAGE, null, pulsantiAggiornaPrezzo, "Modifica");
+	}
+
+	private void mostraErrore(int e)
+	{
+		//RF14
+		String messaggio = new String("");
+		if(e==1){
+			messaggio = "Inserire un numero positivo";
+		}
+		if(e==2){
+			messaggio = "Inserire un prezzo diverso dal precedente";
+		}
+		if(e==3){
+			messaggio = "Impossibile uscire con prezzo nullo";
+		}
+		if(e==4){
+			messaggio = "Inserire un numero";
+		}
+		this.showMessageDialog(null, messaggio, "Errore", this.ERROR_MESSAGE, null);
+	}
+
+	private void mostraMessaggio(String messaggio){
+		//RF14
+		this.showMessageDialog(null, messaggio, "Messaggio", this.INFORMATION_MESSAGE, null);
 	}
 
 	public void avvioNuovaFornitura(Integer codProdotto, boolean nuovoProdotto) throws RemoteException {
