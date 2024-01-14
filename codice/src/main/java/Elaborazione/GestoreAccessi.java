@@ -16,6 +16,8 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 {
 	private Registry registry;
 	private DbUtentiInterfaccia dbUtenti;
+	// RF24
+	private static final String SEPARATORE = ", ";
 
 	public GestoreAccessi(String host) throws RemoteException, NotBoundException
 	{
@@ -410,7 +412,7 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 
 		if (esiste != 0)
 		{
-			String Domicilio = via + "|" + civico + "|" + cap + "|" + localita;
+			String Domicilio = via + SEPARATORE + civico + SEPARATORE + cap + SEPARATORE + localita;
 			String updateQuery = "UPDATE Utente SET domicilio = '" + Domicilio + "' WHERE Username = '" + username + "'";
 			dbUtenti.update(updateQuery);
 		}
@@ -436,7 +438,7 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 		String domicilio = (String) result.get(0).get("domicilio");
 
 		// Dividi il campo Domicilio in 4 parti
-		String[] partiDomicilio = domicilio.split("\\|");
+		String[] partiDomicilio = domicilio.split(SEPARATORE);
 
 		if (partiDomicilio.length == 4) {
 			return partiDomicilio;
