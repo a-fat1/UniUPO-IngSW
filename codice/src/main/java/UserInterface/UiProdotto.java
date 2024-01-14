@@ -450,12 +450,12 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 			int sceltaPannello;
 			sceltaPannello = this.showOptionDialog(null, increDecrePanel, "Inserire percentuale e scelta (premere X per uscire)", this.DEFAULT_OPTION, this.QUESTION_MESSAGE, null, scelta, "ok");
 			if (sceltaPannello == this.CLOSED_OPTION) {
-				return;
+				break;
 			} else {
 				String valore = percentualeField.getText();
 				if (valore.equals("")) {
 					this.mostraErrore();
-					//break;
+
 				} else {
 					percentuale = Integer.parseInt(valore);
 					this.controllaCredenzialiIncreDecrePrezzi();
@@ -463,20 +463,22 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 
 					if (esito == false && sceltaVoce == -1) {
 						this.mostraErrori();
+
 					} else if (esito == false || sceltaVoce == -1) {
 						this.mostraErrore();
+
 					}
 				}
 
-				if (esito == true || sceltaVoce != -1) {
+				if (esito == true && sceltaVoce != -1) {
 					if(sceltaVoce==0){
 						gestoreProdotti.incrementaPrezzi(percentuale);
 					}else if(sceltaVoce==1){
 						gestoreProdotti.decrementaPrezzi(percentuale);
 					}
 
-					this.mostraPrezzi();
-					return;
+					this.mostraPrezziAggiornati();
+
 				}
 			}
 		}
@@ -524,7 +526,7 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 		}
 	}
 	//RF17
-	private void mostraPrezzi(){
+	private void mostraPrezziAggiornati(){
 		String message="";
 		if(esito==true && sceltaVoce!=-1){
 			message="Prezzi aggiornati con successo";
