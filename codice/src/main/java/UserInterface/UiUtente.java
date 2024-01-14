@@ -38,7 +38,7 @@ public class UiUtente extends JOptionPane implements UiUtenteInterfaccia
 	private boolean annullamentoRichiesta;
 	private int esitoControllo;
 	private String tipoUtente;
-	private HashMap<String, Object> clienteAmministratore = new HashMap<String, Object>();
+	private HashMap<String, Object> clienteAmministratore = new HashMap<String, Object>();	//implementazione di cliente/amministratore nel diagramma delle classi.
 
 	// elementi grafici
 	//RF02
