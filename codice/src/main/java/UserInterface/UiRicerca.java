@@ -795,7 +795,7 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 		// inizializzazione variabili
 		Object[][] utentiTabella;
 		JTable table = null;
-		int azione = -3;
+		int azione;
 
 		// se l'utente che ha richiesto è di genere "staff", allora inizializzo la tabella con 4 colonne in quanto
 		// deve essere mostrato solo nome-cognome-username-tipo
@@ -850,18 +850,15 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 		JScrollPane tabella = new JScrollPane(table);
 		tabella.setPreferredSize((new Dimension(500, 150)));
 
-
-		// ciclo while che dura fino a quando non viene selezionato un campo utente e un'azione relativa, oppure
-		// fino a quando l'utente non chiude la finestra per uscire
-		while (table.getSelectedRow() == -1 && azione != -1) {
+		do{
 			// se il genereUtente è di tipo "staff" mostro solo i pulsanti per lo staff
 			if (genereUtente.equals("staff"))
 				azione = showOptionDialog(null, tabella, "Elenco utenti",
 						DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null,
 						pulsanteElencoUtentiStaff, null);
 
-				// se il genereUtente è di tipo "amministratore" mostro solo i pulsanti per l'amministratore
-			else if (genereUtente.equals("amministratore"))
+			// se non è "staff" allora è sicuramente "amministratore" e mostro solo i pulsanti per quello
+			else
 				azione = showOptionDialog(null, tabella, "Elenco utenti",
 						DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null,
 						pulsanteElencoUtentiAdmin, null);
@@ -870,8 +867,10 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 			{
 				mostraErroreRicercaUtente(6);
 			}
+			// ciclo do-while che dura fino a quando non viene selezionato un campo utente e un'azione relativa, oppure
+			// fino a quando l'utente non chiude la finestra per uscire
+		}while (table.getSelectedRow() == -1 && azione != -1);
 
-		}
 
 		if (azione == 0 && genereUtente.equals("staff")) {
 			uiLista.avvioListaPagamenti(table.getModel().getValueAt(table.getSelectedRow(), 2).toString());
