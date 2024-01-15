@@ -61,20 +61,7 @@ public class RF06EffettuaOrdine
         
         assertTrue(risultato== 20.0); // Sostituisci con il risultato atteso
     }
-    /*
-    @Test
-    public void RF06_CalcolaPrezzoTotale1()
-    {
-        //prezzo errato
-        assertFalse(gestoreCarrelli.CalcolaPrezzoTotale(-12,00));
-    }
 
-    @Test
-    public void RF06_CalcolaPrezzoTotale2()
-    {
-        //prezzo corretto
-        assertTrue(gestoreCarrelli.CalcolaPrezzoTotale2(25,50));
-    }*/
     
 }
 
