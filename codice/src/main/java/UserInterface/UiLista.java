@@ -91,8 +91,8 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 		tableListaForniture.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);  
 		scrollPanelListaForniture = new JScrollPane(tableListaForniture);
 
-
-
+		fieldDataInizio.setToolTipText("scrivere qui la data iniziale");
+		fieldDataFine.setToolTipText("scrivere qui la data finale");
 		pulsanteRicerca = new String[1];
 		pulsanteRicerca[0]="Cerca";
 
@@ -209,7 +209,7 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 						}
 					}
 				}
-			} while(esitoControllo==1 || esitoControllo==2 || scelta==-1);
+			} while(scelta!=-1);
 		}
 	}
 
