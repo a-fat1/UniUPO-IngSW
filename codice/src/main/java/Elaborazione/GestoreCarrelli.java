@@ -137,9 +137,9 @@ public void rimozioneProdottoDalCarrello(ArrayList<HashMap<String, Object>> carr
 		
 		int q = (int) elemento.get("quantita") + (int) elemento.get("quantitaProdotto");
 		dbProdotti.update("UPDATE Prodotto "
-				+ "SET Prodotto.quantita = "
+				+ "SET quantita = "
 				+ q
-				+ " WHERE Carrello.codiceProdotto = " + elemento.get("codiceProdotto") + ";");
+				+ " WHERE codice = " + elemento.get("codiceProdotto") + ";");
 		
 		dbProdotti.update("DELETE FROM Carrello "
 				+ "WHERE Carrello.username = \"" + username
@@ -157,9 +157,9 @@ public void svuotaCarrello(ArrayList<HashMap<String, Object>> carrello, String u
 		for(HashMap<String, Object> elemento : carrello) {
 			int q = (int) elemento.get("quantita") + (int) elemento.get("quantitaProdotto");
 			dbProdotti.update("UPDATE Prodotto "
-					+ "SET Prodotto.quantita = "
+					+ "SET quantita = "
 					+ q
-					+ " WHERE Carrello.codiceProdotto = " + elemento.get("codiceProdotto") + ";");
+					+ " WHERE codice = " + elemento.get("codiceProdotto") + ";");
 		}
 		
 		dbProdotti.update("DELETE FROM Carrello "
