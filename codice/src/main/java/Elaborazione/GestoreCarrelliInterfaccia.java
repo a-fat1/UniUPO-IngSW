@@ -15,7 +15,9 @@ public interface GestoreCarrelliInterfaccia extends Remote
     void modificaQuantita(String nuovaQuantita, HashMap<String, Object> prodottoSelezionato, String username) throws RemoteException;
     
     //RF06
-    public boolean controllaNumeroCarta(String NumeroCarta) throws RemoteException;
+    boolean controllaNumeroCarta(String NumeroCarta) throws RemoteException;
+
+    float calcolaPrezzoTotale(ArrayList<HashMap<String, Object>> carrello) throws  RemoteException;
     
     // RF07: rimuovi prodotto dal carrello
  	// autori: Simone Aldo Borsa, Andrea Padoan

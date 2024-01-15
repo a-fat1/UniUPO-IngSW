@@ -100,33 +100,21 @@ public boolean controllaNumeroCarta(String NumeroCarta) {
 	     }
 	 
 	 return Controllo;
-}	
+}
 
 
-public float calcolaPrezzoTotale(ArrayList<HashMap<String, Object>> carrello, ArrayList<String> prodotti) {
-/*RF06: Calcola prezzototale
- * Autori: MENGAPTCHE ,LUINI*/
-    
- float somma = 0;
+public float calcolaPrezzoTotale(ArrayList<HashMap<String, Object>> carrello) throws RemoteException {
+	/*RF06: Calcola prezzototale
+	 * Autori: MENGAPTCHE ,LUINI*/
 
-    if (prodotti != null) {
-        for (HashMap<String, Object> prodotto : carrello) {
-            for (String codiceProdotto : prodotti) {
-                if (prodotto.containsKey(codiceProdotto)) {
-                	double prezzoDouble = (double)prodotto.get(codiceProdotto);
-                    float prezzo =  (float) prezzoDouble;
-                    int quantitaProdotto =  (int) prodotto.get("quantità");
-                    if (prezzo > 0) {
-                        somma = somma + (prezzo * quantitaProdotto);
-                    }
-                }
-            }
-        }
-        return somma;
-    } else {
-        System.out.println("Non ci sono prodotti");
-        return 0;
-    }
+	float somma = 0;
+
+	for(var prodotto : carrello) {
+		var prezzo =  dbProdotti.query("SELECT prezzo FROM Prodotto WHERE codice LIKE " + "\"" + prodotto.get("codiceProdotto") + "\"");
+		somma += Float.parseFloat(prezzo.get(0).get("prezzo").toString())*Integer.parseInt(prodotto.get("quantitaProdotto").toString());
+ 	}
+
+	return somma;
 }
 
 public void rimozioneProdottoDalCarrello(ArrayList<HashMap<String, Object>> carrello, HashMap<String, Object> elemento, String username) throws RemoteException {
