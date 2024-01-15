@@ -11,54 +11,24 @@ public class RF21RicercaNotifiche {
 
     @Test
     public void testcontrolloParametriCorretti() {
-        assertEquals("Date corrette!", gestoreNotifiche.controlloParametri("01-01-2020", "01-01-2021"));
-        assertEquals("Date corrette!", gestoreNotifiche.controlloParametri("01-01-2020", "01-01-2020"));
-        assertEquals("Date corrette!", gestoreNotifiche.controlloParametri("01-01-2020", "01-02-2020"));
-        assertEquals("Date corrette!", gestoreNotifiche.controlloParametri("01-01-2020", "02-01-2020"));
-        assertEquals("Date corrette!", gestoreNotifiche.controlloParametri("01-01-2020", "02-02-2020"));
-        assertEquals("Date corrette!", gestoreNotifiche.controlloParametri("01-01-2020", "02-02-2021"));
-        assertEquals("Date corrette!", gestoreNotifiche.controlloParametri("01-01-2020", "01-02-2021"));
-        assertEquals("Date corrette!", gestoreNotifiche.controlloParametri("01-01-2020", "02-01-2021"));
+        assertEquals("Date corrette!", gestoreNotifiche.controlloParametri("2020-01-01", "2021-01-01"));
+        assertEquals("Date corrette!", gestoreNotifiche.controlloParametri("2020-01-01", "2021-01-01"));
+        assertEquals("Date corrette!", gestoreNotifiche.controlloParametri("2020-01-01", "2020-02-01"));
+        assertEquals("Date corrette!", gestoreNotifiche.controlloParametri("2020-01-01", "2020-01-02"));
+        assertEquals("Date corrette!", gestoreNotifiche.controlloParametri("2020-01-01", "2020-02-02"));
+        assertEquals("Date corrette!", gestoreNotifiche.controlloParametri("2020-01-01", "2021-02-02"));
+        assertEquals("Date corrette!", gestoreNotifiche.controlloParametri("2020-01-01", "2021-02-01"));
+        assertEquals("Date corrette!", gestoreNotifiche.controlloParametri("2020-01-01", "2021-01-02"));
     }
 
     @Test
     public void testcontrolloParametriErrati() {
-        try {
-            gestoreNotifiche.controlloParametri(null, "01-01-2021");
-            fail("Non è stata lanciata l'eccezione IllegalArgumentException");
-        } catch (IllegalArgumentException e) {
-            assertEquals("Manca una data!", e.getMessage());
-        }
-        try {
-            gestoreNotifiche.controlloParametri("01-01-2020", null);
-            fail("Non è stata lanciata l'eccezione IllegalArgumentException");
-        } catch (IllegalArgumentException e) {
-            assertEquals("Manca una data!", e.getMessage());
-        }
-        try {
-            gestoreNotifiche.controlloParametri(null, null);
-            fail("Non è stata lanciata l'eccezione IllegalArgumentException");
-        } catch (IllegalArgumentException e) {
-            assertEquals("Manca una data!", e.getMessage());
-        }
-        try {
-            gestoreNotifiche.controlloParametri("01-01-2021", "01-01-2020");
-            fail("Non è stata lanciata l'eccezione IllegalArgumentException");
-        } catch (IllegalArgumentException e) {
-            assertEquals("Date non valide!", e.getMessage());
-        }
-        try {
-            gestoreNotifiche.controlloParametri("03-01-2020", "01-01-2020");
-            fail("Non è stata lanciata l'eccezione IllegalArgumentException");
-        } catch (IllegalArgumentException e) {
-            assertEquals("Date non valide!", e.getMessage());
-        }
-        try{
-            gestoreNotifiche.controlloParametri("2020/01/03", "01-01-2020");
-            fail("Non è stata lanciata l'eccezione IllegalArgumentException");
-        } catch (IllegalArgumentException e){
-            assertEquals("Formato data non valido!", e.getMessage());
-        }
+        assertEquals("Manca una data!", gestoreNotifiche.controlloParametri("2022-05-10", ""));
+        assertEquals("Manca una data!", gestoreNotifiche.controlloParametri("", "2020-09-07"));
+        assertEquals("Date non valide!", gestoreNotifiche.controlloParametri("2022-05-10", "2021-10-01"));
+        assertEquals("Formato data non valido!", gestoreNotifiche.controlloParametri("01-10-2024", "2020-10-20"));
+        assertEquals("Formato data non valido!", gestoreNotifiche.controlloParametri("2022/05/10", "2020-10-20"));
+        assertEquals("Formato data non valido!", gestoreNotifiche.controlloParametri("aufgbsudb", "2020-10-20"));
     }
 
 }

@@ -71,6 +71,7 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 	private JButton cercaButton;
 	private JPanel mostraFormRicercaNotifichePanel;
 	private JCheckBox[] check;
+	private JScrollPane scrollTable;
 
 
 	public UiNotifica(String hostGestore) throws RemoteException, NotBoundException
@@ -167,6 +168,7 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 		testoLabel = new JLabel("Inserire testo notifica:");
 		testoField.setToolTipText("testo");
 
+		//pannello di modifica notifica
 		modificaNotificaPanel = new JPanel();
 
 		modificaNotificaPanel.setLayout(new GridBagLayout());
@@ -209,7 +211,7 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 		int scelta;
 
 		switch (tipoNotifica) {
-            case "nuovo prodotto":
+            case "nuovo prodotto": //nuovo prodotto
                 testoNotifica = gestoreNotifiche.generaTestoNotificaProdotto(oggetto);
 				do {
 					do {
@@ -224,9 +226,11 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 					}
 				} while (!Objects.equals(esitoVerifica, "ok"));
                 gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), dataScadenza, testoField.getText(), "cliente");
+				// se la notifica è stata inserita correttamente nel database, mostra messaggio di conferma
+				this.showMessageDialog(null,"Notifica inserita correttamente nel database!", "Avviso", this.INFORMATION_MESSAGE);
 	    	break;
             
-            case "avviso":
+            case "avviso"://nuovo avviso
                 testoNotifica = gestoreNotifiche.generaTestoNotificaAvviso();
 				do {
 					scelta = this.mostraFormNotifica(this.testoNotifica);
@@ -239,12 +243,14 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 					}
 				} while (!Objects.equals(esitoVerifica, "ok"));
                 gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), dataScadenza, testoField.getText(), "tutti");
+				// se la notifica è stata inserita correttamente nel database, mostra messaggio di conferma
+				this.showMessageDialog(null,"Notifica inserita correttamente nel database!", "Avviso", this.INFORMATION_MESSAGE);
             break;
-            case "nuovo ordine":
+            case "nuovo ordine"://nuovo ordine creato
                 testoNotifica = gestoreNotifiche.generaTestoNotificaOrdine(oggetto);
                 gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), setDataScadenzaDefault(), testoNotifica, "staff");
             break;
-            case "nuovo utente":
+            case "nuovo utente"://nuova utenza
                 testoNotifica = gestoreNotifiche.generaTestoNotificaUtente(oggetto);
                 gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), setDataScadenzaDefault(), testoNotifica, "amministratore");
             break;
@@ -256,7 +262,7 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 	 *
 	 * @author Linda Monfermoso, Gabriele Magenta Biasina
 	 */
-	private int mostraFormNotifica(String testoNotifica) {
+	private int mostraFormNotifica(String testoNotifica) {// metodo che moostra il form della notifica
 		testoField.setText(testoNotifica);
 
 		int scelta = this.showConfirmDialog(null, modificaNotificaPanel, "Modifica notifica", this.DEFAULT_OPTION, this.QUESTION_MESSAGE, null);
@@ -279,23 +285,23 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 	private void mostraErrore(String tipoErrore) {
 		String messaggio = "";
 		switch (tipoErrore) {
-            case "errore formato data":
+            case "errore formato data"://formato data errato
                 messaggio = "La data fornita non e' in formato YYYY-MM-DD.\n(clicca OK o X per continuare)";
                 dataField.setBackground(Color.YELLOW);
             	break;
-            case "errore formato ora":
+            case "errore formato ora"://formato ora errato
                 messaggio = "L'ora fornita non e' in formato HH:mm:ss.\n(clicca OK o X per continuare)";
                 oraField.setBackground(Color.YELLOW);
             	break;
-            case "errore data":
+            case "errore data"://data non compatibile con la data di pubblicazione
                 messaggio = "La data fornita non e' compatibile con la data di pubblicazione.\n(clicca OK o X per continuare)";
                 dataField.setBackground(Color.YELLOW);
             	break;
-            case "errore testo notifica":
+            case "errore testo notifica"://testo notifica vuoto
                 messaggio = "Il testo della notifica non può essere vuoto.\n(clicca OK o X per continuare)";
                 testoField.setBackground(Color.RED);
             	break;
-			case "errore uscita":
+			case "errore uscita"://quando viene premuto X e il tipo della notifica è prodotto
 				messaggio = "Non è possibile annullare la generazione di una notifica per un nuovo prodotto.\n(clicca OK o X per continuare)";
 				break;
         }
@@ -402,7 +408,7 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 		dataScadenzaRF21 = dataScadenzaField.getText();
 
 
-		for(int i = 0; i < 3; i++){
+		for(int i = 0; i < 4; i++){
 			if(check[i].isSelected()){
 				tipoUtente = check[i].getText();
 			}
@@ -464,30 +470,35 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 	}
 
 	public void mostraNotificheRF21(ArrayList<HashMap<String, Object>> notifica){
-		// RF21: RicercaNotifiche (Caviggia, Colombo)
-		int dim = notifica.size();
+        	// RF21: RicercaNotifiche (Caviggia, Colombo)
+        	int dim = notifica.size();
+        	String[] columnNames = {"Data pubblicazione", "Data scadenza", "Tipo utente", "Testo"};
+        	DefaultTableModel model = new DefaultTableModel(dim, columnNames.length);
+        	model.setColumnIdentifiers(columnNames);
 
-		JTable tabellaRF21 = new JTable(dim, 4);
+        	for (int i = 0; i < dim; i++) {
+            		String dataPubblicazione = (String) notifica.get(i).get("dataPubblicazione");
+            		String dataScadenza = (String) notifica.get(i).get("dataScadenza");
+            		String tipoUtente = (String) notifica.get(i).get("tipoUtente");
+           		 String testo = (String) notifica.get(i).get("testo");
 
-		tabellaRF21.getColumnModel().getColumn(0).setPreferredWidth(100);
-		tabellaRF21.getColumnModel().getColumn(1).setPreferredWidth(100);
-		tabellaRF21.getColumnModel().getColumn(2).setPreferredWidth(100);
-		tabellaRF21.getColumnModel().getColumn(3).setPreferredWidth(300);
-		tabellaRF21.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+           		 model.setValueAt(dataPubblicazione, i, 0);
+           		 model.setValueAt(dataScadenza, i, 1);
+            		model.setValueAt(tipoUtente, i, 2);
+           		 model.setValueAt(testo, i, 3);
+        	}
 
-		for (int i = 0; i < dim; i++) {
-			String dataPubblicazione = (String) notifica.get(i).get("dataPubblicazione");
-			String dataScadenza = (String) notifica.get(i).get("dataScadenza");
-			String tipoUtente = (String) notifica.get(i).get("tipoUtente");
-			String testo = (String) notifica.get(i).get("testo");
+      	  	JTable tabellaRF21 = new JTable(model);
+       	 	tabellaRF21.getColumnModel().getColumn(0).setPreferredWidth(200);
+        	tabellaRF21.getColumnModel().getColumn(1).setPreferredWidth(200);
+        	tabellaRF21.getColumnModel().getColumn(2).setPreferredWidth(100);
+        	tabellaRF21.getColumnModel().getColumn(3).setPreferredWidth(300);
+        	tabellaRF21.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
-			tabellaRF21.setValueAt(dataPubblicazione, i, 0);
-			tabellaRF21.setValueAt(dataScadenza, i, 1);
-			tabellaRF21.setValueAt(tipoUtente, i, 2);
-			tabellaRF21.setValueAt(testo, i, 3);
-		}
-		showMessageDialog(null, tabellaRF21, "Notifiche trovate", JOptionPane.INFORMATION_MESSAGE, null);
-	}
+        	scrollTable = new JScrollPane(tabellaRF21);
+        	scrollTable.setPreferredSize(new Dimension(800, 200));
+        	showMessageDialog(null, scrollTable, "Notifiche trovate", JOptionPane.INFORMATION_MESSAGE, null);
+    }
 
 
 

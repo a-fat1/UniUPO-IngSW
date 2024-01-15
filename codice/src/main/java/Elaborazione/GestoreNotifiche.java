@@ -30,6 +30,7 @@ public class GestoreNotifiche implements GestoreNotificheInterfaccia {
     }
 
     public String generaTestoNotificaProdotto(HashMap<String, Object> prodotto) throws RemoteException {
+        //genera il testo della notifica nel caso di un nuovo prodotto
         String tipo = prodotto.get("tipo").toString();
         String autore = prodotto.get("autore").toString();
         String titolo = prodotto.get("titolo").toString();
@@ -38,16 +39,19 @@ public class GestoreNotifiche implements GestoreNotificheInterfaccia {
     }
 
     public String generaTestoNotificaOrdine(HashMap<String, Object> ordine) throws RemoteException {
+        //genera il testo della notifica nel caso di un nuovo ordine
         String username = ordine.get("username").toString();
 
         return "Nuovo Ordine: effettuato da " + username + ".";
     }
 
     public String generaTestoNotificaAvviso() throws RemoteException {
+        //genera il testo della notifica nel caso di un nuovo avviso
         return "Avviso: ";
     }
 
     public String generaTestoNotificaUtente(HashMap<String, Object> utente) throws RemoteException {
+        //genera il testo della notifica nel caso di un nuovo utente
         String nome = utente.get("nome").toString();
         String cognome = utente.get("cognome").toString();
 
@@ -55,6 +59,7 @@ public class GestoreNotifiche implements GestoreNotificheInterfaccia {
     }
 
     public String verificaCorrettezzaDati(String data, String ora, String testoNotifica) throws RemoteException {
+        //metodo utilizzato per verificare che i dati in input (data, ora e testo della notifica) siano corretti e in linea con i formati
         String esitoVerifica = "errore ";
 
         // controllo formato data
@@ -80,6 +85,7 @@ public class GestoreNotifiche implements GestoreNotificheInterfaccia {
     }
 
     public void inserimentoNotifica(HashMap<String, String> dataPubblicazione, HashMap<String, String> dataScadenza, String testoNotifica, String tipoUtente) throws RemoteException {
+        //metodo utilizzato per l'inserimento di una notifica nel Database
         String comandoSql = "INSERT INTO Notifica (dataPubblicazione, dataScadenza, testo, tipoUtente) values (\"" +
                 dataPubblicazione.get("data") + " " +
                 dataPubblicazione.get("ora") + "\", \"" +
