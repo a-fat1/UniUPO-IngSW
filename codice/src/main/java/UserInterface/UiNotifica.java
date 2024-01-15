@@ -402,7 +402,7 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 		dataScadenzaRF21 = dataScadenzaField.getText();
 
 
-		for(int i = 0; i < 3; i++){
+		for(int i = 0; i < 4; i++){
 			if(check[i].isSelected()){
 				tipoUtente = check[i].getText();
 			}
