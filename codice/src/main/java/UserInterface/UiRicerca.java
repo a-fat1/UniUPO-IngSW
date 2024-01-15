@@ -52,26 +52,23 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 	// RF19 - Ricerca Utente
 	// variabili
 	private int sceltaUtente; // variabile per determinare l'uscita o meno dall'interfaccia di Ricerca utente
-	private String nome;
-	private String cognome;
-	private String username;
-	private String sceltaRicerca;
-	private int esitoControllo;
-
-	private int azione;
-
-	private String utenteSelezionato;
-	private boolean statoUtenteSelezionato;
-
-	private ArrayList<HashMap<String, Object>> elencoUtenti;
+	private String nome; // String nome che viene estratta dal form per la ricerca
+	private String cognome; // String cognome che viene estratta dal form per la ricerca
+	private String username; // String username che viene estratta dal form per la ricerca
+	private String sceltaRicerca; // String che viene estratta per determinare quale ricerca intende effettuare l'utente
+	private int esitoControllo; // variabile per salvare il risultato del controllo parametri
+	private int azione; // variabile per determinare cosa l'utente intende fare con la riga selezionata dalla tabella
+	private String utenteSelezionato; // String che viene estratta per salvare lo username dell'utente selezionato
+	private boolean statoUtenteSelezionato; // boolean che salva lo stato dell'utente (true/false)
+	private ArrayList<HashMap<String, Object>> elencoUtenti; // elenco degli utenti che vengono estratti dal database
 
 	// RF19 - Ricerca Utente
 	// Array di String per i pulsanti di ricerca e le colonne per la tabella dei dati estratti dal database
-	private final String[] pulsanteRicerca;
-	private final String[] pulsanteElencoUtentiStaff;
-	private final String[] pulsanteElencoUtentiAdmin;
-	private final String[] colonneStaff;
-	private final String[] colonneAmministratore;
+	private final String[] pulsanteRicerca; // contiene il pulsante di ricerca "Invia"
+	private final String[] pulsanteElencoUtentiStaff; // contiene i pulsanti per lo staff
+	private final String[] pulsanteElencoUtentiAdmin; // contiene i pulsanti per l'amministratore
+	private final String[] colonneStaff; // contiene le colonne per la tabella che vedrà lo staff
+	private final String[] colonneAmministratore; // contiene le colonne per la tabella che vedrà l'amministratore
 	// RF18
 	private int sceltaGiacenza, esitoGiacenza = -1;
 	private String giacenza;
@@ -622,8 +619,8 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 	}
 
 	/**
-	 * Funzione che avvia la funzione di Ricerca Utente
-	 * @param genereUtente il tipo di utente (admin o staff) di chi vuole iniziare la ricerca
+	 * Funzione che avvia la funzione di Ricerca Utente.
+	 * @param genereUtente il tipo di utente (admin o staff) di chi vuole iniziare la ricerca.
 	 * @throws RemoteException
 	 */
 
@@ -799,7 +796,7 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 	}
 
 	/**
-	 * Funzione che mostra l'elenco degli utenti trovati nel database.
+	 * Funzione che mostra l'elenco degli utenti trovati nel database e fa scegliere cosa fare.
 	 * @param elencoUtenti l'elenco di utenti trovati dopo l'interrogazione al database.
 	 * @param genereUtente il tipo di utente che ha effettuato la ricerca.
 	 * @throws RemoteException
