@@ -288,7 +288,7 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 		do{
 			controllo = 0;
 			mostraFormAggiornaPrezzo(P);
-			if(richiesta==0 && prezzoVecchioVal==0){
+			if(richiesta<=0 && prezzoVecchioVal==0){
 				mostraErrore(3);
 			}
 			else{
@@ -309,7 +309,7 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 					}
 				}
 			}
-		}while((richiesta==0 && prezzoVecchioVal==0) || controllo!=0);
+		}while((richiesta<=0 && prezzoVecchioVal==0) || controllo!=0);
 	}
 
 	private void mostraFormAggiornaPrezzo(HashMap<String,Object> P) throws RemoteException
