@@ -71,6 +71,7 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 	private JButton cercaButton;
 	private JPanel mostraFormRicercaNotifichePanel;
 	private JCheckBox[] check;
+	private JScrollPane scrollTable;
 
 
 	public UiNotifica(String hostGestore) throws RemoteException, NotBoundException
@@ -469,30 +470,35 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 	}
 
 	public void mostraNotificheRF21(ArrayList<HashMap<String, Object>> notifica){
-		// RF21: RicercaNotifiche (Caviggia, Colombo)
-		int dim = notifica.size();
+        	// RF21: RicercaNotifiche (Caviggia, Colombo)
+        	int dim = notifica.size();
+        	String[] columnNames = {"Data pubblicazione", "Data scadenza", "Tipo utente", "Testo"};
+        	DefaultTableModel model = new DefaultTableModel(dim, columnNames.length);
+        	model.setColumnIdentifiers(columnNames);
 
-		JTable tabellaRF21 = new JTable(dim, 4);
+        	for (int i = 0; i < dim; i++) {
+            		String dataPubblicazione = (String) notifica.get(i).get("dataPubblicazione");
+            		String dataScadenza = (String) notifica.get(i).get("dataScadenza");
+            		String tipoUtente = (String) notifica.get(i).get("tipoUtente");
+           		 String testo = (String) notifica.get(i).get("testo");
 
-		tabellaRF21.getColumnModel().getColumn(0).setPreferredWidth(100);
-		tabellaRF21.getColumnModel().getColumn(1).setPreferredWidth(100);
-		tabellaRF21.getColumnModel().getColumn(2).setPreferredWidth(100);
-		tabellaRF21.getColumnModel().getColumn(3).setPreferredWidth(300);
-		tabellaRF21.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+           		 model.setValueAt(dataPubblicazione, i, 0);
+           		 model.setValueAt(dataScadenza, i, 1);
+            		model.setValueAt(tipoUtente, i, 2);
+           		 model.setValueAt(testo, i, 3);
+        	}
 
-		for (int i = 0; i < dim; i++) {
-			String dataPubblicazione = (String) notifica.get(i).get("dataPubblicazione");
-			String dataScadenza = (String) notifica.get(i).get("dataScadenza");
-			String tipoUtente = (String) notifica.get(i).get("tipoUtente");
-			String testo = (String) notifica.get(i).get("testo");
+      	  	JTable tabellaRF21 = new JTable(model);
+       	 	tabellaRF21.getColumnModel().getColumn(0).setPreferredWidth(200);
+        	tabellaRF21.getColumnModel().getColumn(1).setPreferredWidth(200);
+        	tabellaRF21.getColumnModel().getColumn(2).setPreferredWidth(100);
+        	tabellaRF21.getColumnModel().getColumn(3).setPreferredWidth(300);
+        	tabellaRF21.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
-			tabellaRF21.setValueAt(dataPubblicazione, i, 0);
-			tabellaRF21.setValueAt(dataScadenza, i, 1);
-			tabellaRF21.setValueAt(tipoUtente, i, 2);
-			tabellaRF21.setValueAt(testo, i, 3);
-		}
-		showMessageDialog(null, tabellaRF21, "Notifiche trovate", JOptionPane.INFORMATION_MESSAGE, null);
-	}
+        	scrollTable = new JScrollPane(tabellaRF21);
+        	scrollTable.setPreferredSize(new Dimension(800, 200));
+        	showMessageDialog(null, scrollTable, "Notifiche trovate", JOptionPane.INFORMATION_MESSAGE, null);
+    }
 
 
 
