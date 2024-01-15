@@ -271,7 +271,7 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 					riga.get("tipo"),
 					riga.get("prezzo"),
 					riga.get("quantita"),
-					isCliente ? "" : riga.get("disponibile")  // Nasconde la colonna "Disponibilità" se cliente è true
+            		isCliente ? "" : (int) riga.get("disponibile") == 1 ? "SI" : "NO"  // Converte 1 in "si" e 0 in "no"
 			};
 			tableModel.addRow(rowData);
 		}
