@@ -38,6 +38,30 @@ public class UiCarrello extends JOptionPane implements UiCarrelloInterfaccia
 	private String pulsantiConferma[];
 	private String pulsanteNotifica[];
 
+	//attributi
+	//RF06
+	private int sceltaEffettuaOrdine;
+    private int sceltaMostraFormCarta;
+    private int sceltaErrore;
+    private float prezzoTotale;
+    private boolean procedereConOrdine;
+    private String numeroCarta;
+    private String tipoCarta;
+    private String messaggioErrore;
+    
+    //elemmentin grafici
+	//RF06
+    private JLabel labelPrezzoTotale;
+    private JTextField fieldPrezzoTotale;
+    private JLabel labelProcediOrdine;
+    private JTextField fieldProcediOrdine;
+    private JLabel labelNumeroCarta;
+    private JTextField fieldNumeroCarta;
+    private JLabel labelTipoCarta;
+    private JPanel effettuaOrdinePanel;
+    private JPanel mostraFormCartaPanel;
+    private JPanel errorePanel;
+
 
 	//RF09 : Aggiunta al carrello
 	//attributi
@@ -165,7 +189,101 @@ public class UiCarrello extends JOptionPane implements UiCarrelloInterfaccia
 	}
 
 	public void avvioEffettuaOrdine() throws RemoteException
-	{	// RF06	
+	{	// RF06 Luini-Mengaptche	
+		prezzoTotale=mostraPrezzo();
+
+		if(sceltaEffettuaOrdine==0){
+			mostraFormCarta();
+			if(sceltaMostraFormCarta==0){
+				mostraErrore();
+			}
+			gestoreCarrelli.controllaNumeroCarta(numeroCarta);
+		}
+	}
+
+	public float mostraPrezzo() throws RemoteException {
+	    // RF06 Luini-Mengaptche
+		effettuaOrdinePanel = new JPanel();
+
+	    labelPrezzoTotale = new JLabel("Il prezzo totale");
+	    fieldPrezzoTotale = new JTextField("", 15);
+	    labelProcediOrdine = new JLabel("Vuoi procedere con l'ordine?");
+
+	    effettuaOrdinePanel.add(labelPrezzoTotale);
+	    effettuaOrdinePanel.add(fieldPrezzoTotale);
+	    effettuaOrdinePanel.add(labelProcediOrdine);
+
+	    sceltaEffettuaOrdine = showConfirmDialog(
+	        	null,
+	    		effettuaOrdinePanel,
+	        	"Effettua Ordine",
+	        	YES_NO_OPTION);
+
+	    // Conversione del  valore del campo testo  in un float
+	    try {
+	    	prezzoTotale = Float.parseFloat(fieldPrezzoTotale.getText());
+	    } catch (NumberFormatException e) {
+	        prezzoTotale = 0.0f; //Valore predefinito in caso di errore di conversione
+	    }
+
+	    // È possibile controllare il valore di sceltaEffettuaOrdine anche per altre azioni
+	    procedereConOrdine = (sceltaEffettuaOrdine == YES_OPTION);
+
+	    return prezzoTotale;
+	}
+	 
+	public void mostraFormCarta() throws RemoteException {
+		// RF06 Luini-Mengaptche
+	    mostraFormCartaPanel = new JPanel();
+
+	    labelNumeroCarta = new JLabel("Numero Carta");
+	    fieldNumeroCarta = new JTextField("", 20);
+	    labelTipoCarta = new JLabel("Tipo Carta");
+	        
+	        /*sceltaMostraFormCarta = this.showConfirmDialog(null, mostraFormCartaPanel, "mostra form carta", this.VISA_MASTERCARD_AMEX_OK_OPTION);
+	        numeroCarta = this.showInputDialog(null, "numero carta", "mostra form carta".this.QUESTION_MESSAGE);
+	        String[] scelta= {"Visa", "Mastercard", "AmEx"};*/
+	       
+	    labelNumeroCarta = new JLabel("numero carta");
+	    fieldNumeroCarta = new JTextField("", 20);
+	    labelTipoCarta = new JLabel("tipo carta");
+
+	    mostraFormCartaPanel.add(labelNumeroCarta);
+	    mostraFormCartaPanel.add(fieldNumeroCarta);
+	    mostraFormCartaPanel.add(labelTipoCarta);
+
+	    String[] scelte = {"OK"};
+
+	    sceltaMostraFormCarta = showConfirmDialog(
+	        	null,
+	        	mostraFormCartaPanel,
+	        	"Mostra Form Carta",
+	        	OK_OPTION);
+
+	    // Recupero dei valori dei campi di testo
+	    numeroCarta = fieldNumeroCarta.getText();
+	    tipoCarta = labelTipoCarta.getText();
+	}
+
+	 
+	public void mostraErrore() throws RemoteException {
+		// RF06 Luini-Mengaptche
+	    errorePanel = new JPanel();
+
+	    labelNumeroCarta = new JLabel("Dati carta errati");
+
+	    errorePanel.add(labelNumeroCarta);
+
+	    String[] scelte = {"OK"};
+
+	    sceltaErrore = showConfirmDialog(
+	        	null,
+	        	errorePanel,
+	        	"Errore",
+	        	OK_OPTION);
+
+	    // Recupero del messaggio di errore 
+	    messaggioErrore = labelNumeroCarta.getText();
 	}
 
 	
