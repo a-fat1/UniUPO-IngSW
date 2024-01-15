@@ -255,75 +255,83 @@ public class UiCarrello extends JOptionPane implements UiCarrelloInterfaccia
 	}
 
 	
-	public void avvioAggiungiAlCarrello(String username, int codiceProdotto) throws RemoteException
+public void avvioAggiungiAlCarrello(String username, int codiceProdotto) throws RemoteException
 	{	// RF09	: Aggiunta al carrello
 		// Autori: Fasano Lorenzo, Iacobucci Luca;
-
 
 		//prendo la quantita' inserita dall'utente
-		mostraForm();
-
-		//controllo che il prodotto selezionato dall'utente sia disponibile in database
-		if(gestoreCarrelli.controlloDisponibilita(codiceProdotto)){
-			System.out.println("1)Controllo disponibilita': OK");
-		//mostra un messaggio di errore in caso di indisponibilita' del prodotto
-		}else{
-			mostraErrore(1);
-		}
-	
-		//controllo che la quantita' richiesta dall'utente sia compresa tra 1 e 3
-		if(gestoreCarrelli.controlloLimiteQuantita(quantita)){
-			System.out.println("2)Controllo limite quantita': OK");
-		//mostra errore in qualsiasi altro caso
-		}else{
-			mostraErrore(2);
-		}
-
-		//aggiorno la quantita del prodotto in database
-		gestoreCarrelli.aggiornamentoQuantita(quantita,
-		codiceProdotto,username);
+		while(true){
 		
-		this.showMessageDialog(null, "Il carrello e' stato aggiornato", "Carrello aggiornato", this.PLAIN_MESSAGE, null);
-
-	}
+			sceltaQuantita = this.showOptionDialog(null, formPanel, "Inserire quantita'", DEFAULT_OPTION, QUESTION_MESSAGE, null, pulsanteOK, "OK");
 	
-	public void mostraForm() throws RemoteException
-	{	// RF09	: Aggiunta al carrello
-		// Autori: Fasano Lorenzo, Iacobucci Luca;
-
-		sceltaQuantita = this.showOptionDialog(null, formPanel, "Inserire quantita'", 		DEFAULT_OPTION, QUESTION_MESSAGE, null, pulsanteOK, "OK");
-
-		//utente preme X
-		if(sceltaQuantita == -1){
-			System.out.println("Scelta annullata.");
-			mostraErrore(sceltaQuantita);
-		}
-			//utente preme OK
-		if(sceltaQuantita == 0){
-			//aggiungere numberFormatException
-			quantita = Integer.parseInt(quantitaField.getText());
-			//controllo quantita inserita x vedere numero
-			System.out.println("Quantita' inserita:" + quantita);
+			switch (sceltaQuantita) {
+				case 0:
+					//controllo che il prodotto selezionato dall'utente sia disponibile in database
+					if(gestoreCarrelli.controlloDisponibilita(codiceProdotto)){
+					System.out.println("1)Controllo disponibilita': OK");
+						//prelevo intero che utente ha inserito in input gestendo il caso in cui l'utente inserisca qualsiasi cosa al di fuori di un numero impostando la sceltaQuantita a -2 e ripetendo così il ciclo
+							try{
+								quantita = Integer.parseInt(quantitaField.getText());
+								//controllo quantita inserita x vedere numero
+								System.out.println("Quantita' inserita:" + quantita);
+							}catch(NumberFormatException e){
+								System.out.println("Errore formato inserimento quantità non valido.");
+								continue;
+							}
+							//controllo che la quantita' richiesta dall'utente sia compresa tra 1 e 3
+							if(gestoreCarrelli.controlloLimiteQuantita(quantita)){
+								System.out.println("2)Controllo limite quantita': OK");
+								//aggiorno la quantita del prodotto in database e aggiungo prodotto al carrello
+								gestoreCarrelli.aggiornamentoQuantita(quantita,codiceProdotto,username);
+							return;
+						}else{
+							//mostra un messaggio di errore in caso l'utente inserisca una quantita' non valida
+							mostraErr(2);
+							System.out.println("2)Controllo limite quantita': NO");
+							break;	
+						}	
+						//mostra errore in caso in cui il prodotto non sia disponibile
+					}else{
+						System.out.println("1)Controllo disponibilita': NO");
+						break;
+					}
+				case -1:
+						System.out.println("Utente ha premuto X per uscire, uscita in corso...");
+						//mostro uscita da procedimento
+						mostraErr(4);
+						return;
+				} 
 		}
 	}
-		//RF09 : Aggiunta al carrello
-	public void mostraErrore(int numberError)throws RemoteException{
+
+	
+public void mostraErr(int inputEr){
 	// RF09	: Aggiunta al carrello
 	// Autori: Fasano Lorenzo, Iacobucci Luca;
-		switch (numberError) {
-			case 1:
-				this.showMessageDialog(null, "Prodotto non disponibile", "Errore disponibilita' prodotto", this.PLAIN_MESSAGE, null);
-				break;
-			
-			case 2:
-				this.showMessageDialog(null, "La quantita' deve essere compresa tra 1 e 3", "Errore quantita'", this.PLAIN_MESSAGE, null);
-				break;
-				
-				default:
-					System.out.println("Scelta annullata.");
-					break;
-			}
-		}
+	String tit = "";
+	String mex = "";
+	switch (inputEr) {
+		case 1:
+			tit="Errore disponibilita' prodotto";
+			mex = "Prodotto non disponibile";
+			break;
+		case 2:
+			tit = "Errore quantita'";
+			mex = "La quantita' deve essere compresa tra 1 e 3";
+			break;
+		case 3:
+			tit = "Carrello aggiornato";
+			mex = "Il carrello e' stato aggiornato";
+			break;
+		case 4:
+			tit = "Inserimento annullato";
+			mex = "Inserimento annullato.";
+			break;
+	}
+
+	this.showMessageDialog(null, mex, tit, this.PLAIN_MESSAGE, null);
+	
+	}
 
 	private void visualizzaListaProdottiCarrello() {
 		// RF05: visualizza carrello
