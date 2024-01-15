@@ -188,7 +188,7 @@ public class GestoreProdotti implements GestoreProdottiInterfaccia {
 		//RF16
 		dbProdotti.update(
 				"INSERT INTO Prodotto(autore, titolo, editore, anno, tipo, prezzo, quantita, disponibile) " +
-						"VALUES (\""+ String.join(", ", autori) +"\", \""+ titolo +"\", \""+ editore +"\", \""+ anno +"\", \""+ tipo +"\", null, 0, True)"
+						"VALUES (\""+ String.join(", ", autori) +"\", \""+ titolo +"\", \""+ editore +"\", \""+ anno +"\", \""+ tipo +"\", 0, 0, True)"
 				);
 
 		ArrayList<HashMap<String, Object>> prodotti = dbProdotti.query(
