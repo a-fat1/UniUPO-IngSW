@@ -103,7 +103,7 @@ public boolean controllaNumeroCarta(String NumeroCarta) {
 }	
 
 
-public float calcolaPrezzoTotale(ArrayList<HashMap<String, Object>> carrello, List<String> prodotti) {
+public float calcolaPrezzoTotale(ArrayList<HashMap<String, Object>> carrello, ArrayList<String> prodotti) {
 /*RF06: Calcola prezzototale
  * Autori: MENGAPTCHE ,LUINI*/
     
