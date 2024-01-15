@@ -1,11 +1,13 @@
 import static org.junit.Assert.*; 
 import org.junit.Test;
 
+
 import DataBase.DbProdotti;
 import Elaborazione.GestoreCarrelli;
+
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class RF06EffettuaOrdine 
 {
@@ -15,25 +17,25 @@ public class RF06EffettuaOrdine
 
     
     @Test
-    public void RF06_ControllaNumeroCarta1()
+    public void RF06_ControllaNumeroCarta1() throws RemoteException
     {
         //errore troppi numeri
-        assertFalse(gestoreCarrelli.RF06_ControllaNumeroCarta1("672813924677863895"));
+        assertFalse(gestoreCarrelli.controllaNumeroCarta("672813924677863895"));
         
     }
 
     @Test
-    public void RF06_ControllaNumeroCarta2()
+    public void RF06_ControllaNumeroCarta2() throws RemoteException
     {
         //errore pochi numeri
-        assertFalse(gestoreCarrelli.RF06_ControllaNumeroCarta2("67281392467795"));
+        assertFalse(gestoreCarrelli.controllaNumeroCarta("67281392467795"));
     }
 
     @Test
-    public void RF06_ControllaNumeroCarta3()
+    public void RF06_ControllaNumeroCarta3() throws RemoteException
     {
         //ok
-        assertTrue(gestoreCarrelli.RF06_ControllaNumeroCarta3("6728139246779538"));
+        assertTrue(gestoreCarrelli.controllaNumeroCarta("6728139246779538"));
     }
     
 
@@ -50,11 +52,11 @@ public class RF06EffettuaOrdine
         prodotto1.put("quantità",  2);
         carrello.add(prodotto1);
 
-        List<String> prodotti = new ArrayList<>();
+        ArrayList<String> prodotti = new ArrayList<>();
         prodotti.add("prodotto123");
 
       
-        float risultato = gestoreCarrelli.calcolaPrezzoTotale(carrello, prodotti);
+        float risultato = gestoreCarrelli.calcolaPrezzoTotale( carrello, prodotti);
       System.out.println("il risultato : "+risultato);
         
         assertTrue(risultato== 20.0); // Sostituisci con il risultato atteso
