@@ -167,6 +167,7 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 		testoLabel = new JLabel("Inserire testo notifica:");
 		testoField.setToolTipText("testo");
 
+		//pannello di modifica notifica
 		modificaNotificaPanel = new JPanel();
 
 		modificaNotificaPanel.setLayout(new GridBagLayout());
@@ -209,7 +210,7 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 		int scelta;
 
 		switch (tipoNotifica) {
-            case "nuovo prodotto":
+            case "nuovo prodotto": //nuovo prodotto
                 testoNotifica = gestoreNotifiche.generaTestoNotificaProdotto(oggetto);
 				do {
 					do {
@@ -228,7 +229,7 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 				this.showMessageDialog(null,"Notifica inserita correttamente nel database!", "Avviso", this.INFORMATION_MESSAGE);
 	    	break;
             
-            case "avviso":
+            case "avviso"://nuovo avviso
                 testoNotifica = gestoreNotifiche.generaTestoNotificaAvviso();
 				do {
 					scelta = this.mostraFormNotifica(this.testoNotifica);
@@ -244,11 +245,11 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 				// se la notifica è stata inserita correttamente nel database, mostra messaggio di conferma
 				this.showMessageDialog(null,"Notifica inserita correttamente nel database!", "Avviso", this.INFORMATION_MESSAGE);
             break;
-            case "nuovo ordine":
+            case "nuovo ordine"://nuovo ordine creato
                 testoNotifica = gestoreNotifiche.generaTestoNotificaOrdine(oggetto);
                 gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), setDataScadenzaDefault(), testoNotifica, "staff");
             break;
-            case "nuovo utente":
+            case "nuovo utente"://nuova utenza
                 testoNotifica = gestoreNotifiche.generaTestoNotificaUtente(oggetto);
                 gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), setDataScadenzaDefault(), testoNotifica, "amministratore");
             break;
@@ -260,7 +261,7 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 	 *
 	 * @author Linda Monfermoso, Gabriele Magenta Biasina
 	 */
-	private int mostraFormNotifica(String testoNotifica) {
+	private int mostraFormNotifica(String testoNotifica) {// metodo che moostra il form della notifica
 		testoField.setText(testoNotifica);
 
 		int scelta = this.showConfirmDialog(null, modificaNotificaPanel, "Modifica notifica", this.DEFAULT_OPTION, this.QUESTION_MESSAGE, null);
@@ -283,23 +284,23 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 	private void mostraErrore(String tipoErrore) {
 		String messaggio = "";
 		switch (tipoErrore) {
-            case "errore formato data":
+            case "errore formato data"://formato data errato
                 messaggio = "La data fornita non e' in formato YYYY-MM-DD.\n(clicca OK o X per continuare)";
                 dataField.setBackground(Color.YELLOW);
             	break;
-            case "errore formato ora":
+            case "errore formato ora"://formato ora errato
                 messaggio = "L'ora fornita non e' in formato HH:mm:ss.\n(clicca OK o X per continuare)";
                 oraField.setBackground(Color.YELLOW);
             	break;
-            case "errore data":
+            case "errore data"://data non compatibile con la data di pubblicazione
                 messaggio = "La data fornita non e' compatibile con la data di pubblicazione.\n(clicca OK o X per continuare)";
                 dataField.setBackground(Color.YELLOW);
             	break;
-            case "errore testo notifica":
+            case "errore testo notifica"://testo notifica vuoto
                 messaggio = "Il testo della notifica non può essere vuoto.\n(clicca OK o X per continuare)";
                 testoField.setBackground(Color.RED);
             	break;
-			case "errore uscita":
+			case "errore uscita"://quando viene premuto X e il tipo della notifica è prodotto
 				messaggio = "Non è possibile annullare la generazione di una notifica per un nuovo prodotto.\n(clicca OK o X per continuare)";
 				break;
         }
