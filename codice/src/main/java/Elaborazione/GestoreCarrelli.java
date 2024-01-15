@@ -135,8 +135,8 @@ public void rimozioneProdottoDalCarrello(ArrayList<HashMap<String, Object>> carr
 
 	if(carrello.size() == 0) return;
 	
-//		Codice commentato per evitare di modificare il database in fase di testing
-//		
+//	Codice commentato per evitare di modificare il database in fase di testing
+//	
 //		dbProdotti.update("UPDATE Prodotto "
 //				+ "SET Prodotto.quantita = "
 //				+ elemento.get("quantita") + (int) elemento.get("quantitaProdotto")
@@ -165,7 +165,7 @@ public void svuotaCarrello(ArrayList<HashMap<String, Object>> carrello, String u
 //		}
 //		
 //		dbProdotti.update("DELETE FROM Carrello "
-//				+ "WHERE Carrello.username = \"" + username + ";");
+//				+ "WHERE Carrello.username = \"" + username + "\";");
 	
 	carrello.clear();
 }
