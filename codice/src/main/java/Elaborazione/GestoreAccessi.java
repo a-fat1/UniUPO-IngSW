@@ -179,8 +179,6 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 	 * @return ritorna 0 se son uguali.
 	 * Altrimenti, viene ritornato 4.
 	 */
-
-
 	public int verificaCredenziali(String passwordAttuale, String password)throws RemoteException{
 
 		//RF03: Aggiorna password
@@ -196,13 +194,12 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 
     /**
 	 * Controlla se l'utente ha inserito una nuova password valida.
-	 * @param NuovaPassword : la stringa contentente la nuova password.
+	 * @param nuovaPassword : la stringa contentente la nuova password.
 	 * @return ritorna 0 se il formato è corretto (almeno un numero, una lettera e con lunghezza >6).
 	 * Altrimenti, viene ritornato 1 se è troppo corta,
 	 * 2 se manca una lettera e 3 se manca un numero.
       * @throws RemoteException
 	 */
-
 	public int controlloNuovaPassword (String nuovaPassword)throws RemoteException{
 
 		//RF03: Aggiorna password
@@ -294,13 +291,12 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 		dbUtenti.update("INSERT INTO Credenziali ('password', 'username', 'attivo') VALUES ('', '"+username+"', 1);");
 	}
 
-	 /**
-	 * Modifica la password nel database.
-	 * @param username : la stringa contentente l'username.
-         * @param nuovaPassword : la stringa contentente la nuova password.
-         * @throws RemoteException
+	/**
+	 * Metodo che esegue la query di aggiornamento della password nel database
+	 * @param username l'username dell'utente di cui aggiornare la password
+	 * @param nuovaPassword	la nuova password da inserire
+	 * @throws RemoteException
 	 */
-
 	public void AggiornaPassword(String username, String nuovaPassword) throws RemoteException {
 
 		//RF03: Aggiorna password
