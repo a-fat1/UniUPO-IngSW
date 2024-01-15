@@ -440,13 +440,18 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 		fieldUsername.setBackground(Color.WHITE);
 	}
 
+	/**
+	 * Metodo di avvio del servizio di aggiornamento della password
+	 * @param loggato variabile necessaria a capire se l'utente che sta cambiando la password risulta già loggato
+	 * @param username	l'username dell'utente a cui sarà cambiata la password
+	 * @param password	la password attualmente in uso, che verrà controllata in caso di utente già loggato (loggato: true)
+	 * @return la nuova password aggiornata, altrimenti in caso di annullamento della richiesta la password attuale
+	 * @throws RemoteException
+	 */
 	public String avvioAggiornaPassword(Boolean loggato, String username, String password) throws RemoteException
 	{ 	// RF03
 		//autori: Pietro Balossino, Andrija Jovic
 
-        /*Metodo che si assicura che l'utente sia correttamente loggato per poi concedere l'opzione di aggiornare la Password. Le opzioni da 1 a 3
-        fanno riferimento alle casistiche di password incorrette inserite dall'utente, come mancanza di valori alfabetici e numerici (2 e 3 rispettivamente)
-        e/o lunghezza eccessivamente corta (1).*/
 		if(loggato){
 			do{
 				this.mostraFormPasswordAttuale();
@@ -493,11 +498,13 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 		return password;
 	}
 
+	/**
+	 *  Metodo per fornire finestra pop-up per l'inserimento della Password attuale dell'utente loggato
+	 *  al fine di verificarla e consentire poi il cambio della stessa.
+	 */
 	private void mostraFormPasswordAttuale(){
 		// RF03
 		//autori: Pietro Balossino, Andrija Jovic
-		/* Metodo per fornire finestra pop-up per l'inserimento della Password attuale dell'utente loggato al fine di verificarla
-		e consentire poi il cambio della stessa.*/
 
 		passwordAttualeField.setText("");
 
@@ -508,12 +515,15 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 		passwordAttualeField.setBackground(Color.white);
 	}
 
+	/**
+	 * Metodo che, presi in carico i 4 tipi di errore, si occupa di generare i messaggi pop-up di errore corrispondenti.
+	 * @param nErrore il tipo di errore che si è generato
+	 */
 	private void mostraErrore(int nErrore){
 		// RF03
 		//autori: Pietro Balossino, Andrija Jovic
 
-        //Metodo che, presi in carico i 4 tipi di errore, si occupa di generare i messaggi pop-up di errore corrispondenti.
-		String messaggio="";
+        String messaggio="";
 
 		if(nErrore==4){
 			passwordAttualeField.setBackground(Color.yellow);
@@ -536,10 +546,13 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 		this.showMessageDialog(null, messaggio, "Errore", this.ERROR_MESSAGE);
 	}
 
+	/**
+	 * Metodo che genera la finestra di dialogo al fine di far inserire all'utente la nuova password.
+	 */
 	private void mostraFormNuovaPassword(){
 		// RF03
 		//autori: Pietro Balossino, Andrija Jovic
-		//Metodo che genera la finestra di dialogo al fine di far inserire all'utente la nuova password.
+
 		nuovaPasswordField.setText("");
 
 		richiesta = this.showConfirmDialog(null, nuovaPasswordPanel, "Aggiorna password", this.OK_CANCEL_OPTION);
@@ -549,10 +562,12 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 		nuovaPasswordField.setBackground(Color.white);
 	}
 
+	/**
+	 * Metodo che genera la finestra di dialogo che informa l'utente del successo del cambiamento della Password
+	 */
 	private void mostraMessaggioDiSuccesso(){
 		// RF03
 		//autori: Pietro Balossino, Andrija Jovic
-		//Metodo che genera la finestra di dialogo che informa l'utente del successo del cambiamento della Password
 		String messaggio= "La password e' stata cambiata con successo!"+"\nOra potrai accedere con la tua nuova password";
 		this.showMessageDialog(null, messaggio, "Aggiorna Password", this.INFORMATION_MESSAGE);
 	}
