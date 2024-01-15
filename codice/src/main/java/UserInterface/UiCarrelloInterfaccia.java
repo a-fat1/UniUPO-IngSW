@@ -19,9 +19,10 @@ public interface UiCarrelloInterfaccia extends Remote
 	void avvioRimuoviProdottiDalCarrello(boolean tipoDiRimozione, String username, ArrayList<HashMap<String, Object>> carrello, HashMap<String, Object> prodotto) throws RemoteException;
 	
 	
-	void avvioAggiungiAlCarrello(String username, int codiceProdotto) throws RemoteException;
-	public void mostraForm() throws RemoteException;
-	public void mostraErrore(int numberError) throws RemoteException;
+	// RF09 : aggiunta al carrello
+	// Autori: Fasano Lorenzo, Iacobucci Luca
+	public void avvioAggiungiAlCarrello(String username, int codiceProdotto) throws RemoteException;
+	public void mostraErr(int inputEr) throws RemoteException;
 
 }
 
