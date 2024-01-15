@@ -404,4 +404,72 @@ public class GestoreRicerche implements GestoreRicercheInterfaccia
 		   }
 		return risultati;
 	}
+
+
+//RF22 Valentini Marco Cozzi Andrea
+	
+			
+			public ArrayList<HashMap<String, Object>> ricercaProdotti(String titolo, String autore, String editore, String anno, String tipo) throws RemoteException {
+		        
+				ArrayList<HashMap<String, Object>> classifica = null;
+				//query per la classifica dei prodotti piu venduti
+		        
+				String querysql = "SELECT Prodotto.Codice, Prodotto.Autore, Prodotto.Titolo, Prodotto.Editore, Prodotto.Anno, SUM(Ordine.quantitaProdotto) AS quantita FROM Prodotto JOIN Ordine ON Prodotto.Codice = Ordine.codiceProdotto WHERE Tipo LIKE '"+tipo+"' ";
+				//if che rendono la query dinamica in base a cio che inserisce l'utente
+				
+				if (autore != null && !autore.isEmpty())
+					querysql += "AND Autore LIKE '"+autore+"' ";
+				
+				if (titolo != null && !titolo.isEmpty())
+					querysql += "AND Titolo LIKE '"+titolo+"' ";
+				
+				if (editore != null && !editore.isEmpty())
+					querysql += "AND Editore LIKE '"+editore+"' ";
+				
+				if (anno != null && !anno.isEmpty())
+					querysql += "AND Anno = "+anno+" ";
+				
+				
+				
+				querysql += "GROUP BY Prodotto.Codice, quantita";
+				
+				if (autore != null && !autore.isEmpty())
+					querysql += ", Prodotto.Autore";
+				
+				if (titolo != null && !titolo.isEmpty())
+					querysql += ", Prodotto.Titolo";
+				
+				if (editore != null && !editore.isEmpty())
+					querysql += ", Prodotto.Editore";
+				
+				if (anno != null && !anno.isEmpty())
+					querysql += ", Prodotto.Anno";
+				
+
+
+				querysql += " ORDER BY quantita DESC;";
+					
+				classifica = dbProdotti.query(querysql);
+				
+				
+
+				return classifica;
+				
+				
+			}
+			
+			
+			
+			//RF22
+			
+			public boolean controllaValore(String tipo) {
+				
+				//controlla che il valore obbligatorio (categoria) sia stato scelto
+				
+				if(tipo==null) 
+					return false;
+				else 
+					return true;
+		    }
+
 }
