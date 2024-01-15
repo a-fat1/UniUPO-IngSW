@@ -80,6 +80,7 @@ public class UiCarrello extends JOptionPane implements UiCarrelloInterfaccia
 		gestoreCarrelli = (GestoreCarrelliInterfaccia) registryGestore.lookup("gestoreCarrelli");
 		
 		
+		//RF07: rimuovi prodotti dal carrello
 		pulsantiConferma = new String[2];
 		pulsantiConferma[0] = "Si";
 		pulsantiConferma[1] = "No";
@@ -249,6 +250,8 @@ public class UiCarrello extends JOptionPane implements UiCarrelloInterfaccia
 				null,
 				pulsantiConferma,
 				"Si");
+		
+		confermaRimozione.remove(testoConfermaRimozione);
 	}
 
 	
