@@ -132,14 +132,15 @@ public class GestoreProdotti implements GestoreProdottiInterfaccia {
 	public int verificaCampi(String[] autori, String titolo, String editore, int anno) throws RemoteException{
 		//RF16
 		int lenTitolo = titolo.length();
-		if(lenTitolo == 0) return 1; //titolo mancante
+		if(lenTitolo <= 0) return 1; //titolo mancante
 
 		if(anno<1900 || anno> Year.now().getValue()) return 2; //anno errato
 
 		int lenEditore = editore.length();
-		if(lenEditore == 0) return 3;	//editore mancante
+		if(lenEditore <= 0) return 3;	//editore mancante
 
-		if(autori.length == 0) return 4;	//autore mancante
+		int esisteAutore = autori.length;
+		if(esisteAutore <= 0) return 4;	//autore mancante
 		int lenAutore = autori[0].length();
 		if(lenAutore == 0) return 4;	//autore mancante
 
@@ -187,7 +188,7 @@ public class GestoreProdotti implements GestoreProdottiInterfaccia {
 		//RF16
 		dbProdotti.update(
 				"INSERT INTO Prodotto(autore, titolo, editore, anno, tipo, prezzo, quantita, disponibile) " +
-						"VALUES (\""+ String.join(", ", autori) +"\", \""+ titolo +"\", \""+ editore +"\", \""+ anno +"\", \""+ tipo +"\", null, 0, True)"
+						"VALUES (\""+ String.join(", ", autori) +"\", \""+ titolo +"\", \""+ editore +"\", \""+ anno +"\", \""+ tipo +"\", 0, 0, True)"
 				);
 
 		ArrayList<HashMap<String, Object>> prodotti = dbProdotti.query(

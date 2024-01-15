@@ -52,21 +52,23 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 	// RF19 - Ricerca Utente
 	// variabili
 	private int sceltaUtente; // variabile per determinare l'uscita o meno dall'interfaccia di Ricerca utente
-	private String nome;
-	private String cognome;
-	private String username;
-	private String sceltaRicerca;
-	private int esitoControllo;
-
-	private ArrayList<HashMap<String, Object>> elencoUtenti;
+	private String nome; // String nome che viene estratta dal form per la ricerca
+	private String cognome; // String cognome che viene estratta dal form per la ricerca
+	private String username; // String username che viene estratta dal form per la ricerca
+	private String sceltaRicerca; // String che viene estratta per determinare quale ricerca intende effettuare l'utente
+	private int esitoControllo; // variabile per salvare il risultato del controllo parametri
+	private int azione; // variabile per determinare cosa l'utente intende fare con la riga selezionata dalla tabella
+	private String utenteSelezionato; // String che viene estratta per salvare lo username dell'utente selezionato
+	private boolean statoUtenteSelezionato; // boolean che salva lo stato dell'utente (true/false)
+	private ArrayList<HashMap<String, Object>> elencoUtenti; // elenco degli utenti che vengono estratti dal database
 
 	// RF19 - Ricerca Utente
 	// Array di String per i pulsanti di ricerca e le colonne per la tabella dei dati estratti dal database
-	private final String[] pulsanteRicerca;
-	private final String[] pulsanteElencoUtentiStaff;
-	private final String[] pulsanteElencoUtentiAdmin;
-	private final String[] colonneStaff;
-	private final String[] colonneAmministratore;
+	private final String[] pulsanteRicerca; // contiene il pulsante di ricerca "Invia"
+	private final String[] pulsanteElencoUtentiStaff; // contiene i pulsanti per lo staff
+	private final String[] pulsanteElencoUtentiAdmin; // contiene i pulsanti per l'amministratore
+	private final String[] colonneStaff; // contiene le colonne per la tabella che vedrà lo staff
+	private final String[] colonneAmministratore; // contiene le colonne per la tabella che vedrà l'amministratore
 	// RF18
 	private int sceltaGiacenza, esitoGiacenza = -1;
 	private String giacenza;
@@ -269,7 +271,7 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 					riga.get("tipo"),
 					riga.get("prezzo"),
 					riga.get("quantita"),
-					isCliente ? "" : riga.get("disponibile")  // Nasconde la colonna "Disponibilità" se cliente è true
+            		isCliente ? "" : (int) riga.get("disponibile") == 1 ? "SI" : "NO"  // Converte 1 in "si" e 0 in "no"
 			};
 			tableModel.addRow(rowData);
 		}
@@ -617,8 +619,8 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 	}
 
 	/**
-	 * Funzione che avvia la funzione di Ricerca Utente
-	 * @param genereUtente il tipo di utente (admin o staff) di chi vuole iniziare la ricerca
+	 * Funzione che avvia la funzione di Ricerca Utente.
+	 * @param genereUtente il tipo di utente (admin o staff) di chi vuole iniziare la ricerca.
 	 * @throws RemoteException
 	 */
 
@@ -708,6 +710,18 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 			if((!elencoUtenti.isEmpty()) && (sceltaUtente != -1) && (esitoControllo == 4))
 			{
 				mostraElencoRicercaUtente(elencoUtenti, genereUtente);
+				// in base a cosa viene selezionato dall'utente
+				if (azione == 0 && genereUtente.equals("staff")) {
+					// richiamo lista pagamenti
+					uiLista.avvioListaPagamenti(utenteSelezionato);
+				} else if (azione == 1 && genereUtente.equals("staff")) {
+					// richiamo lista ordini
+					uiLista.avvioListaOrdini(utenteSelezionato, -1);
+				} else if (azione == 0 && genereUtente.equals("amministratore")) {
+					// richiamo metodo blocca-sblocca
+					uiUtente.avvioBloccaSbloccaUtente(utenteSelezionato, statoUtenteSelezionato);
+
+				}
 			}
 		}
 	}
@@ -782,7 +796,7 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 	}
 
 	/**
-	 * Funzione che mostra l'elenco degli utenti trovati nel database.
+	 * Funzione che mostra l'elenco degli utenti trovati nel database e fa scegliere cosa fare.
 	 * @param elencoUtenti l'elenco di utenti trovati dopo l'interrogazione al database.
 	 * @param genereUtente il tipo di utente che ha effettuato la ricerca.
 	 * @throws RemoteException
@@ -871,18 +885,11 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 			// fino a quando l'utente non chiude la finestra per uscire
 		}while (table.getSelectedRow() == -1 && azione != -1);
 
-
-		if (azione == 0 && genereUtente.equals("staff")) {
-			uiLista.avvioListaPagamenti(table.getModel().getValueAt(table.getSelectedRow(), 2).toString());
-			// richiamo lista pagamenti
-		} else if (azione == 1 && genereUtente.equals("staff")) {
-			uiLista.avvioListaOrdini(table.getModel().getValueAt(table.getSelectedRow(), 2).toString(), -1);
-			// richiamo lista ordini
-		} else if (azione == 0 && genereUtente.equals("amministratore")) {
-			// richiamo metodo blocca-sblocca
-			uiUtente.avvioBloccaSbloccaUtente(table.getModel().getValueAt(table.getSelectedRow(), 2).toString(),
-					Boolean.parseBoolean((table.getModel().getValueAt(table.getSelectedRow(), 4).toString())));
-
+		// salvo lo username dell'utente selezionato
+		utenteSelezionato = table.getModel().getValueAt(table.getSelectedRow(), 2).toString();
+		// salvo lo stato (true/false) in caso la richiesta venga fatta da un amministratore
+		if(genereUtente.equals("amministratore")) {
+			statoUtenteSelezionato = Boolean.parseBoolean((table.getModel().getValueAt(table.getSelectedRow(), 4).toString()));
 		}
 	}
 

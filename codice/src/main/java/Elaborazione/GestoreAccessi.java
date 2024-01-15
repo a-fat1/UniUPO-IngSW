@@ -117,7 +117,7 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 		}
 
         if(credenziali.size()==0){
-            esito = false; 
+            esito = false;
         }
         else
             esito = true;
@@ -172,10 +172,13 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 		dbUtenti.update(comandoSql);
 	}
 
-
-
-
-
+    /**
+	 * Controlla se l'utente ha inserito le credenziali correttamente.
+	 * @param passwordAttuale : la stringa contentente la password attualmente attiva sull'account.
+	 * @param password : la stringa contentente la password da confrontare.
+	 * @return ritorna 0 se son uguali.
+	 * Altrimenti, viene ritornato 4.
+	 */
 	public int verificaCredenziali(String passwordAttuale, String password)throws RemoteException{
 
 		//RF03: Aggiorna password
@@ -189,6 +192,14 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 		}
 	}
 
+    /**
+	 * Controlla se l'utente ha inserito una nuova password valida.
+	 * @param nuovaPassword : la stringa contentente la nuova password.
+	 * @return ritorna 0 se il formato è corretto (almeno un numero, una lettera e con lunghezza >6).
+	 * Altrimenti, viene ritornato 1 se è troppo corta,
+	 * 2 se manca una lettera e 3 se manca un numero.
+      * @throws RemoteException
+	 */
 	public int controlloNuovaPassword (String nuovaPassword)throws RemoteException{
 
 		//RF03: Aggiorna password
@@ -222,8 +233,8 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 	 * Controlla se l'utente ha inserito delle stringhe di nome e cognome valide.
 	 * @param nome Il nome dell'utente che si sta registrando sul sistema informatico.
 	 * @param cognome il cognome dell'utente che si sta registrando sul sistema informatico.
-	 * @return ritorna 0 se il formato di nome e cognome sono corretti (senza numeri e con lunghezza >=3) 
-	 * e se ambedue non contengono numeri. Altrimenti, viene ritornato 1 se il formato di nome è errato, 
+	 * @return ritorna 0 se il formato di nome e cognome sono corretti (senza numeri e con lunghezza >=3)
+	 * e se ambedue non contengono numeri. Altrimenti, viene ritornato 1 se il formato di nome è errato,
 	 * 2 se il formato di cognome è errato.
 	 */
 	public int controlloFormatoNomeCognome(String nome, String cognome) {
@@ -231,7 +242,7 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 		int len2 = cognome.length();
 		boolean bool1 = nome.matches(".*\\d.*");	//controlla se nome oppure cognome contengono un numero
 		boolean bool2 = cognome.matches(".*\\d.*");
-		
+
 		if(len1>3 && !bool1)
 		{
 			if(len2>3 && !bool2)	return 0;
@@ -246,33 +257,33 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 	 * con nickname "nome.cognome".
 	 * @param nome nome dell'utente.
 	 * @param cognome cognome dell'utente.
-	 * 
+	 *
 	 * @throws RemoteException
 	*/
 	public void promptSalvaAccount(String nome, String cognome) throws RemoteException
 	{
 		dbUtenti.update("INSERT INTO 'main'.'Utente' ('username', 'nome', 'cognome') VALUES (\""+nome+'.'+cognome+"\", \""+nome+"\", \""+cognome+"\");");
 	}
-	
+
 	/**
 	 * Funzione necessaria per attivare l'account, settando il tipo utente dell'utente designato da nome
 	 * e cognome, con nickname "nome.cognome".
 	 * @param nome nome dell'utente.
 	 * @param cognome cognome dell'utente.
 	 * @param tipoUtente il tipo con cui l'utente verrà attivato.
-	 * 
+	 *
 	 * @throws RemoteException
 	*/
 	public void richiestaAttivazioneAccount(String nome, String cognome, String tipoUtente) throws RemoteException
 	{
 		dbUtenti.update("UPDATE Utente SET tipo='"+tipoUtente+"' WHERE username='"+nome+'.'+cognome+"'");
 	}
-	
+
 	/**
-	 * Funzione necessaria per aggiungere delle credenziali da aggiornare per l'utente identificato da 
+	 * Funzione necessaria per aggiungere delle credenziali da aggiornare per l'utente identificato da
 	 * username.
 	 * @param username username dell'utente.
-	 * 
+	 *
 	 * @throws RemoteException
 	*/
 	public void aggiuntaCredenziali(String username) throws RemoteException
@@ -280,6 +291,12 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 		dbUtenti.update("INSERT INTO Credenziali ('password', 'username', 'attivo') VALUES ('', '"+username+"', 1);");
 	}
 
+	/**
+	 * Metodo che esegue la query di aggiornamento della password nel database
+	 * @param username l'username dell'utente di cui aggiornare la password
+	 * @param nuovaPassword	la nuova password da inserire
+	 * @throws RemoteException
+	 */
 	public void AggiornaPassword(String username, String nuovaPassword) throws RemoteException {
 
 		//RF03: Aggiorna password

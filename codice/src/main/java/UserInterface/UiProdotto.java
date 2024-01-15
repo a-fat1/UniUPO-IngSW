@@ -52,6 +52,12 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 
 
 	// RF16 Nuova Fornitura Galliera, Ternullo
+	String[] autori;
+	String titolo;
+	String editore;
+	String tipo;
+	int anno;
+
 	private JPanel nuovoProdottoPanel;
 	private JLabel titoloProdottoLabel;
 	private JLabel annoProdottoLabel;
@@ -229,12 +235,8 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 		
 
 		//RF10 (Filidoro Michele, Mahfoud Ayoub)
-		labelRimozione= new JLabel("Rimuovere prodotto dal catalogo?");
-		labelRipristino=new JLabel("Ripristinare prodotto nel catalogo?");
 		ripristinoPanel=new JPanel(new FlowLayout());
-		ripristinoPanel.add(labelRipristino);
 		rimozionePanel=new JPanel(new FlowLayout());
-		rimozionePanel.add(labelRimozione);
 
 		//RF14
 		prezzoVecchioLabel = new JLabel("prezzo precedente");
@@ -258,13 +260,6 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 
 	public void avvioRimuoviRipristinaNelCatalogo(Integer codProdotto, Integer Disponibile) throws RemoteException
 	{	// RF10
-		/*
-		switch (Disponibile) {
-			case 0 -> mostraFormRipristino(codProdotto);
-			case 1 -> mostraFormRimozione(codProdotto);
-			default -> mostraErroreDisponibile(codProdotto);
-		}
-		*/
 		switch (Disponibile) {
 			case 0: mostraFormRipristino(codProdotto);
 			break;
@@ -278,12 +273,11 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 	public void avvioAggiornaPrezzo(HashMap<String, Object> P) throws RemoteException
 	{
 		//RF14
-
 		prezzoVecchioVal = ((Double)P.get("prezzo")).floatValue();
 		do{
 			controllo = 0;
 			mostraFormAggiornaPrezzo(P);
-			if(richiesta==0 && prezzoVecchioVal==0){
+			if(richiesta<=0 && prezzoVecchioVal==0){
 				mostraErrore(3);
 			}
 			else{
@@ -304,7 +298,7 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 					}
 				}
 			}
-		}while((richiesta==0 && prezzoVecchioVal==0) || controllo!=0);
+		}while((richiesta<=0 && prezzoVecchioVal==0) || controllo!=0);
 	}
 
 	private void mostraFormAggiornaPrezzo(HashMap<String,Object> P) throws RemoteException
@@ -454,32 +448,41 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 	private void mostraFormNuovoProdotto() throws RemoteException {
 		//RF16
 		int esitoVerifica;
-		boolean esitoControllo;
+		boolean esitoControllo = false;
 		HashMap<String, Object> ultimoProdotto;
-
-		String[] autori;
-		String titolo;
-		String editore;
-		String tipo;
-		int anno;
 
 		// elimina dati preinseriti
 		titoloProdottoField.setText("");
 		editoreProdottoField.setText("");
 		for(JTextField t: autoriProdottoField) t.setText("");
+		//reset colori
+		titoloProdottoField.setBackground(Color.WHITE);
+		editoreProdottoField.setBackground(Color.WHITE);
+		for(JTextField autoreField: autoriProdottoField){
+			autoreField.setBackground(Color.WHITE);
+		}
 
 		// cicla finchè il prodotto inserito possa venire aggiunto
 		do{
 			int scelta = showConfirmDialog(null, nuovoProdottoPanel, "Nuovo Prodotto (x per uscire)", JOptionPane.OK_CANCEL_OPTION);
 			if(scelta == JOptionPane.CLOSED_OPTION || scelta == JOptionPane.CANCEL_OPTION) return;
 
+			//reset colori dopo input
+			titoloProdottoField.setBackground(Color.WHITE);
+			editoreProdottoField.setBackground(Color.WHITE);
+			for(JTextField autoreField: autoriProdottoField){
+				autoreField.setBackground(Color.WHITE);
+			}
+
+			// leggo e memorizzo in ordine gli autori inseriti nel form
 			ArrayList<String> autoriList = new ArrayList<>();
 			for(JTextField autoreF: autoriProdottoField){
-				if(autoreF.getText().isEmpty()) break;
+				if(autoreF.getText().isEmpty()) break; // se c'e' un field vuoto esco
 				autoriList.add(autoreF.getText());
 			}
-			autori = autoriList.toArray(new String[0]);
+			autori = autoriList.toArray(new String[0]); // trasformo arraylist in array
 
+			// memorizzo gli altri campi
 			titolo = titoloProdottoField.getText();
 			editore = editoreProdottoField.getText();
 			tipo = Objects.requireNonNull(tipoProdottoCombo.getSelectedItem()).toString();
@@ -487,19 +490,22 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 
 			// verifica campi
 			esitoVerifica = gestoreProdotti.verificaCampi(autori, titolo, editore, anno);
+			// se non 0, messaggio di errore
 			if(esitoVerifica != 0) mostraErroreVerifica(esitoVerifica);
+			else{
+				// controllo unicita'
+				esitoControllo = gestoreProdotti.controlloUnicita(autori, titolo, editore, anno, tipo);
+				if(esitoControllo == false) mostraErroreControllo();
+				else{
+					// aggiunta prodotto
+					ultimoProdotto = gestoreProdotti.aggiungiProdotto(autori, titolo, editore, anno, tipo);
 
-			// controllo unicita'
-			esitoControllo = gestoreProdotti.controlloUnicita(autori, titolo, editore, anno, tipo);
-			if(!esitoControllo) mostraErroreControllo();
-
-		} while(esitoVerifica != 0 || !esitoControllo); // se i dati inseriti non sono corretti o il prodotto esiste già cicla
-
-		ultimoProdotto = gestoreProdotti.aggiungiProdotto(autori, titolo, editore, anno, tipo);
-
-		//avvioAggiornaPrezzo(ultimoProdotto);
-		avvioNuovaFornitura((Integer) ultimoProdotto.get("codice"), true);
-		//UserInterface.UiNotifica.avvioGeneraNotifica("nuovo prodotto", ultimoProdotto);
+					avvioAggiornaPrezzo(ultimoProdotto);
+					avvioNuovaFornitura((Integer) ultimoProdotto.get("codice"), true);
+					uiNotifica.avvioGeneraNotifica("nuovo prodotto", ultimoProdotto);
+				}
+			}
+		} while(esitoVerifica != 0 || esitoControllo == false); // se i dati inseriti non sono corretti o il prodotto esiste già cicla
 	}
 
 	private void mostraErroreVerifica(int codice){
@@ -507,20 +513,24 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 
 		erroreVerificaPanel = new JPanel();
 		messaggioErrore = new JLabel();
-		/*switch (codice) {
-			case 1 -> messaggioErrore.setText("Errore: Titolo mancante");
-			case 2 -> messaggioErrore.setText("Errore: Anno errato");
-			case 3 -> messaggioErrore.setText("Errore: Editore mancante");
-			case 4 -> messaggioErrore.setText("Errore: Autore mancante");
+		switch (codice) {
+			case 1:
+				messaggioErrore.setText("Errore: Titolo mancante");
+				titoloProdottoField.setBackground(Color.YELLOW);
+				break;
+			case 2:
+				messaggioErrore.setText("Errore: Anno errato");
+				break;
+			case 3:
+				messaggioErrore.setText("Errore: Editore mancante");
+				editoreProdottoField.setBackground(Color.YELLOW);
+				break;
+			case 4:
+				messaggioErrore.setText("Errore: Autore mancante");
+				autoriProdottoField[0].setBackground(Color.YELLOW);
+				break;
 
-			default -> messaggioErrore.setText("Errore");
-		}*/
-		switch(codice) {
-			case 1: messaggioErrore.setText("Errore: Titolo mancante"); break;
-			case 2: messaggioErrore.setText("Errore: Anno errato"); break;
-			case 3: messaggioErrore.setText("Errore: Editore mancante"); break;
-			case 4: messaggioErrore.setText("Errore: Autore mancante"); break;
-			default: messaggioErrore.setText("Errore"); break;
+			default: messaggioErrore.setText("Errore");
 		}
 		erroreVerificaPanel.add(messaggioErrore);
 		showMessageDialog(null, erroreVerificaPanel, "ERRORE (x o OK per confermare lettura)", JOptionPane.ERROR_MESSAGE);
@@ -528,7 +538,6 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 
 	private void mostraErroreControllo(){
 		//RF16
-
 		erroreControlloPanel = new JPanel();
 		messaggioErrore = new JLabel("Errore: Prototto gia' esistente");
 		erroreControlloPanel.add(messaggioErrore);
@@ -537,7 +546,7 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 
 	//RF17
 	private void mostraFormIncrementaDecrementa() throws RemoteException{
-		while((esito==false || sceltaVoce==-1)||(esito==false && sceltaVoce==-1)) {
+		do {
 			String[] scelta = {"ok"};
 			int sceltaPannello;
 			sceltaPannello = this.showOptionDialog(null, increDecrePanel, "Inserire percentuale e scelta (premere X per uscire)", this.DEFAULT_OPTION, this.QUESTION_MESSAGE, null, scelta, "ok");
@@ -558,7 +567,6 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 
 					} else if (esito == false || sceltaVoce == -1) {
 						this.mostraErrore();
-
 					}
 				}
 
@@ -573,7 +581,7 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 
 				}
 			}
-		}
+		}while((esito==false || sceltaVoce==-1)||(esito==false && sceltaVoce==-1));
 
 	}
 	//RF17
@@ -594,12 +602,11 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 	//RF17
 	private void mostraErrore(){
 		String message="";
-		if(esito==false){
+		if(esito==false && sceltaVoce!=-1){
 			message="Percentuale non idonea";
 			this.showMessageDialog(null,message,"Errore",this.ERROR_MESSAGE,null);
 			percentualeField.setText("");
 			percentualeField.setBackground(Color.YELLOW);
-
 		}
 		if(sceltaVoce==-1){
 			message="Selezionare incrementa o decrementa";
@@ -629,34 +636,39 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 
 	//RF10
 	private void mostraFormRimozione(Integer codProdotto) throws RemoteException {
-		labelRimozione=new JLabel("Prodotto n."+codProdotto);
+		labelRimozione=new JLabel("Rimuovere prodotto n."+codProdotto+" dal catalogo?");
 		rimozionePanel.add(labelRimozione);
 		int scelta;
 		String[] scelte={"Annulla", "Conferma"};
 
 		scelta=this.showOptionDialog(null,rimozionePanel,"Rimozione Prodotto", this.DEFAULT_OPTION,this.QUESTION_MESSAGE,null,scelte,"Annulla");
-		if(scelta==JOptionPane.CLOSED_OPTION || scelta==0) return;
+		if(scelta==JOptionPane.CLOSED_OPTION || scelta==0){
+			mostraRimozioneAnnullata(codProdotto);
+		}
 		if(scelta==1){
 			gestoreProdotti.rimuoviProdotto(codProdotto);
 			mostraSuccessoRimozione(codProdotto);
 		}
+		rimozionePanel.remove(labelRimozione); //Per evitare che ad ogni rimozione si sommino i label
 
 	}
 	//RF10
 	private void mostraFormRipristino(Integer codProdotto) throws RemoteException {
 
-		labelRipristino=new JLabel("Prodotto n."+codProdotto);
+		labelRipristino=new JLabel("Ripristinare prodotto n."+codProdotto +" nel catalogo?");
 		ripristinoPanel.add(labelRipristino);
-
 		int scelta;
 		String[] scelte={"Annulla", "Conferma"};
 
 		scelta=this.showOptionDialog(null,ripristinoPanel,"Ripristino Prodotto", this.DEFAULT_OPTION,this.QUESTION_MESSAGE,null,scelte,"Annulla");
-		if(scelta==JOptionPane.CLOSED_OPTION || scelta==0) return;
+		if(scelta==JOptionPane.CLOSED_OPTION || scelta==0) {
+			mostraRipristinoAnnullato(codProdotto);
+		}
 		if(scelta==1){
 			gestoreProdotti.ripristinaProdotto(codProdotto);
 			mostraSuccessoRipristino(codProdotto);
 		}
+		ripristinoPanel.remove(labelRipristino); //Per evitare che ad ogni ripristino si sommino i label
 	}
 
 	//RF10
@@ -673,9 +685,22 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 
 	}
 	//RF10
+	private void mostraRimozioneAnnullata(Integer codProdotto){
+		String messaggio;
+		messaggio="Rimozione prodotto n." +codProdotto +" annullata";
+		this.showMessageDialog(null,messaggio,"Esito rimozione", this.INFORMATION_MESSAGE,null);
+
+	}
+	//RF10
+	private void mostraRipristinoAnnullato(Integer codProdotto){
+		String messaggio;
+		messaggio="Ripristino prodotto n." +codProdotto +" annullato";
+		this.showMessageDialog(null,messaggio,"Esito ripristino", this.INFORMATION_MESSAGE,null);
+	}
+	//RF10
 	private void mostraErroreDisponibile(Integer codProdotto){
 		String messaggio;
 		messaggio="Valore 'Disponibile' per il prodotto n." +codProdotto+ " diverso da 0 o 1, correggere valore";
-		this.showMessageDialog(null,messaggio,"errore",this.ERROR_MESSAGE,null);
+		this.showMessageDialog(null,messaggio,"ERRORE DISPONIBILE",this.ERROR_MESSAGE,null);
 	}
 }

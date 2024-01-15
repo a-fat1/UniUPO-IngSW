@@ -78,14 +78,65 @@ public class GestoreCarrelli implements GestoreCarrelliInterfaccia
 				+ "WHERE codice = " + prodottoSelezionato.get("codice") + ";");
 	}
 
-	public void rimozioneProdottoDalCarrello(ArrayList<HashMap<String, Object>> carrello, HashMap<String, Object> elemento, String username) throws RemoteException {
-		// RF07: rimuovi prodotto dal carrello
-		// autori: Simone Aldo Borsa, Andrea Padoan
-
-		if(carrello.size() == 0) return;
+	
+public boolean controllaNumeroCarta(String NumeroCarta) {
+//RF06 Effettua Ordine
+// Autori: Virginia Luini, Jorelle MENGAPTCHE
+		boolean Controllo=false;
 		
-//		Codice commentato per evitare di modificare il database in fase di testing
-//		
+	System.out.println("Inserisce il numero di carta: " + NumeroCarta);
+	 
+	 if(NumeroCarta.length()==16 ) {
+		 
+		  
+		  Controllo=true;
+		  
+	 }
+	 else {
+		 
+		System.out.println("Numero carta non valido: deve contener 16 caratteri");
+		 Controllo=false;
+		 
+	     }
+	 
+	 return Controllo;
+}	
+
+
+public float calcolaPrezzoTotale(ArrayList<HashMap<String, Object>> carrello, ArrayList<String> prodotti) {
+/*RF06: Calcola prezzototale
+ * Autori: MENGAPTCHE ,LUINI*/
+    
+ float somma = 0;
+
+    if (prodotti != null) {
+        for (HashMap<String, Object> prodotto : carrello) {
+            for (String codiceProdotto : prodotti) {
+                if (prodotto.containsKey(codiceProdotto)) {
+                	double prezzoDouble = (double)prodotto.get(codiceProdotto);
+                    float prezzo =  (float) prezzoDouble;
+                    int quantitaProdotto =  (int) prodotto.get("quantità");
+                    if (prezzo > 0) {
+                        somma = somma + (prezzo * quantitaProdotto);
+                    }
+                }
+            }
+        }
+        return somma;
+    } else {
+        System.out.println("Non ci sono prodotti");
+        return 0;
+    }
+}
+
+public void rimozioneProdottoDalCarrello(ArrayList<HashMap<String, Object>> carrello, HashMap<String, Object> elemento, String username) throws RemoteException {
+	// RF07: rimuovi prodotto dal carrello
+	// autori: Simone Aldo Borsa, Andrea Padoan
+
+	if(carrello.size() == 0) return;
+	
+//	Codice commentato per evitare di modificare il database in fase di testing
+//	
 //		dbProdotti.update("UPDATE Prodotto "
 //				+ "SET Prodotto.quantita = "
 //				+ elemento.get("quantita") + (int) elemento.get("quantitaProdotto")
@@ -94,16 +145,16 @@ public class GestoreCarrelli implements GestoreCarrelliInterfaccia
 //		dbProdotti.update("DELETE FROM Carrello "
 //				+ "WHERE Carrello.username = \"" + username
 //				+ "\" AND Carrello.codiceProdotto = " + elemento.get("codice") + ";");
-		
-		carrello.remove(elemento);
-	}
 	
-	public void svuotaCarrello(ArrayList<HashMap<String, Object>> carrello, String username) throws RemoteException {
-		// RF07: rimuovi prodotto dal carrello
-		// autori: Simone Aldo Borsa, Andrea Padoan
-		
-		if(carrello.size() == 0) return;
-		
+	carrello.remove(elemento);
+}
+
+public void svuotaCarrello(ArrayList<HashMap<String, Object>> carrello, String username) throws RemoteException {
+	// RF07: rimuovi prodotto dal carrello
+	// autori: Simone Aldo Borsa, Andrea Padoan
+	
+	if(carrello.size() == 0) return;
+	
 //		Codice commentato per evitare di modificare il database in fase di testing
 //	
 //		for(HashMap<String, Object> elemento : carrello) {
@@ -114,51 +165,52 @@ public class GestoreCarrelli implements GestoreCarrelliInterfaccia
 //		}
 //		
 //		dbProdotti.update("DELETE FROM Carrello "
-//				+ "WHERE Carrello.username = \"" + username + ";");
-		
-		carrello.clear();
+//				+ "WHERE Carrello.username = \"" + username + "\";");
+	
+	carrello.clear();
+}
+
+//RF 09 - aggiunta al carrello
+//autori: Fasano Lorenzo, Iacobucci Luca;
+public boolean controlloLimiteQuantita(int quantita) throws RemoteException{
+	if(quantita > 0 && quantita < 4)
+		return true;
+	return false;
+}
+
+//RF 09 - aggiunta al carrello
+//autori: Fasano Lorenzo, Iacobucci Luca;
+public boolean controlloDisponibilita(int codiceProdotto) throws RemoteException{
+	
+	String query = "SELECT * FROM Prodotto WHERE codice =" + codiceProdotto + " AND disponibile = 1;";
+
+	//nel caso in cui venga ritornato un hasmap con almeno un elemento, la ricerca e' andata a buon fine
+	if(dbProdotti.query(query).size() != 0){
+		return true;
+	}
+
+	return false;
+
 	}
 
 	//RF 09 - aggiunta al carrello
 	//autori: Fasano Lorenzo, Iacobucci Luca;
-	public boolean controlloLimiteQuantita(int quantita) throws RemoteException{
-		if(quantita > 0 && quantita < 4)
-			return true;
-		return false;
+	public void aggiornamentoQuantita(int quantita, int codiceProdotto, String username) throws RemoteException{
+	String query = "UPDATE Prodotto SET quantita = quantita - " + 
+	quantita + " WHERE codice =" + codiceProdotto + /*" AND username = " + username +*/ ";";
+	
+	dbProdotti.update(query);
+
+	System.out.println("Aggiornamento riuscito.");
+
+	
+	query = "INSERT INTO Carrello (username, codiceProdotto, quantitaProdotto) VALUES ('" + username + "'," + codiceProdotto + "," + quantita + ");" ;
+
+	dbProdotti.update(query);
+
+	System.out.println("Aggiornamento carrello riuscito.");
+
 	}
-
-	//RF 09 - aggiunta al carrello
-	//autori: Fasano Lorenzo, Iacobucci Luca;
-	public boolean controlloDisponibilita(int codiceProdotto) throws RemoteException{
-		
-		String query = "SELECT * FROM Prodotto WHERE codice =" + codiceProdotto + " AND disponibile = 1;";
-
-		//nel caso in cui venga ritornato un hasmap con almeno un elemento, la ricerca e' andata a buon fine
-		if(dbProdotti.query(query).size() != 0){
-			return true;
-		}
-
-		return false;
-
-		}
-
-		//RF 09 - aggiunta al carrello
-		//autori: Fasano Lorenzo, Iacobucci Luca;
-		public void aggiornamentoQuantita(int quantita, int codiceProdotto, String username) throws RemoteException{
-		String query = "UPDATE Prodotto SET quantita = quantita - " + 
-		quantita + " WHERE codice =" + codiceProdotto + /*" AND username = " + username +*/ ";";
-		
-		dbProdotti.update(query);
-
-		System.out.println("Aggiornamento riuscito.");
-
-		
-		query = "INSERT INTO Carrello (username, codiceProdotto, quantitaProdotto) VALUES ('" + username + "'," + codiceProdotto + "," + quantita + ");" ;
-
-		dbProdotti.update(query);
-
-		System.out.println("Aggiornamento carrello riuscito.");
-
-		}
 
 }
+
