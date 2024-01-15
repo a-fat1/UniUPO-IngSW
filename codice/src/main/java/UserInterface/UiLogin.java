@@ -3,8 +3,8 @@ package UserInterface;
 import java.awt.*;
 import java.util.HashMap;
 
-import java.rmi.registry.Registry; 
-import java.rmi.registry.LocateRegistry; 
+import java.rmi.registry.Registry;
+import java.rmi.registry.LocateRegistry;
 import java.rmi.RemoteException;
 import java.rmi.NotBoundException;
 
@@ -34,7 +34,7 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 	private String username;
 	private String password;
 	private HashMap<String, Object> utente;
-	private	String esitoControllo;	
+	private	String esitoControllo;
 	private	String esitoRicerca;
 
 	// attributi
@@ -56,7 +56,7 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 	// RF23: Aggiorna Username
 	private JTextField fieldUsername = new JTextField("", 15);
 	JPanel panel;
-	
+
 	// elementi grafici
 	// RF00: login (Codetta)
 	private JLabel usernameLabel;
@@ -87,17 +87,17 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 	public UiLogin(String hostGestore) throws RemoteException, NotBoundException
 	{
 		registryUI = LocateRegistry.getRegistry("127.0.0.1", 1100); // default: 1099
-		registryGestore = LocateRegistry.getRegistry(hostGestore, 1099); 
+		registryGestore = LocateRegistry.getRegistry(hostGestore, 1099);
 
 		uiUtente = (UiUtenteInterfaccia) registryUI.lookup("uiUtente");
 		uiNotifica = (UiNotificaInterfaccia) registryUI.lookup("uiNotifica");
 		uiRicerca = (UiRicercaInterfaccia) registryUI.lookup("uiRicerca");
 		uiLista = (UiListaInterfaccia) registryUI.lookup("uiLista");
 		uiCarrello = (UiCarrelloInterfaccia) registryUI.lookup("uiCarrello");
-		uiProdotto = (UiProdottoInterfaccia) registryUI.lookup("uiProdotto"); 
+		uiProdotto = (UiProdottoInterfaccia) registryUI.lookup("uiProdotto");
 
 		gestoreAccessi = (GestoreAccessiInterfaccia) registryGestore.lookup("gestoreAccessi");
-		 
+
 		usernameLabel = new JLabel("username");
 		passwordLabel = new JLabel("password");
 		usernameField = new JTextField("", 10);
@@ -110,7 +110,7 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 		loginPanel.add(usernameLabel);
 		loginPanel.add(usernameField);
 		loginPanel.add(passwordLabel);
-		loginPanel.add(passwordField); 
+		loginPanel.add(passwordField);
 
 		pulsantiLogin = new String[2];
 		pulsantiLogin[0] = "Crea utente";
@@ -127,7 +127,7 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 		pulsantiMenuStaff[7] = "Nuovo prodotto";
 		pulsantiMenuStaff[8] = "Incrementa / decrementa prezzi";
 		pulsantiMenuStaff[9] = "Prodotti in esaurimento";
-		
+
 		pulsantiMenuCliente = new String[8];
 		pulsantiMenuCliente[0] = "Aggiorna username";
 		pulsantiMenuCliente[1] = "Aggiorna password";
@@ -137,7 +137,7 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 		pulsantiMenuCliente[5] = "Lista pagamenti";
 		pulsantiMenuCliente[6] = "Prodotti piu' venduti";
 		pulsantiMenuCliente[7] = "Aggiorna domicilio";
-		
+
 		pulsantiMenuAmministratore = new String[6];
 		pulsantiMenuAmministratore[0] = "Aggiorna username";
 		pulsantiMenuAmministratore[1] = "Aggiorna password";
@@ -149,8 +149,8 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 		menuLabel1 = new JLabel();
 		menuLabel2 = new JLabel("Seleziona servizio. (X per logout)");
 		menuList = new JList<String>();
-		menuList.setSelectionMode(DefaultListSelectionModel.SINGLE_SELECTION);	
-		menuList.setToolTipText("seleziona un servizio e clicca OK");	
+		menuList.setSelectionMode(DefaultListSelectionModel.SINGLE_SELECTION);
+		menuList.setToolTipText("seleziona un servizio e clicca OK");
 
 		menuPanel = new JPanel(new BorderLayout(5, 5));
 		menuPanel.add(menuLabel1, BorderLayout.NORTH);
@@ -178,20 +178,20 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 		nuovaPasswordPanel.add(new JLabel("La password deve essere almeno 6 caratteri"));
 		nuovaPasswordPanel.add(new JLabel("e contenere almeno una lettera e un numero"));
 	}
-	
+
 	public void avvioLogin() throws RemoteException, NotBoundException
-	{	
+	{
 		//RF00: login
     		//autore: Codetta
 		do
 		{
 			this.mostraFormLogin();
-			
-			if (scelta==0) 
+
+			if (scelta==0)
 				uiUtente.avvioCreaUtente(true);
 
 			if (scelta==1) // login
-			{		
+			{
 				esitoControllo=gestoreAccessi.controllaFormatoCredenziali(username, password);
 				if (esitoControllo.contains("errore"))
 					this.mostraErrore(esitoControllo);
@@ -213,7 +213,7 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 								password=this.avvioAggiornaPassword(true,username,password);
 							if (sceltaMenu==2 && !((String)utente.get("tipo")).equals("amministratore"))
 								uiRicerca.avvioRicercaProdotto((String)utente.get("tipo"), username);
-							if (sceltaMenu==2 && ((String)utente.get("tipo")).equals("amministratore"))			
+							if (sceltaMenu==2 && ((String)utente.get("tipo")).equals("amministratore"))
 								uiUtente.avvioCreaUtente(false);
 							if (sceltaMenu==3 && ((String)utente.get("tipo")).equals("cliente"))
 								uiCarrello.avvioVisualizzaCarrello(username);
@@ -245,7 +245,7 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 						while (sceltaMenu != -1);
 					}
 				}
-			}					
+			}
 		}
 		while (scelta != -1);
 	}
@@ -256,7 +256,7 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
     		//autore: Codetta
 		scelta = this.showOptionDialog(null, loginPanel, "Login (clicca su X per uscire)", DEFAULT_OPTION, QUESTION_MESSAGE, null, pulsantiLogin, "Login");
 
-		if (scelta == 0) // crea utente 
+		if (scelta == 0) // crea utente
 		{
 			usernameField.setText("");
 			passwordField.setText("");
@@ -269,8 +269,8 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 			password = new String(passwordField.getPassword());
 			usernameField.setBackground(Color.WHITE);
 			passwordField.setBackground(Color.WHITE);
-    		}	
-	}		
+    		}
+	}
 
 	private void mostraErrore(String tipoErrore)
 	{
@@ -342,7 +342,7 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 	}
 
 	public String avvioAggiornaUsername(String vecchio_username) throws RemoteException
-	{ 	
+	{
 		// RF23: Aggiorna Username
 		//Brivio Marco, Serio Giulia
 		esito = 0;
@@ -391,7 +391,7 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 		richiestaUsername = JOptionPane.showConfirmDialog(
 				null,
 				panel,
-				"Aggiorna la tua username",
+				"Cambio Username",
 				JOptionPane.OK_CANCEL_OPTION
 		);
 		if (richiestaUsername == JOptionPane.OK_OPTION) {
@@ -417,7 +417,7 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 				fieldUsername.setText("");
 				break;
 			case 3:
-				messaggioUsername = "Lo username deve essere\ndiverso da quello vecchio e\ndeve avere almeno 3 caratteri"; 
+				messaggioUsername = "Lo username deve essere\ndiverso da quello vecchio e\ndeve avere almeno 3 caratteri";
 				this.showMessageDialog(null, messaggioUsername, "Errore generale", this.ERROR_MESSAGE);
 				fieldUsername.setBackground(Color.YELLOW);
 				fieldUsername.setText("");
@@ -443,6 +443,10 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 	public String avvioAggiornaPassword(Boolean loggato, String username, String password) throws RemoteException
 	{ 	// RF03
 		//autori: Pietro Balossino, Andrija Jovic
+
+        /*Metodo che si assicura che l'utente sia correttamente loggato per poi concedere l'opzione di aggiornare la Password. Le opzioni da 1 a 3
+        fanno riferimento alle casistiche di password incorrette inserite dall'utente, come mancanza di valori alfabetici e numerici (2 e 3 rispettivamente)
+        e/o lunghezza eccessivamente corta (1).*/
 		if(loggato){
 			do{
 				this.mostraFormPasswordAttuale();
@@ -492,6 +496,9 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 	private void mostraFormPasswordAttuale(){
 		// RF03
 		//autori: Pietro Balossino, Andrija Jovic
+		/* Metodo per fornire finestra pop-up per l'inserimento della Password attuale dell'utente loggato al fine di verificarla
+		e consentire poi il cambio della stessa.*/
+
 		passwordAttualeField.setText("");
 
 		richiesta = this.showConfirmDialog(null, aggiornaPasswordPanel, "Aggiorna password", this.OK_CANCEL_OPTION);
@@ -504,6 +511,8 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 	private void mostraErrore(int nErrore){
 		// RF03
 		//autori: Pietro Balossino, Andrija Jovic
+
+        //Metodo che, presi in carico i 4 tipi di errore, si occupa di generare i messaggi pop-up di errore corrispondenti.
 		String messaggio="";
 
 		if(nErrore==4){
@@ -530,6 +539,7 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 	private void mostraFormNuovaPassword(){
 		// RF03
 		//autori: Pietro Balossino, Andrija Jovic
+		//Metodo che genera la finestra di dialogo al fine di far inserire all'utente la nuova password.
 		nuovaPasswordField.setText("");
 
 		richiesta = this.showConfirmDialog(null, nuovaPasswordPanel, "Aggiorna password", this.OK_CANCEL_OPTION);
@@ -542,6 +552,7 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 	private void mostraMessaggioDiSuccesso(){
 		// RF03
 		//autori: Pietro Balossino, Andrija Jovic
+		//Metodo che genera la finestra di dialogo che informa l'utente del successo del cambiamento della Password
 		String messaggio= "La password e' stata cambiata con successo!"+"\nOra potrai accedere con la tua nuova password";
 		this.showMessageDialog(null, messaggio, "Aggiorna Password", this.INFORMATION_MESSAGE);
 	}
