@@ -30,7 +30,7 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 	// attributi
 	private int sceltaGiacenza, esitoGiacenza = -1;
 	private String giacenza;
-	ArrayList<HashMap<String, Object>> listaProdotti;
+	private ArrayList<HashMap<String, Object>> listaProdotti;
 	
 	// elementi grafici
 	private JPanel pannelloGiacenza;
