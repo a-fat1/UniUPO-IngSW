@@ -224,6 +224,8 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 					}
 				} while (!Objects.equals(esitoVerifica, "ok"));
                 gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), dataScadenza, testoField.getText(), "cliente");
+				// se la notifica è stata inserita correttamente nel database, mostra messaggio di conferma
+				this.showMessageDialog(null,"Notifica inserita correttamente nel database!", "Avviso", this.INFORMATION_MESSAGE);
 	    	break;
             
             case "avviso":
@@ -239,6 +241,8 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 					}
 				} while (!Objects.equals(esitoVerifica, "ok"));
                 gestoreNotifiche.inserimentoNotifica(setDataPubblicazione(), dataScadenza, testoField.getText(), "tutti");
+				// se la notifica è stata inserita correttamente nel database, mostra messaggio di conferma
+				this.showMessageDialog(null,"Notifica inserita correttamente nel database!", "Avviso", this.INFORMATION_MESSAGE);
             break;
             case "nuovo ordine":
                 testoNotifica = gestoreNotifiche.generaTestoNotificaOrdine(oggetto);
