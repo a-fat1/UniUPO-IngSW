@@ -352,6 +352,8 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 
 	public void avvioIncrementaDecrementaPrezzi() throws RemoteException
 	{	// RF17
+		percentualeField.setText("");
+		percentualeField.setBackground(Color.WHITE);
 		do {
 			this.mostraFormIncrementaDecrementa();
 			if (sceltaPannello == this.CLOSED_OPTION) {
@@ -609,7 +611,7 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 			percentualeField.setText("");
 			percentualeField.setBackground(Color.YELLOW);
 		}
-		if(sceltaVoce==-1){
+		if(sceltaVoce==-1 && esito==true){
 			message="Selezionare incrementa o decrementa";
 			this.showMessageDialog(null,message,"Errore",this.ERROR_MESSAGE,null);
 		}
