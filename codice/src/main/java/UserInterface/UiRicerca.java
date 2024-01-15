@@ -91,6 +91,29 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 	private JTable tabellaProdotti;
 	private JScrollPane pannelloGiacenzaScorrevole;
 	private String giacenzaPulsanti[] = new String[2];
+
+
+//RF22
+	private static final String tipocd = "CD"; 
+	private static final String tipodvd = "DVD";
+	private static final String tipolibro = "Libro";
+	JPanel filtripanel;
+				
+	private JLabel autorelabel; 	
+	private JLabel titololabel; 	
+	private JLabel editorelabel; 
+	private JLabel annolabel;
+	private JTextField fieldautore;
+	private JTextField fieldtitolo;
+	private JTextField fieldeditore;
+	private JTextField fieldanno;
+	private JRadioButton[] check;
+	private ButtonGroup group;	
+	private JTable tablemenu;
+	private JPanel pannello;	
+	
+
+
 	//RF08
 	JPanel ricercaPanel;
 	JPanel mainPanel;
@@ -894,7 +917,244 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 		}
 	}
 
-  	public void avvioProdottiPiuVenduti() throws RemoteException
-	{	// RF22
+  	//RF22 Valentini Marco Cozzi Andrea
+	
+	
+		private int risultatoquery(ArrayList<HashMap<String, Object>> classifica) throws RemoteException{
+		
+			System.out.println(classifica);
+			
+			DefaultTableModel tabella = new DefaultTableModel(
+			        new Object[][]{},
+			        new String[]{"Codice", "Autore", "Titolo", "Editore", "Anno", "Quantita"}
+			);
+			
+				// Popolare la tabella con i dati
+				for (HashMap<String, Object> riga : classifica) {
+					Object[] dati = {riga.get("codice"), riga.get("autore"), riga.get("titolo"), riga.get("editore"), riga.get("anno"), riga.get("quantita")};
+						tabella.addRow(dati);
+				}
+
+				// Creazione della tabella
+				JTable tablemenu = new JTable(tabella);
+				// Creazione dello scroll pane per la tabella
+				JScrollPane scroll = new JScrollPane(tablemenu);
+				
+				
+				pannello = new JPanel();
+				pannello.setLayout(new BoxLayout(pannello, BoxLayout.Y_AXIS));
+				pannello.add(scroll, BorderLayout.CENTER);
+				// mainPanel.add(buttonPanel);
+
+				//mostra risultatiPanel
+				
+				pannello.setPreferredSize(new Dimension(830, 260));
+				//risultatiPanel.setLayout(null);
+				pannello.setVisible(true);
+				String tasto [] =null;
+				
+				return showOptionDialog(null, pannello, "Classifica", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, tasto,"OK");
+
+		}
+
+	
+		
+		
+		
+		
+		//RF22 
+
+
+			private void erroreclassifica(String errore)
+		{
+			String comunicazione="";
+
+	        if (errore.equals("erroreCompilazioneFiltri"))
+			{
+	        	comunicazione="Errore nella compilazione filtri";
+			}
+	        
+	        if (errore.equals("erroreCompilazioneCategoria"))
+			{
+	        	comunicazione="errore nella scelta della categoria";
+			}
+	        
+	        if(errore.equals("erroreAutore"))
+			{
+				comunicazione = "L'autore deve contenere almeno 3 caratteri";
+			}
+	        
+	        if (errore.equals("erroreTitolo"))
+			{
+				comunicazione="Errore compilazione titolo";
+			}
+	        
+	        if (errore.equals("erroreEditore")) 
+			{
+				comunicazione="Errore compilazione editore";
+			}
+	        
+	        if (errore.equals("erroreAnno"))
+			{
+				comunicazione="Errore compilazione anno";
+			}
+	        
+	        if (errore.equals("OrdiniNonTrovati"))
+			{
+				comunicazione="Ordini non trovati";
+			}
+	        
+	        if(errore.equals("erroreControlloValore"))
+			{
+				comunicazione = "Errore nel controllo valore scelto su tipo";
+			}
+			
+
+			showMessageDialog(null, comunicazione, "Errore", this.ERROR_MESSAGE);
+		}
+			
+	    
+		
+		//RF22
+		
+		private int mostraFormFiltri()
+		{
+			//selezione filtri
+			
+			String tasto [] = null ;
+
+			autorelabel=new JLabel("Autore");
+			titololabel=new JLabel("Titolo");
+			editorelabel=new JLabel("Editore");
+			annolabel=new JLabel("Anno");
+			fieldautore=new JTextField("", 10);
+			fieldtitolo=new JTextField("", 10);
+			fieldeditore=new JTextField("", 10);
+			fieldanno=new JTextField("", 10);
+			
+			filtripanel= new JPanel();
+			
+			filtripanel.add(autorelabel);
+			filtripanel.add(fieldautore);
+			filtripanel.add(titololabel);
+			filtripanel.add(fieldtitolo);
+			filtripanel.add(editorelabel);
+			filtripanel.add(fieldeditore);
+			filtripanel.add(annolabel);
+			filtripanel.add(fieldanno);
+			
+			return showOptionDialog(null, filtripanel, "Selezione Filtri", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, tasto,"OK");
+			
+		}
+
+		
+		//RF22
+		private int mostraFormCategorie()
+		{
+			//selezione categorie
+			int i;
+			String tasto [] = null ;
+
+			check=new JRadioButton[3];
+			check[0]=new JRadioButton("Libro");
+			check[1]=new JRadioButton("CD");
+			check[2]=new JRadioButton("DVD");
+			group=new ButtonGroup();
+			filtripanel=new JPanel(new GridLayout(4,1));
+			for(i=0;i<3;i++) {
+				group.add(check[i]);
+				filtripanel.add(check[i]);
+			}
+			
+			return showOptionDialog(null, filtripanel, "Selezione Categorie", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, tasto,"OK");
+			
+		}
+		
+		
+		
+		
+		//RF22
+
+	  	public void avvioProdottiPiuVenduti() throws RemoteException
+		{
+	  		
+			String tipo = "null";
+			
+	  		//controllo sui metodi
+			if(mostraFormFiltri()==OK_OPTION) {
+				if(mostraFormCategorie()==OK_OPTION) {
+				
+					//risultato caricato sul boolean delle variabili
+					boolean Libro = check[0].isSelected();
+					boolean CD = check[1].isSelected();
+					boolean DVD = check[2].isSelected();
+					
+					//controllo su quale tipo è stato scelto
+					if(Libro){
+						tipo=tipolibro;
+					}else {
+						if(CD){
+							tipo=tipocd;
+						}else {
+							if(DVD){
+								tipo=tipodvd;
+							}else {
+								tipo=null; 
+							}
+						}
+					}
+					
+				}
+				else
+				{
+					erroreclassifica("erroreCompilazioneCategoria");
+				}
+				
+			}else {
+				
+				erroreclassifica("erroreCompilazioneFiltri");
+			}
+				
+				String autore = fieldautore.getText();
+				String titolo = fieldtitolo.getText();
+				String editori = fieldeditore.getText();
+				String anno = fieldanno.getText();
+				
+
+				//controllo sui valori
+				if(gestoreRicerche.controllaValore(tipo)){
+					
+					if(autore!=null && !autore.equals("") && autore.length()<3){					
+						erroreclassifica("erroreAutore");
+						return ;
+					}
+					if(titolo!=null && !titolo.equals("") && titolo.length()<3){					
+						erroreclassifica("erroreTitolo");
+						return ;
+					}
+					if(editori!=null && !editori.equals("") && editori.length()<3){					
+						erroreclassifica("erroreEditore");
+						return ;
+					}
+					if(anno!=null && anno.length()!=0 && anno.length()!=4){					
+						erroreclassifica("erroreAnno");					
+						return ;
+					}
+					
+					ArrayList<HashMap<String, Object>> classifica = gestoreRicerche.ricercaProdotti(titolo,  autore, editori, anno, tipo);
+					if(classifica==null || classifica.size()==0) {
+						erroreclassifica("OrdiniNonTrovati");
+						avvioProdottiPiuVenduti();
+					}
+						
+					else 				
+						risultatoquery(classifica);
+					
+					
+
+				} else 
+					erroreclassifica("erroreControlloValore");
+				
+				
 	}
 }
