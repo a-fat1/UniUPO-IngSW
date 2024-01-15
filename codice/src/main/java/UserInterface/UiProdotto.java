@@ -537,7 +537,7 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 
 	//RF17
 	private void mostraFormIncrementaDecrementa() throws RemoteException{
-		while((esito==false || sceltaVoce==-1)||(esito==false && sceltaVoce==-1)) {
+		do {
 			String[] scelta = {"ok"};
 			int sceltaPannello;
 			sceltaPannello = this.showOptionDialog(null, increDecrePanel, "Inserire percentuale e scelta (premere X per uscire)", this.DEFAULT_OPTION, this.QUESTION_MESSAGE, null, scelta, "ok");
@@ -558,7 +558,6 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 
 					} else if (esito == false || sceltaVoce == -1) {
 						this.mostraErrore();
-
 					}
 				}
 
@@ -573,7 +572,7 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 
 				}
 			}
-		}
+		}while((esito==false || sceltaVoce==-1)||(esito==false && sceltaVoce==-1));
 
 	}
 	//RF17
@@ -594,12 +593,11 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 	//RF17
 	private void mostraErrore(){
 		String message="";
-		if(esito==false){
+		if(esito==false && sceltaVoce!=-1){
 			message="Percentuale non idonea";
 			this.showMessageDialog(null,message,"Errore",this.ERROR_MESSAGE,null);
 			percentualeField.setText("");
 			percentualeField.setBackground(Color.YELLOW);
-
 		}
 		if(sceltaVoce==-1){
 			message="Selezionare incrementa o decrementa";
