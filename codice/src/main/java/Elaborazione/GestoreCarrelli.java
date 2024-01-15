@@ -129,44 +129,44 @@ public float calcolaPrezzoTotale(ArrayList<HashMap<String, Object>> carrello, Ar
     }
 }
 
-public void rimozioneProdottoDalCarrello(ArrayList<HashMap<String, Object>> carrello, HashMap<String, Object> elemento, String username) throws RemoteException {
-	// RF07: rimuovi prodotto dal carrello
-	// autori: Simone Aldo Borsa, Andrea Padoan
+	public void rimozioneProdottoDalCarrello(ArrayList<HashMap<String, Object>> carrello, HashMap<String, Object> elemento, String username) throws RemoteException {
+		// RF07: rimuovi prodotto dal carrello
+		// autori: Simone Aldo Borsa, Andrea Padoan
 
-	if(carrello.size() == 0) return;
-		
-		int q = (int) elemento.get("quantita") + (int) elemento.get("quantitaProdotto");
-		dbProdotti.update("UPDATE Prodotto "
-				+ "SET quantita = "
-				+ q
-				+ " WHERE codice = " + elemento.get("codiceProdotto") + ";");
-		
-		dbProdotti.update("DELETE FROM Carrello "
-				+ "WHERE Carrello.username = \"" + username
-				+ "\" AND Carrello.codiceProdotto = " + elemento.get("codice") + ";");
-	
-	carrello.remove(elemento);
-}
-
-public void svuotaCarrello(ArrayList<HashMap<String, Object>> carrello, String username) throws RemoteException {
-	// RF07: rimuovi prodotto dal carrello
-	// autori: Simone Aldo Borsa, Andrea Padoan
-	
-	if(carrello.size() == 0) return;
-	
-		for(HashMap<String, Object> elemento : carrello) {
+		if(carrello.size() == 0) return;
+			
 			int q = (int) elemento.get("quantita") + (int) elemento.get("quantitaProdotto");
 			dbProdotti.update("UPDATE Prodotto "
 					+ "SET quantita = "
 					+ q
 					+ " WHERE codice = " + elemento.get("codiceProdotto") + ";");
-		}
+			
+			dbProdotti.update("DELETE FROM Carrello "
+					+ "WHERE Carrello.username = \"" + username
+					+ "\" AND Carrello.codiceProdotto = " + elemento.get("codice") + ";");
 		
-		dbProdotti.update("DELETE FROM Carrello "
-				+ "WHERE Carrello.username = \"" + username + "\";");
-	
-	carrello.clear();
-}
+		carrello.remove(elemento);
+	}
+
+	public void svuotaCarrello(ArrayList<HashMap<String, Object>> carrello, String username) throws RemoteException {
+		// RF07: rimuovi prodotto dal carrello
+		// autori: Simone Aldo Borsa, Andrea Padoan
+		
+		if(carrello.size() == 0) return;
+		
+			for(HashMap<String, Object> elemento : carrello) {
+				int q = (int) elemento.get("quantita") + (int) elemento.get("quantitaProdotto");
+				dbProdotti.update("UPDATE Prodotto "
+						+ "SET quantita = "
+						+ q
+						+ " WHERE codice = " + elemento.get("codiceProdotto") + ";");
+			}
+			
+			dbProdotti.update("DELETE FROM Carrello "
+					+ "WHERE Carrello.username = \"" + username + "\";");
+		
+		carrello.clear();
+	}
 
 
 public boolean controlloLimiteQuantita(int quantita) throws RemoteException{
