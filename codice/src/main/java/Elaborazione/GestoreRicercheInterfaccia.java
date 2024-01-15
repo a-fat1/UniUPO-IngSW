@@ -36,5 +36,13 @@ public interface GestoreRicercheInterfaccia extends Remote
      public ArrayList<HashMap<String, Object>> ricercaProdotto(String titolo, String autore, String editore, String anno,
      ArrayList<String> tipoList, boolean isCliente) throws RemoteException;
     public boolean controllaParametri(String titolo, String autore, String editore, String anno, ArrayList<String> tipoList) throws RemoteException;
+
+//RF22 Valentini Marco Cozzi Andrea
+    //definisce i metodi utilizzati
+    public ArrayList<HashMap<String, Object>> ricercaProdotti(String titolo, String autore, String editori, String anno, String tipo) throws RemoteException;
+    
+  	public boolean controllaValore(String tipo) throws RemoteException;
+
+
 } 
 
