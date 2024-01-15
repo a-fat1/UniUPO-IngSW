@@ -22,28 +22,28 @@ public class RF12ListaPagamenti
     public void testControlloParametri1() throws RemoteException
     {
         // formato dataInizio non corretto
-        assertEquals(1, gestoreRicerche.controlloParametri("12/14/2022", "01/12/2023"));
+        assertEquals(1, gestoreRicerche.controlloParametriListaPagamenti("12/14/2022", "01/12/2023"));
     }
 
     @Test
     public void testControlloParametri2() throws RemoteException
     {
         // formato dataFine non corretto
-        assertEquals(1, gestoreRicerche.controlloParametri("12/12/2023", "01/13/2023"));
+        assertEquals(1, gestoreRicerche.controlloParametriListaPagamenti("12/12/2023", "01/13/2023"));
     }
 
     @Test
     public void testControlloParametri3() throws RemoteException
     {
         // dataInizio > dataFine
-        assertEquals(2, gestoreRicerche.controlloParametri("12/02/2023", "01/01/2023"));
+        assertEquals(2, gestoreRicerche.controlloParametriListaPagamenti("12/02/2023", "01/01/2023"));
     }
 
     @Test
     public void testControlloParametri4() throws RemoteException
     {
         // formato dataInizio non corretto
-        assertEquals(0, gestoreRicerche.controlloParametri("12/01/2023", "20/01/2023"));
+        assertEquals(0, gestoreRicerche.controlloParametriListaPagamenti("12/01/2023", "20/01/2023"));
     }
 
     @Test

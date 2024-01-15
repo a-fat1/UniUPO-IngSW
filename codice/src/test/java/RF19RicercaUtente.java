@@ -121,7 +121,6 @@ public class RF19RicercaUtente {
         assertEquals("Aldo", utenti.get(0).get("nome"));
         assertEquals("Bianchi", utenti.get(0).get("cognome"));
         assertEquals("aldo", utenti.get(0).get("username"));
-        assertEquals(1, utenti.get(0).get("attivo"));
     }
 
     @Test
