@@ -391,7 +391,7 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 		richiestaUsername = JOptionPane.showConfirmDialog(
 				null,
 				panel,
-				"Cambio Username",
+				"Aggiorna la tua username",
 				JOptionPane.OK_CANCEL_OPTION
 		);
 		if (richiestaUsername == JOptionPane.OK_OPTION) {
