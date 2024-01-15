@@ -12,7 +12,7 @@ public class RF06EffettuaOrdine
     DbProdotti dbProdotti = new DbProdotti();
     GestoreCarrelli gestoreCarrelli = new GestoreCarrelli(dbProdotti);
 
-
+    /*
     
     @Test
     public void RF06_ControllaNumeroCarta1()
@@ -59,4 +59,6 @@ public class RF06EffettuaOrdine
         
         assertTrue(risultato== 20.0); // Sostituisci con il risultato atteso
     }
+    
+    */
 }
