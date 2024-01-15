@@ -33,7 +33,6 @@ public class RF07RimuoviProdottoDalCarrello {
 	public void testSvuotaCarrello() throws RemoteException {
 		Carrello = gestoreCarrelli.cercaProdottiCarrello(username);
 		valorePrevisto = 0;
-		if(Carrello.size() == 0) return;
 		ArrayList<Integer> quantita = new ArrayList<Integer>();
 		
 		ArrayList<HashMap<String, Object>> tempC = new ArrayList<HashMap<String, Object>>(Carrello);
