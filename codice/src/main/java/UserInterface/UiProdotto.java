@@ -93,6 +93,7 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 	private int percentuale;
 	private boolean esito;
 	private int sceltaVoce;
+	private int sceltaPannello;
 
 	private JLabel labelRimozione; //RF10
 	private JLabel labelRipristino; //RF10
@@ -351,7 +352,41 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 
 	public void avvioIncrementaDecrementaPrezzi() throws RemoteException
 	{	// RF17
-		this.mostraFormIncrementaDecrementa();
+		do {
+			this.mostraFormIncrementaDecrementa();
+			if (sceltaPannello == this.CLOSED_OPTION) {
+				break;
+			} else {
+				String valore = percentualeField.getText();
+				if (valore.equals("")) {
+					this.mostraErrore();
+
+				} else {
+					percentuale = Integer.parseInt(valore);
+					this.controllaCredenzialiIncreDecrePrezzi();
+					this.selezioneControllo();
+
+					if (esito == false && sceltaVoce == -1) {
+						this.mostraErrori();
+
+					} else if (esito == false || sceltaVoce == -1) {
+						this.mostraErrore();
+					}
+				}
+
+				if (esito == true && sceltaVoce != -1) {
+					if(sceltaVoce==0){
+						gestoreProdotti.incrementaPrezzi(percentuale);
+					}else if(sceltaVoce==1){
+						gestoreProdotti.decrementaPrezzi(percentuale);
+					}
+
+					this.mostraPrezziAggiornati();
+
+				}
+			}
+		}while((esito==false || sceltaVoce==-1)||(esito==false && sceltaVoce==-1));
+
 
 	}
 
@@ -545,44 +580,10 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 	}
 
 	//RF17
-	private void mostraFormIncrementaDecrementa() throws RemoteException{
-		do {
-			String[] scelta = {"ok"};
-			int sceltaPannello;
-			sceltaPannello = this.showOptionDialog(null, increDecrePanel, "Inserire percentuale e scelta (premere X per uscire)", this.DEFAULT_OPTION, this.QUESTION_MESSAGE, null, scelta, "ok");
-			if (sceltaPannello == this.CLOSED_OPTION) {
-				break;
-			} else {
-				String valore = percentualeField.getText();
-				if (valore.equals("")) {
-					this.mostraErrore();
-
-				} else {
-					percentuale = Integer.parseInt(valore);
-					this.controllaCredenzialiIncreDecrePrezzi();
-					this.selezioneControllo();
-
-					if (esito == false && sceltaVoce == -1) {
-						this.mostraErrori();
-
-					} else if (esito == false || sceltaVoce == -1) {
-						this.mostraErrore();
-					}
-				}
-
-				if (esito == true && sceltaVoce != -1) {
-					if(sceltaVoce==0){
-						gestoreProdotti.incrementaPrezzi(percentuale);
-					}else if(sceltaVoce==1){
-						gestoreProdotti.decrementaPrezzi(percentuale);
-					}
-
-					this.mostraPrezziAggiornati();
-
-				}
-			}
-		}while((esito==false || sceltaVoce==-1)||(esito==false && sceltaVoce==-1));
-
+	private int mostraFormIncrementaDecrementa() throws RemoteException{
+		String[] scelta = {"ok"};
+		sceltaPannello=this.showOptionDialog(null, increDecrePanel, "Inserire percentuale e scelta (premere X per uscire)", this.DEFAULT_OPTION, this.QUESTION_MESSAGE, null, scelta, "ok");
+		return sceltaPannello;
 	}
 	//RF17
 	private void controllaCredenzialiIncreDecrePrezzi(){
