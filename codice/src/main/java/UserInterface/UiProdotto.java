@@ -235,12 +235,8 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 		
 
 		//RF10 (Filidoro Michele, Mahfoud Ayoub)
-		labelRimozione= new JLabel("Rimuovere prodotto dal catalogo?");
-		labelRipristino=new JLabel("Ripristinare prodotto nel catalogo?");
 		ripristinoPanel=new JPanel(new FlowLayout());
-		ripristinoPanel.add(labelRipristino);
 		rimozionePanel=new JPanel(new FlowLayout());
-		rimozionePanel.add(labelRimozione);
 
 		//RF14
 		prezzoVecchioLabel = new JLabel("prezzo precedente");
@@ -264,13 +260,6 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 
 	public void avvioRimuoviRipristinaNelCatalogo(Integer codProdotto, Integer Disponibile) throws RemoteException
 	{	// RF10
-		/*
-		switch (Disponibile) {
-			case 0 -> mostraFormRipristino(codProdotto);
-			case 1 -> mostraFormRimozione(codProdotto);
-			default -> mostraErroreDisponibile(codProdotto);
-		}
-		*/
 		switch (Disponibile) {
 			case 0: mostraFormRipristino(codProdotto);
 			break;
@@ -647,34 +636,39 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 
 	//RF10
 	private void mostraFormRimozione(Integer codProdotto) throws RemoteException {
-		labelRimozione=new JLabel("Prodotto n."+codProdotto);
+		labelRimozione=new JLabel("Rimuovere prodotto n."+codProdotto+" dal catalogo?");
 		rimozionePanel.add(labelRimozione);
 		int scelta;
 		String[] scelte={"Annulla", "Conferma"};
 
 		scelta=this.showOptionDialog(null,rimozionePanel,"Rimozione Prodotto", this.DEFAULT_OPTION,this.QUESTION_MESSAGE,null,scelte,"Annulla");
-		if(scelta==JOptionPane.CLOSED_OPTION || scelta==0) return;
+		if(scelta==JOptionPane.CLOSED_OPTION || scelta==0){
+			mostraRimozioneAnnullata(codProdotto);
+		}
 		if(scelta==1){
 			gestoreProdotti.rimuoviProdotto(codProdotto);
 			mostraSuccessoRimozione(codProdotto);
 		}
+		rimozionePanel.remove(labelRimozione); //Per evitare che ad ogni rimozione si sommino i label
 
 	}
 	//RF10
 	private void mostraFormRipristino(Integer codProdotto) throws RemoteException {
 
-		labelRipristino=new JLabel("Prodotto n."+codProdotto);
+		labelRipristino=new JLabel("Ripristinare prodotto n."+codProdotto +" nel catalogo?");
 		ripristinoPanel.add(labelRipristino);
-
 		int scelta;
 		String[] scelte={"Annulla", "Conferma"};
 
 		scelta=this.showOptionDialog(null,ripristinoPanel,"Ripristino Prodotto", this.DEFAULT_OPTION,this.QUESTION_MESSAGE,null,scelte,"Annulla");
-		if(scelta==JOptionPane.CLOSED_OPTION || scelta==0) return;
+		if(scelta==JOptionPane.CLOSED_OPTION || scelta==0) {
+			mostraRipristinoAnnullato(codProdotto);
+		}
 		if(scelta==1){
 			gestoreProdotti.ripristinaProdotto(codProdotto);
 			mostraSuccessoRipristino(codProdotto);
 		}
+		ripristinoPanel.remove(labelRipristino); //Per evitare che ad ogni ripristino si sommino i label
 	}
 
 	//RF10
@@ -691,9 +685,22 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 
 	}
 	//RF10
+	private void mostraRimozioneAnnullata(Integer codProdotto){
+		String messaggio;
+		messaggio="Rimozione prodotto n." +codProdotto +" annullata";
+		this.showMessageDialog(null,messaggio,"Esito rimozione", this.INFORMATION_MESSAGE,null);
+
+	}
+	//RF10
+	private void mostraRipristinoAnnullato(Integer codProdotto){
+		String messaggio;
+		messaggio="Ripristino prodotto n." +codProdotto +" annullato";
+		this.showMessageDialog(null,messaggio,"Esito ripristino", this.INFORMATION_MESSAGE,null);
+	}
+	//RF10
 	private void mostraErroreDisponibile(Integer codProdotto){
 		String messaggio;
 		messaggio="Valore 'Disponibile' per il prodotto n." +codProdotto+ " diverso da 0 o 1, correggere valore";
-		this.showMessageDialog(null,messaggio,"errore",this.ERROR_MESSAGE,null);
+		this.showMessageDialog(null,messaggio,"ERRORE DISPONIBILE",this.ERROR_MESSAGE,null);
 	}
 }
