@@ -18,6 +18,7 @@ import java.rmi.NotBoundException;
 import java.time.LocalTime;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
 import Elaborazione.*;
 
