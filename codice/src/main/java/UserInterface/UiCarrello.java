@@ -239,10 +239,7 @@ public class UiCarrello extends JOptionPane implements UiCarrelloInterfaccia
 	    labelNumeroCarta = new JLabel("Numero Carta");
 	    fieldNumeroCarta = new JTextField("", 20);
 	    labelTipoCarta = new JLabel("Tipo Carta");
-	        
-	        /*sceltaMostraFormCarta = this.showConfirmDialog(null, mostraFormCartaPanel, "mostra form carta", this.VISA_MASTERCARD_AMEX_OK_OPTION);
-	        numeroCarta = this.showInputDialog(null, "numero carta", "mostra form carta".this.QUESTION_MESSAGE);
-	        String[] scelta= {"Visa", "Mastercard", "AmEx"};*/
+	    
 	       
 	    labelNumeroCarta = new JLabel("numero carta");
 	    fieldNumeroCarta = new JTextField("", 20);
