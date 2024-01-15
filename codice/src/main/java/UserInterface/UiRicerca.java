@@ -809,7 +809,6 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 		// inizializzazione variabili
 		Object[][] utentiTabella;
 		JTable table = null;
-		int azione;
 
 		// se l'utente che ha richiesto è di genere "staff", allora inizializzo la tabella con 4 colonne in quanto
 		// deve essere mostrato solo nome-cognome-username-tipo
@@ -885,10 +884,12 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 			// fino a quando l'utente non chiude la finestra per uscire
 		}while (table.getSelectedRow() == -1 && azione != -1);
 
+
 		// salvo lo username dell'utente selezionato
-		utenteSelezionato = table.getModel().getValueAt(table.getSelectedRow(), 2).toString();
+		if(azione != -1)
+			utenteSelezionato = table.getModel().getValueAt(table.getSelectedRow(), 2).toString();
 		// salvo lo stato (true/false) in caso la richiesta venga fatta da un amministratore
-		if(genereUtente.equals("amministratore")) {
+		if(genereUtente.equals("amministratore") && azione != -1) {
 			statoUtenteSelezionato = Boolean.parseBoolean((table.getModel().getValueAt(table.getSelectedRow(), 4).toString()));
 		}
 	}
