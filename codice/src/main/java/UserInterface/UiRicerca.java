@@ -72,7 +72,7 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 	// RF18
 	private int sceltaGiacenza, esitoGiacenza = -1;
 	private String giacenza;
-	ArrayList<HashMap<String, Object>> listaProdotti;
+	private ArrayList<HashMap<String, Object>> listaProdotti;
 	//RF08
 	private static final String _CD_ = "CD"; 
 	private static final String _DVD_ = "DVD";
