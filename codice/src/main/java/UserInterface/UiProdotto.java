@@ -99,6 +99,8 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 	private JLabel labelRipristino; //RF10
 	private JPanel rimozionePanel;//RF10
 	private JPanel ripristinoPanel;//RF10
+	private int sceltaRR; //RF10
+	private String[] scelteRR={"Annulla", "Conferma"}; //RF10
 
 	//RF14: aggiornaPrezzo
 	private JLabel prezzoVecchioLabel;
@@ -262,14 +264,31 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 	public void avvioRimuoviRipristinaNelCatalogo(Integer codProdotto, Integer Disponibile) throws RemoteException
 	{	// RF10
 		switch (Disponibile) {
-			case 0: mostraFormRipristino(codProdotto);
-			break;
-			case 1: mostraFormRimozione(codProdotto);
-			break;
-			default: mostraErroreDisponibile(codProdotto);
-			break;
+			case 0->{
+				mostraFormRipristino(codProdotto);
+				if(sceltaRR==JOptionPane.CLOSED_OPTION || sceltaRR==0) {
+					mostraRipristinoAnnullato(codProdotto);
+				}
+				if(sceltaRR==1){
+					gestoreProdotti.ripristinaProdotto(codProdotto);
+					mostraSuccessoRipristino(codProdotto);
+				}
+			}
+			case 1->{
+				mostraFormRimozione(codProdotto);
+				if(sceltaRR==JOptionPane.CLOSED_OPTION || sceltaRR==0){
+					mostraRimozioneAnnullata(codProdotto);
+				}
+				if(sceltaRR==1){
+					gestoreProdotti.rimuoviProdotto(codProdotto);
+					mostraSuccessoRimozione(codProdotto);
+				}
+			}
+
+			default->mostraErroreDisponibile(codProdotto);
 		}
 	}
+
 
 	public void avvioAggiornaPrezzo(HashMap<String, Object> P) throws RemoteException
 	{
@@ -641,17 +660,7 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 	private void mostraFormRimozione(Integer codProdotto) throws RemoteException {
 		labelRimozione=new JLabel("Rimuovere prodotto n."+codProdotto+" dal catalogo?");
 		rimozionePanel.add(labelRimozione);
-		int scelta;
-		String[] scelte={"Annulla", "Conferma"};
-
-		scelta=this.showOptionDialog(null,rimozionePanel,"Rimozione Prodotto", this.DEFAULT_OPTION,this.QUESTION_MESSAGE,null,scelte,"Annulla");
-		if(scelta==JOptionPane.CLOSED_OPTION || scelta==0){
-			mostraRimozioneAnnullata(codProdotto);
-		}
-		if(scelta==1){
-			gestoreProdotti.rimuoviProdotto(codProdotto);
-			mostraSuccessoRimozione(codProdotto);
-		}
+		sceltaRR=this.showOptionDialog(null,rimozionePanel,"Rimozione Prodotto", this.DEFAULT_OPTION,this.QUESTION_MESSAGE,null,scelteRR,"Annulla");
 		rimozionePanel.remove(labelRimozione); //Per evitare che ad ogni rimozione si sommino i label
 
 	}
@@ -660,17 +669,7 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 
 		labelRipristino=new JLabel("Ripristinare prodotto n."+codProdotto +" nel catalogo?");
 		ripristinoPanel.add(labelRipristino);
-		int scelta;
-		String[] scelte={"Annulla", "Conferma"};
-
-		scelta=this.showOptionDialog(null,ripristinoPanel,"Ripristino Prodotto", this.DEFAULT_OPTION,this.QUESTION_MESSAGE,null,scelte,"Annulla");
-		if(scelta==JOptionPane.CLOSED_OPTION || scelta==0) {
-			mostraRipristinoAnnullato(codProdotto);
-		}
-		if(scelta==1){
-			gestoreProdotti.ripristinaProdotto(codProdotto);
-			mostraSuccessoRipristino(codProdotto);
-		}
+		sceltaRR=this.showOptionDialog(null,ripristinoPanel,"Ripristino Prodotto", this.DEFAULT_OPTION,this.QUESTION_MESSAGE,null,scelteRR,"Annulla");
 		ripristinoPanel.remove(labelRipristino); //Per evitare che ad ogni ripristino si sommino i label
 	}
 
@@ -706,4 +705,5 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 		messaggio="Valore 'Disponibile' per il prodotto n." +codProdotto+ " diverso da 0 o 1, correggere valore";
 		this.showMessageDialog(null,messaggio,"ERRORE DISPONIBILE",this.ERROR_MESSAGE,null);
 	}
+
 }
