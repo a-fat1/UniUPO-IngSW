@@ -58,7 +58,7 @@ public class RF16NuovoProdotto {
         assertEquals("Zanichelli", returnValue.get("editore"));
         assertEquals(2023, returnValue.get("anno"));
         assertEquals("Libro", returnValue.get("tipo"));
-        assertNull(returnValue.get("prezzo"));
+        assertEquals(0.0, returnValue.get("prezzo"));
         assertEquals(0, returnValue.get("quantita"));
         assertEquals(1, returnValue.get("disponibile"));
 
@@ -71,7 +71,7 @@ public class RF16NuovoProdotto {
         assertEquals("Zanichelli", returnValue.get("editore"));
         assertEquals(2024, returnValue.get("anno"));
         assertEquals("Libro", returnValue.get("tipo"));
-        assertNull(returnValue.get("prezzo"));
+        assertEquals(0.0, returnValue.get("prezzo"));
         assertEquals(0, returnValue.get("quantita"));
 
         assertEquals(1, returnValue.get("disponibile"));
