@@ -200,7 +200,7 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 	 * @return ritorna 0 se il formato è corretto (almeno un numero, una lettera e con lunghezza >6).
 	 * Altrimenti, viene ritornato 1 se è troppo corta,
 	 * 2 se manca una lettera e 3 se manca un numero.
-     * @throws RemoteException
+        * @throws RemoteException
 	 */
 
 	public int controlloNuovaPassword (String nuovaPassword)throws RemoteException{
@@ -297,8 +297,8 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 	 /**
 	 * Modifica la password nel database.
 	 * @param username : la stringa contentente l'username.
-     * @param nuovaPassword : la stringa contentente la nuova password.
-     * @throws RemoteException
+        * @param nuovaPassword : la stringa contentente la nuova password.
+        * @throws RemoteException
 	 */
 
 	public void AggiornaPassword(String username, String nuovaPassword) throws RemoteException {
