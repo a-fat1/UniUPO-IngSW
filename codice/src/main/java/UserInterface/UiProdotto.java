@@ -52,6 +52,12 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 
 
 	// RF16 Nuova Fornitura Galliera, Ternullo
+	String[] autori;
+	String titolo;
+	String editore;
+	String tipo;
+	int anno;
+
 	private JPanel nuovoProdottoPanel;
 	private JLabel titoloProdottoLabel;
 	private JLabel annoProdottoLabel;
@@ -278,7 +284,6 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 	public void avvioAggiornaPrezzo(HashMap<String, Object> P) throws RemoteException
 	{
 		//RF14
-
 		prezzoVecchioVal = ((Double)P.get("prezzo")).floatValue();
 		do{
 			controllo = 0;
@@ -454,32 +459,41 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 	private void mostraFormNuovoProdotto() throws RemoteException {
 		//RF16
 		int esitoVerifica;
-		boolean esitoControllo;
+		boolean esitoControllo = false;
 		HashMap<String, Object> ultimoProdotto;
-
-		String[] autori;
-		String titolo;
-		String editore;
-		String tipo;
-		int anno;
 
 		// elimina dati preinseriti
 		titoloProdottoField.setText("");
 		editoreProdottoField.setText("");
 		for(JTextField t: autoriProdottoField) t.setText("");
+		//reset colori
+		titoloProdottoField.setBackground(Color.WHITE);
+		editoreProdottoField.setBackground(Color.WHITE);
+		for(JTextField autoreField: autoriProdottoField){
+			autoreField.setBackground(Color.WHITE);
+		}
 
 		// cicla finchè il prodotto inserito possa venire aggiunto
 		do{
 			int scelta = showConfirmDialog(null, nuovoProdottoPanel, "Nuovo Prodotto (x per uscire)", JOptionPane.OK_CANCEL_OPTION);
 			if(scelta == JOptionPane.CLOSED_OPTION || scelta == JOptionPane.CANCEL_OPTION) return;
 
+			//reset colori dopo input
+			titoloProdottoField.setBackground(Color.WHITE);
+			editoreProdottoField.setBackground(Color.WHITE);
+			for(JTextField autoreField: autoriProdottoField){
+				autoreField.setBackground(Color.WHITE);
+			}
+
+			// leggo e memorizzo in ordine gli autori inseriti nel form
 			ArrayList<String> autoriList = new ArrayList<>();
 			for(JTextField autoreF: autoriProdottoField){
-				if(autoreF.getText().isEmpty()) break;
+				if(autoreF.getText().isEmpty()) break; // se c'e' un field vuoto esco
 				autoriList.add(autoreF.getText());
 			}
-			autori = autoriList.toArray(new String[0]);
+			autori = autoriList.toArray(new String[0]); // trasformo arraylist in array
 
+			// memorizzo gli altri campi
 			titolo = titoloProdottoField.getText();
 			editore = editoreProdottoField.getText();
 			tipo = Objects.requireNonNull(tipoProdottoCombo.getSelectedItem()).toString();
@@ -487,19 +501,22 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 
 			// verifica campi
 			esitoVerifica = gestoreProdotti.verificaCampi(autori, titolo, editore, anno);
+			// se non 0, messaggio di errore
 			if(esitoVerifica != 0) mostraErroreVerifica(esitoVerifica);
+			else{
+				// controllo unicita'
+				esitoControllo = gestoreProdotti.controlloUnicita(autori, titolo, editore, anno, tipo);
+				if(esitoControllo == false) mostraErroreControllo();
+				else{
+					// aggiunta prodotto
+					ultimoProdotto = gestoreProdotti.aggiungiProdotto(autori, titolo, editore, anno, tipo);
 
-			// controllo unicita'
-			esitoControllo = gestoreProdotti.controlloUnicita(autori, titolo, editore, anno, tipo);
-			if(!esitoControllo) mostraErroreControllo();
-
-		} while(esitoVerifica != 0 || !esitoControllo); // se i dati inseriti non sono corretti o il prodotto esiste già cicla
-
-		ultimoProdotto = gestoreProdotti.aggiungiProdotto(autori, titolo, editore, anno, tipo);
-
-		//avvioAggiornaPrezzo(ultimoProdotto);
-		avvioNuovaFornitura((Integer) ultimoProdotto.get("codice"), true);
-		//UserInterface.UiNotifica.avvioGeneraNotifica("nuovo prodotto", ultimoProdotto);
+					avvioAggiornaPrezzo(ultimoProdotto);
+					avvioNuovaFornitura((Integer) ultimoProdotto.get("codice"), true);
+					uiNotifica.avvioGeneraNotifica("nuovo prodotto", ultimoProdotto);
+				}
+			}
+		} while(esitoVerifica != 0 || esitoControllo == false); // se i dati inseriti non sono corretti o il prodotto esiste già cicla
 	}
 
 	private void mostraErroreVerifica(int codice){
@@ -507,20 +524,24 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 
 		erroreVerificaPanel = new JPanel();
 		messaggioErrore = new JLabel();
-		/*switch (codice) {
-			case 1 -> messaggioErrore.setText("Errore: Titolo mancante");
-			case 2 -> messaggioErrore.setText("Errore: Anno errato");
-			case 3 -> messaggioErrore.setText("Errore: Editore mancante");
-			case 4 -> messaggioErrore.setText("Errore: Autore mancante");
+		switch (codice) {
+			case 1:
+				messaggioErrore.setText("Errore: Titolo mancante");
+				titoloProdottoField.setBackground(Color.YELLOW);
+				break;
+			case 2:
+				messaggioErrore.setText("Errore: Anno errato");
+				break;
+			case 3:
+				messaggioErrore.setText("Errore: Editore mancante");
+				editoreProdottoField.setBackground(Color.YELLOW);
+				break;
+			case 4:
+				messaggioErrore.setText("Errore: Autore mancante");
+				autoriProdottoField[0].setBackground(Color.YELLOW);
+				break;
 
-			default -> messaggioErrore.setText("Errore");
-		}*/
-		switch(codice) {
-			case 1: messaggioErrore.setText("Errore: Titolo mancante"); break;
-			case 2: messaggioErrore.setText("Errore: Anno errato"); break;
-			case 3: messaggioErrore.setText("Errore: Editore mancante"); break;
-			case 4: messaggioErrore.setText("Errore: Autore mancante"); break;
-			default: messaggioErrore.setText("Errore"); break;
+			default: messaggioErrore.setText("Errore");
 		}
 		erroreVerificaPanel.add(messaggioErrore);
 		showMessageDialog(null, erroreVerificaPanel, "ERRORE (x o OK per confermare lettura)", JOptionPane.ERROR_MESSAGE);
@@ -528,7 +549,6 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 
 	private void mostraErroreControllo(){
 		//RF16
-
 		erroreControlloPanel = new JPanel();
 		messaggioErrore = new JLabel("Errore: Prototto gia' esistente");
 		erroreControlloPanel.add(messaggioErrore);
