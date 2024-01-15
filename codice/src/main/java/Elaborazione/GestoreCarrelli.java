@@ -103,7 +103,7 @@ public boolean controllaNumeroCarta(String NumeroCarta) {
 }	
 
 
-public float calcolaPrezzoTotale(ArrayList<HashMap<String, Object>> carrello, ArrayList<String> prodotti) {
+public float calcolaPrezzoTotale(ArrayList<HashMap<String, Object>> carrello, List<String> prodotti) {
 /*RF06: Calcola prezzototale
  * Autori: MENGAPTCHE ,LUINI*/
     
@@ -134,17 +134,16 @@ public void rimozioneProdottoDalCarrello(ArrayList<HashMap<String, Object>> carr
 	// autori: Simone Aldo Borsa, Andrea Padoan
 
 	if(carrello.size() == 0) return;
-	
-//	Codice commentato per evitare di modificare il database in fase di testing
-//	
-//		dbProdotti.update("UPDATE Prodotto "
-//				+ "SET Prodotto.quantita = "
-//				+ elemento.get("quantita") + (int) elemento.get("quantitaProdotto")
-//				+ "WHERE Carrello.codiceProdotto = " + elemento.get("codiceProdotto") + ";");
-//		
-//		dbProdotti.update("DELETE FROM Carrello "
-//				+ "WHERE Carrello.username = \"" + username
-//				+ "\" AND Carrello.codiceProdotto = " + elemento.get("codice") + ";");
+		
+		int q = (int) elemento.get("quantita") + (int) elemento.get("quantitaProdotto");
+		dbProdotti.update("UPDATE Prodotto "
+				+ "SET Prodotto.quantita = "
+				+ q
+				+ " WHERE Carrello.codiceProdotto = " + elemento.get("codiceProdotto") + ";");
+		
+		dbProdotti.update("DELETE FROM Carrello "
+				+ "WHERE Carrello.username = \"" + username
+				+ "\" AND Carrello.codiceProdotto = " + elemento.get("codice") + ";");
 	
 	carrello.remove(elemento);
 }
@@ -155,17 +154,16 @@ public void svuotaCarrello(ArrayList<HashMap<String, Object>> carrello, String u
 	
 	if(carrello.size() == 0) return;
 	
-//		Codice commentato per evitare di modificare il database in fase di testing
-//	
-//		for(HashMap<String, Object> elemento : carrello) {
-//			dbProdotti.update("UPDATE Prodotto "
-//					+ "SET Prodotto.quantita = "
-//					+ elemento.get("quantita") + (int) elemento.get("quantitaProdotto")
-//					+ "WHERE Carrello.codiceProdotto = " + elemento.get("codiceProdotto") + ";");
-//		}
-//		
-//		dbProdotti.update("DELETE FROM Carrello "
-//				+ "WHERE Carrello.username = \"" + username + "\";");
+		for(HashMap<String, Object> elemento : carrello) {
+			int q = (int) elemento.get("quantita") + (int) elemento.get("quantitaProdotto");
+			dbProdotti.update("UPDATE Prodotto "
+					+ "SET Prodotto.quantita = "
+					+ q
+					+ " WHERE Carrello.codiceProdotto = " + elemento.get("codiceProdotto") + ";");
+		}
+		
+		dbProdotti.update("DELETE FROM Carrello "
+				+ "WHERE Carrello.username = \"" + username + "\";");
 	
 	carrello.clear();
 }
