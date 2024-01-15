@@ -58,6 +58,11 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 	private String sceltaRicerca;
 	private int esitoControllo;
 
+	private int azione;
+
+	private String utenteSelezionato;
+	private boolean statoUtenteSelezionato;
+
 	private ArrayList<HashMap<String, Object>> elencoUtenti;
 
 	// RF19 - Ricerca Utente
@@ -708,6 +713,18 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 			if((!elencoUtenti.isEmpty()) && (sceltaUtente != -1) && (esitoControllo == 4))
 			{
 				mostraElencoRicercaUtente(elencoUtenti, genereUtente);
+				// in base a cosa viene selezionato dall'utente
+				if (azione == 0 && genereUtente.equals("staff")) {
+					// richiamo lista pagamenti
+					uiLista.avvioListaPagamenti(utenteSelezionato);
+				} else if (azione == 1 && genereUtente.equals("staff")) {
+					// richiamo lista ordini
+					uiLista.avvioListaOrdini(utenteSelezionato, -1);
+				} else if (azione == 0 && genereUtente.equals("amministratore")) {
+					// richiamo metodo blocca-sblocca
+					uiUtente.avvioBloccaSbloccaUtente(utenteSelezionato, statoUtenteSelezionato);
+
+				}
 			}
 		}
 	}
@@ -871,18 +888,11 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 			// fino a quando l'utente non chiude la finestra per uscire
 		}while (table.getSelectedRow() == -1 && azione != -1);
 
-
-		if (azione == 0 && genereUtente.equals("staff")) {
-			uiLista.avvioListaPagamenti(table.getModel().getValueAt(table.getSelectedRow(), 2).toString());
-			// richiamo lista pagamenti
-		} else if (azione == 1 && genereUtente.equals("staff")) {
-			uiLista.avvioListaOrdini(table.getModel().getValueAt(table.getSelectedRow(), 2).toString(), -1);
-			// richiamo lista ordini
-		} else if (azione == 0 && genereUtente.equals("amministratore")) {
-			// richiamo metodo blocca-sblocca
-			uiUtente.avvioBloccaSbloccaUtente(table.getModel().getValueAt(table.getSelectedRow(), 2).toString(),
-					Boolean.parseBoolean((table.getModel().getValueAt(table.getSelectedRow(), 4).toString())));
-
+		// salvo lo username dell'utente selezionato
+		utenteSelezionato = table.getModel().getValueAt(table.getSelectedRow(), 2).toString();
+		// salvo lo stato (true/false) in caso la richiesta venga fatta da un amministratore
+		if(genereUtente.equals("amministratore")) {
+			statoUtenteSelezionato = Boolean.parseBoolean((table.getModel().getValueAt(table.getSelectedRow(), 4).toString()));
 		}
 	}
 
