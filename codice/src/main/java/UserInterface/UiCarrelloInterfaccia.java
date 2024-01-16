@@ -13,7 +13,7 @@ public interface UiCarrelloInterfaccia extends Remote
 
 	//RF06: effettua ordine
 	//autori: Luini, Luini-Mengaptche
-	void avvioEffettuaOrdine(ArrayList<HashMap<String, Object>> carrello) throws RemoteException;
+	void avvioEffettuaOrdine() throws RemoteException;
 	
 	
     // RF07: rimuovi prodotto dal carrello
