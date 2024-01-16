@@ -352,7 +352,7 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 			this.mostraFormCambio(vecchio_username);
 			if (nuovo_username != null) {
 				try {
-					boolean dup = gestoreAccessi.verificaDuplicato(nuovo_username);
+					dup = gestoreAccessi.verificaDuplicato(nuovo_username);
 					if (dup) {
 						mostraErroreInterfaccia(4);
 					} else {
