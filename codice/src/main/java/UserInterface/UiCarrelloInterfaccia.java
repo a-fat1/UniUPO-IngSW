@@ -12,8 +12,8 @@ public interface UiCarrelloInterfaccia extends Remote
 	void avvioVisualizzaCarrello(String username) throws RemoteException;
 
 	//RF06: effettua ordine
-	//autori: Luini, Luini-Mengaptche
-	void avvioEffettuaOrdine() throws RemoteException;
+	//autori: Luini, Mengaptche
+	void avvioEffettuaOrdine(String username) throws RemoteException;
 	
 	
     // RF07: rimuovi prodotto dal carrello
