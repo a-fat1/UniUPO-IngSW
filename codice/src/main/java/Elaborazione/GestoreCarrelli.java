@@ -7,7 +7,6 @@ import java.rmi.registry.Registry;
 import java.rmi.registry.LocateRegistry; 
 import java.rmi.RemoteException;
 import java.rmi.NotBoundException;
-
 import DataBase.*;
 
 public class GestoreCarrelli implements GestoreCarrelliInterfaccia
@@ -77,16 +76,22 @@ public class GestoreCarrelli implements GestoreCarrelliInterfaccia
 				+ ((int) prodottoSelezionato.get("quantitaProdotto") - Integer.parseInt(nuovaQuantita))) + " "
 				+ "WHERE codice = " + prodottoSelezionato.get("codice") + ";");
 	}
+	
+	
+	
+	
+	
 
 	
 public boolean controllaNumeroCarta(String NumeroCarta) {
 //RF06 Effettua Ordine
 // Autori: Virginia Luini, Jorelle MENGAPTCHE
 		boolean Controllo=false;
+	//	String regex = "\\d+";
 		
 	System.out.println("Inserisce il numero di carta: " + NumeroCarta);
 	 
-	 if(NumeroCarta.length()==16 ) {
+	 if(NumeroCarta.length()==16 /*&& Pattern.matches(regex, NumeroCarta)*/) {
 		 
 		  
 		  Controllo=true;
@@ -102,20 +107,53 @@ public boolean controllaNumeroCarta(String NumeroCarta) {
 	 return Controllo;
 }	
 
-public float calcolaPrezzoTotale(ArrayList<HashMap<String, Object>> carrello, ArrayList<String> prodotti)throws RemoteException {
-/*RF06: Calcola prezzototale
- * Autori: MENGAPTCHE ,LUINI*/
-    
- float somma = 0;
- /*
- for(var prodotto : carrello) {
-	var prezzo =  dbProdotti.query("SELECT prezzo FROM Prodotto WHERE codice LIKE " + "\"" + prodotto.get("codiceProdotto") + "\"");
-	somma += Float.parseFloat(prezzo.get(0).get("prezzo").toString())*Integer.parseInt(prodotto.get("quantitaProdotto").toString());
- }
-*/
 
-return somma;
+public void aggiornaOrdini(ArrayList<HashMap<String, Object>> listaProdottiCarrello, String dataOrdine) throws RemoteException{
+	//RF 06 - effettua ordine
+	//autori: Virginia Luini, Jorelle MENGAPTCHE
+	String username;	
+	int codiceProdotto;
+	int quantitaProdotto;
+	String query="";
+				//1234567891234567
+	for (var ordine : listaProdottiCarrello) {
+	        // Estrai quantità e prezzo dall'ordine
+		username = ordine.get("username").toString();
+		System.out.println(username);		
+		codiceProdotto =(int)ordine.get("codiceProdotto");    
+		quantitaProdotto =(int)ordine.get("quantitaProdotto");
+		query = "INSERT INTO Ordine (username, dataOrdine, codiceProdotto, quantitaProdotto) VALUES ('" + username + "'," + " '" + dataOrdine + "', " + codiceProdotto + ", "+ quantitaProdotto + ");" ;
+	        // Calcola il costo totale del prodotto moltiplicando la quantità per il prezzo
+		dbProdotti.update(query);    
+	    }
+
 }
+
+public void aggiornaPagamenti(String username,String dataOrdine,float prezzoTotale,String numeroCarta,int sceltaMostraFormCarta) throws RemoteException{
+	//RF 09 - aggiunta al carrello
+	//autori: Fasano Lorenzo, Iacobucci Luca;
+	String tipoCarta="";
+	String query="";
+	System.out.println(prezzoTotale);
+	if(sceltaMostraFormCarta==0) {
+		tipoCarta="Visa";
+		
+	}else {
+		if(sceltaMostraFormCarta==1) {
+			tipoCarta="Mastercard";
+		}else {
+			if(sceltaMostraFormCarta==2)
+				tipoCarta="AmEX";
+		}
+			
+	}
+	
+	query = "INSERT INTO Pagamento (username, dataOrdine, importo, numeroCarta, tipoCarta) VALUES ('" + username + "'," + " '" + dataOrdine + "', " + prezzoTotale + ", '" + numeroCarta + "', '"+ tipoCarta + "');" ;
+	        // Calcola il costo totale del prodotto moltiplicando la quantità per il prezzo
+	dbProdotti.update(query);    
+}
+
+
 
 	public void rimozioneProdottoDalCarrello(ArrayList<HashMap<String, Object>> carrello, HashMap<String, Object> elemento, String username) throws RemoteException {
 		// RF07: rimuovi prodotto dal carrello
