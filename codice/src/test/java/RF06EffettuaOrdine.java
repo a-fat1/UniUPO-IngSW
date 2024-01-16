@@ -40,7 +40,7 @@ public class RF06EffettuaOrdine
     
 
    @Test
-    public void testCalcolaPrezzoTotale() {
+    public void testCalcolaPrezzoTotale() throws RemoteException {
         
     	DbProdotti dbProdottiMock = new DbProdotti();
         GestoreCarrelli gestoreCarrelli = new GestoreCarrelli(dbProdottiMock);

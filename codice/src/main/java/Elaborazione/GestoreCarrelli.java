@@ -107,11 +107,12 @@ public float calcolaPrezzoTotale(ArrayList<HashMap<String, Object>> carrello, Ar
  * Autori: MENGAPTCHE ,LUINI*/
     
  float somma = 0;
-
+ /*
  for(var prodotto : carrello) {
 	var prezzo =  dbProdotti.query("SELECT prezzo FROM Prodotto WHERE codice LIKE " + "\"" + prodotto.get("codiceProdotto") + "\"");
 	somma += Float.parseFloat(prezzo.get(0).get("prezzo").toString())*Integer.parseInt(prodotto.get("quantitaProdotto").toString());
  }
+*/
 
 return somma;
 }

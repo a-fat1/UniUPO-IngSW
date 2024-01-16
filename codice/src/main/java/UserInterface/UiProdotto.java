@@ -263,6 +263,7 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 
 	public void avvioRimuoviRipristinaNelCatalogo(Integer codProdotto, Integer Disponibile) throws RemoteException
 	{	// RF10
+		/*
 		switch (Disponibile) {
 			case 0->{
 				mostraFormRipristino(codProdotto);
@@ -286,6 +287,33 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 			}
 
 			default->mostraErroreDisponibile(codProdotto);
+		}
+		*/
+		switch (Disponibile) {
+			case 0:
+				mostraFormRipristino(codProdotto);
+				if(sceltaRR==JOptionPane.CLOSED_OPTION || sceltaRR==0) {
+					mostraRipristinoAnnullato(codProdotto);
+				}
+				if(sceltaRR==1){
+					gestoreProdotti.ripristinaProdotto(codProdotto);
+					mostraSuccessoRipristino(codProdotto);
+				}
+			break;
+			
+			case 1:
+				mostraFormRimozione(codProdotto);
+				if(sceltaRR==JOptionPane.CLOSED_OPTION || sceltaRR==0){
+					mostraRimozioneAnnullata(codProdotto);
+				}
+				if(sceltaRR==1){
+					gestoreProdotti.rimuoviProdotto(codProdotto);
+					mostraSuccessoRimozione(codProdotto);
+				}
+			break;
+
+			default: mostraErroreDisponibile(codProdotto);
+			break;
 		}
 	}
 
