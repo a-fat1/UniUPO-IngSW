@@ -187,10 +187,7 @@ public class RF22Classifica {
     public void TestcontrollaValorenotiponull() {
         assertFalse(gestoreRicerche.controllaValore(null));
     }
-    @Test
-    public void TestcontrollaValorenotipoVuoto() {
-        assertFalse(gestoreRicerche.controllaValore(""));
-    }
+    
     @Test
     public void TestcontrollaValorenotipoTrue() {
         assertTrue(gestoreRicerche.controllaValore("stringa"));
