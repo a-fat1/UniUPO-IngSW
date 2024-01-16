@@ -15,6 +15,8 @@ import java.awt.GridLayout; /*RF09*/
 
 import UserInterface.*;
 import Elaborazione.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class UiCarrello extends JOptionPane implements UiCarrelloInterfaccia
 {
@@ -61,7 +63,7 @@ public class UiCarrello extends JOptionPane implements UiCarrelloInterfaccia
     private JPanel effettuaOrdinePanel;
     private JPanel mostraFormCartaPanel;
     private JPanel errorePanel;
-
+    private BoxLayout boxLayout;
 
 	//RF09 : Aggiunta al carrello
 	//attributi
@@ -94,6 +96,7 @@ public class UiCarrello extends JOptionPane implements UiCarrelloInterfaccia
 	private JTextField formQuantitaField;
 	private JLabel formQuantitaLabel;
 	private JPanel formQuantitaPanel;
+	
 
 	public UiCarrello(String hostGestore) throws RemoteException, NotBoundException
 	{
@@ -179,7 +182,7 @@ public class UiCarrello extends JOptionPane implements UiCarrelloInterfaccia
 				}
 				if (richiestaCarrello == 3) { // richiesta ordine
 					richiestaOrdineEffettuata = true;
-					this.avvioEffettuaOrdine();
+					this.avvioEffettuaOrdine(username);
 				}
 				if ((richiestaCarrello == 1 || richiestaCarrello == 2) && prodottoSelezionato == null) {
 					this.mostraErroreCarrello(3);
@@ -188,29 +191,64 @@ public class UiCarrello extends JOptionPane implements UiCarrelloInterfaccia
 		} while (richiestaCarrello != CLOSED_OPTION && !listaProdottiCarrello.isEmpty());
 	}
 
-	public void avvioEffettuaOrdine() throws RemoteException
+	public void avvioEffettuaOrdine(String username) throws RemoteException
 	{	// RF06 Luini-Mengaptche	
+		
 		prezzoTotale=mostraPrezzo();
+		
+		
+		LocalDateTime data = LocalDateTime.now();
+
+        // Formattare l'output con anno, mese, giorno, ora, minuti e secondi
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String dataOrdine = data.format(formatter);
 
 		if(sceltaEffettuaOrdine==0){
 			mostraFormCarta();
-			if(sceltaMostraFormCarta==0){
+			if(sceltaMostraFormCarta==CLOSED_OPTION){
 				mostraErrore();
 			}
-			gestoreCarrelli.controllaNumeroCarta(numeroCarta);
+			if(gestoreCarrelli.controllaNumeroCarta(numeroCarta)) {
+				
+				
+				gestoreCarrelli.aggiornaOrdini(listaProdottiCarrello, dataOrdine);
+				System.out.println(prezzoTotale);
+				gestoreCarrelli.aggiornaPagamenti(username,dataOrdine,prezzoTotale,numeroCarta,sceltaMostraFormCarta);
+				avvioRimuoviProdottiDalCarrello(false,username,listaProdottiCarrello,prodottoSelezionato);
+				
+				
+			
+			}
+			else
+				mostraErrore();
+			
 		}
 	}
 
 	public float mostraPrezzo() throws RemoteException {
 	    // RF06 Luini-Mengaptche
 		effettuaOrdinePanel = new JPanel();
+		
+		
+		
+		float somma = 0;
 
-	    labelPrezzoTotale = new JLabel("Il prezzo totale");
-	    fieldPrezzoTotale = new JTextField("", 15);
+	    // Itera attraverso ogni ordine nella lista
+	    for (var ordine : listaProdottiCarrello) {
+	        // Estrai quantità e prezzo dall'ordine
+	        int quantita = Integer.parseInt(ordine.get("quantitaProdotto").toString());
+	        float prezzo = Float.parseFloat(ordine.get("prezzo").toString());
+
+	        // Calcola il costo totale del prodotto moltiplicando la quantità per il prezzo
+	        somma += quantita * prezzo;
+	    }
+		
+		prezzoTotale=somma;
+		
+	    labelPrezzoTotale = new JLabel("Il prezzo totale e' di " + prezzoTotale);
 	    labelProcediOrdine = new JLabel("Vuoi procedere con l'ordine?");
 
 	    effettuaOrdinePanel.add(labelPrezzoTotale);
-	    effettuaOrdinePanel.add(fieldPrezzoTotale);
 	    effettuaOrdinePanel.add(labelProcediOrdine);
 
 	    sceltaEffettuaOrdine = showConfirmDialog(
@@ -220,15 +258,11 @@ public class UiCarrello extends JOptionPane implements UiCarrelloInterfaccia
 	        	YES_NO_OPTION);
 
 	    // Conversione del  valore del campo testo  in un float
-	    try {
-	    	prezzoTotale = Float.parseFloat(fieldPrezzoTotale.getText());
-	    } catch (NumberFormatException e) {
-	        prezzoTotale = 0.0f; //Valore predefinito in caso di errore di conversione
-	    }
+	   
 
 	    // È possibile controllare il valore di sceltaEffettuaOrdine anche per altre azioni
 	    procedereConOrdine = (sceltaEffettuaOrdine == YES_OPTION);
-
+	    
 	    return prezzoTotale;
 	}
 	 
@@ -240,26 +274,22 @@ public class UiCarrello extends JOptionPane implements UiCarrelloInterfaccia
 	    fieldNumeroCarta = new JTextField("", 20);
 	    labelTipoCarta = new JLabel("Tipo Carta");
 	    
+	    boxLayout=new BoxLayout(mostraFormCartaPanel,BoxLayout.PAGE_AXIS);
 	       
-	    labelNumeroCarta = new JLabel("numero carta");
-	    fieldNumeroCarta = new JTextField("", 20);
-	    labelTipoCarta = new JLabel("tipo carta");
-
+	    mostraFormCartaPanel.setLayout(boxLayout);
 	    mostraFormCartaPanel.add(labelNumeroCarta);
 	    mostraFormCartaPanel.add(fieldNumeroCarta);
 	    mostraFormCartaPanel.add(labelTipoCarta);
 
-	    String[] scelte = {"OK"};
+	    String[] scelte = {"Visa","Mastercard","AmEX"};
 
-	    sceltaMostraFormCarta = showConfirmDialog(
-	        	null,
-	        	mostraFormCartaPanel,
-	        	"Mostra Form Carta",
-	        	OK_OPTION);
+	    sceltaMostraFormCarta = showOptionDialog(null,mostraFormCartaPanel,"Mostra Form Carta",DEFAULT_OPTION,QUESTION_MESSAGE,null,scelte,"Mastercard");
+	    
 
 	    // Recupero dei valori dei campi di testo
 	    numeroCarta = fieldNumeroCarta.getText();
-	    tipoCarta = labelTipoCarta.getText();
+	    
+	    
 	}
 
 	 
