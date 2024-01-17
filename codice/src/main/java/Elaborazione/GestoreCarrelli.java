@@ -110,7 +110,8 @@ public void aggiornaOrdini(ArrayList<HashMap<String, Object>> listaProdottiCarre
 	int quantitaProdotto;
 	String query="";
 				//1234567891234567
-	for (var ordine : listaProdottiCarrello) {
+	//for (var ordine : listaProdottiCarrello) {
+	for (HashMap<String, Object> ordine : listaProdottiCarrello) {
 	        // Estrai quantità e prezzo dall'ordine
 		username = ordine.get("username").toString();
 		System.out.println(username);		

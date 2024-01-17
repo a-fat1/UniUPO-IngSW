@@ -234,7 +234,8 @@ public class UiCarrello extends JOptionPane implements UiCarrelloInterfaccia
 		float somma = 0;
 
 	    // Itera attraverso ogni ordine nella lista
-	    for (var ordine : listaProdottiCarrello) {
+	    //for (var ordine : listaProdottiCarrello) {
+	    for (HashMap<String, Object> ordine : listaProdottiCarrello) {
 	        // Estrai quantità e prezzo dall'ordine
 	        int quantita = Integer.parseInt(ordine.get("quantitaProdotto").toString());
 	        float prezzo = Float.parseFloat(ordine.get("prezzo").toString());
