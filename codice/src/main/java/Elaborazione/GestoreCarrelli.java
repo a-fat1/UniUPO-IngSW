@@ -78,20 +78,14 @@ public class GestoreCarrelli implements GestoreCarrelliInterfaccia
 	}
 	
 	
-	
-	
-	
-
-	
 public boolean controllaNumeroCarta(String NumeroCarta) {
 //RF06 Effettua Ordine
 // Autori: Virginia Luini, Jorelle MENGAPTCHE
 		boolean Controllo=false;
-	//	String regex = "\\d+";
 		
 	System.out.println("Inserisce il numero di carta: " + NumeroCarta);
 	 
-	 if(NumeroCarta.length()==16 /*&& Pattern.matches(regex, NumeroCarta)*/) {
+	 if(NumeroCarta.length()==16 && NumeroCarta.matches("[0-9]+")) {
 		 
 		  
 		  Controllo=true;
