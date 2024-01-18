@@ -18,7 +18,7 @@ public class RF06EffettuaOrdine
 
 
     
-    */
+    
     @Test
     public void testControllaNumeroCarta() throws RemoteException {
         GestoreCarrelli gestoreCarrelli = new GestoreCarrelli(new DbProdotti());
@@ -32,7 +32,7 @@ public class RF06EffettuaOrdine
         // Test caso in cui il numero di carta non sia valido (contiene caratteri non numerici)
         assertFalse(gestoreCarrelli.controllaNumeroCarta("123456789012345a"));
     }
-    @Test
+    
   
     
     @Test
