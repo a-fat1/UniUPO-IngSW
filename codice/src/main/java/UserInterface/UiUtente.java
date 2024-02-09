@@ -10,6 +10,8 @@ import java.rmi.RemoteException;
 import java.awt.Frame.*;
 import java.rmi.NotBoundException;
 
+import java.time.LocalDateTime;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
@@ -85,15 +87,16 @@ public class UiUtente extends JOptionPane implements UiUtenteInterfaccia
 	 */
 	public void avvioCreaUtente(boolean cliente) throws RemoteException, NotBoundException
 	{ 	// RF02
-		if (uiLogin == null)
+		if (uiLogin == null) // Codetta: UiLogin <-----> UiUtente
 			uiLogin = (UiLoginInterfaccia) registryUI.lookup("uiLogin");
 
 		String username = "";
 		do
 		{
 			mostraFormRegistrazione();
-			if (annullamentoRichiesta)	break;
-
+			// Codetta
+			//if (annullamentoRichiesta)	break;
+			if (!annullamentoRichiesta) {
 			nome = textFieldNome.getText();
 			cognome = textFieldCognome.getText();
 
@@ -104,8 +107,11 @@ public class UiUtente extends JOptionPane implements UiUtenteInterfaccia
 			}
 			else if (esitoControllo == 0)
 			{
-				gestoreAccessi.promptSalvaAccount(nome, cognome);
-				username = nome+"."+cognome;
+				// Codetta
+				//username = nome+"."+cognome;
+				username="user" + LocalDateTime.now().toString();
+				gestoreAccessi.promptSalvaAccount(nome, cognome, username);
+				
 				clienteAmministratore.put("username", username);
 				clienteAmministratore.put("nome", nome);
 				clienteAmministratore.put("cognome", cognome);
@@ -119,15 +125,18 @@ public class UiUtente extends JOptionPane implements UiUtenteInterfaccia
 				else
 				{
 					mostraFormTipoUtente();
-					if (annullamentoRichiesta) break;
+					// Codetta
+					// if (annullamentoRichiesta) break;
 				}
 
-				gestoreAccessi.richiestaAttivazioneAccount(nome, cognome, tipoUtente);
-				gestoreAccessi.aggiuntaCredenziali(nome+"."+cognome);
-				username = uiLogin.avvioAggiornaUsername(username);
+				gestoreAccessi.richiestaAttivazioneAccount(nome, cognome, tipoUtente, username);
+				// Codetta
+				//gestoreAccessi.aggiuntaCredenziali(nome+"."+cognome);
+				gestoreAccessi.aggiuntaCredenziali(username);
+				username = uiLogin.avvioAggiornaUsername(username, true);
 				uiLogin.avvioAggiornaPassword(false, username, "");
 			}
-
+			}
 
 		}while (!annullamentoRichiesta && esitoControllo!=0);
 	}
@@ -137,7 +146,7 @@ public class UiUtente extends JOptionPane implements UiUtenteInterfaccia
 	 * Fa immettere nome e cognome per la registrazione dell'account.
 	 * @throws RemoteException
 	 */
-	private void mostraFormRegistrazione() throws RemoteException {
+	private void mostraFormRegistrazione() throws RemoteException { // RF02
 		
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel(new GridLayout(0, 2, 5, 5));
@@ -189,7 +198,7 @@ public class UiUtente extends JOptionPane implements UiUtenteInterfaccia
 	 * in mostraFormRegistrazione().
 	 * @param esitoControllo se settato a 1, viene mostrato 'errore nome', se settato a 2 viene mostrato 'errore cognome'.
 	 */
-	private void mostraErrore(int esitoControllo)
+	private void mostraErrore(int esitoControllo) // RF02
 	{
 		
 		if (esitoControllo == 1)	//errore nome
@@ -226,7 +235,7 @@ public class UiUtente extends JOptionPane implements UiUtenteInterfaccia
 	 * metodo che implementa la visualizzazione (solo per amministratori) della tendina per la scelta del
 	 * ruolo dell'utente appena registrato.
 	 */
-	private void mostraFormTipoUtente(){
+	private void mostraFormTipoUtente(){ // RF02
 		//creazione di contentPaneError
 		setBounds(100, 100, 450, 300);
 		contentPaneDialog = new JPanel();
@@ -277,7 +286,7 @@ public class UiUtente extends JOptionPane implements UiUtenteInterfaccia
 		}
 	}
 
-	private void mostraFormBlocco() {
+	private void mostraFormBlocco() { // RF20
 		String[] scelte= { "ANNULLA","CONFERMA"};
 		selezione = JOptionPane.showOptionDialog(null, null, "FORM BLOCCO", 0, 2, null, scelte, null);
 
@@ -290,7 +299,7 @@ public class UiUtente extends JOptionPane implements UiUtenteInterfaccia
 		}
 	}
 
-	private void mostraFormSblocco() {
+	private void mostraFormSblocco() { // RF20
 		String[] scelte= { "ANNULLA","CONFERMA"};
 		selezione = JOptionPane.showOptionDialog(null, null, "FORM SBLOCCO", 0, 3, null, scelte, null);
 

@@ -208,7 +208,7 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 	 * @param oggetto l'oggetto (utente, prodotto, ordine) per generare la notifica
 	 * @throws RemoteException
 	 */
-	public void avvioGeneraNotifica(String tipoNotifica, HashMap<String, Object> oggetto) throws RemoteException {
+	public void avvioGeneraNotifica(String tipoNotifica, HashMap<String, Object> oggetto) throws RemoteException { 
 		int scelta;
 
 		switch (tipoNotifica) {
@@ -327,7 +327,9 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 	 * @return la data entro la quale la notifica scadrà (un giorno dalla data di pubblicazione)
 	 */
 	private HashMap<String, String> setDataScadenzaDefault() {
-		dataScadenza.put("data", LocalDate.now().plusDays(1).toString());
+		//Codetta:
+		//dataScadenza.put("data", LocalDate.now().plusDays(1).toString());
+		dataScadenza.put("data", LocalDate.now().plusMonths(1).toString());
 		dataScadenza.put("ora", LocalTime.now().truncatedTo(ChronoUnit.SECONDS).toString());
 
 		return dataScadenza;
@@ -403,23 +405,33 @@ public class UiNotifica extends JOptionPane implements UiNotificaInterfaccia
 		sceltaRF21 = JOptionPane.OK_OPTION;
 		dataPubblicazioneRF21 = "";
 		dataScadenzaRF21 = "";
+		
+		int conta; // Codetta
+
+		do { // Codetta
+		conta=0; // Codetta
 		tipoUtente = "";
+
 		sceltaRF21 = showConfirmDialog(null, mostraFormRicercaNotifichePanel, "Ricerca notifiche", JOptionPane.OK_CANCEL_OPTION);
 		dataPubblicazioneRF21 = dataPubblicazioneField.getText();
 		dataScadenzaRF21 = dataScadenzaField.getText();
 
-
+		
 		for(int i = 0; i < 4; i++){
 			if(check[i].isSelected()){
 				tipoUtente = check[i].getText();
+				conta++; // Codetta
 			}
 		}
 
-		if(sceltaRF21 == CANCEL_OPTION)
+		if(sceltaRF21 == CANCEL_OPTION || sceltaRF21 == CLOSED_OPTION) // Codetta: CLOSE
 			return;
 
-		if(tipoUtente.isEmpty())
+		if(tipoUtente.isEmpty() || conta > 1) // Codetta: conta
 			mostraErroreRF21("Selezionare un tipo utente!");
+
+		}
+		while (conta != 1); // Codetta
 	
 	}
 	

@@ -183,6 +183,9 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 	{
 		//RF00: login
     		//autore: Codetta
+
+		String nuovaUsername;
+
 		do
 		{
 			this.mostraFormLogin();
@@ -208,7 +211,11 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 						{
 							this.mostraMenu((String)utente.get("nome"), ((String)utente.get("tipo")));
 							if (sceltaMenu==0)
-								this.avvioAggiornaUsername(username);
+							{
+								nuovaUsername=this.avvioAggiornaUsername(username, false);
+								if (nuovaUsername!=null)
+									username=nuovaUsername;
+							}
 							if (sceltaMenu==1)
 								password=this.avvioAggiornaPassword(true,username,password);
 							if (sceltaMenu==2 && !((String)utente.get("tipo")).equals("amministratore"))
@@ -341,16 +348,17 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 			sceltaMenu = -1;
 	}
 
-	public String avvioAggiornaUsername(String vecchio_username) throws RemoteException
-	{
+	public String avvioAggiornaUsername(String vecchio_username, boolean nuovoUtente) throws RemoteException
+	{	// Codetta: nuovoUtente
 		// RF23: Aggiorna Username
 		//Brivio Marco, Serio Giulia
 		esito = 0;
 		nuovo_username = "";
 		dup = false;
+
 		do {
 			this.mostraFormCambio(vecchio_username);
-			if (nuovo_username != null) {
+			if (nuovo_username != null) { // OK_OPTION
 				try {
 					dup = gestoreAccessi.verificaDuplicato(nuovo_username);
 					if (dup) {
@@ -373,7 +381,7 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 					fieldUsername.setText("");
 				}
 			}
-		} while (dup == true || esito == 1 || esito == 2 || esito == 3);
+		} while ( (dup == true || esito == 1 || esito == 2 || esito == 3) && nuovo_username!=null || nuovo_username==null && nuovoUtente); // Codetta: nuovo_username, nuovoUtente
 		return nuovo_username;
 	}
 
@@ -405,25 +413,25 @@ public class UiLogin extends JOptionPane implements UiLoginInterfaccia
 		// Brivio Marco, Serio Giulia
 		switch (valore) {
 			case 1:
-				messaggioUsername = "Formato username errato\ndeve avere almeno 3 caratteri";
+				messaggioUsername = "1. Formato username errato\ndeve avere almeno 3 caratteri";
 				this.showMessageDialog(null, messaggioUsername, "Errore lunghezza", this.ERROR_MESSAGE);
 				fieldUsername.setBackground(Color.YELLOW);
 				fieldUsername.setText("");
 				break;
 			case 2:
-				messaggioUsername = "Lo username deve essere\ndiverso da quello vecchio";
+				messaggioUsername = "2. Lo username deve essere\ndiverso da quello vecchio";
 				this.showMessageDialog(null, messaggioUsername, "Errore username", this.ERROR_MESSAGE);
 				fieldUsername.setBackground(Color.YELLOW);
 				fieldUsername.setText("");
 				break;
 			case 3:
-				messaggioUsername = "Lo username deve essere\ndiverso da quello vecchio e\ndeve avere almeno 3 caratteri";
+				messaggioUsername = "3. Lo username deve essere\ndiverso da quello vecchio e\ndeve avere almeno 3 caratteri";
 				this.showMessageDialog(null, messaggioUsername, "Errore generale", this.ERROR_MESSAGE);
 				fieldUsername.setBackground(Color.YELLOW);
 				fieldUsername.setText("");
 				break;
 			case 4:
-				messaggioUsername = ("Lo username esiste già");
+				messaggioUsername = ("4. Lo username esiste già");
 				this.showMessageDialog(null, messaggioUsername, "Username duplicato", this.ERROR_MESSAGE);
 				fieldUsername.setBackground(Color.YELLOW);
 				fieldUsername.setText("");

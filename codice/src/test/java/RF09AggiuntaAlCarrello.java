@@ -23,10 +23,10 @@ public class RF09AggiuntaAlCarrello {
     assertFalse(gestore.controlloLimiteQuantita(0));
     
     //controllo di prodotto disponibile
-    assertTrue(gestore.controlloDisponibilita(100000));
+    assertTrue(gestore.controlloDisponibilita(100000, 0));
     
     //controllo di prodotto non disponibile
-    assertFalse(gestore.controlloDisponibilita(100003));
+    assertFalse(gestore.controlloDisponibilita(100003, 0));
 
     }
 

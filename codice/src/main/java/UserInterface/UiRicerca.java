@@ -953,7 +953,7 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 				pannello.setVisible(true);
 				String tasto [] =null;
 				
-				return showOptionDialog(null, pannello, "Classifica", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, tasto,"OK");
+				return showOptionDialog(null, pannello, "Classifica", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, tasto,"OK"); // Codetta: DEFAULT
 
 		}
 
@@ -1107,12 +1107,15 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 				}
 				else
 				{
-					erroreclassifica("erroreCompilazioneCategoria");
+					// Codetta:
+					// erroreclassifica("erroreCompilazioneCategoria");
+					return;
 				}
 				
 			}else {
-				
-				erroreclassifica("erroreCompilazioneFiltri");
+				// Codetta:
+				// erroreclassifica("erroreCompilazioneFiltri");
+				return;
 			}
 				
 				String autore = fieldautore.getText();
@@ -1137,7 +1140,16 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 						return ;
 					}
 					if(anno!=null && anno.length()!=0 && anno.length()!=4){					
-						erroreclassifica("erroreAnno");					
+						erroreclassifica("erroreAnno");
+						return ;
+					}
+					
+					// Codetta:
+					if(anno!=null && anno.length()!=0 && anno.length()==4){				
+						try{
+							Integer.parseInt(anno);}
+						catch(NumberFormatException e) {	
+						erroreclassifica("erroreAnno");}
 						return ;
 					}
 					

@@ -50,7 +50,7 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 	private JScrollPane scrollPanelListaPagamenti;
 
 	// attributi
-	// RF 13 Benetti-Chiappa
+	// RF13 Benetti-Chiappa
 	private int codice;
 	private String dataInizio;
 	private String dataFine;
@@ -62,7 +62,7 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 
 
 	// elementi grafici
-	// RF 13 Benetti-Chiappa
+	// RF13 Benetti-Chiappa
 	private JLabel labelDataInizio;
 	private JLabel labelDataFine;
 	private JTextField fieldDataInizio;
@@ -114,11 +114,11 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 			this.mostraOrdini(ordini);
 	}
 
-	private void mostraErroreOrdini() {
+	private void mostraErroreOrdini() { // RF11
 		showMessageDialog(null, "Non ci sono ordini. \n (clicca OK o X per proseguire)", "Errore", ERROR_MESSAGE);
 	}
 
-	private void mostraOrdini(ArrayList<HashMap<String,Object>> ordini){
+	private void mostraOrdini(ArrayList<HashMap<String,Object>> ordini){ // RF11
 		JTable tableOrdini;
 		JScrollPane paneOrdini;
 
@@ -321,10 +321,11 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 	}
 
 	@Override
-	public void avvioListaForniture(int codice) throws RemoteException { // RF 13 Benetti-Chiappa
-		DbProdotti dbProdotti = new DbProdotti();
-		GestoreProdotti gestoreProdotti = new GestoreProdotti(dbProdotti);
-		ArrayList<HashMap<String, Object>> listaForniture = gestoreProdotti.ricercaListaForniture(codice);
+	public void avvioListaForniture(int codice) throws RemoteException { // RF13 Benetti-Chiappa
+		// Codetta:
+		//DbProdotti dbProdotti = new DbProdotti();
+		//GestoreProdotti gestoreProdotti = new GestoreProdotti(dbProdotti);
+		ArrayList<HashMap<String, Object>> listaForniture = gestoreRicerche.ricercaListaForniture(codice);
 		if (listaForniture.size() == 0) {
 			mostraErrore(3);
 			return;
@@ -335,20 +336,21 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 	}
 
 	@Override
-	public void avvioListaForniture() throws RemoteException { // RF 13 Benetti-Chiappa
-		DbProdotti dbProdotti = new DbProdotti();
-		GestoreProdotti gestoreProdotti = new GestoreProdotti(dbProdotti);
+	public void avvioListaForniture() throws RemoteException { // RF13 Benetti-Chiappa
+		// Codetta:
+		//DbProdotti dbProdotti = new DbProdotti();
+		//GestoreProdotti gestoreProdotti = new GestoreProdotti(dbProdotti);
 		ArrayList<HashMap<String, Object>> listaForniture = new ArrayList<>();
 
 		do {
 			mostraFormRicercaPerData();
 			if (dataInizio == null || dataFine == null)
 				return;
-			esitoControllo = gestoreProdotti.controlloParametri(dataInizio, dataFine);
+			esitoControllo = gestoreRicerche.controlloParametri(dataInizio, dataFine);
 			if (esitoControllo == 1 || esitoControllo == 2) {
 				mostraErrore(esitoControllo);
 			} else {
-				listaForniture = gestoreProdotti.ricercaListaForniture(dataInizio, dataFine);
+				listaForniture = gestoreRicerche.ricercaListaForniture(dataInizio, dataFine);
 				if (listaForniture.size() == 0) {
 					mostraErrore(4);
 					break;
@@ -361,7 +363,7 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 	}
 
 	@Override
-	public void mostraErrore(int esitoControllo) throws RemoteException {// RF 13 Benetti-Chiappa
+	public void mostraErrore(int esitoControllo) throws RemoteException {// RF13 Benetti-Chiappa
 
 		String messaggio = "";
 
@@ -393,7 +395,7 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 	}
 
 	@Override
-	public void mostraFormRicercaPerData() throws RemoteException {// RF 13 Benetti-Chiappa
+	public void mostraFormRicercaPerData() throws RemoteException {// RF13 Benetti-Chiappa
 		int ricerca = showOptionDialog(null, panelData, "Ricerca per data", JOptionPane.DEFAULT_OPTION,
 				JOptionPane.PLAIN_MESSAGE, null, new Object[] { "OK" }, -1);
 
@@ -408,7 +410,7 @@ public class UiLista extends JOptionPane implements UiListaInterfaccia {
 	}
 
 	@Override
-	public void mostraLista(ArrayList<HashMap<String, Object>> listaForniture) throws RemoteException {// RF 13
+	public void mostraLista(ArrayList<HashMap<String, Object>> listaForniture) throws RemoteException {// RF13
 																										// Benetti-Chiappa
 		Vector<String> columnNames = new Vector<>();
 		Vector<Vector<Object>> data = new Vector<>();

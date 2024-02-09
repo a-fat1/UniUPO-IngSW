@@ -43,6 +43,11 @@ public interface GestoreRicercheInterfaccia extends Remote
     
   	public boolean controllaValore(String tipo) throws RemoteException;
 
+  // RF 13 Benetti-Chiappa
+    public ArrayList<HashMap<String, Object>> ricercaListaForniture(int codice) throws RemoteException;
+    public ArrayList<HashMap<String, Object>> ricercaListaForniture(String dataInizio, String dataFine) throws RemoteException;
+    public int controlloParametri(String dataInizio, String dataFine) throws RemoteException;
+
 
 } 
 

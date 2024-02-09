@@ -103,7 +103,7 @@ public boolean controllaNumeroCarta(String NumeroCarta) {
 
 
 public void aggiornaOrdini(ArrayList<HashMap<String, Object>> listaProdottiCarrello, String dataOrdine) throws RemoteException{
-	//RF 06 - effettua ordine
+	//RF06 - effettua ordine
 	//autori: Virginia Luini, Jorelle MENGAPTCHE
 	String username;	
 	int codiceProdotto;
@@ -125,8 +125,9 @@ public void aggiornaOrdini(ArrayList<HashMap<String, Object>> listaProdottiCarre
 }
 
 public void aggiornaPagamenti(String username,String dataOrdine,float prezzoTotale,String numeroCarta,int sceltaMostraFormCarta) throws RemoteException{
-	//RF 09 - aggiunta al carrello
+	//RF09 - aggiunta al carrello
 	//autori: Fasano Lorenzo, Iacobucci Luca;
+	// Codetta: questo metodo appartiene a RF06.
 	String tipoCarta="";
 	String query="";
 	System.out.println(prezzoTotale);
@@ -169,12 +170,13 @@ public void aggiornaPagamenti(String username,String dataOrdine,float prezzoTota
 		carrello.remove(elemento);
 	}
 
-	public void svuotaCarrello(ArrayList<HashMap<String, Object>> carrello, String username) throws RemoteException {
+	public void svuotaCarrello(ArrayList<HashMap<String, Object>> carrello, String username, boolean ordine) throws RemoteException { // Codetta: ordine
 		// RF07: rimuovi prodotto dal carrello
 		// autori: Simone Aldo Borsa, Andrea Padoan
 		
 		if(carrello.size() == 0) return;
 		
+		if (!ordine) // Codetta
 			for(HashMap<String, Object> elemento : carrello) {
 				int q = (int) elemento.get("quantita") + (int) elemento.get("quantitaProdotto");
 				dbProdotti.update("UPDATE Prodotto "
@@ -191,19 +193,21 @@ public void aggiornaPagamenti(String username,String dataOrdine,float prezzoTota
 
 
 public boolean controlloLimiteQuantita(int quantita) throws RemoteException{
-//RF 09 - aggiunta al carrello
+//RF09 - aggiunta al carrello
 //autori: Fasano Lorenzo, Iacobucci Luca;
 	if(quantita > 0 && quantita < 4)
 		return true;
 	return false;
 }
 
-public boolean controlloDisponibilita(int codiceProdotto) throws RemoteException{
-//RF 09 - aggiunta al carrello
+public boolean controlloDisponibilita(int codiceProdotto, int quantita) throws RemoteException{
+// Codetta: quantita'
+//RF09 - aggiunta al carrello
 //autori: Fasano Lorenzo, Iacobucci Luca;
 
 	//cerco prodotto nel database disponibile
-	String query = "SELECT * FROM Prodotto WHERE codice =" + codiceProdotto + " AND disponibile = 1 AND quantita > 0;";
+	//String query = "SELECT * FROM Prodotto WHERE codice =" + codiceProdotto + " AND disponibile = 1 AND quantita > 0;";
+	String query = "SELECT * FROM Prodotto WHERE codice =" + codiceProdotto + " AND disponibile = 1 AND quantita >= " + quantita + " ;";
 
 	//nel caso in cui venga ritornato un hasmap con almeno un elemento, la ricerca e' andata a buon fine
 	if(dbProdotti.query(query).size() != 0){
@@ -213,14 +217,20 @@ public boolean controlloDisponibilita(int codiceProdotto) throws RemoteException
 	}
 
 	public void aggiornamentoQuantita(int quantita, int codiceProdotto, String username) throws RemoteException{
-	//RF 09 - aggiunta al carrello
+	//RF09 - aggiunta al carrello
 	//autori: Fasano Lorenzo, Iacobucci Luca;
 
 		String query = "UPDATE Prodotto SET quantita = quantita - " + quantita + " WHERE codice =" + codiceProdotto + ";";
 		dbProdotti.update(query);
 		System.out.println("Aggiornamento riuscito.");
 
-		query = "INSERT INTO Carrello (username, codiceProdotto, quantitaProdotto) VALUES ('" + username + "'," + codiceProdotto + ","+ quantita + ");" ;
+		// Codetta
+		query = "SELECT * FROM Carrello WHERE username = '" + username + "' AND codiceProdotto = '" + codiceProdotto + "';";
+		if (dbProdotti.query(query).size() !=0 )
+			query = "UPDATE Carrello SET quantitaProdotto = quantitaProdotto + " + quantita + " WHERE username = '" + username + "' AND codiceProdotto = '" + codiceProdotto + "';";
+		else
+
+			query = "INSERT INTO Carrello (username, codiceProdotto, quantitaProdotto) VALUES ('" + username + "'," + codiceProdotto + ","+ quantita + ");" ;
 		dbProdotti.update(query);
 
 		}

@@ -11,6 +11,9 @@ import java.rmi.NotBoundException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+
 import DataBase.*;
 
 public class GestoreRicerche implements GestoreRicercheInterfaccia
@@ -72,7 +75,7 @@ public class GestoreRicerche implements GestoreRicercheInterfaccia
 		{
 			LocalDate data1 = LocalDate.parse(dataInizio, formatoData);
 			LocalDate data2 =  LocalDate.parse(dataFine, formatoData);
-			if(data1.isBefore(data2))
+			if(data1.isBefore(data2) || data1.isEqual(data2)) // Codetta: isEqual
 			{
 				esitoControllo = 0;
 			}
@@ -471,5 +474,59 @@ public class GestoreRicerche implements GestoreRicercheInterfaccia
 				else 
 					return true;
 		    }
+
+	@Override // Codetta: GestoreProdotti ---> GestoreRicerche
+	public ArrayList<HashMap<String, Object>> ricercaListaForniture(int codice) throws RemoteException {// RF13
+																										// Benetti-Chiappa
+		try {
+			return dbProdotti.query("SELECT * FROM Fornitura WHERE codiceProdotto=" + codice);
+		} catch (RemoteException e) {
+			return new ArrayList<>();
+		}
+	}
+
+	@Override // Codetta: GestoreProdotti ---> GestoreRicerche
+	public ArrayList<HashMap<String, Object>> ricercaListaForniture(String dataInizio, String dataFine)
+			throws RemoteException {// RF13 Benetti-Chiappa
+
+		if (controlloParametri(dataInizio, dataFine) == 0)
+			try {
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+				DateTimeFormatter stringFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+				LocalDateTime dataIn = LocalDateTime.of(LocalDate.parse(dataInizio, formatter), LocalTime.MIDNIGHT);
+				LocalDateTime dataFin = LocalDateTime.of(LocalDate.parse(dataFine, formatter), LocalTime.MAX);
+
+				return dbProdotti.query(
+						"SELECT f.*, p.autore ,p.titolo, p.editore FROM Fornitura AS f JOIN Prodotto AS p on f.codiceProdotto=p.codice WHERE f.dataFornitura BETWEEN '"
+								+ dataIn.format(stringFormatter) + "' AND '" + dataFin.format(stringFormatter) + "'");
+			} catch (RemoteException e) {
+				return new ArrayList<>();
+			}
+		return new ArrayList<>();
+	}
+
+	@Override // Codetta: GestoreProdotti ---> GestoreRicerche
+	public int controlloParametri(String dataInizio, String dataFine) throws RemoteException {// RF13 Benetti-Chiappa
+		int esitoControllo = 0;
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		LocalDate dataIn = null;
+		LocalDate dataFin = null;
+		try {
+			dataIn = LocalDate.parse(dataInizio, formatter);
+			dataFin = LocalDate.parse(dataFine, formatter);
+		} catch (Exception e) {
+			esitoControllo = 1;
+		}
+
+		if (dataIn != null && dataFin != null) {
+			if (dataIn.isBefore(dataFin) || dataIn.isEqual(dataFin)) // Codetta: isEqual
+				esitoControllo = 0;
+			else {
+				esitoControllo = 2;
+			}
+		}
+		return esitoControllo;
+	}
+
 
 }

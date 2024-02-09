@@ -16,7 +16,7 @@ public class DbProdotti implements DbProdottiInterfaccia
 	}
 	
 	public ArrayList<HashMap<String, Object>> query(String comandoSql)
-	{
+	{	// Codetta
 		Connection conn;
 		Statement stmt;
 		ResultSet rs;
@@ -55,7 +55,7 @@ public class DbProdotti implements DbProdottiInterfaccia
 	}
 
 	public void update(String comandoSql)
-	{
+	{	// Codetta
 		Connection conn;
 		Statement stmt;
 

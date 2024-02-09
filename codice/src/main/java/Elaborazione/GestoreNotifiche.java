@@ -30,6 +30,7 @@ public class GestoreNotifiche implements GestoreNotificheInterfaccia {
     }
 
     public String generaTestoNotificaProdotto(HashMap<String, Object> prodotto) throws RemoteException {
+	// RF04
         //genera il testo della notifica nel caso di un nuovo prodotto
         String tipo = prodotto.get("tipo").toString();
         String autore = prodotto.get("autore").toString();
@@ -39,6 +40,7 @@ public class GestoreNotifiche implements GestoreNotificheInterfaccia {
     }
 
     public String generaTestoNotificaOrdine(HashMap<String, Object> ordine) throws RemoteException {
+	// RF04
         //genera il testo della notifica nel caso di un nuovo ordine
         String username = ordine.get("username").toString();
 
@@ -46,11 +48,13 @@ public class GestoreNotifiche implements GestoreNotificheInterfaccia {
     }
 
     public String generaTestoNotificaAvviso() throws RemoteException {
+	// RF04
         //genera il testo della notifica nel caso di un nuovo avviso
         return "Avviso: ";
     }
 
     public String generaTestoNotificaUtente(HashMap<String, Object> utente) throws RemoteException {
+	// RF04
         //genera il testo della notifica nel caso di un nuovo utente
         String nome = utente.get("nome").toString();
         String cognome = utente.get("cognome").toString();
@@ -59,6 +63,7 @@ public class GestoreNotifiche implements GestoreNotificheInterfaccia {
     }
 
     public String verificaCorrettezzaDati(String data, String ora, String testoNotifica) throws RemoteException {
+	// RF04
         //metodo utilizzato per verificare che i dati in input (data, ora e testo della notifica) siano corretti e in linea con i formati
         String esitoVerifica = "errore ";
 
@@ -85,6 +90,7 @@ public class GestoreNotifiche implements GestoreNotificheInterfaccia {
     }
 
     public void inserimentoNotifica(HashMap<String, String> dataPubblicazione, HashMap<String, String> dataScadenza, String testoNotifica, String tipoUtente) throws RemoteException {
+	// RF04
         //metodo utilizzato per l'inserimento di una notifica nel Database
         String comandoSql = "INSERT INTO Notifica (dataPubblicazione, dataScadenza, testo, tipoUtente) values (\"" +
                 dataPubblicazione.get("data") + " " +
@@ -138,6 +144,7 @@ public class GestoreNotifiche implements GestoreNotificheInterfaccia {
 
 
     public ArrayList<HashMap<String, Object>> ricercaNotifiche(String tipoUtente, String myDateObj) throws RemoteException{
+	// RF01
         String comandoSql;
         ArrayList<HashMap<String,Object>> notifica=null;
         comandoSql="SELECT * FROM Notifica WHERE(tipoUtente='"+tipoUtente+"' OR tipoUtente='tutti')"+" AND dataScadenza>='"+myDateObj+"'";

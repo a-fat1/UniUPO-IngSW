@@ -19,8 +19,8 @@ public interface GestoreAccessiInterfaccia extends Remote
    
    //RF02
    int controlloFormatoNomeCognome(String nome, String cognome)throws RemoteException;
-   void promptSalvaAccount(String nome, String cognome) throws RemoteException;
-   void richiestaAttivazioneAccount(String nome, String cognome, String tipoUtente) throws RemoteException;
+   void promptSalvaAccount(String nome, String cognome, String username) throws RemoteException;
+   void richiestaAttivazioneAccount(String nome, String cognome, String tipoUtente, String username) throws RemoteException;
    void aggiuntaCredenziali(String username) throws RemoteException;
 
    //RF23

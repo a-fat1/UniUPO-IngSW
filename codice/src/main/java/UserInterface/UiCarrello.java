@@ -161,11 +161,11 @@ public class UiCarrello extends JOptionPane implements UiCarrelloInterfaccia
 				this.visualizzaListaProdottiCarrello();
 				if (richiestaCarrello == 0) { // richiesta svuotamento
 					richiestaRimozioneEffettuata = true;
-					this.avvioRimuoviProdottiDalCarrello(false, username, listaProdottiCarrello, prodottoSelezionato);
+					this.avvioRimuoviProdottiDalCarrello(false, username, listaProdottiCarrello, prodottoSelezionato, false); // Codetta: false
 				}
 				if (richiestaCarrello == 1 && prodottoSelezionato != null) { // richiesta rimozione
 					richiestaRimozioneEffettuata = true;
-					this.avvioRimuoviProdottiDalCarrello(true, username, listaProdottiCarrello, prodottoSelezionato);
+					this.avvioRimuoviProdottiDalCarrello(true, username, listaProdottiCarrello, prodottoSelezionato, false); // Codetta: false
 				}
 				if (richiestaCarrello == 2 && prodottoSelezionato != null) { // richiesta modifica quantità
 					do {
@@ -206,18 +206,18 @@ public class UiCarrello extends JOptionPane implements UiCarrelloInterfaccia
 		if(sceltaEffettuaOrdine==0){
 			mostraFormCarta();
 			if(sceltaMostraFormCarta==CLOSED_OPTION){
-				mostraErrore();
-			}
+				// mostraErrore(); <--- Codetta
+			} else // <--- Codetta 
 			if(gestoreCarrelli.controllaNumeroCarta(numeroCarta)) {
 				
 				
 				gestoreCarrelli.aggiornaOrdini(listaProdottiCarrello, dataOrdine);
 				System.out.println(prezzoTotale);
 				gestoreCarrelli.aggiornaPagamenti(username,dataOrdine,prezzoTotale,numeroCarta,sceltaMostraFormCarta);
-				avvioRimuoviProdottiDalCarrello(false,username,listaProdottiCarrello,prodottoSelezionato);
+				avvioRimuoviProdottiDalCarrello(false,username,listaProdottiCarrello,prodottoSelezionato, true); // Codetta: true
+				// Codetta:
+				uiNotifica.avvioGeneraNotifica("nuovo ordine", listaProdottiCarrello.get(0));
 				
-				
-			
 			}
 			else
 				mostraErrore();
@@ -315,14 +315,17 @@ public class UiCarrello extends JOptionPane implements UiCarrelloInterfaccia
 	}
 
 	
-	public void avvioRimuoviProdottiDalCarrello(boolean tipoDiRimozione, String username, ArrayList<HashMap<String, Object>> carrello, HashMap<String, Object> prodotto) throws RemoteException{
+	public void avvioRimuoviProdottiDalCarrello(boolean tipoDiRimozione, String username, ArrayList<HashMap<String, Object>> carrello, HashMap<String, Object> prodotto, boolean ordine) throws RemoteException{ // Codetta: ordine
 		// RF07: rimuovi prodotto dal carrello
 		// autori: Simone Aldo Borsa, Andrea Padoan
 
 		if(!tipoDiRimozione) {
-			mostraConfermaSvuotamento();
+			if (!ordine) // Codetta
+				mostraConfermaSvuotamento();
+			else	// Codetta
+				scelta=0; // Codetta
 			if(scelta == 0) {
-				gestoreCarrelli.svuotaCarrello(carrello, username);
+				gestoreCarrelli.svuotaCarrello(carrello, username, ordine); // Codetta: ordine
 				mostraMessaggio(tipoDiRimozione);
 			}
 		}
@@ -413,22 +416,26 @@ public void avvioAggiungiAlCarrello(String username, int codiceProdotto) throws 
 			switch (sceltaQuantita) {
 				case 0:
 					//controllo che il prodotto selezionato dall'utente sia disponibile in database
-					if(gestoreCarrelli.controlloDisponibilita(codiceProdotto)){
+
+					try{
+						quantita = Integer.parseInt(quantitaField.getText());
+						//controllo quantita inserita x vedere numero
+						System.out.println("Quantita' inserita:" + quantita);
+					}catch(NumberFormatException e){
+						System.out.println("Errore formato inserimento quantità non valido.");
+						continue;
+					}
+
+					if(gestoreCarrelli.controlloDisponibilita(codiceProdotto, quantita)){ // Codetta:quantita
 					System.out.println("1)Controllo disponibilita': OK");
 						//prelevo intero che utente ha inserito in input gestendo il caso in cui l'utente inserisca qualsiasi cosa al di fuori di un numero impostando la sceltaQuantita a -2 e ripetendo così il ciclo
-							try{
-								quantita = Integer.parseInt(quantitaField.getText());
-								//controllo quantita inserita x vedere numero
-								System.out.println("Quantita' inserita:" + quantita);
-							}catch(NumberFormatException e){
-								System.out.println("Errore formato inserimento quantità non valido.");
-								continue;
-							}
+							
 							//controllo che la quantita' richiesta dall'utente sia compresa tra 1 e 3
 							if(gestoreCarrelli.controlloLimiteQuantita(quantita)){
 								System.out.println("2)Controllo limite quantita': OK");
 								//aggiorno la quantita del prodotto in database e aggiungo prodotto al carrello
 								gestoreCarrelli.aggiornamentoQuantita(quantita,codiceProdotto,username);
+								mostraErr(3); // Codetta
 							return;
 						}else{
 							//mostra un messaggio di errore in caso l'utente inserisca una quantita' non valida
@@ -439,6 +446,7 @@ public void avvioAggiungiAlCarrello(String username, int codiceProdotto) throws 
 						//mostra errore in caso in cui il prodotto non sia disponibile
 					}else{
 						System.out.println("1)Controllo disponibilita': NO");
+						mostraErr(1); // Codetta
 						break;
 					}
 				case -1:
@@ -459,7 +467,8 @@ public void mostraErr(int inputEr){
 	switch (inputEr) {
 		case 1:
 			tit="Errore disponibilita' prodotto";
-			mex = "Prodotto non disponibile";
+			// mex = "Prodotto non disponibile";
+			mex = "Quantita' non disponibile"; // Codetta
 			break;
 		case 2:
 			tit = "Errore quantita'";

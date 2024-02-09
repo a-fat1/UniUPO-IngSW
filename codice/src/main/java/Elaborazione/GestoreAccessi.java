@@ -16,6 +16,8 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 {
 	private Registry registry;
 	private DbUtentiInterfaccia dbUtenti;
+	private DbProdottiInterfaccia dbProdotti;
+
 	// RF24
 	private static final String SEPARATORE = ", ";
 
@@ -23,6 +25,7 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 	{
 		registry = LocateRegistry.getRegistry(host, 1098);
        	 	dbUtenti = (DbUtentiInterfaccia) registry.lookup("dbUtenti");
+		dbProdotti = (DbProdottiInterfaccia) registry.lookup("dbProdotti");
 	}
 
 	public GestoreAccessi(DbUtenti d1) // per testing
@@ -152,6 +155,14 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
         String query1 = "UPDATE utente SET username = \"" + nuovoUsername + "\" WHERE username = \"" + vecchioUsername + "\";";
 		dbUtenti.update(query);
 		dbUtenti.update(query1);
+
+		// Codetta:
+		query = "UPDATE Carrello SET username = \"" + nuovoUsername + "\" WHERE username = \"" + vecchioUsername + "\";";
+		dbProdotti.update(query);
+        	query = "UPDATE Ordine SET username = \"" + nuovoUsername + "\" WHERE username = \"" + vecchioUsername + "\";";
+		dbProdotti.update(query);
+		query = "UPDATE Pagamento SET username = \"" + nuovoUsername + "\" WHERE username = \"" + vecchioUsername + "\";";
+		dbProdotti.update(query);
     }
 
 	public void bloccoUtente(String username) throws RemoteException {
@@ -237,7 +248,7 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 	 * e se ambedue non contengono numeri. Altrimenti, viene ritornato 1 se il formato di nome è errato,
 	 * 2 se il formato di cognome è errato.
 	 */
-	public int controlloFormatoNomeCognome(String nome, String cognome) {
+	public int controlloFormatoNomeCognome(String nome, String cognome) { // RF02
 		int len1 = nome.length();
 		int len2 = cognome.length();
 		boolean bool1 = nome.matches(".*\\d.*");	//controlla se nome oppure cognome contengono un numero
@@ -260,9 +271,11 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 	 *
 	 * @throws RemoteException
 	*/
-	public void promptSalvaAccount(String nome, String cognome) throws RemoteException
+	public void promptSalvaAccount(String nome, String cognome, String username) throws RemoteException // RF02
 	{
-		dbUtenti.update("INSERT INTO 'main'.'Utente' ('username', 'nome', 'cognome') VALUES (\""+nome+'.'+cognome+"\", \""+nome+"\", \""+cognome+"\");");
+		// Codetta:
+		//dbUtenti.update("INSERT INTO 'main'.'Utente' ('username', 'nome', 'cognome') VALUES (\""+nome+'.'+cognome+"\", \""+nome+"\", \""+cognome+"\");");
+		dbUtenti.update("INSERT INTO 'main'.'Utente' ('username', 'nome', 'cognome') VALUES (\""+username+"\", \""+nome+"\", \""+cognome+"\");");
 	}
 
 	/**
@@ -274,9 +287,11 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 	 *
 	 * @throws RemoteException
 	*/
-	public void richiestaAttivazioneAccount(String nome, String cognome, String tipoUtente) throws RemoteException
+	public void richiestaAttivazioneAccount(String nome, String cognome, String tipoUtente, String username) throws RemoteException // RF02
 	{
-		dbUtenti.update("UPDATE Utente SET tipo='"+tipoUtente+"' WHERE username='"+nome+'.'+cognome+"'");
+		// Codetta:
+		//dbUtenti.update("UPDATE Utente SET tipo='"+tipoUtente+"' WHERE username='"+nome+'.'+cognome+"'");
+		dbUtenti.update("UPDATE Utente SET tipo='"+tipoUtente+"' WHERE username='" + username + "' ;");
 	}
 
 	/**
@@ -286,7 +301,7 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 	 *
 	 * @throws RemoteException
 	*/
-	public void aggiuntaCredenziali(String username) throws RemoteException
+	public void aggiuntaCredenziali(String username) throws RemoteException // RF02
 	{
 		dbUtenti.update("INSERT INTO Credenziali ('password', 'username', 'attivo') VALUES ('', '"+username+"', 1);");
 	}
@@ -421,7 +436,7 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 	 */
 	public void promptSalvaDomicilio(String username, String via, String civico, String cap, String localita) throws RemoteException {
 
-		DbUtenti dbUtenti = new DbUtenti();
+		//DbUtenti dbUtenti = new DbUtenti();
 
 		String selectQuery = "SELECT COUNT() FROM Utente WHERE Username = '" + username + "'";
 		// numero di record prima dell'esecuzione del metodo
@@ -447,7 +462,7 @@ public class GestoreAccessi implements GestoreAccessiInterfaccia
 	 * Autore: Mondelli e Reci
 	 */
 	public String[] promptRecuperaDomicilio(String username) throws RemoteException {
-		DbUtenti dbUtenti = new DbUtenti();
+		//DbUtenti dbUtenti = new DbUtenti();
 
 		String selectQuery = "SELECT domicilio FROM Utente WHERE Username = '" + username + "'";
 		ArrayList<HashMap<String, Object>> result = dbUtenti.query(selectQuery);

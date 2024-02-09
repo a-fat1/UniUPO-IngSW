@@ -407,13 +407,23 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 				break;
 			} else {
 				String valore = percentualeField.getText();
-				if (valore.equals("")) {
-					this.mostraErrore();
+				// Codetta:
+				//if (valore.equals("")) {	
+					//this.mostraErrore();
+				//} else {
+					// Codetta:
+					try{ 
+						percentuale = Integer.parseInt(valore);}
+					catch(NumberFormatException e) {
+						percentuale=0; }
 
-				} else {
-					percentuale = Integer.parseInt(valore);
-					this.controllaCredenzialiIncreDecrePrezzi();
-					this.selezioneControllo();
+					// Codetta:
+					//this.controllaCredenzialiIncreDecrePrezzi(); // esito
+
+					// Codetta:
+					esito=gestoreProdotti.controlloPercentuale(percentuale);
+
+					this.selezioneControllo(); // sceltaVoce
 
 					if (esito == false && sceltaVoce == -1) {
 						this.mostraErrori();
@@ -433,7 +443,7 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 					this.mostraPrezziAggiornati();
 
 				}
-			}
+			//}
 		}while((esito==false || sceltaVoce==-1)||(esito==false && sceltaVoce==-1));
 
 
@@ -444,9 +454,10 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 		int scelta = JOptionPane.OK_OPTION;
 		while(scelta == JOptionPane.OK_OPTION) {
 			if(nuovoProdotto)
-				showMessageDialog(null, nuovaFornituraPanel, "Nuova fornitura per prodotto " + codProdotto, JOptionPane.QUESTION_MESSAGE);
+				// Codetta: OK o X per proseguire
+				showMessageDialog(null, nuovaFornituraPanel, "Nuova fornitura per prodotto " + codProdotto + " (premi OK o X per proseguire)", JOptionPane.QUESTION_MESSAGE);
 			else
-				scelta = showConfirmDialog(null, nuovaFornituraPanel, "Nuova fornitura per prodotto " + codProdotto, JOptionPane.OK_CANCEL_OPTION);
+				scelta = showConfirmDialog(null, nuovaFornituraPanel, "Nuova fornitura per prodotto " + codProdotto + " (premi OK per proseguire)", JOptionPane.OK_CANCEL_OPTION);
 
 			if(scelta == JOptionPane.OK_OPTION) {
 				String data = dataFornituraField.getText().trim();
@@ -561,8 +572,10 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 			// leggo e memorizzo in ordine gli autori inseriti nel form
 			ArrayList<String> autoriList = new ArrayList<>();
 			for(JTextField autoreF: autoriProdottoField){
-				if(autoreF.getText().isEmpty()) break; // se c'e' un field vuoto esco
-				autoriList.add(autoreF.getText());
+				// Codetta
+				//if(autoreF.getText().isEmpty()) break; // se c'e' un field vuoto esco
+				if(!autoreF.getText().isEmpty())
+					autoriList.add(autoreF.getText());
 			}
 			autori = autoriList.toArray(new String[0]); // trasformo arraylist in array
 
@@ -635,11 +648,18 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 		return sceltaPannello;
 	}
 	//RF17
+	// Codetta:
+	/*
 	private void controllaCredenzialiIncreDecrePrezzi(){
 		if (percentuale > 0 && percentuale <= 100) {
 			esito = true;
 		}
+		// Codetta:
+		else
+			esito=false;
 	}
+	*/
+
 	//RF17
 	private void selezioneControllo(){
 		sceltaVoce=-1;
@@ -648,6 +668,9 @@ public class UiProdotto extends JOptionPane implements UiProdottoInterfaccia
 				sceltaVoce=i;
 			}
 		}
+		// Codetta:
+		if (increDecreRadioButton[0].isSelected() && increDecreRadioButton[1].isSelected())
+			sceltaVoce=-1;
 	}
 	//RF17
 	private void mostraErrore(){

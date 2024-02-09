@@ -40,7 +40,7 @@ public class RF07RimuoviProdottoDalCarrello {
 			quantita.add((int) k.get("quantitaProdotto"));
 		}
 		
-		gestoreCarrelli.svuotaCarrello(Carrello, username);
+		gestoreCarrelli.svuotaCarrello(Carrello, username, false);
 		assertEquals(valorePrevisto, Carrello.size());
 		
 		for(int i = 0; i < quantita.size(); i++) {
