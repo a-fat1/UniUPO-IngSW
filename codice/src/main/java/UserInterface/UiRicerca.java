@@ -673,7 +673,8 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 
 			// se viene selezionato nome-cognome, viene controllato tramite la funzione apposita per il nome
 			// e cognome
-			if(sceltaRicerca.equals("Ricerca per nome-cognome"))
+			// Codetta: && (sceltaUtente != -1
+			if(sceltaRicerca.equals("Ricerca per nome-cognome") && (sceltaUtente != -1))
 			{
 				esitoControllo = gestoreRicerche.controlloParametriRicercaUtente(nome, cognome);
 				// result != -1, altrimenti viene mostrato questo errore quando viene chiusa la finestra per uscire
@@ -683,7 +684,8 @@ public class UiRicerca extends JOptionPane implements UiRicercaInterfaccia
 				}
 			}
 			// se viene selezionato username, viene controllato tramite la funzione apposita per lo username
-			else if(sceltaRicerca.equals("Ricerca per username"))
+			// Codetta: && (sceltaUtente != -1
+			else if(sceltaRicerca.equals("Ricerca per username") && (sceltaUtente != -1))
 			{
 				esitoControllo = gestoreRicerche.controlloParametriRicercaUtente(username);
 				// result != -1, altrimenti viene mostrato questo errore quando viene chiusa la finestra per uscire

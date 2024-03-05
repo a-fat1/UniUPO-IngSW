@@ -214,6 +214,8 @@ public class GestoreRicerche implements GestoreRicercheInterfaccia
 		// RF19
 		// Riccardo Nazzari, Andrea Benedetto
 
+		System.out.println("Gestore Ricerche.controlloParametriRicercaUtente(" + username + ")");
+
 		// ricavo la lunghezza della stringa
 		int len1 = username.length();
 
@@ -236,6 +238,8 @@ public class GestoreRicerche implements GestoreRicercheInterfaccia
 
 		// RF19
 		// Riccardo Nazzari, Andrea Benedetto
+
+		System.out.println("Gestore Ricerche.controlloParametriRicercaUtente(" + nome + "," + cognome + ")");
 
 		// ricavo la lunghezza della stringa del nome
 		int len1 = nome.length();
